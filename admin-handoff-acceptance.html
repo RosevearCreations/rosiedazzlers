@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="/assets/build831-pilot.css?v=build831"/>
 <link rel="stylesheet" href="/assets/build832-economics.css?v=build832"/>
 <link rel="stylesheet" href="/assets/build833-comms.css?v=build833"/>
+<link rel="stylesheet" href="/assets/build834-master-status.css?v=build834"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -339,6 +340,27 @@
     <p class="muted">Local issue counts and historical staff-reported handoffs do not establish current consent, recipient identity, provider delivery or customer contact authority. Comms must separately approve exact incident IDs, audience, correlation, idempotency/replay, retention, receipt and closure policy. A completed local concern is not a closed Comms incident. No messages, incidents, payments, remote GETs, master events or database changes occur here.</p>
   </div>
 </section>
+<section class="section build834-master-status" id="build834MasterStatus" aria-labelledby="build834Heading">
+  <div class="panel">
+    <span class="badge">Build 834 · Local source health and Master Shell release evidence</span>
+    <h2 id="build834Heading">13. Compare local status with independently verified release history</h2>
+    <p>Rosie owns this source status. A signed-in supervisor can inspect the latest recorded GitHub/Cloudflare release evidence and the local process's deployment revision claim. <strong>Matching revision text is not an independently authenticated live status.</strong> This report does not publish an AI Data event, create an incident or connect Comms.</p>
+    <div class="build834-tools">
+      <button class="btn ghost" type="button" id="build834Refresh">Refresh private source-status preview</button>
+      <a id="build834Proof" class="btn ghost">No independently confirmed release report available here</a>
+    </div>
+    <p id="build834State" role="status" aria-live="polite">Awaiting signed original staff session. Comms DISCONNECTED / HOLD.</p>
+    <p id="build834Summary" role="status" aria-live="polite">No authenticated source status. Independent release, health and integrations are UNKNOWN / HOLD.</p>
+    <div class="build825-scroll" role="region" tabindex="0" aria-label="Rosevear Master Shell owner, data plane, communications plane and peer application boundaries">
+      <table><caption>Declared ownership and source identity only · no direct peer credential or active trust</caption>
+        <thead><tr><th scope="col">System</th><th scope="col">Master, source or peer role</th>
+          <th scope="col">What it owns</th><th scope="col">Actual route state</th>
+          <th scope="col">Contract and direction</th></tr></thead><tbody id="build834Rows"></tbody></table>
+    </div>
+    <p id="build834Event" class="muted">Master event contract NOT ACTIVE.</p>
+    <p class="muted">AI Data Builds 335/337 define <code>source.health.reported</code> and <code>release.promoted</code> with expiring evidence, approved audience, signer, sequence and verified receipt. Rosie 834 only stages intentionally incomplete, non-ingestible payload shapes. The external original QL-364/365D Comms one-use signed health TEST and all messaging, incident, provider and owner grants remain separate and HELD.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -355,7 +377,8 @@
   import { startBookingWorksitePilot831 } from '/assets/build831-pilot-ui.mjs?v=build831';
   import { startEconomics832 } from '/assets/build832-economics-ui.mjs?v=build832';
   import { startCommsReview833 } from '/assets/build833-comms-ui.mjs?v=build833';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();}});
+  import { startMasterStatus834 } from '/assets/build834-master-status-ui.mjs?v=build834';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();}});
 </script>
 </body>
 </html>
