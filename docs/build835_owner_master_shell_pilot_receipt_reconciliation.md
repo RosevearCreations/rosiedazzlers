@@ -1,6 +1,8 @@
 # Rosie Dazzlers 835 — Owner-Authorized Master Shell Pilot, One-Source Receipt & Fail-Closed Reconciliation
 
-**Software candidate / operational HOLD.** This build does **not** turn the Rosie Master Shell connection on. It gives the signed-in Rosie supervisor an explicit original-owner readiness checklist and adds a Node-only, single-attempt original-receipt reconciliation adapter that reuses the already-shipped QL-795 original cryptographic closure. No source signer or original Windows operator is bundled in the repository. A passing CI or source-local status response is **not** a real signed private GET.
+**Software release verified GREEN (November 9, 2026):** [protected dev #914](https://github.com/RosevearCreations/rosiedazzlers/pull/914), [protected main #915](https://github.com/RosevearCreations/rosiedazzlers/pull/915), [six-job exact-SHA Production #42757931784](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42757931784) at immutable feature commit `6b412dbf61c39dedc10164400c795354c68c967a`. **Original field connection and receipt acceptance remain HOLD.** This release-documentation closure separately requires protected production proof.
+
+**Software release Production GREEN / original operational HOLD.** This build does **not** turn the Rosie Master Shell connection on. It gives the signed-in Rosie supervisor an explicit original-owner readiness checklist and adds a Node-only, single-attempt original-receipt reconciliation adapter that reuses the already-shipped QL-795 original cryptographic closure. No source signer or original Windows operator is bundled in the repository. A passing CI or source-local status response is **not** a real signed private GET.
 
 ## New software
 
