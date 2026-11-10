@@ -1,6 +1,6 @@
 # Build 841 — Customer/Detailer Job-Day Mobile Journey, Accessible Exception Recovery & Socials Creator
 
-**Source status (November 10, 2026): implemented and locally tested.** Protected `dev`/`main` merge and production exact-SHA deployment remain separate release checks; this document does not claim a deployed GREEN result or original customer/provider acceptance.
+**Verified software Production GREEN (November 10, 2026):** protected [dev PR #939](https://github.com/RosevearCreations/rosiedazzlers/pull/939), [main PR #940](https://github.com/RosevearCreations/rosiedazzlers/pull/940), and [Cloudflare exact-SHA Production workflow #42873940448](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42873940448) passed for immutable feature `main` `6251336deb63443772fd47cf4dfafd172a253815`. All 147 final commit checks passed. This software result is not original customer/device/provider acceptance, channel onboarding, image publication authorization or a live post receipt. These remain HOLD.
 
 ## Customer and detailer experience
 
@@ -28,4 +28,4 @@ Run `node scripts/build841_jobday_social_media_test.mjs` and `bash scripts/curre
 
 The Build 841 test covers unauthorized access, sanitized recent-job/media reads, cross-booking rejection, mandatory source tagging, zero photo copy, review-only two-platform drafts, no private URLs/progress tokens, local image asset presence, both customer/detailer mobile routes and source card placement. The project-level Supabase/provider integration and real owner device checks remain external.
 
-**Proposed next Build 842:** Job-Day Owner Device Acceptance & Consent-Safe DAIP Approved-Derivative Handoff, with original proof and human publishing decision preserved.
+**Proposed next Build 842:** Job-Day Owner Device Acceptance, DAIP Approved-Derivative Handoff & Social Delivery Evidence, with original proof, privacy/consent authorization and human publishing decision preserved.
