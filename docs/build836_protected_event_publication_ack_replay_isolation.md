@@ -1,6 +1,8 @@
 # Rosie Dazzlers 836 — Protected Event Publication, ACK/Replay & Consumer Isolation (After Contract Approval)
 
-**Feature candidate; original source and consumer authority HOLD.** This release adds a fail-closed original-private publication contract and owner-visible readiness screen. It does **not** provision an Ed25519 source signer, an AI Data HMAC key, a Comms delivery provider, a hosted database ledger, consent, an owner role, a receiver, a durable replay store or a live connection. No original event was transmitted or acknowledged by this build.
+**Software Production GREEN (November 10, 2026):** [protected dev #918](https://github.com/RosevearCreations/rosiedazzlers/pull/918), [main #919](https://github.com/RosevearCreations/rosiedazzlers/pull/919), [six-job exact-SHA Cloudflare Production #42761658919](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42761658919) at feature `main` `d079b7fac034885142a556b5df155d85af6bf495`. The original field authority/consumer ACK state remains **HOLD**; this documentation-only release closure separately requires protected acceptance.
+
+**Original source and consumer authority HOLD.** This release adds a fail-closed original-private publication contract and owner-visible readiness screen. It does **not** provision an Ed25519 source signer, an AI Data HMAC key, a Comms delivery provider, a hosted database ledger, consent, an owner role, a receiver, a durable replay store or a live connection. No original event was transmitted or acknowledged by this build.
 
 ## Master Shell role and boundaries
 
@@ -27,7 +29,7 @@ Rosie is `rosiedazzlers`, an independent owned-business **source shell**. AI Dat
 | AI Data Build 290/337 webhook + accepted signed receipt | Protected HMAC transport contract and independent ACK callback | HMAC identity, current key, original receipt and accepted consumer ACK absent — **HOLD** |
 | Comms QL-404 consent/incident/receiver | Separate private approved transport and per-recipient receipt | Original provider/route/consent/receiver/owner proofs absent — **HOLD** |
 | Durable idempotency, ordering, replay and DLQ | Protected-only callbacks; no browser retry or public nonce store | Genuine atomic database and original DLQ readback not witnessed — **HOLD** |
-| Production software deployment | Protected `dev` → `main` PR and Cloudflare exact-SHA checks required | Awaiting Build 836 release verification |
+| Production software deployment | Protected `dev` #918 → `main` #919 and exact-SHA Cloudflare #42761658919 independently passed | **SOFTWARE GREEN**; no field acceptance is implied |
 
 ## Owner-controlled activation sequence
 
