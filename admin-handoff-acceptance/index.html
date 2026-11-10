@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="/assets/build830-role-device.css?v=build830"/>
 <link rel="stylesheet" href="/assets/build831-pilot.css?v=build831"/>
 <link rel="stylesheet" href="/assets/build832-economics.css?v=build832"/>
+<link rel="stylesheet" href="/assets/build833-comms.css?v=build833"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -316,6 +317,28 @@
     <p class="muted">The finance administrator must obtain the original dated stock and supplier receipts, applicable cost basis, signed staff time, actual payroll period allocations, customer-issued invoice, independent payment/provider statements, posted GL tax and HST/ITC workpapers. A separate accountant and owner must approve genuine outcomes. This screen neither creates those records nor changes the canonical HOLD, Master Shell status, invoice, employee pay or tax filing.</p>
   </div>
 </section>
+<section class="section build833-comms" id="build833Comms" aria-labelledby="build833Heading">
+  <div class="panel">
+    <span class="badge">Build 833 · Comms Hub shell, consent and incident contract review</span>
+    <h2 id="build833Heading">12. Review Comms route authority and local incident evidence</h2>
+    <p>The <strong>rosiedazzlers</strong> owned-business shell is the only integration identity. Customers, bookings, detailers and payment providers are not new shell identities. QL-364/365D permits only independently approved, single-use signed health <code>GET</code> testing. There is <strong>no approved Comms incident, notification or staff-task route</strong> in this review.</p>
+    <div class="build833-controls">
+      <button id="build833Refresh" type="button" class="btn ghost">Refresh private Comms contract review</button>
+      <a href="/admin-comms-hub-v781.html" class="btn ghost">Original QL-365D health gates</a>
+    </div>
+    <p id="build833Status" role="status" aria-live="polite">Original-session source not checked. Comms DISCONNECTED / HOLD.</p>
+    <p id="build833Count" role="status" aria-live="polite">All incident and consent routes HOLD.</p>
+    <div class="build825-scroll" role="region" aria-label="Private Rosie Comms shell and consent route contract review" tabindex="0">
+      <table><caption>Proposed route review only · all Comms messaging, incident, task and health-test authority remains HOLD</caption>
+        <thead><tr><th scope="col">Source-owned route</th><th scope="col">Source and audience</th>
+          <th scope="col">Privacy boundary</th><th scope="col">Missing authority</th>
+          <th scope="col">Manual source review</th></tr></thead>
+        <tbody id="build833Rows"></tbody>
+      </table>
+    </div>
+    <p class="muted">Local issue counts and historical staff-reported handoffs do not establish current consent, recipient identity, provider delivery or customer contact authority. Comms must separately approve exact incident IDs, audience, correlation, idempotency/replay, retention, receipt and closure policy. A completed local concern is not a closed Comms incident. No messages, incidents, payments, remote GETs, master events or database changes occur here.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -331,7 +354,8 @@
   import { startRoleDeviceRecovery830 } from '/assets/build830-role-device-ui.mjs?v=build830';
   import { startBookingWorksitePilot831 } from '/assets/build831-pilot-ui.mjs?v=build831';
   import { startEconomics832 } from '/assets/build832-economics-ui.mjs?v=build832';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();}});
+  import { startCommsReview833 } from '/assets/build833-comms-ui.mjs?v=build833';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();}});
 </script>
 </body>
 </html>
