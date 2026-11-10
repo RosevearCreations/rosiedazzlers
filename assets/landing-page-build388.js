@@ -308,13 +308,16 @@ function visualBriefsMarkup(page, websiteImageManifest, slug) {
   if (!briefs.length) return "";
   const managed = landingImageMatches(websiteImageManifest, page, slug, 20).filter((row) => row?.explicit_assignment === true && row?.url);
   if (managed.length >= briefs.length) return "";
+  const serviceImage=standardLandingFallback(slug)||'/assets/themes/standard/images/service-photo.webp';
+  const processImage='/assets/themes/standard/images/jobday-field-841.webp';
+  const illustrationImages=[serviceImage,processImage,'/assets/themes/standard/images/daip-editor-841.webp'];
   return `
-    <section class="section panel visual-proof-plan" data-visual-placeholder-section="true">
-      <p class="eyebrow">Visual proof placeholders</p>
-      <h2 style="margin-top:0">Photos that will strengthen this service page</h2>
-      <p class="muted">These placeholders keep the layout ready for real Rosie Dazzlers work. Replace them through Photo Management Studio as matching before/after and process photos become available.</p>
+    <section class="section panel visual-proof-plan" data-build841="illustrative-service-cards">
+      <p class="eyebrow">Service visuals</p>
+      <h2 style="margin-top:0">What to look for in this service</h2>
+      <p class="muted">Illustrative service photography, not photos of a customer's completed job or evidence of a particular result. Verified before/after photos remain a separate, consent-controlled Photo Studio workflow.</p>
       <div class="visual-brief-grid">
-        ${briefs.slice(managed.length, managed.length + 6).map((brief) => `<article class="visual-brief-card"><img src="/assets/placeholders/service-photo-needed.svg" alt="Photo placeholder for ${escapeHtml(brief)}" loading="lazy"><h3>Photo needed</h3><p class="muted">${escapeHtml(brief)}</p></article>`).join("")}
+        ${briefs.slice(managed.length, managed.length + 6).map((brief,index) => `<article class="visual-brief-card"><img src="${escapeHtml(illustrationImages[index%illustrationImages.length])}" alt="Illustrative detailing service photograph; not a real customer result" loading="lazy" decoding="async"><h3>Illustrative view ${index+1}</h3><p class="muted">${escapeHtml(brief)}</p></article>`).join("")}
       </div>
     </section>`;
 }

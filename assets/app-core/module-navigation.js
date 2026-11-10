@@ -6,9 +6,31 @@
   function moduleForPage(pageKey){const row=CATALOG.route_index[String(pageKey||'')];return row?.primary_module||null;}
   function modulesForPage(pageKey){const row=CATALOG.route_index[String(pageKey||'')];if(!row)return [];return [row.primary_module,...(row.related_modules||[])].filter(Boolean);}
   function canPage(pageKey){try{return !g.AdminAuth||typeof g.AdminAuth.canAccessPage!=='function'||g.AdminAuth.canAccessPage(pageKey);}catch{return false;}}
+  CATALOG.modules.socials.categories[0].cards.unshift({href:'/admin-social.html#jobMedia841',label:'Create from Job',description:'Tag an active or completed job upload in DAIP, then create a private social draft.',page_key:'admin-social'});
+  // Build 841: every workflow tile has a real, local, non-customer image. These
+  // are illustrative photographs, never claimed to be proof of a real job.
+  const PHOTO_ROOT='/assets/themes/standard/images/';
+  const WORKFLOW_PHOTOS=[
+    [/social|publish|marketing|promotion|campaign|growth|connection/i,'social-creator-841.webp'],
+    [/daip|creative|media intake|content|photo studio|gallery|upload/i,'daip-editor-841.webp'],
+    [/detailer|jobsite|assigned jobs|incident|customer progress|live operations/i,'jobday-field-841.webp'],
+    [/inventory|catalog|supplies/i,'inventory-tools-photo.webp'],
+    [/payment|accounting|payroll|tax|finance|close|economic/i,'workflow-tablet.webp'],
+    [/vehicle|fleet|maintenance|water rules/i,'service-exterior.webp'],
+    [/booking|quote|conversion|schedule|assignment|blocked days|today/i,'package-complete.webp'],
+    [/launch|readiness|preflight|test|sanity|startup/i,'launch-readiness-photo.webp'],
+    [/security|recovery|health|runtime|support|diagnostic|reliability|notification|system/i,'workflow-photo.webp'],
+    [/customer|staff|people|access|operations|workflow/i,'jobday-field-841.webp']
+  ];
+  function workflowPhoto(card,moduleKey){
+    const label=String(card.label||'');
+    const selected=WORKFLOW_PHOTOS.find(([pattern])=>pattern.test(label));
+    const fallback={socials:'social-creator-841.webp',daip:'daip-editor-841.webp',detailer:'jobday-field-841.webp',operations:'package-complete.webp',admin:'inventory-tools-photo.webp',finance:'workflow-tablet.webp',it:'workflow-photo.webp'};
+    return PHOTO_ROOT+(selected?.[1]||fallback[moduleKey]||'service-photo.webp');
+  }
   function renderHome(moduleKey,mount=document.querySelector('[data-module-home-cards]')){
     if(!mount)return; const mod=CATALOG.modules[moduleKey]; if(!mod){mount.innerHTML='';return;}
-    mount.innerHTML=mod.categories.map(cat=>{const cards=cat.cards.filter(c=>canPage(c.page_key));if(!cards.length)return '';return `<section class="module-nav-group"><div class="module-nav-heading"><h2>${esc(cat.name)}</h2><span class="mini">${cards.length} workflow${cards.length===1?'':'s'}</span></div><div class="module-links">${cards.map(c=>`<article class="module-link-card"><h3>${esc(c.label)}</h3><p class="mini">${esc(c.description)}</p><a class="btn ghost" href="${esc(c.href)}">Open</a></article>`).join('')}</div></section>`;}).join('');
+    mount.innerHTML=mod.categories.map(cat=>{const cards=cat.cards.filter(c=>canPage(c.page_key));if(!cards.length)return '';return `<section class="module-nav-group"><div class="module-nav-heading"><h2>${esc(cat.name)}</h2><span class="mini">${cards.length} workflow${cards.length===1?'':'s'}</span></div><div class="module-links">${cards.map(c=>`<article class="module-link-card"><img class="module-link-card__photo" src="${esc(workflowPhoto(c,moduleKey))}" alt="Illustrative image for ${esc(c.label)}" loading="lazy" decoding="async"><h3>${esc(c.label)}</h3><p class="mini">${esc(c.description)}</p><a class="btn ghost" href="${esc(c.href)}">Open</a></article>`).join('')}</div></section>`;}).join('');
   }
   g.RosieAppCore=g.RosieAppCore||{}; g.RosieAppCore.ModuleNavigation={BUILD:267,CATALOG,moduleForPage,modulesForPage,renderHome};
 })(window);
