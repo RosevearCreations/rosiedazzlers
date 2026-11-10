@@ -1,0 +1,6 @@
+.build837-continuity .build837-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem;margin:.9rem 0}
+.build837-continuity #build837State{font-weight:600}
+.build837-continuity #build837Summary{line-height:1.6}
+.build837-continuity #build837Next{border-left:3px solid var(--gold,#b9974a);padding:.7rem 1rem;max-width:78ch}
+.build837-continuity #build837Refresh:focus-visible{outline:3px solid #b9974a;outline-offset:3px}
+@media(max-width:720px){.build837-continuity .build837-controls>*{width:100%}}

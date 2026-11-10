@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="/assets/build834-master-status.css?v=build834"/>
 <link rel="stylesheet" href="/assets/build835-pilot.css?v=build835"/>
 <link rel="stylesheet" href="/assets/build836-publication.css?v=build836"/>
+<link rel="stylesheet" href="/assets/build837-consent-incident.css?v=build837"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -399,6 +400,24 @@
     <p class="muted">The separate Node-only original publisher contract requires original per-consumer approval, durable sequence/replay claims and a receiver-verified ACK. On ambiguous delivery it records a protected dead-letter when available, never automatically retries, and never changes the source connection from HOLD. No secrets or customer data enter this page.</p>
   </div>
 </section>
+<section class="section build837-continuity" id="build837Continuity" aria-labelledby="build837Heading">
+  <div class="panel">
+    <span class="badge">Build 837 · Customer consent and operator incident continuity</span>
+    <h2 id="build837Heading">16. Review consent journeys, delivery proof and incident handoff gates</h2>
+    <p>Private Rosie source-only readiness. Customer purpose, recipient, channel and revocation must be verified again before any separately approved delivery. An operator acknowledging or archiving a concern does not close the original Rosie worksite issue. <strong>No customer message, Comms task or incident is sent or changed here.</strong></p>
+    <div class="build837-controls"><button class="btn ghost" id="build837Refresh" type="button">Refresh consent/incident readiness (no send)</button></div>
+    <p id="build837State" role="status" aria-live="polite">Current consent and signed delivery unknown. Comms HOLD.</p>
+    <p id="build837Summary">Independent current consent, provider delivery receipt and incident closure evidence have not been supplied.</p>
+    <div class="build825-scroll" role="region" tabindex="0" aria-label="Customer consent journeys">
+      <table><caption>Purposes and channels · no inferred opt-in</caption><thead><tr><th scope="col">Journey</th><th scope="col">Purpose</th><th scope="col">Channels</th><th scope="col">State</th></tr></thead><tbody id="build837Journeys"></tbody></table>
+    </div>
+    <div class="build825-scroll" role="region" tabindex="0" aria-label="Original provider and incident handoff gates">
+      <table><caption>Original source/operator approvals · held until independently proven</caption><thead><tr><th scope="col">Gate</th><th scope="col">Required original evidence</th><th scope="col">State</th><th scope="col">Authority</th></tr></thead><tbody id="build837Gates"></tbody></table>
+    </div>
+    <p id="build837Next" class="muted">An authenticated source and current purpose/channel consent are required.</p>
+    <p class="muted">No customer identity, contact method, incident description, provider token, owner signature or message body is exposed. A separate Node-only protected reviewer can reconcile genuine original evidence once authorized; its tests do not establish live delivery.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -418,7 +437,8 @@
   import { startMasterStatus834 } from '/assets/build834-master-status-ui.mjs?v=build834';
   import { startOwnerPilot835 } from '/assets/build835-pilot-ui.mjs?v=build835';
   import { startPublicationReadiness836 } from '/assets/build836-publication-ui.mjs?v=build836';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();startPublicationReadiness836();}});
+  import { startConsentIncidentContinuity837 } from '/assets/build837-consent-incident-ui.mjs?v=build837';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();startPublicationReadiness836();startConsentIncidentContinuity837();}});
 </script>
 </body>
 </html>
