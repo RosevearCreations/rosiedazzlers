@@ -190,3 +190,4 @@ node scripts/build836_protected_event_publication_test.mjs
 node scripts/build837_consent_incident_continuity_test.mjs
 node scripts/build838_operations_security_it_health_test.mjs
 node scripts/build839_module_trends_owner_signoff_test.mjs
+node scripts/build840_suite_pilot_final_business_gate_test.mjs

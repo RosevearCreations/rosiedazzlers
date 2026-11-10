@@ -1,0 +1,9 @@
+.build840-suite-pilot .build840-status{border:1px solid #a86529;border-radius:12px;padding:1rem;
+  background:rgba(168,101,41,.12);color:inherit;font-weight:700}
+.build840-suite-pilot .build840-grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.build840-suite-pilot .build840-table{overflow-x:auto;margin-block:1rem}
+.build840-suite-pilot table{width:100%;border-collapse:collapse;min-width:620px}
+.build840-suite-pilot th,.build840-suite-pilot td{padding:.65rem;text-align:left;border-bottom:1px solid currentColor;vertical-align:top}
+.build840-suite-pilot .build840-topology{margin:0;padding-left:1.4rem}
+.build840-suite-pilot a:focus-visible,.build840-suite-pilot button:focus-visible{outline:3px solid #b68b3c;outline-offset:3px}
+@media (prefers-color-scheme:dark){.build840-suite-pilot .build840-status{background:rgba(201,142,74,.18)}}
