@@ -1,6 +1,6 @@
 # Build 840 — End-to-End Rosevear Suite Pilot Reconciliation & Final Business Gate
 
-**Release status:** software candidate for protected `dev` → `main`, Cloudflare exact-SHA verification pending. **Final business gate: HOLD**, independently signed original owner/provider/consumer receipts not available to Rosie.
+**Release status: SOFTWARE / PRODUCTION GREEN (November 10, 2026).** Protected [dev PR #934](https://github.com/RosevearCreations/rosiedazzlers/pull/934) and [main PR #935](https://github.com/RosevearCreations/rosiedazzlers/pull/935), with six successful [Cloudflare Production exact-SHA jobs #42853326265](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42853326265), independently verify feature `main` `255eba78a36902f4ac3b282165ffaa4b067a8fe3`. **Final business gate: HOLD**; independently signed original owner/provider/consumer receipts were not available to Rosie. This documentation-only closure requires separate protected exact-SHA verification.
 
 ## Implemented source-owned review
 
