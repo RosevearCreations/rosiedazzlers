@@ -1,0 +1,10 @@
+.build833-comms .build833-controls{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin-block:1rem}
+.build833-comms .build825-scroll{overflow-x:auto}
+.build833-comms table{min-width:760px;width:100%;border-collapse:collapse}
+.build833-comms th,.build833-comms td{padding:.85rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--border, #555)}
+.build833-comms th{min-width:140px}
+.build833-comms details{max-width:28rem}
+.build833-comms details p{margin:.5rem 0}
+.build833-comms details summary{cursor:pointer;text-decoration:underline;text-underline-offset:.15rem}
+.build833-comms :is(button,a,summary):focus-visible{outline:3px solid #c78e46;outline-offset:3px}
+@media(max-width:650px){.build833-comms .build833-controls button{width:100%}}
