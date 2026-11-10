@@ -1,6 +1,8 @@
 # Rosie Dazzlers 834 — Source Health, Release Provenance & Verified Master Status Envelope
 
-**Release status:** source feature candidate; full protected `dev`/`main` and exact-SHA Cloudflare Production acceptance must be completed before calling 834 software GREEN. Master Shell producer/consumer linkage remains **HOLD** without independent authority.
+**Build 834 software release verified GREEN (November 9, 2026):** [protected dev PR #906](https://github.com/RosevearCreations/rosiedazzlers/pull/906), [protected main PR #907](https://github.com/RosevearCreations/rosiedazzlers/pull/907), six successful [Cloudflare exact-SHA Production jobs #42747851780](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42747851780) at feature commit `930eb7170bba28059421eac7e6193cd7d2ca3a21`. This **newer independent feature acceptance** supplements (but does not modify) the runtime preview's immutable Build 833 historical proof reference. It does not make that preview an independent runtime attestation, a signed Master event or a Comms connection. Original owner/source signer, approved audience, evidence expiry and consumer receipt remain **DISCONNECTED / HOLD**. This docs-only release closure separately needs protected promotion.
+
+**Pre-promotion status (superseded by the verified release above):** source feature candidate, formerly awaiting protected `dev`/`main` and exact-SHA Cloudflare Production acceptance. Master Shell producer/consumer linkage remains **HOLD** without independent authority.
 
 ## Role in the Master Shell
 
