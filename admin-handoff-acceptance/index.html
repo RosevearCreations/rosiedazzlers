@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="/assets/build833-comms.css?v=build833"/>
 <link rel="stylesheet" href="/assets/build834-master-status.css?v=build834"/>
 <link rel="stylesheet" href="/assets/build835-pilot.css?v=build835"/>
+<link rel="stylesheet" href="/assets/build836-publication.css?v=build836"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -378,6 +379,26 @@
     <p class="muted">No credentials, original signed artifacts, customer/payment data, database writes, connection activation, automatic retry or new peer permission are collected here. A read-only status check is not a signed TEST receipt.</p>
   </div>
 </section>
+<section class="section build836-publication" id="build836Publication" aria-labelledby="build836Heading">
+  <div class="panel">
+    <span class="badge">Build 836 · Protected source-event publication and independent consumer ACK</span>
+    <h2 id="build836Heading">15. Review per-consumer publication, replay protection and HOLD</h2>
+    <p>This signed-in Rosie source view checks the event contract and lists the original approvals needed before AI Data Platform or Comms Hub can accept an event. <strong>It never sends events, authorizes delivery, retries an uncertain publish or releases a connection.</strong> Each master remains an independent audience; no other business, tenant or device receives an implicit grant.</p>
+    <div class="build836-controls"><button class="btn ghost" id="build836Refresh" type="button">Refresh publication readiness (no send)</button></div>
+    <p id="build836State" role="status" aria-live="polite">No independently signed source event or consumer ACK verified. HOLD.</p>
+    <p id="build836Summary">Original owner, transport, replay, consent and receipt gates remain held.</p>
+    <div class="build825-scroll" role="region" tabindex="0" aria-label="Protected source event and consumer acceptance gates">
+      <table><caption>Original publisher authorization gates · one Rosie source</caption>
+        <thead><tr><th scope="col">Gate</th><th scope="col">Required evidence</th><th scope="col">Current state</th><th scope="col">Owner</th></tr></thead><tbody id="build836Gates"></tbody></table>
+    </div>
+    <div class="build825-scroll" role="region" tabindex="0" aria-label="AI Data and Comms independent event acceptance">
+      <table><caption>Master consumers · each independently authorized and held</caption>
+        <thead><tr><th scope="col">Consumer</th><th scope="col">Purpose</th><th scope="col">State</th><th scope="col">Events / ACKs</th></tr></thead><tbody id="build836Consumers"></tbody></table>
+    </div>
+    <p id="build836Next" class="muted">Original protected signer, approved consumer and independent receipt required.</p>
+    <p class="muted">The separate Node-only original publisher contract requires original per-consumer approval, durable sequence/replay claims and a receiver-verified ACK. On ambiguous delivery it records a protected dead-letter when available, never automatically retries, and never changes the source connection from HOLD. No secrets or customer data enter this page.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -396,7 +417,8 @@
   import { startCommsReview833 } from '/assets/build833-comms-ui.mjs?v=build833';
   import { startMasterStatus834 } from '/assets/build834-master-status-ui.mjs?v=build834';
   import { startOwnerPilot835 } from '/assets/build835-pilot-ui.mjs?v=build835';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();}});
+  import { startPublicationReadiness836 } from '/assets/build836-publication-ui.mjs?v=build836';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();startPublicationReadiness836();}});
 </script>
 </body>
 </html>
