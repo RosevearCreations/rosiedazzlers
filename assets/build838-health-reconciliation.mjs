@@ -66,7 +66,7 @@ export function reconcileHealth838(base,{it=null,support=null,backup=null}={},no
       row.state=observed.state;
       row.nextAction=observed.nextAction;
       row.observedAt=source.body.generated_at;
-    }else row.nextAction=window.state==='SOURCE_UNAVAILABLE'? 
+    }else row.nextAction=window.state==='SOURCE_UNAVAILABLE'?
       'Open the owning screen; restore the read-only diagnostic or required permission, then refresh once.':
       'Refresh the owning source; this old/invalid timestamp is not current proof.';
   };
