@@ -188,3 +188,4 @@ node scripts/build834_master_shell_status_test.mjs
 node scripts/build835_owner_master_pilot_test.mjs
 node scripts/build836_protected_event_publication_test.mjs
 node scripts/build837_consent_incident_continuity_test.mjs
+node scripts/build838_operations_security_it_health_test.mjs
