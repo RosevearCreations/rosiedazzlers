@@ -184,3 +184,4 @@ node scripts/build830_role_device_recovery_test.mjs
 node scripts/build831_booking_worksite_payment_pilot_test.mjs
 node scripts/build832_job_economics_reconciliation_test.mjs
 node scripts/build833_comms_boundary_contract_test.mjs
+node scripts/build834_master_shell_status_test.mjs
