@@ -1,0 +1,6 @@
+.build835-pilot .build835-controls{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem;margin:.9rem 0}
+.build835-pilot #build835State{font-weight:600}
+.build835-pilot #build835Summary{line-height:1.6}
+.build835-pilot #build835Next{border-left:3px solid var(--gold,#b9974a);padding:.7rem 1rem;max-width:78ch}
+.build835-pilot #build835Refresh:focus-visible{outline:3px solid #b9974a;outline-offset:3px}
+@media(max-width:720px){.build835-pilot .build835-controls>*{width:100%}}
