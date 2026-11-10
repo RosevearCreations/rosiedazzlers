@@ -1,0 +1,7 @@
+.build839-portfolio .build839-controls{display:flex;flex-wrap:wrap;align-items:end;gap:.8rem;margin:.9rem 0}
+.build839-portfolio .build839-controls label{display:flex;flex-direction:column;gap:.35rem}
+.build839-portfolio .build839-review{border-left:3px solid var(--gold,#b9974a);padding:.6rem 1rem;max-width:86ch;line-height:1.6}
+.build839-portfolio #build839State{font-weight:600}
+.build839-portfolio td{vertical-align:top;min-width:7rem}
+.build839-portfolio a:focus-visible,.build839-portfolio button:focus-visible,.build839-portfolio input:focus-visible,.build839-portfolio select:focus-visible{outline:3px solid #b9974a;outline-offset:3px}
+@media(max-width:720px){.build839-portfolio .build839-controls>*{width:100%}}

@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/build836-publication.css?v=build836"/>
 <link rel="stylesheet" href="/assets/build837-consent-incident.css?v=build837"/>
 <link rel="stylesheet" href="/assets/build838-health.css?v=build838"/>
+<link rel="stylesheet" href="/assets/build839-portfolio.css?v=build839"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -438,6 +439,31 @@
     <p class="muted">The signed Rosie supervisor session and source-only request remain the only local authority here. No customer, employee, payroll, payment, backup contents or provider secrets are returned. No database write, remote command, provider send, automatic retry, restore or scheduled polling is performed.</p>
   </div>
 </section>
+<section class="section build839-portfolio" id="build839Portfolio" aria-labelledby="build839Heading">
+  <div class="panel">
+    <span class="badge">Build 839 · Module trends, owner signoff and Master portfolio</span>
+    <h2 id="build839Heading">18. Review dated module estimates, local evidence and owner approval gaps</h2>
+    <p>We retain the November 8 human-estimated built/proven baseline for all 45 module scopes, but no second independently owner-approved scoring snapshot exists. <strong>No trend or portfolio completion rate can honestly be calculated yet.</strong> Local supervisor review is not an original signed owner decision, and software Production GREEN is separate from real field acceptance.</p>
+    <div class="build839-controls">
+      <label for="build839Search">Find module, scope or proposed owner<input id="build839Search" type="search" autocomplete="off" placeholder="Search 45 module scopes"/></label>
+      <label for="build839Filter">Local evidence signal<select id="build839Filter"><option value="all">All draft scopes</option><option value="linked">Linked local chain</option><option value="conflict">Conflicting chain</option><option value="missing">Missing / other</option></select></label>
+      <button id="build839Refresh" type="button" class="btn ghost">Refresh private portfolio review once</button>
+    </div>
+    <p id="build839State" role="status" aria-live="polite">Current private source not yet checked; owner and Master HOLD.</p>
+    <p id="build839Summary">The baseline is an estimate, not a confirmed completion percentage.</p>
+    <p id="build839Count" role="status" aria-live="polite">Module source not yet reconciled.</p>
+    <div class="build825-scroll" role="region" tabindex="0" aria-label="45 module scope trends and independent owner approval review">
+      <table><caption>November 8 provisional estimates, private local decisions and unsigned owner gates</caption>
+        <thead><tr><th scope="col">Module</th><th scope="col">Provisional baseline</th><th scope="col">Approved trend</th><th scope="col">Local evidence</th><th scope="col">Owner signoff</th><th scope="col">Master score</th><th scope="col">Original evidence next step</th></tr></thead>
+        <tbody id="build839Rows"></tbody>
+      </table>
+    </div>
+    <p class="build839-review" id="build839Signoff">An independent owner-approved scoring scope, evidence and signed decision remain required.</p>
+    <p class="build839-review" id="build839Master">AI Data and Comms contracts remain DISCONNECTED / HOLD until independently accepted.</p>
+    <p id="build839Revision" class="muted">A source report cannot certify its own Production exact SHA.</p>
+    <p class="muted">Read-only signed-admin scope, one bounded private field-evidence read, no new database table, no score mutation, no customer or staff payload export, no remote Master message, no automatic polling or retry. A field reviewer can use <a href="/admin-handoff-acceptance.html#build826GuidedEvidence">the existing authenticated observation/signoff procedure</a>; only an independently authorized original owner can approve and sign the portfolio acceptance.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -459,7 +485,8 @@
   import { startPublicationReadiness836 } from '/assets/build836-publication-ui.mjs?v=build836';
   import { startConsentIncidentContinuity837 } from '/assets/build837-consent-incident-ui.mjs?v=build837';
   import { startHealthReconciliation838 } from '/assets/build838-health-ui.mjs?v=build838';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();startPublicationReadiness836();startConsentIncidentContinuity837();startHealthReconciliation838();}});
+  import { startPortfolioReadiness839 } from '/assets/build839-portfolio-ui.mjs?v=build839';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();startPublicationReadiness836();startConsentIncidentContinuity837();startHealthReconciliation838();startPortfolioReadiness839();}});
 </script>
 </body>
 </html>
