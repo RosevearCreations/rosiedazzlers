@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="/assets/build829-reporting.css?v=build829"/>
 <link rel="stylesheet" href="/assets/build830-role-device.css?v=build830"/>
 <link rel="stylesheet" href="/assets/build831-pilot.css?v=build831"/>
+<link rel="stylesheet" href="/assets/build832-economics.css?v=build832"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -289,6 +290,32 @@
     <p class="muted">Review only original customer-consented bookings and independently witnessed real jobs. Follow the private admin route for each exception and obtain the actual signed provider and finance receipts before owner signoff. No payment, refund, reminder, booking, customer message, AI Data event, Comms incident, module percentage or HOLD state is automatically changed.</p>
   </div>
 </section>
+<section class="section build832-economics" id="build832Economics" aria-labelledby="build832Heading">
+  <div class="panel">
+    <span class="badge">Build 832 · Private job economics and accountant evidence review</span>
+    <h2 id="build832Heading">11. Reconcile job inventory, time, invoice, payroll and HST sources</h2>
+    <p>Authorized finance admins can review real, bounded <strong>read-only</strong> source records. An accounting total is not an independently issued invoice; time entries do not prove payroll allocation; stock movement does not prove historical cost. No HST return, margin, reimbursement, payout or owner approval is inferred.</p>
+    <div class="build832-controls">
+      <label for="build832Filter">Evidence focus
+        <select id="build832Filter"><option value="all">All recent bookings</option>
+          <option value="finance">Accounting amount and missing-record checks</option>
+          <option value="inventory">Inventory and cost-of-sales source</option>
+          <option value="payroll">Time and payroll allocation</option>
+          <option value="tax">Issued invoices, receipts and tax support</option></select></label>
+      <button id="build832Refresh" class="btn ghost" type="button">Refresh private economics source</button>
+    </div>
+    <p id="build832Status" role="status" aria-live="polite">Financial source not checked.</p>
+    <p id="build832Count" role="status" aria-live="polite">Job economics review not loaded.</p>
+    <div class="build825-scroll" role="region" aria-label="Private job economics and accountant handoff source matrix" tabindex="0">
+      <table><caption>Bookkeeping snapshots only · actual accountant and owner acceptance HOLD</caption>
+        <thead><tr><th scope="col">Booking suffix</th><th scope="col">Local accounting snapshot</th>
+          <th scope="col">Inventory and COGS references</th><th scope="col">Labour records</th>
+          <th scope="col">Evidence still required</th><th scope="col">Owning review</th></tr></thead>
+        <tbody id="build832Rows"></tbody></table>
+    </div>
+    <p class="muted">The finance administrator must obtain the original dated stock and supplier receipts, applicable cost basis, signed staff time, actual payroll period allocations, customer-issued invoice, independent payment/provider statements, posted GL tax and HST/ITC workpapers. A separate accountant and owner must approve genuine outcomes. This screen neither creates those records nor changes the canonical HOLD, Master Shell status, invoice, employee pay or tax filing.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -303,7 +330,8 @@
   import { startReporting829 } from '/assets/build829-reporting-ui.mjs?v=build829';
   import { startRoleDeviceRecovery830 } from '/assets/build830-role-device-ui.mjs?v=build830';
   import { startBookingWorksitePilot831 } from '/assets/build831-pilot-ui.mjs?v=build831';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();}});
+  import { startEconomics832 } from '/assets/build832-economics-ui.mjs?v=build832';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();}});
 </script>
 </body>
 </html>
