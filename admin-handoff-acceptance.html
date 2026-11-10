@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="/assets/build837-consent-incident.css?v=build837"/>
 <link rel="stylesheet" href="/assets/build838-health.css?v=build838"/>
 <link rel="stylesheet" href="/assets/build839-portfolio.css?v=build839"/>
+<link rel="stylesheet" href="/assets/build840-suite-pilot.css?v=build840"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -464,6 +465,40 @@
     <p class="muted">Read-only signed-admin scope, one bounded private field-evidence read, no new database table, no score mutation, no customer or staff payload export, no remote Master message, no automatic polling or retry. A field reviewer can use <a href="/admin-handoff-acceptance.html#build826GuidedEvidence">the existing authenticated observation/signoff procedure</a>; only an independently authorized original owner can approve and sign the portfolio acceptance.</p>
   </div>
 </section>
+<section class="section build840-suite-pilot" id="build840SuitePilot" aria-labelledby="build840Heading">
+  <div class="panel">
+    <span class="badge">Build 840 · Rosevear Suite end-to-end business gate</span>
+    <h2 id="build840Heading">19. Compare source evidence, routing patterns and unresolved original approvals</h2>
+    <p>Rosie is an owned-business source shell. AI Data Platform independently owns intelligence, while Comms Hub independently owns operator communications. Yard Workers and iCamp are platform shells with their own child-tenants; Devil n Dove and the Windows AI Hub are peers, not extra Rosie tenants. No cross-application customer records or tenant authority are exposed by this report.</p>
+    <button type="button" id="build840Refresh" class="btn ghost">Compare six private Rosie reports once</button>
+    <p id="build840State" role="status" aria-live="polite">Manual source comparison not started; independent business acceptance HOLD.</p>
+    <p class="build840-status" id="build840Gate" role="status">Final business gate: HOLD · independent original owner, provider, source receipt and master acknowledgements required.</p>
+    <p id="build840Summary">No verified cross-app receipt or original owner decision supplied by this source view.</p>
+    <div class="build840-grid">
+      <div><h3>Suite roles and isolation</h3><ul class="build840-topology" id="build840Topology"></ul></div>
+      <div><h3>Original evidence safeguards</h3><ul>
+        <li>Current per-purpose customer consent, recipient and revocation proof.</li>
+        <li>Independent source signer, nonce/replay, receiver ACK and witness.</li>
+        <li>Role/tenant isolation, unavailable/unknown/timeout HOLD and owner-gated STOP/rollback.</li>
+        <li>No automatic replays, restore, provider send, Master publish or owner signature here.</li>
+      </ul></div>
+    </div>
+    <div class="build840-table" role="region" tabindex="0" aria-label="One-to-one, one-to-many and many-to-one suite review">
+      <table><caption>Proposed Suite routes remain gated until independently accepted</caption>
+        <thead><tr><th scope="col">Pattern</th><th scope="col">Sources / consumers</th><th scope="col">Required original evidence</th><th scope="col">Approval owner</th></tr></thead>
+        <tbody id="build840RouteRows"></tbody>
+      </table>
+    </div>
+    <div class="build840-table" role="region" tabindex="0" aria-label="Six existing local signed Rosie source reports">
+      <table><caption>Only existing signed-in Rosie source reports; never independent consumer receipts</caption>
+        <thead><tr><th scope="col">Source</th><th scope="col">Comparison status</th><th scope="col">Observed UTC</th><th scope="col">Owning source</th></tr></thead>
+        <tbody id="build840SourceRows"></tbody>
+      </table>
+    </div>
+    <p id="build840Release" class="muted">Exact-SHA deployment acceptance is verified outside this dashboard.</p>
+    <p class="muted">This source-only comparison reads up to six authorized Rosie GETs after a manual click, with seven-second per-request timeouts. It does not contact AI Data, Comms, another business, a provider, a Windows host or a signer. Missing evidence stays UNKNOWN/HOLD. Final business acceptance must come from the original independent owners and protected receipt process, not a software release.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -486,7 +521,8 @@
   import { startConsentIncidentContinuity837 } from '/assets/build837-consent-incident-ui.mjs?v=build837';
   import { startHealthReconciliation838 } from '/assets/build838-health-ui.mjs?v=build838';
   import { startPortfolioReadiness839 } from '/assets/build839-portfolio-ui.mjs?v=build839';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();startPublicationReadiness836();startConsentIncidentContinuity837();startHealthReconciliation838();startPortfolioReadiness839();}});
+  import { startSuitePilot840 } from '/assets/build840-suite-pilot-ui.mjs?v=build840';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();startPublicationReadiness836();startConsentIncidentContinuity837();startHealthReconciliation838();startPortfolioReadiness839();startSuitePilot840();}});
 </script>
 </body>
 </html>
