@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="/assets/build835-pilot.css?v=build835"/>
 <link rel="stylesheet" href="/assets/build836-publication.css?v=build836"/>
 <link rel="stylesheet" href="/assets/build837-consent-incident.css?v=build837"/>
+<link rel="stylesheet" href="/assets/build838-health.css?v=build838"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -418,6 +419,25 @@
     <p class="muted">No customer identity, contact method, incident description, provider token, owner signature or message body is exposed. A separate Node-only protected reviewer can reconcile genuine original evidence once authorized; its tests do not establish live delivery.</p>
   </div>
 </section>
+<section class="section build838-health" id="build838Health" aria-labelledby="build838Heading">
+  <div class="panel">
+    <span class="badge">Build 838 · Source-owned Operations, Security &amp; I.T. health</span>
+    <h2 id="build838Heading">17. Reconcile current diagnostic sources and original evidence gaps</h2>
+    <p>One private snapshot links existing runtime, support, backup, operations, security and Master Shell authorities. It checks three retained diagnostic endpoints once and labels everything else <strong>not queried</strong>. Configuration presence is not a verified transaction, an old acceptance screen is not a new prerequisite, and a valid source status is not independent Production or owner approval.</p>
+    <div class="build838-controls"><button class="btn ghost" id="build838Refresh" type="button">Refresh current source health once</button></div>
+    <p id="build838State" role="status" aria-live="polite">Original source diagnostics not reconciled yet. HOLD where proof is missing.</p>
+    <p id="build838Summary">No original I.T., operations or backup proof has been reviewed in this session.</p>
+    <div class="build825-scroll" role="region" tabindex="0" aria-label="Operations, security and IT evidence source status">
+      <table><caption>Nine separately owned source areas · results never certify cross-app connection</caption>
+        <thead><tr><th scope="col">Area</th><th scope="col">Authority</th><th scope="col">Source status</th><th scope="col">Evidence class</th><th scope="col">Observed at</th><th scope="col">Next action</th><th scope="col">Original screen</th></tr></thead>
+        <tbody id="build838Rows"></tbody>
+      </table>
+    </div>
+    <p id="build838Proof" class="muted">This screen does not verify the live deployment's exact GitHub/Cloudflare SHA.</p>
+    <p id="build838Next" class="muted">Independent original owner, device, recovery and Master Shell proof stays with its source.</p>
+    <p class="muted">The signed Rosie supervisor session and source-only request remain the only local authority here. No customer, employee, payroll, payment, backup contents or provider secrets are returned. No database write, remote command, provider send, automatic retry, restore or scheduled polling is performed.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -438,7 +458,8 @@
   import { startOwnerPilot835 } from '/assets/build835-pilot-ui.mjs?v=build835';
   import { startPublicationReadiness836 } from '/assets/build836-publication-ui.mjs?v=build836';
   import { startConsentIncidentContinuity837 } from '/assets/build837-consent-incident-ui.mjs?v=build837';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();startPublicationReadiness836();startConsentIncidentContinuity837();}});
+  import { startHealthReconciliation838 } from '/assets/build838-health-ui.mjs?v=build838';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();startPublicationReadiness836();startConsentIncidentContinuity837();startHealthReconciliation838();}});
 </script>
 </body>
 </html>
