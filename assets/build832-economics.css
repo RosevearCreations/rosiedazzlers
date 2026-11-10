@@ -1,0 +1,9 @@
+.build832-economics .build832-controls{display:flex;flex-wrap:wrap;gap:1rem;align-items:end;margin:1rem 0}
+.build832-economics .build832-controls label{display:grid;gap:.35rem;max-width:26rem}
+.build832-economics .build832-controls select{min-width:16rem;max-width:100%}
+.build832-economics details{max-width:29rem}
+.build832-economics details p{margin:.6rem 0;line-height:1.45}
+.build832-economics .btn.ghost{display:inline-block;margin:.35rem 0;padding:.5rem .65rem}
+.build832-economics :is(a,button,select,summary):focus-visible{outline:3px solid #b58e42;outline-offset:3px}
+@media(max-width:650px){.build832-economics .build832-controls{display:grid;grid-template-columns:1fr}
+.build832-economics .build832-controls label,.build832-economics .build832-controls select{width:100%}}
