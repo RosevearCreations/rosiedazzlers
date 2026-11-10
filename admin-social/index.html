@@ -58,6 +58,24 @@
         </div>
       </section>
 
+      <section class="section" id="jobMedia841" data-build841="job-to-daip-social-creator">
+        <div class="panel stack">
+          <div><span class="badge">Build 841 · Socials creator</span><h2>Create from an active or previous job</h2><p class="muted">Select an authorized job and one existing upload. Tag its ID in a private DAIP Creative Project, then prepare social copy for review. <strong>No private photo, progress link, or customer details are sent to a social platform.</strong> The original file stays in Rosie storage; use DAIP Private Media Intake for an explicitly approved upload/copy.</p></div>
+          <div class="template-row">
+            <label>Job <select id="job841Select"><option value="">Load jobs to choose</option></select></label>
+            <div class="job-actions"><button class="btn ghost" id="job841Reload" type="button">Refresh job choices</button><button class="btn ghost" id="job841Inspect" type="button">Load uploads</button></div>
+          </div>
+          <div class="notice" id="job841Status" role="status" aria-live="polite" tabindex="-1">Choose Refresh job choices to load up to 30 recent jobs.</div>
+          <fieldset style="border:1px solid var(--border);border-radius:12px;padding:12px"><legend>Source upload (private metadata only)</legend><div id="job841Media" class="readiness-grid">No job selected.</div></fieldset>
+          <div class="job-actions"><button class="btn ghost" id="job841Project" type="button">Create / link DAIP project</button><button class="btn ghost" id="job841Tag" type="button" disabled>Tag selected upload in DAIP</button><a class="btn ghost" id="job841ProjectLink" href="/admin-creative-projects.html">Open Creative Projects</a><a class="btn ghost" id="job841Intake" href="/admin-daip-media.html">Open DAIP private upload</a></div>
+          <div class="notice soft" id="job841Boundary">DAIP source tagging is metadata-only. Any public media derivative still needs customer/public-use consent, plate/face/address review, private processing approval and a deliberate public export in Photo Studio.</div>
+          <label>Social caption draft (no customer names, addresses, plates or job-specific private facts)<textarea id="job841Caption" rows="3" maxlength="1800" placeholder="A freshly detailed finish from our team in Southern Ontario."></textarea></label>
+          <div class="job-actions" role="group" aria-label="Draft platform targets"><label class="check-row"><input type="checkbox" name="job841Platform" value="facebook" checked> Facebook</label><label class="check-row"><input type="checkbox" name="job841Platform" value="instagram"> Instagram</label><label class="check-row"><input type="checkbox" name="job841Platform" value="x"> X</label><label class="check-row"><input type="checkbox" name="job841Platform" value="manual"> Manual</label></div>
+          <div class="job-actions"><button class="btn primary" id="job841Draft" type="button" disabled>Create review-only social drafts</button><a class="btn ghost" href="/admin-integrations.html">Check social connections</a><a class="btn ghost" href="/admin-photo-studio.html">Review public derivatives</a></div>
+          <p class="mini">Posts begin in Draft and carry a source media ID, not the private media URL. Publish/API or webhook still requires separate human review, actual provider credentials and the existing hard privacy gate. This page never automatically posts.</p>
+        </div>
+      </section>
+
       <section class="section">
         <div class="panel">
           <h2>Create manual social draft</h2>
@@ -112,6 +130,7 @@
   <script src="/assets/admin-page-init.js"></script>
   <script src="/assets/admin-runtime.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
+  <script defer src="/assets/social-job-tagging-841.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
@@ -265,6 +284,7 @@
           ${media.length ? `<div class="kicker">Media URLs: ${media.length}</div>` : ''}
           ${isPlanned ? `<div class="scheduled-pill">Planned: ${escapeHtml(formatDateTime(post.scheduled_for))}</div>` : ''}
           ${post.caption_template_key ? `<div class="kicker">Template: ${escapeHtml(post.caption_template_key)}</div>` : ''}
+          ${post.source_type === 'daip_job_media_tag' ? `<div class="kicker">DAIP-tagged job upload · reference ${escapeHtml(String(post.source_id || '').slice(0,8))} · private photo not attached</div>` : ''}
           ${Array.isArray(post.local_hashtag_set) && post.local_hashtag_set.length ? `<div class="kicker">Hashtags: ${escapeHtml(post.local_hashtag_set.map((tag)=>`#${String(tag).replace(/^#/, '')}`).join(' '))}</div>` : ''}
           ${isDuplicate ? `<div class="notice warn">Possible duplicate draft: same platform/caption/first media appears ${duplicateCounts.get(post.duplicate_signature)} times in this view.</div>` : ''}
           ${reviewSummary(post)}
