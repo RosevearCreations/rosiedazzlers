@@ -186,3 +186,4 @@ node scripts/build832_job_economics_reconciliation_test.mjs
 node scripts/build833_comms_boundary_contract_test.mjs
 node scripts/build834_master_shell_status_test.mjs
 node scripts/build835_owner_master_pilot_test.mjs
+node scripts/build836_protected_event_publication_test.mjs

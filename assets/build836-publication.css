@@ -1,0 +1,6 @@
+.build836-publication .build836-controls{display:flex;align-items:center;flex-wrap:wrap;gap:.8rem;margin:.9rem 0}
+.build836-publication #build836State{font-weight:600}
+.build836-publication #build836Summary{line-height:1.6}
+.build836-publication #build836Next{border-left:3px solid var(--gold,#b9974a);padding:.7rem 1rem;max-width:78ch}
+.build836-publication #build836Refresh:focus-visible{outline:3px solid #b9974a;outline-offset:3px}
+@media(max-width:720px){.build836-publication .build836-controls>*{width:100%}}
