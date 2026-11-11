@@ -196,3 +196,4 @@ node scripts/build842_owner_device_derivative_delivery_test.mjs
 node scripts/build843_platform_recall_mobile_closure_test.mjs
 node scripts/build844_independent_provider_r2_device_test.mjs
 node scripts/build845_provider_adapter_recall_device_test.mjs
+node scripts/build846_provider_recall_master_test.mjs
