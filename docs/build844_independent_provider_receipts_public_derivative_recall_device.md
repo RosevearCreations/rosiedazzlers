@@ -1,6 +1,6 @@
 # Rosie Dazzlers 844 — Independent Provider Receipts, Public Derivative Recall & Device Review
 
-Release state: **software source candidate** pending protected `dev`, `main` and immutable exact-main Production proof. Real platform, provider access, original customer consent, witness enrollment and device hardware observations are independent external evidence gates; source GREEN never resolves them.
+Release state: **software Production GREEN** — [protected dev #951](https://github.com/RosevearCreations/rosiedazzlers/pull/951), [main #952](https://github.com/RosevearCreations/rosiedazzlers/pull/952), and [six-job exact-SHA Cloudflare Production #43023585378](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/43023585378). Real platform, provider access, original customer consent, witness enrollment and device hardware observations are independent external evidence gates; source GREEN never resolves them. This docs-only closure itself requires separate exact-main Production acceptance.
 
 ## What ships
 
