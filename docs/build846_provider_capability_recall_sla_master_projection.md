@@ -1,6 +1,6 @@
 # Rosie Dazzlers Build 846 — Provider capability, scoped recall SLA and Master source intelligence
 
-**Source:** `rosiedazzlers`, owned-business shell. **Build status:** candidate until protected `dev`/`main` merges and exact-`main` Cloudflare Production acceptance. **External acceptance:** HOLD until evidenced separately.
+**Source:** `rosiedazzlers`, owned-business shell. **Build status:** software Production GREEN at protected [dev #960](https://github.com/RosevearCreations/rosiedazzlers/pull/960), [main #962](https://github.com/RosevearCreations/rosiedazzlers/pull/962) and [six successful exact-SHA Cloudflare Production jobs #43059227945](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/43059227945), including deployed production verification. **External acceptance:** HOLD until evidenced separately. Subsequent release-ledger documentation-only revisions require their own protected checks.
 
 ## Implemented software scope
 
@@ -23,6 +23,8 @@ Use `version:1`, `kind:"cdn_invalidation"`, authenticated purge `cache_purge_htt
 ## AI Data Platform — direct Master-side integration instructions (HOLD)
 
 **For `RosevearCreations/ai-data-platform`, Build 368/369+ source intake owner:**
+
+Direct coordination sent through [AI Data Platform issue #839](https://github.com/RosevearCreations/ai-data-platform/issues/839).
 
 1. Review proposed source-only contract `rosie.ai-data.social-evidence.preview.v846` and schema returned by `masterSocialProjection846` from Rosie. This is only a **local preview**, not a signed `HEALTHY` receipt. Keep identity `sourceId:"rosiedazzlers"`, `shellId:"rosiedazzlers"`, `role:"owned_business_shell"`; do not treat bookings/customers as additional tenant shells.
 2. Establish and document the independent trusted signer enrollment, rotated public-key custody, replay/freshness ledger, approved data audience and source revision pin required by Master 366–369. Until **independently** fulfilled, leave `approvedAudience:[]`, `consumerPayloadEligible:false`, `signedEnvelope:null`, `externalConnection:"HOLD"`, `ownerAcceptance:"HOLD"`. Do **not** scrape or reuse Rosie supervisor credentials to fetch the private preview.
