@@ -1,6 +1,6 @@
 # Rosie Dazzlers Build 849 — Multi-Episode Recall Integrity, Marketing Exception Priority & Independent Master ACK Preflight
 
-**Release authority:** Source-owned Rosie Dazzlers business shell. **Status:** pending protected dev/main approval and exact-SHA Cloudflare Production. **External provider, original-device, independent Master runtime ACK and CONNECTED:** HOLD unless independently proven.
+**Release authority:** Source-owned Rosie Dazzlers business shell. **Software Production GREEN:** [protected dev PR #974](https://github.com/RosevearCreations/rosiedazzlers/pull/974), [protected main PR #975](https://github.com/RosevearCreations/rosiedazzlers/pull/975), and [all six successful exact-SHA Cloudflare Production jobs #43094264347](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/43094264347), including verified deployed feature `main` revision `60b5a4acf3ed9aefa7a43332d70733b0bfd2dbc3`. Any later documentation-only release record requires its own protected Production checks. **External provider, original-device, independent Master runtime ACK and CONNECTED:** HOLD unless independently proven.
 
 ## Multiple recall episodes without loss of evidence
 
