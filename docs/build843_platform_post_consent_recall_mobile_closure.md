@@ -1,6 +1,6 @@
 # Build 843 — Per-Platform Published-Post Confirmation, Consent Recall & Owner Mobile Closure
 
-Status: **source candidate until protected dev/main merges and exact-main Cloudflare Production acceptance**. Code GREEN never means a social provider, original owner device, customer consent or independently verified takedown is GREEN.
+Status: **software Production GREEN** — [dev #947](https://github.com/RosevearCreations/rosiedazzlers/pull/947), [main #948](https://github.com/RosevearCreations/rosiedazzlers/pull/948), [six-job exact-SHA Cloudflare Production #42957786112](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42957786112). Code GREEN never means a social provider, original owner device, customer consent or independently verified takedown is GREEN. This documentation closure itself needs a separate exact-main Production proof.
 
 ## Bounded release contract
 
