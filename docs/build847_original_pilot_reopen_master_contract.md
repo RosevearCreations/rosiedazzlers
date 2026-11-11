@@ -1,6 +1,6 @@
 # Rosie Dazzlers Build 847 — Original provider/custodian pilot, recall reopen and Master contract evidence
 
-**Source owner:** Rosie Dazzlers (`rosiedazzlers`, owned-business shell). **Software:** candidate until protected `dev`/`main` PRs and six exact-SHA Cloudflare Production jobs succeed. **Independent live provider, custodian, physical-device and AI Data acceptance:** HOLD until separately witnessed.
+**Source owner:** Rosie Dazzlers (`rosiedazzlers`, owned-business shell). **Software Production GREEN:** [protected dev #965](https://github.com/RosevearCreations/rosiedazzlers/pull/965), [main #966](https://github.com/RosevearCreations/rosiedazzlers/pull/966), and [all six successful exact-SHA Cloudflare Production jobs #43083266823](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/43083266823), including deployed runtime verification. **Independent live provider, custodian, physical-device and AI Data acceptance:** HOLD until separately witnessed. Subsequent release-ledger documentation-only commits require independent protected production checks.
 
 ## Added original owner workflow
 
