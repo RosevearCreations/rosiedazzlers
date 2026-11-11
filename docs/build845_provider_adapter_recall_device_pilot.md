@@ -1,6 +1,6 @@
 # Rosie Dazzlers 845 — Real Provider Enrollment, Recall Escalations and Device Pilot
 
-Release state: **software release candidate**. Protected `dev`/`main` checks and exact-SHA Cloudflare Production verification are required before declaring this code GREEN. Real account credentials, customer consent, external recall, independent device witness and Master Shell trust remain separate evidence gates.
+Release state: **software Production GREEN**, [protected dev #955](https://github.com/RosevearCreations/rosiedazzlers/pull/955), [protected main #956](https://github.com/RosevearCreations/rosiedazzlers/pull/956) and [six successful exact-SHA Cloudflare Production jobs #43032507662](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/43032507662) for feature `main` `7a15701abf82a6a120a741d4973b70d7438b1cea`. Its 305 main checks concluded 273 success / 32 permitted skip / 0 failure. This docs-only closure separately requires protected exact-main verification. Real account credentials, customer consent, external recall, independent device witness and Master Shell trust remain separate evidence gates.
 
 ## Implemented scope
 
