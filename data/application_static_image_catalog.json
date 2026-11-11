@@ -2022,1973 +2022,6 @@
       "id": "IMG-091"
     },
     {
-      "key": "static:assets/card-art-842/admin-business-analytics.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-business-analytics.svg",
-      "path": "assets/card-art-842/admin-business-analytics.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 92,
-      "id": "IMG-092"
-    },
-    {
-      "key": "static:assets/card-art-842/admin-catalog.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-catalog.svg",
-      "path": "assets/card-art-842/admin-catalog.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 93,
-      "id": "IMG-093"
-    },
-    {
-      "key": "static:assets/card-art-842/admin-economics-capacity-review.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-economics-capacity-review.svg",
-      "path": "assets/card-art-842/admin-economics-capacity-review.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 94,
-      "id": "IMG-094"
-    },
-    {
-      "key": "static:assets/card-art-842/admin-inventory-posting.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-inventory-posting.svg",
-      "path": "assets/card-art-842/admin-inventory-posting.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 95,
-      "id": "IMG-095"
-    },
-    {
-      "key": "static:assets/card-art-842/admin-inventory-workbench.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-inventory-workbench.svg",
-      "path": "assets/card-art-842/admin-inventory-workbench.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 96,
-      "id": "IMG-096"
-    },
-    {
-      "key": "static:assets/card-art-842/admin-legacy-admin-dashboard.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-legacy-admin-dashboard.svg",
-      "path": "assets/card-art-842/admin-legacy-admin-dashboard.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 97,
-      "id": "IMG-097"
-    },
-    {
-      "key": "static:assets/card-art-842/admin-owner-commercial-decisions.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-owner-commercial-decisions.svg",
-      "path": "assets/card-art-842/admin-owner-commercial-decisions.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 98,
-      "id": "IMG-098"
-    },
-    {
-      "key": "static:assets/card-art-842/admin-site-settings.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-site-settings.svg",
-      "path": "assets/card-art-842/admin-site-settings.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 99,
-      "id": "IMG-099"
-    },
-    {
-      "key": "static:assets/card-art-842/admin-staff-access.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-staff-access.svg",
-      "path": "assets/card-art-842/admin-staff-access.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 100,
-      "id": "IMG-100"
-    },
-    {
-      "key": "static:assets/card-art-842/admin-staff-workflow-learning.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-staff-workflow-learning.svg",
-      "path": "assets/card-art-842/admin-staff-workflow-learning.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 101,
-      "id": "IMG-101"
-    },
-    {
-      "key": "static:assets/card-art-842/admin-water-rules.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "admin-water-rules.svg",
-      "path": "assets/card-art-842/admin-water-rules.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 102,
-      "id": "IMG-102"
-    },
-    {
-      "key": "static:assets/card-art-842/customer-book.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "customer-book.svg",
-      "path": "assets/card-art-842/customer-book.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "/app/customer"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [
-        "app/customer/index.html"
-      ],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 103,
-      "id": "IMG-103"
-    },
-    {
-      "key": "static:assets/card-art-842/customer-gift-cards.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "customer-gift-cards.svg",
-      "path": "assets/card-art-842/customer-gift-cards.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "/app/customer"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [
-        "app/customer/index.html"
-      ],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 104,
-      "id": "IMG-104"
-    },
-    {
-      "key": "static:assets/card-art-842/customer-live-progress-messages.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "customer-live-progress-messages.svg",
-      "path": "assets/card-art-842/customer-live-progress-messages.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "/app/customer"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [
-        "app/customer/index.html"
-      ],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 105,
-      "id": "IMG-105"
-    },
-    {
-      "key": "static:assets/card-art-842/customer-my-account.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "customer-my-account.svg",
-      "path": "assets/card-art-842/customer-my-account.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "/app/customer"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [
-        "app/customer/index.html"
-      ],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 106,
-      "id": "IMG-106"
-    },
-    {
-      "key": "static:assets/card-art-842/customer-quote-response.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "customer-quote-response.svg",
-      "path": "assets/card-art-842/customer-quote-response.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "/app/customer"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [
-        "app/customer/index.html"
-      ],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 107,
-      "id": "IMG-107"
-    },
-    {
-      "key": "static:assets/card-art-842/customer-website.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "customer-website.svg",
-      "path": "assets/card-art-842/customer-website.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "/app/customer"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [
-        "app/customer/index.html"
-      ],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 108,
-      "id": "IMG-108"
-    },
-    {
-      "key": "static:assets/card-art-842/daip-creative-projects.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "daip-creative-projects.svg",
-      "path": "assets/card-art-842/daip-creative-projects.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 109,
-      "id": "IMG-109"
-    },
-    {
-      "key": "static:assets/card-art-842/daip-daip-overview-test-lab.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "daip-daip-overview-test-lab.svg",
-      "path": "assets/card-art-842/daip-daip-overview-test-lab.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 110,
-      "id": "IMG-110"
-    },
-    {
-      "key": "static:assets/card-art-842/daip-gate-c.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "daip-gate-c.svg",
-      "path": "assets/card-art-842/daip-gate-c.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 111,
-      "id": "IMG-111"
-    },
-    {
-      "key": "static:assets/card-art-842/daip-governance.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "daip-governance.svg",
-      "path": "assets/card-art-842/daip-governance.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 112,
-      "id": "IMG-112"
-    },
-    {
-      "key": "static:assets/card-art-842/daip-intake-dry-run.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "daip-intake-dry-run.svg",
-      "path": "assets/card-art-842/daip-intake-dry-run.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 113,
-      "id": "IMG-113"
-    },
-    {
-      "key": "static:assets/card-art-842/daip-private-media-intake.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "daip-private-media-intake.svg",
-      "path": "assets/card-art-842/daip-private-media-intake.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 114,
-      "id": "IMG-114"
-    },
-    {
-      "key": "static:assets/card-art-842/daip-private-mvp-blueprint.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "daip-private-mvp-blueprint.svg",
-      "path": "assets/card-art-842/daip-private-mvp-blueprint.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 115,
-      "id": "IMG-115"
-    },
-    {
-      "key": "static:assets/card-art-842/daip-readiness.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "daip-readiness.svg",
-      "path": "assets/card-art-842/daip-readiness.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 116,
-      "id": "IMG-116"
-    },
-    {
-      "key": "static:assets/card-art-842/detailer-assigned-jobs-legacy.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "detailer-assigned-jobs-legacy.svg",
-      "path": "assets/card-art-842/detailer-assigned-jobs-legacy.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 117,
-      "id": "IMG-117"
-    },
-    {
-      "key": "static:assets/card-art-842/detailer-detailer-mobile.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "detailer-detailer-mobile.svg",
-      "path": "assets/card-art-842/detailer-detailer-mobile.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 118,
-      "id": "IMG-118"
-    },
-    {
-      "key": "static:assets/card-art-842/detailer-incidents.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "detailer-incidents.svg",
-      "path": "assets/card-art-842/detailer-incidents.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 119,
-      "id": "IMG-119"
-    },
-    {
-      "key": "static:assets/card-art-842/detailer-jobsite.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "detailer-jobsite.svg",
-      "path": "assets/card-art-842/detailer-jobsite.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 120,
-      "id": "IMG-120"
-    },
-    {
-      "key": "static:assets/card-art-842/finance-accounting.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "finance-accounting.svg",
-      "path": "assets/card-art-842/finance-accounting.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 121,
-      "id": "IMG-121"
-    },
-    {
-      "key": "static:assets/card-art-842/finance-hst-gst-review.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "finance-hst-gst-review.svg",
-      "path": "assets/card-art-842/finance-hst-gst-review.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 122,
-      "id": "IMG-122"
-    },
-    {
-      "key": "static:assets/card-art-842/finance-month-end-close.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "finance-month-end-close.svg",
-      "path": "assets/card-art-842/finance-month-end-close.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 123,
-      "id": "IMG-123"
-    },
-    {
-      "key": "static:assets/card-art-842/finance-payments.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "finance-payments.svg",
-      "path": "assets/card-art-842/finance-payments.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 124,
-      "id": "IMG-124"
-    },
-    {
-      "key": "static:assets/card-art-842/finance-payroll.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "finance-payroll.svg",
-      "path": "assets/card-art-842/finance-payroll.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 125,
-      "id": "IMG-125"
-    },
-    {
-      "key": "static:assets/card-art-842/it-app-management.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-app-management.svg",
-      "path": "assets/card-art-842/it-app-management.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 126,
-      "id": "IMG-126"
-    },
-    {
-      "key": "static:assets/card-art-842/it-bootstrap.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-bootstrap.svg",
-      "path": "assets/card-art-842/it-bootstrap.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 127,
-      "id": "IMG-127"
-    },
-    {
-      "key": "static:assets/card-art-842/it-docs-sanity.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-docs-sanity.svg",
-      "path": "assets/card-art-842/it-docs-sanity.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 128,
-      "id": "IMG-128"
-    },
-    {
-      "key": "static:assets/card-art-842/it-guided-test-centre.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-guided-test-centre.svg",
-      "path": "assets/card-art-842/it-guided-test-centre.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 129,
-      "id": "IMG-129"
-    },
-    {
-      "key": "static:assets/card-art-842/it-launch-readiness.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-launch-readiness.svg",
-      "path": "assets/card-art-842/it-launch-readiness.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 130,
-      "id": "IMG-130"
-    },
-    {
-      "key": "static:assets/card-art-842/it-media-health.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-media-health.svg",
-      "path": "assets/card-art-842/it-media-health.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 131,
-      "id": "IMG-131"
-    },
-    {
-      "key": "static:assets/card-art-842/it-notification-health.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-notification-health.svg",
-      "path": "assets/card-art-842/it-notification-health.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 132,
-      "id": "IMG-132"
-    },
-    {
-      "key": "static:assets/card-art-842/it-production-readiness.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-production-readiness.svg",
-      "path": "assets/card-art-842/it-production-readiness.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 133,
-      "id": "IMG-133"
-    },
-    {
-      "key": "static:assets/card-art-842/it-recovery.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-recovery.svg",
-      "path": "assets/card-art-842/it-recovery.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 134,
-      "id": "IMG-134"
-    },
-    {
-      "key": "static:assets/card-art-842/it-reliability-reassessment.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-reliability-reassessment.svg",
-      "path": "assets/card-art-842/it-reliability-reassessment.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 135,
-      "id": "IMG-135"
-    },
-    {
-      "key": "static:assets/card-art-842/it-roadmap-execution.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-roadmap-execution.svg",
-      "path": "assets/card-art-842/it-roadmap-execution.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 136,
-      "id": "IMG-136"
-    },
-    {
-      "key": "static:assets/card-art-842/it-runtime-cpu.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-runtime-cpu.svg",
-      "path": "assets/card-art-842/it-runtime-cpu.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 137,
-      "id": "IMG-137"
-    },
-    {
-      "key": "static:assets/card-art-842/it-sanity-checks.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-sanity-checks.svg",
-      "path": "assets/card-art-842/it-sanity-checks.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 138,
-      "id": "IMG-138"
-    },
-    {
-      "key": "static:assets/card-art-842/it-security.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-security.svg",
-      "path": "assets/card-art-842/it-security.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 139,
-      "id": "IMG-139"
-    },
-    {
-      "key": "static:assets/card-art-842/it-startup-command-center.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-startup-command-center.svg",
-      "path": "assets/card-art-842/it-startup-command-center.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 140,
-      "id": "IMG-140"
-    },
-    {
-      "key": "static:assets/card-art-842/it-support-exceptions.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-support-exceptions.svg",
-      "path": "assets/card-art-842/it-support-exceptions.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 141,
-      "id": "IMG-141"
-    },
-    {
-      "key": "static:assets/card-art-842/it-ui-seo-cache-health.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "it-ui-seo-cache-health.svg",
-      "path": "assets/card-art-842/it-ui-seo-cache-health.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 142,
-      "id": "IMG-142"
-    },
-    {
-      "key": "static:assets/card-art-842/launcher-business-administration.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "launcher-business-administration.svg",
-      "path": "assets/card-art-842/launcher-business-administration.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 143,
-      "id": "IMG-143"
-    },
-    {
-      "key": "static:assets/card-art-842/launcher-daip.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "launcher-daip.svg",
-      "path": "assets/card-art-842/launcher-daip.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 144,
-      "id": "IMG-144"
-    },
-    {
-      "key": "static:assets/card-art-842/launcher-detailer.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "launcher-detailer.svg",
-      "path": "assets/card-art-842/launcher-detailer.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 145,
-      "id": "IMG-145"
-    },
-    {
-      "key": "static:assets/card-art-842/launcher-finance.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "launcher-finance.svg",
-      "path": "assets/card-art-842/launcher-finance.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 146,
-      "id": "IMG-146"
-    },
-    {
-      "key": "static:assets/card-art-842/launcher-i-t-reliability.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "launcher-i-t-reliability.svg",
-      "path": "assets/card-art-842/launcher-i-t-reliability.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 147,
-      "id": "IMG-147"
-    },
-    {
-      "key": "static:assets/card-art-842/launcher-operations-supervisor.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "launcher-operations-supervisor.svg",
-      "path": "assets/card-art-842/launcher-operations-supervisor.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 148,
-      "id": "IMG-148"
-    },
-    {
-      "key": "static:assets/card-art-842/launcher-socials.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "launcher-socials.svg",
-      "path": "assets/card-art-842/launcher-socials.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 149,
-      "id": "IMG-149"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-assignments.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-assignments.svg",
-      "path": "assets/card-art-842/operations-assignments.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 150,
-      "id": "IMG-150"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-blocked-days.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-blocked-days.svg",
-      "path": "assets/card-art-842/operations-blocked-days.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 151,
-      "id": "IMG-151"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-booking-quote-retention-learning.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-booking-quote-retention-learning.svg",
-      "path": "assets/card-art-842/operations-booking-quote-retention-learning.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 152,
-      "id": "IMG-152"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-bookings.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-bookings.svg",
-      "path": "assets/card-art-842/operations-bookings.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 153,
-      "id": "IMG-153"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-conversion-queue.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-conversion-queue.svg",
-      "path": "assets/card-art-842/operations-conversion-queue.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 154,
-      "id": "IMG-154"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-customer-progress.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-customer-progress.svg",
-      "path": "assets/card-art-842/operations-customer-progress.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 155,
-      "id": "IMG-155"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-customers.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-customers.svg",
-      "path": "assets/card-art-842/operations-customers.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 156,
-      "id": "IMG-156"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-fleet-commercial-learning.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-fleet-commercial-learning.svg",
-      "path": "assets/card-art-842/operations-fleet-commercial-learning.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 157,
-      "id": "IMG-157"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-leads-estimates.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-leads-estimates.svg",
-      "path": "assets/card-art-842/operations-leads-estimates.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 158,
-      "id": "IMG-158"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-live-operations.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-live-operations.svg",
-      "path": "assets/card-art-842/operations-live-operations.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 159,
-      "id": "IMG-159"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-live-snapshot.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-live-snapshot.svg",
-      "path": "assets/card-art-842/operations-live-snapshot.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 160,
-      "id": "IMG-160"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-quotes.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-quotes.svg",
-      "path": "assets/card-art-842/operations-quotes.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 161,
-      "id": "IMG-161"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-retention-rebooking-learning.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-retention-rebooking-learning.svg",
-      "path": "assets/card-art-842/operations-retention-rebooking-learning.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 162,
-      "id": "IMG-162"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-schedule.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-schedule.svg",
-      "path": "assets/card-art-842/operations-schedule.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 163,
-      "id": "IMG-163"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-today.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-today.svg",
-      "path": "assets/card-art-842/operations-today.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 164,
-      "id": "IMG-164"
-    },
-    {
-      "key": "static:assets/card-art-842/operations-workflow.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "operations-workflow.svg",
-      "path": "assets/card-art-842/operations-workflow.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 165,
-      "id": "IMG-165"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-connections-centre.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-connections-centre.svg",
-      "path": "assets/card-art-842/socials-connections-centre.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 166,
-      "id": "IMG-166"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-content-center.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-content-center.svg",
-      "path": "assets/card-art-842/socials-content-center.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 167,
-      "id": "IMG-167"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-create-from-job.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-create-from-job.svg",
-      "path": "assets/card-art-842/socials-create-from-job.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 168,
-      "id": "IMG-168"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-gallery.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-gallery.svg",
-      "path": "assets/card-art-842/socials-gallery.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 169,
-      "id": "IMG-169"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-growth.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-growth.svg",
-      "path": "assets/card-art-842/socials-growth.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 170,
-      "id": "IMG-170"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-marketing.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-marketing.svg",
-      "path": "assets/card-art-842/socials-marketing.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 171,
-      "id": "IMG-171"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-media-upload.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-media-upload.svg",
-      "path": "assets/card-art-842/socials-media-upload.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 172,
-      "id": "IMG-172"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-photo-studio.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-photo-studio.svg",
-      "path": "assets/card-art-842/socials-photo-studio.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 173,
-      "id": "IMG-173"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-promotions.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-promotions.svg",
-      "path": "assets/card-art-842/socials-promotions.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 174,
-      "id": "IMG-174"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-seo-tasks.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-seo-tasks.svg",
-      "path": "assets/card-art-842/socials-seo-tasks.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 175,
-      "id": "IMG-175"
-    },
-    {
-      "key": "static:assets/card-art-842/socials-social-queue.svg",
-      "ownership": "application-owner-only",
-      "theme": "shared",
-      "name": "socials-social-queue.svg",
-      "path": "assets/card-art-842/socials-social-queue.svg",
-      "format": "svg",
-      "size": {
-        "width": 640,
-        "height": 360,
-        "viewBox": "0 0 640 360",
-        "basis": "svg-explicit-canvas"
-      },
-      "pages": [
-        "shared runtime / placement not verified"
-      ],
-      "placement": "checked-in local file; render usage not verified",
-      "filePresent": true,
-      "sourceFiles": [],
-      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 176,
-      "id": "IMG-176"
-    },
-    {
       "key": "static:assets/photos/coating-detail.jpg",
       "ownership": "application-owner-only",
       "theme": "shared",
@@ -4007,8 +2040,8 @@
       "filePresent": true,
       "sourceFiles": [],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 177,
-      "id": "IMG-177"
+      "number": 92,
+      "id": "IMG-092"
     },
     {
       "key": "static:assets/photos/customer-review.jpg",
@@ -4029,8 +2062,8 @@
       "filePresent": true,
       "sourceFiles": [],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 178,
-      "id": "IMG-178"
+      "number": 93,
+      "id": "IMG-093"
     },
     {
       "key": "static:assets/photos/engine-bay.jpg",
@@ -4051,8 +2084,8 @@
       "filePresent": true,
       "sourceFiles": [],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 179,
-      "id": "IMG-179"
+      "number": 94,
+      "id": "IMG-094"
     },
     {
       "key": "static:assets/photos/interior-detail.jpg",
@@ -4073,8 +2106,8 @@
       "filePresent": true,
       "sourceFiles": [],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 180,
-      "id": "IMG-180"
+      "number": 95,
+      "id": "IMG-095"
     },
     {
       "key": "static:assets/photos/inventory-room.jpg",
@@ -4095,8 +2128,8 @@
       "filePresent": true,
       "sourceFiles": [],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 181,
-      "id": "IMG-181"
+      "number": 96,
+      "id": "IMG-096"
     },
     {
       "key": "static:assets/photos/launch-checklist.jpg",
@@ -4117,8 +2150,8 @@
       "filePresent": true,
       "sourceFiles": [],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 182,
-      "id": "IMG-182"
+      "number": 97,
+      "id": "IMG-097"
     },
     {
       "key": "static:assets/photos/local-town.jpg",
@@ -4139,8 +2172,8 @@
       "filePresent": true,
       "sourceFiles": [],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 183,
-      "id": "IMG-183"
+      "number": 98,
+      "id": "IMG-098"
     },
     {
       "key": "static:assets/photos/service-exterior.jpg",
@@ -4163,8 +2196,8 @@
         "landing/index.html"
       ],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 184,
-      "id": "IMG-184"
+      "number": 99,
+      "id": "IMG-099"
     },
     {
       "key": "static:assets/photos/workflow-tablet.jpg",
@@ -4185,8 +2218,8 @@
       "filePresent": true,
       "sourceFiles": [],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 185,
-      "id": "IMG-185"
+      "number": 100,
+      "id": "IMG-100"
     },
     {
       "key": "static:assets/photos/wrap-tint.jpg",
@@ -4207,8 +2240,8 @@
       "filePresent": true,
       "sourceFiles": [],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 186,
-      "id": "IMG-186"
+      "number": 101,
+      "id": "IMG-101"
     },
     {
       "key": "static:assets/placeholders/inventory-tools-photo.jpg",
@@ -4231,8 +2264,8 @@
         "assets/visual-placeholders.js"
       ],
       "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
-      "number": 187,
-      "id": "IMG-187"
+      "number": 102,
+      "id": "IMG-102"
     },
     {
       "key": "static:assets/placeholders/launch-readiness-photo.jpg",
@@ -4255,8 +2288,8 @@
         "assets/visual-placeholders.js"
       ],
       "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
-      "number": 188,
-      "id": "IMG-188"
+      "number": 103,
+      "id": "IMG-103"
     },
     {
       "key": "static:assets/placeholders/local-proof-photo.jpg",
@@ -4279,8 +2312,8 @@
         "assets/visual-placeholders.js"
       ],
       "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
-      "number": 189,
-      "id": "IMG-189"
+      "number": 104,
+      "id": "IMG-104"
     },
     {
       "key": "static:assets/placeholders/product-gallery-photo.jpg",
@@ -4305,8 +2338,8 @@
         "assets/visual-placeholders.js"
       ],
       "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
-      "number": 190,
-      "id": "IMG-190"
+      "number": 105,
+      "id": "IMG-105"
     },
     {
       "key": "static:assets/placeholders/service-photo-needed.svg",
@@ -4376,8 +2409,8 @@
         "pre-sale-lease-return-detailing/index.html"
       ],
       "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
-      "number": 191,
-      "id": "IMG-191"
+      "number": 106,
+      "id": "IMG-106"
     },
     {
       "key": "static:assets/placeholders/service-photo.jpg",
@@ -4402,8 +2435,8 @@
         "assets/visual-placeholders.js"
       ],
       "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
-      "number": 192,
-      "id": "IMG-192"
+      "number": 107,
+      "id": "IMG-107"
     },
     {
       "key": "static:assets/placeholders/workflow-photo.jpg",
@@ -4426,8 +2459,8 @@
         "assets/visual-placeholders.js"
       ],
       "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
-      "number": 193,
-      "id": "IMG-193"
+      "number": 108,
+      "id": "IMG-108"
     },
     {
       "key": "static:assets/vehicles/outline_back.svg",
@@ -4452,8 +2485,8 @@
         "my-account/index.html"
       ],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 194,
-      "id": "IMG-194"
+      "number": 109,
+      "id": "IMG-109"
     },
     {
       "key": "static:assets/vehicles/outline_front.svg",
@@ -4478,8 +2511,8 @@
         "my-account/index.html"
       ],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
-      "number": 195,
-      "id": "IMG-195"
+      "number": 110,
+      "id": "IMG-110"
     },
     {
       "key": "static:favicon.ico",
@@ -4506,8 +2539,8 @@
         "assets/chrome.js"
       ],
       "notes": "Browser/PWA icon; not a Photo Studio upload",
-      "number": 196,
-      "id": "IMG-196"
+      "number": 111,
+      "id": "IMG-111"
     },
     {
       "key": "admin-art:creative_project_budget_archive_history",
@@ -4528,8 +2561,8 @@
       "placement": "theme illustration in repository; render acceptance pending",
       "filePresent": true,
       "notes": "Internal illustration only. Never depict private customer information or tokens.",
-      "number": 197,
-      "id": "IMG-197"
+      "number": 112,
+      "id": "IMG-112"
     },
     {
       "key": "admin-art:creative_project_cost_content_workflow",
@@ -4550,8 +2583,8 @@
       "placement": "theme illustration in repository; render acceptance pending",
       "filePresent": true,
       "notes": "Internal illustration only. Never depict private customer information or tokens.",
-      "number": 198,
-      "id": "IMG-198"
+      "number": 113,
+      "id": "IMG-113"
     },
     {
       "key": "admin-art:creative_project_profit_learning_workflow",
@@ -4572,8 +2605,8 @@
       "placement": "theme illustration in repository; render acceptance pending",
       "filePresent": true,
       "notes": "Internal illustration only. Never depict private customer information or tokens.",
-      "number": 199,
-      "id": "IMG-199"
+      "number": 114,
+      "id": "IMG-114"
     },
     {
       "key": "admin-art:roadmap_execution_centre",
@@ -4594,8 +2627,8 @@
       "placement": "theme illustration in repository; render acceptance pending",
       "filePresent": true,
       "notes": "Internal illustration only. Never depict private customer information or tokens.",
-      "number": 200,
-      "id": "IMG-200"
+      "number": 115,
+      "id": "IMG-115"
     },
     {
       "key": "admin-art:startup_go_live_command_path",
@@ -4616,6 +2649,1973 @@
       "placement": "theme illustration in repository; render acceptance pending",
       "filePresent": true,
       "notes": "Internal illustration only. Never depict private customer information or tokens.",
+      "number": 116,
+      "id": "IMG-116"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-business-analytics.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-business-analytics.svg",
+      "path": "assets/card-art-842/admin-business-analytics.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 117,
+      "id": "IMG-117"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-catalog.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-catalog.svg",
+      "path": "assets/card-art-842/admin-catalog.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 118,
+      "id": "IMG-118"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-economics-capacity-review.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-economics-capacity-review.svg",
+      "path": "assets/card-art-842/admin-economics-capacity-review.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 119,
+      "id": "IMG-119"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-inventory-posting.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-inventory-posting.svg",
+      "path": "assets/card-art-842/admin-inventory-posting.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 120,
+      "id": "IMG-120"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-inventory-workbench.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-inventory-workbench.svg",
+      "path": "assets/card-art-842/admin-inventory-workbench.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 121,
+      "id": "IMG-121"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-legacy-admin-dashboard.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-legacy-admin-dashboard.svg",
+      "path": "assets/card-art-842/admin-legacy-admin-dashboard.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 122,
+      "id": "IMG-122"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-owner-commercial-decisions.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-owner-commercial-decisions.svg",
+      "path": "assets/card-art-842/admin-owner-commercial-decisions.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 123,
+      "id": "IMG-123"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-site-settings.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-site-settings.svg",
+      "path": "assets/card-art-842/admin-site-settings.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 124,
+      "id": "IMG-124"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-staff-access.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-staff-access.svg",
+      "path": "assets/card-art-842/admin-staff-access.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 125,
+      "id": "IMG-125"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-staff-workflow-learning.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-staff-workflow-learning.svg",
+      "path": "assets/card-art-842/admin-staff-workflow-learning.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 126,
+      "id": "IMG-126"
+    },
+    {
+      "key": "static:assets/card-art-842/admin-water-rules.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "admin-water-rules.svg",
+      "path": "assets/card-art-842/admin-water-rules.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 127,
+      "id": "IMG-127"
+    },
+    {
+      "key": "static:assets/card-art-842/customer-book.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "customer-book.svg",
+      "path": "assets/card-art-842/customer-book.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "/app/customer"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "app/customer/index.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 128,
+      "id": "IMG-128"
+    },
+    {
+      "key": "static:assets/card-art-842/customer-gift-cards.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "customer-gift-cards.svg",
+      "path": "assets/card-art-842/customer-gift-cards.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "/app/customer"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "app/customer/index.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 129,
+      "id": "IMG-129"
+    },
+    {
+      "key": "static:assets/card-art-842/customer-live-progress-messages.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "customer-live-progress-messages.svg",
+      "path": "assets/card-art-842/customer-live-progress-messages.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "/app/customer"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "app/customer/index.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 130,
+      "id": "IMG-130"
+    },
+    {
+      "key": "static:assets/card-art-842/customer-my-account.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "customer-my-account.svg",
+      "path": "assets/card-art-842/customer-my-account.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "/app/customer"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "app/customer/index.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 131,
+      "id": "IMG-131"
+    },
+    {
+      "key": "static:assets/card-art-842/customer-quote-response.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "customer-quote-response.svg",
+      "path": "assets/card-art-842/customer-quote-response.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "/app/customer"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "app/customer/index.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 132,
+      "id": "IMG-132"
+    },
+    {
+      "key": "static:assets/card-art-842/customer-website.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "customer-website.svg",
+      "path": "assets/card-art-842/customer-website.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "/app/customer"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "app/customer/index.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 133,
+      "id": "IMG-133"
+    },
+    {
+      "key": "static:assets/card-art-842/daip-creative-projects.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "daip-creative-projects.svg",
+      "path": "assets/card-art-842/daip-creative-projects.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 134,
+      "id": "IMG-134"
+    },
+    {
+      "key": "static:assets/card-art-842/daip-daip-overview-test-lab.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "daip-daip-overview-test-lab.svg",
+      "path": "assets/card-art-842/daip-daip-overview-test-lab.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 135,
+      "id": "IMG-135"
+    },
+    {
+      "key": "static:assets/card-art-842/daip-gate-c.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "daip-gate-c.svg",
+      "path": "assets/card-art-842/daip-gate-c.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 136,
+      "id": "IMG-136"
+    },
+    {
+      "key": "static:assets/card-art-842/daip-governance.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "daip-governance.svg",
+      "path": "assets/card-art-842/daip-governance.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 137,
+      "id": "IMG-137"
+    },
+    {
+      "key": "static:assets/card-art-842/daip-intake-dry-run.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "daip-intake-dry-run.svg",
+      "path": "assets/card-art-842/daip-intake-dry-run.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 138,
+      "id": "IMG-138"
+    },
+    {
+      "key": "static:assets/card-art-842/daip-private-media-intake.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "daip-private-media-intake.svg",
+      "path": "assets/card-art-842/daip-private-media-intake.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 139,
+      "id": "IMG-139"
+    },
+    {
+      "key": "static:assets/card-art-842/daip-private-mvp-blueprint.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "daip-private-mvp-blueprint.svg",
+      "path": "assets/card-art-842/daip-private-mvp-blueprint.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 140,
+      "id": "IMG-140"
+    },
+    {
+      "key": "static:assets/card-art-842/daip-readiness.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "daip-readiness.svg",
+      "path": "assets/card-art-842/daip-readiness.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 141,
+      "id": "IMG-141"
+    },
+    {
+      "key": "static:assets/card-art-842/detailer-assigned-jobs-legacy.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "detailer-assigned-jobs-legacy.svg",
+      "path": "assets/card-art-842/detailer-assigned-jobs-legacy.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 142,
+      "id": "IMG-142"
+    },
+    {
+      "key": "static:assets/card-art-842/detailer-detailer-mobile.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "detailer-detailer-mobile.svg",
+      "path": "assets/card-art-842/detailer-detailer-mobile.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 143,
+      "id": "IMG-143"
+    },
+    {
+      "key": "static:assets/card-art-842/detailer-incidents.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "detailer-incidents.svg",
+      "path": "assets/card-art-842/detailer-incidents.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 144,
+      "id": "IMG-144"
+    },
+    {
+      "key": "static:assets/card-art-842/detailer-jobsite.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "detailer-jobsite.svg",
+      "path": "assets/card-art-842/detailer-jobsite.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 145,
+      "id": "IMG-145"
+    },
+    {
+      "key": "static:assets/card-art-842/finance-accounting.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "finance-accounting.svg",
+      "path": "assets/card-art-842/finance-accounting.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 146,
+      "id": "IMG-146"
+    },
+    {
+      "key": "static:assets/card-art-842/finance-hst-gst-review.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "finance-hst-gst-review.svg",
+      "path": "assets/card-art-842/finance-hst-gst-review.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 147,
+      "id": "IMG-147"
+    },
+    {
+      "key": "static:assets/card-art-842/finance-month-end-close.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "finance-month-end-close.svg",
+      "path": "assets/card-art-842/finance-month-end-close.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 148,
+      "id": "IMG-148"
+    },
+    {
+      "key": "static:assets/card-art-842/finance-payments.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "finance-payments.svg",
+      "path": "assets/card-art-842/finance-payments.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 149,
+      "id": "IMG-149"
+    },
+    {
+      "key": "static:assets/card-art-842/finance-payroll.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "finance-payroll.svg",
+      "path": "assets/card-art-842/finance-payroll.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 150,
+      "id": "IMG-150"
+    },
+    {
+      "key": "static:assets/card-art-842/it-app-management.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-app-management.svg",
+      "path": "assets/card-art-842/it-app-management.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 151,
+      "id": "IMG-151"
+    },
+    {
+      "key": "static:assets/card-art-842/it-bootstrap.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-bootstrap.svg",
+      "path": "assets/card-art-842/it-bootstrap.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 152,
+      "id": "IMG-152"
+    },
+    {
+      "key": "static:assets/card-art-842/it-docs-sanity.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-docs-sanity.svg",
+      "path": "assets/card-art-842/it-docs-sanity.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 153,
+      "id": "IMG-153"
+    },
+    {
+      "key": "static:assets/card-art-842/it-guided-test-centre.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-guided-test-centre.svg",
+      "path": "assets/card-art-842/it-guided-test-centre.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 154,
+      "id": "IMG-154"
+    },
+    {
+      "key": "static:assets/card-art-842/it-launch-readiness.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-launch-readiness.svg",
+      "path": "assets/card-art-842/it-launch-readiness.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 155,
+      "id": "IMG-155"
+    },
+    {
+      "key": "static:assets/card-art-842/it-media-health.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-media-health.svg",
+      "path": "assets/card-art-842/it-media-health.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 156,
+      "id": "IMG-156"
+    },
+    {
+      "key": "static:assets/card-art-842/it-notification-health.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-notification-health.svg",
+      "path": "assets/card-art-842/it-notification-health.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 157,
+      "id": "IMG-157"
+    },
+    {
+      "key": "static:assets/card-art-842/it-production-readiness.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-production-readiness.svg",
+      "path": "assets/card-art-842/it-production-readiness.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 158,
+      "id": "IMG-158"
+    },
+    {
+      "key": "static:assets/card-art-842/it-recovery.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-recovery.svg",
+      "path": "assets/card-art-842/it-recovery.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 159,
+      "id": "IMG-159"
+    },
+    {
+      "key": "static:assets/card-art-842/it-reliability-reassessment.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-reliability-reassessment.svg",
+      "path": "assets/card-art-842/it-reliability-reassessment.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 160,
+      "id": "IMG-160"
+    },
+    {
+      "key": "static:assets/card-art-842/it-roadmap-execution.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-roadmap-execution.svg",
+      "path": "assets/card-art-842/it-roadmap-execution.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 161,
+      "id": "IMG-161"
+    },
+    {
+      "key": "static:assets/card-art-842/it-runtime-cpu.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-runtime-cpu.svg",
+      "path": "assets/card-art-842/it-runtime-cpu.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 162,
+      "id": "IMG-162"
+    },
+    {
+      "key": "static:assets/card-art-842/it-sanity-checks.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-sanity-checks.svg",
+      "path": "assets/card-art-842/it-sanity-checks.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 163,
+      "id": "IMG-163"
+    },
+    {
+      "key": "static:assets/card-art-842/it-security.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-security.svg",
+      "path": "assets/card-art-842/it-security.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 164,
+      "id": "IMG-164"
+    },
+    {
+      "key": "static:assets/card-art-842/it-startup-command-center.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-startup-command-center.svg",
+      "path": "assets/card-art-842/it-startup-command-center.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 165,
+      "id": "IMG-165"
+    },
+    {
+      "key": "static:assets/card-art-842/it-support-exceptions.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-support-exceptions.svg",
+      "path": "assets/card-art-842/it-support-exceptions.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 166,
+      "id": "IMG-166"
+    },
+    {
+      "key": "static:assets/card-art-842/it-ui-seo-cache-health.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "it-ui-seo-cache-health.svg",
+      "path": "assets/card-art-842/it-ui-seo-cache-health.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 167,
+      "id": "IMG-167"
+    },
+    {
+      "key": "static:assets/card-art-842/launcher-business-administration.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "launcher-business-administration.svg",
+      "path": "assets/card-art-842/launcher-business-administration.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 168,
+      "id": "IMG-168"
+    },
+    {
+      "key": "static:assets/card-art-842/launcher-daip.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "launcher-daip.svg",
+      "path": "assets/card-art-842/launcher-daip.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 169,
+      "id": "IMG-169"
+    },
+    {
+      "key": "static:assets/card-art-842/launcher-detailer.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "launcher-detailer.svg",
+      "path": "assets/card-art-842/launcher-detailer.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 170,
+      "id": "IMG-170"
+    },
+    {
+      "key": "static:assets/card-art-842/launcher-finance.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "launcher-finance.svg",
+      "path": "assets/card-art-842/launcher-finance.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 171,
+      "id": "IMG-171"
+    },
+    {
+      "key": "static:assets/card-art-842/launcher-i-t-reliability.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "launcher-i-t-reliability.svg",
+      "path": "assets/card-art-842/launcher-i-t-reliability.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 172,
+      "id": "IMG-172"
+    },
+    {
+      "key": "static:assets/card-art-842/launcher-operations-supervisor.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "launcher-operations-supervisor.svg",
+      "path": "assets/card-art-842/launcher-operations-supervisor.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 173,
+      "id": "IMG-173"
+    },
+    {
+      "key": "static:assets/card-art-842/launcher-socials.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "launcher-socials.svg",
+      "path": "assets/card-art-842/launcher-socials.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 174,
+      "id": "IMG-174"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-assignments.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-assignments.svg",
+      "path": "assets/card-art-842/operations-assignments.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 175,
+      "id": "IMG-175"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-blocked-days.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-blocked-days.svg",
+      "path": "assets/card-art-842/operations-blocked-days.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 176,
+      "id": "IMG-176"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-booking-quote-retention-learning.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-booking-quote-retention-learning.svg",
+      "path": "assets/card-art-842/operations-booking-quote-retention-learning.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 177,
+      "id": "IMG-177"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-bookings.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-bookings.svg",
+      "path": "assets/card-art-842/operations-bookings.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 178,
+      "id": "IMG-178"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-conversion-queue.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-conversion-queue.svg",
+      "path": "assets/card-art-842/operations-conversion-queue.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 179,
+      "id": "IMG-179"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-customer-progress.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-customer-progress.svg",
+      "path": "assets/card-art-842/operations-customer-progress.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 180,
+      "id": "IMG-180"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-customers.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-customers.svg",
+      "path": "assets/card-art-842/operations-customers.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 181,
+      "id": "IMG-181"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-fleet-commercial-learning.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-fleet-commercial-learning.svg",
+      "path": "assets/card-art-842/operations-fleet-commercial-learning.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 182,
+      "id": "IMG-182"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-leads-estimates.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-leads-estimates.svg",
+      "path": "assets/card-art-842/operations-leads-estimates.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 183,
+      "id": "IMG-183"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-live-operations.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-live-operations.svg",
+      "path": "assets/card-art-842/operations-live-operations.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 184,
+      "id": "IMG-184"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-live-snapshot.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-live-snapshot.svg",
+      "path": "assets/card-art-842/operations-live-snapshot.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 185,
+      "id": "IMG-185"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-quotes.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-quotes.svg",
+      "path": "assets/card-art-842/operations-quotes.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 186,
+      "id": "IMG-186"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-retention-rebooking-learning.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-retention-rebooking-learning.svg",
+      "path": "assets/card-art-842/operations-retention-rebooking-learning.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 187,
+      "id": "IMG-187"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-schedule.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-schedule.svg",
+      "path": "assets/card-art-842/operations-schedule.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 188,
+      "id": "IMG-188"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-today.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-today.svg",
+      "path": "assets/card-art-842/operations-today.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 189,
+      "id": "IMG-189"
+    },
+    {
+      "key": "static:assets/card-art-842/operations-workflow.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "operations-workflow.svg",
+      "path": "assets/card-art-842/operations-workflow.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 190,
+      "id": "IMG-190"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-connections-centre.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-connections-centre.svg",
+      "path": "assets/card-art-842/socials-connections-centre.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 191,
+      "id": "IMG-191"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-content-center.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-content-center.svg",
+      "path": "assets/card-art-842/socials-content-center.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 192,
+      "id": "IMG-192"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-create-from-job.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-create-from-job.svg",
+      "path": "assets/card-art-842/socials-create-from-job.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 193,
+      "id": "IMG-193"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-gallery.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-gallery.svg",
+      "path": "assets/card-art-842/socials-gallery.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 194,
+      "id": "IMG-194"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-growth.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-growth.svg",
+      "path": "assets/card-art-842/socials-growth.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 195,
+      "id": "IMG-195"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-marketing.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-marketing.svg",
+      "path": "assets/card-art-842/socials-marketing.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 196,
+      "id": "IMG-196"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-media-upload.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-media-upload.svg",
+      "path": "assets/card-art-842/socials-media-upload.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 197,
+      "id": "IMG-197"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-photo-studio.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-photo-studio.svg",
+      "path": "assets/card-art-842/socials-photo-studio.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 198,
+      "id": "IMG-198"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-promotions.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-promotions.svg",
+      "path": "assets/card-art-842/socials-promotions.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 199,
+      "id": "IMG-199"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-seo-tasks.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-seo-tasks.svg",
+      "path": "assets/card-art-842/socials-seo-tasks.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 200,
+      "id": "IMG-200"
+    },
+    {
+      "key": "static:assets/card-art-842/socials-social-queue.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "socials-social-queue.svg",
+      "path": "assets/card-art-842/socials-social-queue.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
       "number": 201,
       "id": "IMG-201"
     }

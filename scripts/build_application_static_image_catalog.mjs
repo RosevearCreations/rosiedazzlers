@@ -130,7 +130,7 @@ export async function buildCatalog(){
         basis:'recommended-canvas-not-upload-minimum'},pages:proposedPages(slot),placement:'planned-or-fallback-not-live-verified',
       filePresent:await exists(expected),notes:noteFor(slot)});
   }
-  for(const file of physical.sort()){
+  const addPhysical=async(file)=>{
     const bytes=await fs.readFile(path.join(root,file));
     const hits=source.filter(x=>x.content.includes('/'+file)||x.content.includes(file));
     const htmlRoutes=unique(hits.map(x=>x.route).filter(Boolean));
@@ -141,7 +141,10 @@ export async function buildCatalog(){
       notes:file.startsWith('assets/placeholders/')?'Generic interface placeholder, never a substitute for actual customer evidence':
         file.startsWith('assets/app-icons/')||file==='favicon.ico'?'Browser/PWA icon; not a Photo Studio upload':
         'Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence'});
-  }
+  };
+  // Build 842: append newly introduced card artwork after the existing
+  // catalog groups so the original 116 numbered image IDs never shift.
+  for(const file of physical.filter(x=>!x.startsWith('assets/card-art-842/')).sort())await addPhysical(file);
   for(const item of admin.placeholderIllustrations.slice().sort((a,b)=>a.key.localeCompare(b.key))){
     const size=(item.desiredGeometry||'').match(/(\d+)\s*x\s*(\d+)/i);
     const target=`assets/themes/standard/admin/${item.proposal}`;
@@ -152,6 +155,7 @@ export async function buildCatalog(){
       pages:[item.page],placement:present?'theme illustration in repository; render acceptance pending':'reserved admin artwork; not approved or installed',filePresent:present,
       notes:'Internal illustration only. Never depict private customer information or tokens.'});
   }
+  for(const file of physical.filter(x=>x.startsWith('assets/card-art-842/')).sort())await addPhysical(file);
   const seen=new Set();
   entries.forEach((x,i)=>{if(seen.has(x.key))throw Error('Duplicate image authority '+x.key);seen.add(x.key);x.number=i+1;x.id=`IMG-${String(i+1).padStart(3,'0')}`;});
   return {schema:'rosie.application-nonemployee-image-catalog.v1',defaultTheme:'standard',

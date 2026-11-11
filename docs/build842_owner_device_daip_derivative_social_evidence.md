@@ -24,7 +24,7 @@ No private R2 object is copied or exposed. No automatic social publication occur
 
 `scripts/build842_generate_card_art.mjs` reproducibly generates **85 separately named static SVG illustrations** in `assets/card-art-842/`: 72 workflow cards, 7 launcher modules and 6 customer cards. Every card references its own asset; no external fonts, network image requests, customer photos or unapproved source proof. The icons use Rosie's dark/gold metallic palette. `--check` verifies the committed manifest/assets.
 
-The canonical application-controlled image inventory is regenerated with `node scripts/build_application_static_image_catalog.mjs --write` and checked in; its count rises from 116 to 201 exactly. Build 611's historical inventory contract is extended to count these 85 new assets.
+The canonical application-controlled image inventory is regenerated with `node scripts/build_application_static_image_catalog.mjs --write` and checked in; its count rises from 116 to 201 exactly. New Build 842 art is **appended after all original 116 IDs**, preserving every pre-existing image identifier. Builds 611 and 612 assert the extended count and the stable original sequence.
 
 ### Verification and deployment
 
