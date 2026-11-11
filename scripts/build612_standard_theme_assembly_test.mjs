@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import fs from 'node:fs';
 import { standardLandingFallback, standardPackageFallback, standardAddonFallback } from '../assets/standard-image-slots.js';
 import { packageImageForSize, addonPrimaryImage, addonFallbackImage } from '../assets/pricing-catalog-client-legacy.js';
@@ -18,7 +19,11 @@ const landing = read('assets/landing-page-build388.js');
 const home = read('index.html');
 const site = read('assets/site.js');
 
-assert.equal(catalog.entries.length, 116, 'Existing numbered catalog IDs stay stable');
+assert.equal(catalog.entries.length, 201, 'Build 842 appends 85 unique illustrations to 116 original numbered assets');
+assert.equal(createHash('sha256').update(JSON.stringify(catalog.entries.slice(0,116).map(row=>row.key))).digest('hex'),
+  '620a9cc3e260c556708d5257edb70ebaa69bcb8e30511f1b0e5418fed7076a7b',
+  'All 116 original numbered catalog IDs and their key order must remain unchanged');
+assert.equal(catalog.entries.slice(116).filter(row=>row.key.startsWith('static:assets/card-art-842/')).length,85);
 assert.equal(catalog.policy.dynamicTargetsExcluded, 617, 'Employee Photo Studio remains separate');
 assert.equal(catalog.policy.reservedThemeProofExcluded, 49);
 assert.ok(catalog.entries.every((row) => row.filePresent), 'Every numbered asset has its original or theme file in the repository');

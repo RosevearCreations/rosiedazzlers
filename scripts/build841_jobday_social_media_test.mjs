@@ -41,7 +41,7 @@ for(const image of ['jobday-field-841.webp','social-creator-841.webp','daip-edit
 for(const page of ['app/detailer/index.html','progress.html']){const h=read(page);assert.match(h,/data-jobday-841/);assert.match(h,/jobday-recovery-841\.js/);}
 const helper=read('assets/jobday-recovery-841.js');assert.doesNotMatch(helper,/localStorage|setInterval|serviceWorker/);assert.match(helper,/click\(\)/);assert.match(helper,/aria-live|data-jobday-state/);
 const nav=read('assets/app-core/module-navigation.js');assert.match(nav,/module-link-card__photo/);assert.match(nav,/Create from Job/);
-const launcher=read('apps/launcher/app-launcher.js');assert.match(launcher,/module-link-card__photo/);assert.match(read('app/index.html'),/app-launcher\.js\?v=20261110build841/);
+const launcher=read('apps/launcher/app-launcher.js');assert.match(launcher,/module-link-card__photo/);assert.match(read('app/index.html'),/app-launcher\.js\?v=20261110build84[12]/);
 assert.equal((read('app/customer/index.html').match(/module-link-card__photo/g)||[]).length,6);
 const landing=read('assets/landing-page-build388.js');assert.match(landing,/illustrationImages/);assert.doesNotMatch(landing,/Photo needed<\/h3>/);
 const social=read('admin-social.html');assert.match(social,/id="jobMedia841"/);assert.match(social,/social-job-tagging-841\.js/);

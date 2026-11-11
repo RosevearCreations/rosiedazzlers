@@ -4,7 +4,9 @@ import {buildCatalog,asMarkdown} from './build_application_static_image_catalog.
 import {reviewMatrix} from './accept_rendered_visual_audit_matrix.mjs';
 
 const catalog=await buildCatalog();
-assert.equal(catalog.entries.length,116);
+// Build 842 registers 85 unique, locally owned workflow/launcher/customer SVGs.
+assert.equal(catalog.entries.length,116+85);
+assert.equal(catalog.entries.filter(x=>x.key.startsWith('static:assets/card-art-842/')).length,85);
 assert.equal(catalog.entries.filter(x=>x.key.startsWith('theme:town_')).length,8);
 assert.equal(catalog.entries.filter(x=>x.key.startsWith('theme:proof_')).length,0);
 assert.equal(catalog.policy.dynamicTargetsExcluded,617);

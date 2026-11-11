@@ -2,7 +2,7 @@
 
 > **Single source of truth:** `data/application_static_image_catalog.json` is the numbered, machine-readable authority. This Markdown table is generated from it. Run `node scripts/build_application_static_image_catalog.mjs --write` to regenerate, or `--check` to confirm it is current.
 
-- **116 listed images/proposals**: 62 Standard theme candidates, 54 shared/Admin application items.
+- **201 listed images/proposals**: 62 Standard theme candidates, 139 shared/Admin application items.
 - **617 Photo Studio target records excluded** because their public/staff assignments are dynamic, not permanent design artwork; **49 proof/review proposals excluded** as customer/review evidence. Counts are records, not missing files.
 - **Town banners are static theme assets.** Town landing-page galleries, before/after comparisons, customer reviews, and job progress are separately managed media—even on those same pages.
 - **Dimensions are labelled:** recommended/proposed canvas for files not uploaded, actual decoded pixel dimensions for raster files, or scalable SVG viewBox/ICO variants as appropriate. Proposed sizes do not supersede R2 upload minimums.
@@ -127,6 +127,91 @@
 | IMG-114 | creative project profit learning workflow | SVG | 1600×900 | Admin/shared | standard | In repo | `assets/themes/standard/admin/admin-creative-project-profit-learning-workflow.svg` |
 | IMG-115 | roadmap execution centre | SVG | 1600×900 | /admin-roadmap-execution.html | standard | In repo | `assets/themes/standard/admin/admin-roadmap-execution-centre.svg` |
 | IMG-116 | startup go live command path | SVG | 1600×900 | /admin-startup-guide.html | standard | In repo | `assets/themes/standard/admin/admin-startup-go-live-command-path.svg` |
+| IMG-117 | admin-business-analytics.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-business-analytics.svg` |
+| IMG-118 | admin-catalog.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-catalog.svg` |
+| IMG-119 | admin-economics-capacity-review.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-economics-capacity-review.svg` |
+| IMG-120 | admin-inventory-posting.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-inventory-posting.svg` |
+| IMG-121 | admin-inventory-workbench.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-inventory-workbench.svg` |
+| IMG-122 | admin-legacy-admin-dashboard.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-legacy-admin-dashboard.svg` |
+| IMG-123 | admin-owner-commercial-decisions.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-owner-commercial-decisions.svg` |
+| IMG-124 | admin-site-settings.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-site-settings.svg` |
+| IMG-125 | admin-staff-access.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-staff-access.svg` |
+| IMG-126 | admin-staff-workflow-learning.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-staff-workflow-learning.svg` |
+| IMG-127 | admin-water-rules.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/admin-water-rules.svg` |
+| IMG-128 | customer-book.svg | SVG | 640×360 | /app/customer | shared | In repo | `assets/card-art-842/customer-book.svg` |
+| IMG-129 | customer-gift-cards.svg | SVG | 640×360 | /app/customer | shared | In repo | `assets/card-art-842/customer-gift-cards.svg` |
+| IMG-130 | customer-live-progress-messages.svg | SVG | 640×360 | /app/customer | shared | In repo | `assets/card-art-842/customer-live-progress-messages.svg` |
+| IMG-131 | customer-my-account.svg | SVG | 640×360 | /app/customer | shared | In repo | `assets/card-art-842/customer-my-account.svg` |
+| IMG-132 | customer-quote-response.svg | SVG | 640×360 | /app/customer | shared | In repo | `assets/card-art-842/customer-quote-response.svg` |
+| IMG-133 | customer-website.svg | SVG | 640×360 | /app/customer | shared | In repo | `assets/card-art-842/customer-website.svg` |
+| IMG-134 | daip-creative-projects.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/daip-creative-projects.svg` |
+| IMG-135 | daip-daip-overview-test-lab.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/daip-daip-overview-test-lab.svg` |
+| IMG-136 | daip-gate-c.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/daip-gate-c.svg` |
+| IMG-137 | daip-governance.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/daip-governance.svg` |
+| IMG-138 | daip-intake-dry-run.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/daip-intake-dry-run.svg` |
+| IMG-139 | daip-private-media-intake.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/daip-private-media-intake.svg` |
+| IMG-140 | daip-private-mvp-blueprint.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/daip-private-mvp-blueprint.svg` |
+| IMG-141 | daip-readiness.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/daip-readiness.svg` |
+| IMG-142 | detailer-assigned-jobs-legacy.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/detailer-assigned-jobs-legacy.svg` |
+| IMG-143 | detailer-detailer-mobile.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/detailer-detailer-mobile.svg` |
+| IMG-144 | detailer-incidents.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/detailer-incidents.svg` |
+| IMG-145 | detailer-jobsite.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/detailer-jobsite.svg` |
+| IMG-146 | finance-accounting.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/finance-accounting.svg` |
+| IMG-147 | finance-hst-gst-review.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/finance-hst-gst-review.svg` |
+| IMG-148 | finance-month-end-close.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/finance-month-end-close.svg` |
+| IMG-149 | finance-payments.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/finance-payments.svg` |
+| IMG-150 | finance-payroll.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/finance-payroll.svg` |
+| IMG-151 | it-app-management.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-app-management.svg` |
+| IMG-152 | it-bootstrap.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-bootstrap.svg` |
+| IMG-153 | it-docs-sanity.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-docs-sanity.svg` |
+| IMG-154 | it-guided-test-centre.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-guided-test-centre.svg` |
+| IMG-155 | it-launch-readiness.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-launch-readiness.svg` |
+| IMG-156 | it-media-health.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-media-health.svg` |
+| IMG-157 | it-notification-health.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-notification-health.svg` |
+| IMG-158 | it-production-readiness.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-production-readiness.svg` |
+| IMG-159 | it-recovery.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-recovery.svg` |
+| IMG-160 | it-reliability-reassessment.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-reliability-reassessment.svg` |
+| IMG-161 | it-roadmap-execution.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-roadmap-execution.svg` |
+| IMG-162 | it-runtime-cpu.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-runtime-cpu.svg` |
+| IMG-163 | it-sanity-checks.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-sanity-checks.svg` |
+| IMG-164 | it-security.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-security.svg` |
+| IMG-165 | it-startup-command-center.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-startup-command-center.svg` |
+| IMG-166 | it-support-exceptions.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-support-exceptions.svg` |
+| IMG-167 | it-ui-seo-cache-health.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/it-ui-seo-cache-health.svg` |
+| IMG-168 | launcher-business-administration.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/launcher-business-administration.svg` |
+| IMG-169 | launcher-daip.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/launcher-daip.svg` |
+| IMG-170 | launcher-detailer.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/launcher-detailer.svg` |
+| IMG-171 | launcher-finance.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/launcher-finance.svg` |
+| IMG-172 | launcher-i-t-reliability.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/launcher-i-t-reliability.svg` |
+| IMG-173 | launcher-operations-supervisor.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/launcher-operations-supervisor.svg` |
+| IMG-174 | launcher-socials.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/launcher-socials.svg` |
+| IMG-175 | operations-assignments.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-assignments.svg` |
+| IMG-176 | operations-blocked-days.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-blocked-days.svg` |
+| IMG-177 | operations-booking-quote-retention-learning.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-booking-quote-retention-learning.svg` |
+| IMG-178 | operations-bookings.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-bookings.svg` |
+| IMG-179 | operations-conversion-queue.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-conversion-queue.svg` |
+| IMG-180 | operations-customer-progress.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-customer-progress.svg` |
+| IMG-181 | operations-customers.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-customers.svg` |
+| IMG-182 | operations-fleet-commercial-learning.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-fleet-commercial-learning.svg` |
+| IMG-183 | operations-leads-estimates.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-leads-estimates.svg` |
+| IMG-184 | operations-live-operations.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-live-operations.svg` |
+| IMG-185 | operations-live-snapshot.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-live-snapshot.svg` |
+| IMG-186 | operations-quotes.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-quotes.svg` |
+| IMG-187 | operations-retention-rebooking-learning.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-retention-rebooking-learning.svg` |
+| IMG-188 | operations-schedule.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-schedule.svg` |
+| IMG-189 | operations-today.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-today.svg` |
+| IMG-190 | operations-workflow.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/operations-workflow.svg` |
+| IMG-191 | socials-connections-centre.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-connections-centre.svg` |
+| IMG-192 | socials-content-center.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-content-center.svg` |
+| IMG-193 | socials-create-from-job.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-create-from-job.svg` |
+| IMG-194 | socials-gallery.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-gallery.svg` |
+| IMG-195 | socials-growth.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-growth.svg` |
+| IMG-196 | socials-marketing.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-marketing.svg` |
+| IMG-197 | socials-media-upload.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-media-upload.svg` |
+| IMG-198 | socials-photo-studio.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-photo-studio.svg` |
+| IMG-199 | socials-promotions.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-promotions.svg` |
+| IMG-200 | socials-seo-tasks.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-seo-tasks.svg` |
+| IMG-201 | socials-social-queue.svg | SVG | 640×360 | shared runtime / placement not verified | shared | In repo | `assets/card-art-842/socials-social-queue.svg` |
 
 ## Approval and update rules
 

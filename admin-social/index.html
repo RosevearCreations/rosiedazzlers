@@ -45,6 +45,28 @@
         </div>
       </section>
 
+      <section class="section" id="jobday842" data-build842="owner-device-daip-social-evidence">
+        <div class="panel stack">
+          <div><span class="badge">Build 842 · Owner-supervised job-day evidence</span><h2>Device acceptance, DAIP handoff &amp; delivery receipts</h2><p class="muted">Choose an active or previous job above, then inspect its original-device observations, approved-public derivative status and per-platform delivery evidence. Only an authorized owner can record an observation or attach an operator-attested public derivative. <strong>Neither action publishes.</strong></p></div>
+          <div class="job-actions"><button class="btn ghost" id="job842Refresh" type="button">Inspect selected job evidence</button><a class="btn ghost" href="/admin-handoff-acceptance.html">Original-device acceptance authority</a><a class="btn ghost" href="/admin-daip-media.html">DAIP review</a></div>
+          <div class="notice soft" id="job842Status" role="status" aria-live="polite">Select a job in Create from Job, then inspect its evidence. No original-device or provider receipts are inferred.</div>
+          <div class="readiness-grid" id="job842Timeline">No job selected.</div>
+          <fieldset style="border:1px solid var(--border);border-radius:12px;padding:12px" class="stack"><legend>Owner observation on the original device</legend><p class="mini">This records a supervised observation, not independent device verification or global acceptance. Use a non-sensitive evidence reference, never a customer address or credential.</p>
+            <div class="template-row"><label>Device <select id="job842Device"><option value="android_phone">Android phone</option><option value="iphone">iPhone</option><option value="ipad">iPad</option><option value="android_tablet">Android tablet</option><option value="desktop">Desktop</option><option value="other">Other</option></select></label><label>Observed outcome <select id="job842Result"><option value="blocked">Blocked / not verified</option><option value="pass">Observed pass</option><option value="fail">Observed failure</option></select></label><label>Evidence reference <input id="job842DeviceRef" maxlength="120" placeholder="Device test receipt or internal note ID"></label></div>
+            <label class="check-row"><input type="checkbox" id="job842Accessibility"> I inspected the accessible controls, focus and screen reader/keyboard recovery on this device.</label>
+            <label class="check-row"><input type="checkbox" id="job842Recovery"> I inspected the job-day offline/error recovery and manual fallback on this device.</label>
+            <button class="btn ghost" id="job842Record" type="button">Record owner-observed result (not system acceptance)</button>
+          </fieldset>
+          <fieldset style="border:1px solid var(--border);border-radius:12px;padding:12px" class="stack"><legend>Attach reviewed public derivative to a DAIP-tagged social draft</legend><p class="mini">First obtain public consent and an approved content package in DAIP; export the edited/blurred derivative to an approved public Photo Studio folder. Select its saved Photo Studio ID. The source relationship is an operator attestation and remains independently unverified.</p>
+            <div class="template-row"><label>DAIP-tagged draft <select id="job842Post"><option value="">Inspect job first</option></select></label><label>Photo Studio public image ID <input id="job842PhotoId" placeholder="Approved public image UUID"></label><label>Derivative lineage evidence <input id="job842Lineage" maxlength="120" placeholder="Approved-export receipt/reference"></label></div>
+            <label class="check-row"><input type="checkbox" id="job842LineageAck"> I personally checked the original-job source against this edited public derivative and its export evidence.</label>
+            <label class="check-row"><input type="checkbox" id="job842PrivacyAck"> I confirmed public-use consent and reviewed plates, faces, home addresses, private details and caption safety.</label>
+            <div class="job-actions"><button class="btn primary" id="job842Attach" type="button">Attach to Draft · owner review still required</button><a class="btn ghost" href="/admin-photo-studio.html">Find approved Photo Studio ID</a></div>
+          </fieldset>
+          <div class="notice warn">Publishing still requires a second explicit owner review in the Social Queue and an actual platform response. Webhook acceptance and manual “posted” claims are not independent proof that a social post is live.</div>
+        </div>
+      </section>
+
       <section class="section">
         <div id="pageNotice" class="notice" data-admin-shell-status>Ready.</div>
       </section>
@@ -131,6 +153,7 @@
   <script src="/assets/admin-runtime.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script defer src="/assets/social-job-tagging-841.js"></script>
+  <script defer src="/assets/jobday-social-evidence-842.js"></script>
   <script type="module">
     import { setBrandImages, setFooter } from "/assets/site.js";
 
@@ -257,7 +280,9 @@
       renderPosts(data.posts || [], data.warning || '');
     }
 
+    let currentPosts=[];
     function renderPosts(posts, warning) {
+      currentPosts=posts;
       const wrap = qs('#postsList');
       if (warning) { wrap.innerHTML = `<div class="notice warn">${escapeHtml(warning)}</div>`; return; }
       if (!posts.length) { wrap.innerHTML = '<div class="notice">No social drafts found for this filter.</div>'; return; }
@@ -284,7 +309,7 @@
           ${media.length ? `<div class="kicker">Media URLs: ${media.length}</div>` : ''}
           ${isPlanned ? `<div class="scheduled-pill">Planned: ${escapeHtml(formatDateTime(post.scheduled_for))}</div>` : ''}
           ${post.caption_template_key ? `<div class="kicker">Template: ${escapeHtml(post.caption_template_key)}</div>` : ''}
-          ${post.source_type === 'daip_job_media_tag' ? `<div class="kicker">DAIP-tagged job upload · reference ${escapeHtml(String(post.source_id || '').slice(0,8))} · private photo not attached</div>` : ''}
+          ${post.source_type === 'daip_job_media_tag' ? `<div class="kicker">DAIP-tagged job upload · reference ${escapeHtml(String(post.source_id || '').slice(0,8))} · ${Array.isArray(post.media_urls)&&post.media_urls.length?'owner-attested public derivative attached; separate approval required':'private source only; no public derivative attached'}</div>` : ''}
           ${Array.isArray(post.local_hashtag_set) && post.local_hashtag_set.length ? `<div class="kicker">Hashtags: ${escapeHtml(post.local_hashtag_set.map((tag)=>`#${String(tag).replace(/^#/, '')}`).join(' '))}</div>` : ''}
           ${isDuplicate ? `<div class="notice warn">Possible duplicate draft: same platform/caption/first media appears ${duplicateCounts.get(post.duplicate_signature)} times in this view.</div>` : ''}
           ${reviewSummary(post)}
@@ -309,6 +334,11 @@
     async function updatePost(id, action) {
       const body = { id, action };
       if (action === 'approve_ready') {
+        const tagged=currentPosts.find(post=>post.id===id&&post.source_type==='daip_job_media_tag');
+        if(tagged){
+          if(!confirm('OWNER SOCIAL REVIEW: Have we independently reviewed the customer public-use consent, approved Photo Studio derivative, source lineage, plates/faces/addresses and caption? This records our explicit approval and permits later manual publishing.'))throw new Error('Owner review cancelled; draft remains unchanged.');
+          body.confirmed_build842_owner_review=true;
+        }
         body.customer_consent_confirmed = true;
         body.plate_privacy_confirmed = true;
         body.no_private_info_confirmed = true;

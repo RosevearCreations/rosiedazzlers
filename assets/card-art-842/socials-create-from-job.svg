@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-label="Illustrative Create from Job artwork">
+<title>Create from Job — original Rosie workflow illustration</title><defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111925"/><stop offset=".55" stop-color="#371e43"/><stop offset="1" stop-color="#090f19"/></linearGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#bd6be6"/><stop offset="1" stop-color="#a63697"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#bb50f1" stop-opacity=".36"/><stop offset="1" stop-color="#a63697" stop-opacity="0"/></radialGradient></defs>
+<rect width="640" height="360" fill="url(#bg)"/><circle cx="585" cy="70" r="280" fill="url(#glow)"/>
+<path d="M-15 274 Q151 186 312 277T656 240V370H-15Z" fill="#5b2277" opacity=".19"/>
+<path d="M0 305 Q466 208 640 298" fill="none" stroke="url(#metal)" stroke-opacity=".33" stroke-width="3"/>
+<g stroke="#c984eb" fill="none" opacity=".15"><path d="M151 0 0 160M640 31 430 360"/><circle cx="548" cy="78" r="58"/><circle cx="548" cy="78" r="110"/></g>
+<rect x="165" y="54" width="308" height="253" rx="36" fill="#0b1320" fill-opacity=".72" stroke="#bd6be6" stroke-opacity=".3" stroke-width="2"/>
+<rect x="185" y="74" width="268" height="213" rx="29" fill="url(#metal)" fill-opacity=".08"/>
+<g transform="translate(229 92) scale(1.08)" stroke="url(#metal)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m84 18 14 47 47 14-47 14-14 47-14-47-47-14 47-14zM138 18l5 17 17 5-17 5-5 17-5-17-17-5 17-5z"/></g>
+<g transform="translate(506 222) rotate(4 56 56) scale(.68)" stroke="#e5d8b9" stroke-opacity=".65" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M46 20h62l26 26v98H46z"/><path d="M108 21v26h26M64 73h49M64 96h49M64 119h33"/></g>
+<rect x="522" y="39" width="72" height="6" rx="3" fill="url(#metal)" opacity=".65"/>
+<g fill="#c984eb" opacity=".7"><circle cx="80" cy="301" r="5"/><circle cx="103" cy="301" r="3"/><circle cx="123" cy="301" r="2"/></g>
+</svg>
