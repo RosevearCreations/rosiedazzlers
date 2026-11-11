@@ -1,5 +1,7 @@
 # Rosie Dazzlers 842 — Owner Device, DAIP Derivative & Social Delivery Evidence
 
+**Verified software release (November 10, 2026):** [dev #943](https://github.com/RosevearCreations/rosiedazzlers/pull/943) → [main #944](https://github.com/RosevearCreations/rosiedazzlers/pull/944) → [six-job exact-SHA Production #42936417081](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42936417081), immutable feature `main` `bb12d7a7a234a175a481f93ece2aac3ddab64440`; 189 successful main checks, zero failures. **External original-device/owner/customer/provider acceptance remains HOLD.**
+
 ## Source contract
 
 Build 842 continues the Build 841 customer/detailer job-day and Socials creator without changing canonical booking or original private-media storage. Software GREEN is **not** an original-device, customer-consent, provider, owner, DAIP consumer or public-post acceptance claim.
