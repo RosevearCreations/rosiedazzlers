@@ -6,6 +6,7 @@ import {ownerActor842,SOURCE_TYPE_842} from '../_lib/jobday-social-842.js';
 import {PROVIDER_STATUS_844} from '../_lib/jobday-acceptance-844.js';
 import {PROVIDERS_845,PROVIDER_AUDIT_845,ageLevel845,providerSetup845} from '../_lib/jobday-provider-845.js';
 import {CAPABILITY_AUDIT_846,CDN_STATUS_846,SLA_STATUS_846,verifyReadCapability846,verifyCdnWitness846,validCdnReceipt846,recallPolicy846} from '../_lib/jobday-capabilities-846.js';
+import {recallState847} from '../_lib/jobday-pilot-847.js';
 
 const fail=(error,status=400)=>json({ok:false,error,platform_mutation_performed:false,external_mirrors_verified:false,master_connection:'HOLD'},status);
 const ref=value=>typeof value==='string'&&/^[A-Za-z0-9][A-Za-z0-9_-]{2,79}$/.test(value);
@@ -41,8 +42,8 @@ export async function onRequest({request,env}){
     if(request.method==='GET'){
       const limited=posts.slice(0,20),ids=limited.map(p=>p.id),attempts=ids.length?await rest(env,`social_dispatch_attempts?select=id,social_post_id,status,request_summary,response_summary,created_at&social_post_id=in.(${ids.join(',')})&order=created_at.desc&limit=500`):[];
       return json({ok:true,build:846,revoked,booking_id:bookingId,recall_policy:policy,provider_capability_audits:audits.filter(a=>a.safe_note?.startsWith(CAPABILITY_AUDIT_846)).map(a=>({created_at:a.created_at,summary:a.safe_note.slice(0,170)})),cdn_witness_pin_enrolled:Boolean(env?.ROSIE_SOCIAL_CDN_WITNESS_ED25519_PUBLIC_KEY),posts:limited.map(p=>{
-        const rows=(attempts||[]).filter(a=>a.social_post_id===p.id),recall=rows.find(a=>a.status==='recall_required'),provider=rows.find(removed),origin=rows.find(originGone),cdn=rows.find(cdnWitness),closed=rows.find(a=>a.status===SLA_STATUS_846),liveLater=provider&&rows.some(a=>a.status==='provider_api_authenticated_post_visible'&&Date.parse(a.created_at)>Date.parse(provider.created_at));
-        return {id:p.id,platform:p.platform,external_post_id:p.external_post_id||null,recall_aging:recall?ageLevel845(recall.created_at):null,provider_removal_witnessed:Boolean(provider),r2_origin_verified_gone:Boolean(origin),cdn_invalidation_witnessed:Boolean(cdn),conflicting_later_live_post:Boolean(liveLater),closure_state:closed?'SCOPED_EVIDENCE_CLOSED_EXTERNAL_MIRRORS_UNKNOWN':recall?'RECALL_SLA_OPEN_HOLD':'NOT_REQUESTED',closure_at:closed?.created_at||null};
+        const rows=(attempts||[]).filter(a=>a.social_post_id===p.id),recall=rows.find(a=>a.status==='recall_required'),provider=rows.find(removed),origin=rows.find(originGone),cdn=rows.find(cdnWitness),closure=recallState847(rows),liveLater=provider&&rows.some(a=>a.status==='provider_api_authenticated_post_visible'&&Date.parse(a.created_at)>Date.parse(provider.created_at));
+        return {id:p.id,platform:p.platform,external_post_id:p.external_post_id||null,recall_aging:recall?ageLevel845(recall.created_at):null,provider_removal_witnessed:Boolean(provider),r2_origin_verified_gone:Boolean(origin),cdn_invalidation_witnessed:Boolean(cdn),conflicting_later_live_post:Boolean(liveLater),closure_state:closure.state==='CLOSED_SCOPED_EXTERNAL_MIRRORS_HOLD'?'SCOPED_EVIDENCE_CLOSED_EXTERNAL_MIRRORS_UNKNOWN':closure.state,closure_at:closure.closure?.created_at||null};
       }),view_truncated:posts.length>20||attempts.length===500,platform_mutation_performed:false,external_mirrors_verified:false,master_connection:'HOLD'});
     }
     const action=clean(body.action,45),caseRef=clean(body.owner_case_reference,80);

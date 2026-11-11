@@ -1,0 +1,33 @@
+# Rosie Dazzlers Build 847 — Original provider/custodian pilot, recall reopen and Master contract evidence
+
+**Source owner:** Rosie Dazzlers (`rosiedazzlers`, owned-business shell). **Software:** candidate until protected `dev`/`main` PRs and six exact-SHA Cloudflare Production jobs succeed. **Independent live provider, custodian, physical-device and AI Data acceptance:** HOLD until separately witnessed.
+
+## Added original owner workflow
+
+- `GET/POST /api/admin/jobday_pilot_review_847` requires an **original signed-in, active Rosie owner session** and `manage_staff` authority. Legacy admin-password and staff bridge headers do not qualify. Database writes are service-role-only, server-side, with bounded original booking/project, private audit and job-post lookups. All write actions require explicit owner checkboxes and non-sensitive owner case IDs.
+- `review_original_provider_custodian_pilot` records **review of the original post and the gaps**, not provider or device success. It checks that the same configured Meta account has fresh Build 845 authenticated enrollment and Build 846 read permission evidence, a prior independently verified 844 provider-removal acknowledgment and 846 CDN witness, plus no reopened/contradicted scoped closure. The result is `source_gaps`, `real_provider_custodian_acceptance:HOLD`; repeat case references cannot be silently added. No provider post, removal or CDN API operation is performed.
+- `reopen_verified_conflict` requires original consent withdrawal, a prior Build 846 scoped SLA closure, and a **newer** authenticated HTTP 200 provider LIVE observation or an independently witnessed provider LIVE receipt. The owner explicitly acknowledges the conflict and that takedown remains unverified. Only then is an append-only `recall_reopened_verified_provider_conflict` attempt saved with closure/trigger reference IDs. No previous evidence is rewritten, no publication is permitted and no old deletion receipt becomes valid again. Duplicates and unsupported 404 statuses fail closed.
+- 846 local owner view and source-only Master projection now honor that conflict. A later verified LIVE observation moves the case to `CONFLICT_REOPEN_REQUIRED`; after owner reopening it remains `REOPENED_VERIFIED_PROVIDER_CONFLICT_HOLD`. It is counted as **open**, not closed, in original privacy-safe reporting; Build 847 adds `recall_reopened_verified` and `recall_reopen_required` counts to that internal source projection. External mirrors and the original consent withdrawal stay unresolved/immutable.
+- `GET /api/admin/master_social_intelligence_v847` returns an original signed-supervisor-only private, redacted local projection (`rosie.ai-data.social-evidence.preview.v847`). No customer name, booking ID, post ID, staff email, derivative, note, URL, credential, arbitrary tenant data, outbound event or Master consumer token is exported. `completionPercent:null`, `externalConnection:HOLD`, source-window truncation and revision claims remain truthful.
+
+## Independently signed AI Data source-contract review
+
+The owner may request `admit_independent_master_contract` only after receiving a genuine **AI Data custodian-controlled Ed25519** contract acknowledgment and separately enrolling the **public** key in Rosie server-only `ROSIE_AIDATA_SOCIAL_CONTRACT_ED25519_PUBLIC_KEY` (base64url of raw 32-byte public key). The private key must never be put in the repository, UI, Supabase public schema or transmitted to Rosie.
+
+The signed receipt must have **exactly** these 16 fields in this order:
+
+`version, kind, source_id, shell_id, source_contract, source_revision, consumer_id, decision, permissions, booking_id, project_id, master_case_reference, nonce, issued_at, expires_at, signer_id`
+
+Canonical signature message: UTF-8 `ROSIE-847-AIDATA-CONTRACT-V1\n` followed by JSON of the ordered field *values* array. Receipt values must be `version:1`, `kind:"source_contract_review"`, `source_id/shell_id:"rosiedazzlers"`, `source_contract:"rosie.ai-data.social-evidence.preview.v847"`, `source_revision` **exact** deployed `CF_PAGES_COMMIT_SHA`, `consumer_id:"ai-data-platform"`, `decision:"source_contract_accepted_counts_only"`, `permissions:"read_redacted_counts_only_no_event"`, matching original booking/project UUIDs and owner case ID, non-replay nonce and distinct `signer_id`. Issued time must be within 24 hours; expiry must be after review and within 24 hours of issuance. The signature is detached base64url Ed25519. Fail closed on missing pin, invalid signature, another source/revision/consumer, expiry, replay or conflicting owner case.
+
+A valid independent signature permits a **private original owner review audit only**, containing canonical SHA-256 of the receipt. It does **not** mean the AI Data consumer actually fetched data, established a source signer, received a signed operational HEALTHY receipt, acknowledged an event, gained an audience grant, accepted a portfolio percentage, or connected the six apps. Even a genuine contract decision leaves `master_runtime_consumer_ack:false`, `consumer_payload_eligible:false`, `master_connection:HOLD` pending separate Master-controlled runtime evidence and owner acceptance.
+
+**Direct AI Data handoff:** [AI Data Platform source contract issue #839](https://github.com/RosevearCreations/ai-data-platform/issues/839). AI Data must independently own and publish the permitted v847 contract, original signing custodian public pin, exact revision/receipt, receiver audience policy, replay/freshness ledger and explicit runtime acceptance. No source may fabricate their authorization. Comms owns incident delivery; Rosie owns original customer consent, job evidence and revoked media.
+
+## Validation / remaining real-world gates
+
+`node scripts/build847_original_pilot_reopen_master_test.mjs` covers signed-owner-only authorization, replay, missing/invalid public key, wrong revision, expired receipt, signed original contract intake, no network/provider mutation, late LIVE conflict detection, owner reopening and accurate redacted Master counts. It runs with existing 846, 845 and earlier cumulative release regressions through `scripts/current_booking_wizard_regression.sh`.
+
+**HOLD:** independently granted real Meta provider accounts/capabilities, actual provider removal and CDN custodian receipt, original physical mobile acceptance, customer public-use consent, AI Data signer/consumer approval and runtime ACK, Comms trust. No test key, mock receipt or green deployment upgrades these states.
+
+**Next conditional Build 848 — Verified Recall Recovery Reclosure, Independent Master Receipt Freshness & Owner Marketing Exception Dashboard.** Do not activate provider writes or Master transport before independent approval.
