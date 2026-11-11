@@ -22,7 +22,7 @@ globalThis.fetch=async(url,opts={})=>{
   if(table==='social_post_queue')return respond(posts);
   if(table==='social_dispatch_attempts')return respond(attempts);
   if(table==='creative_projects')return respond([{id:project,source_booking_id:booking,project_code:'SAFE',title:'Safe',consent_status:approved?'approved_public':'not_reviewed',public_publish_allowed:approved,content_package_status:approved?'approved':'draft',before_after_applicability:'not_applicable',consent_expires_at:null}]);
-  if(table==='creative_project_audit')return respond(tagged?[{id:crypto.randomUUID(),event_type:'updated',safe_note:`Build 841 job media source tag: ${source}; metadata only, no media copied or published.`}]:[]);
+  if(table==='creative_project_audit')return respond(u.search.includes('safe_note=like.')?[]:tagged?[{id:crypto.randomUUID(),event_type:'updated',safe_note:`Build 841 job media source tag: ${source}; metadata only, no media copied or published.`}]:[]);
   if(table==='job_media')return respond([{id:source,booking_id:booking,kind:'image',media_url:'https://private.example/token=SECRET'}]);
   if(table==='daip_project_media_assets')return respond(approved?[{id:'555',upload_status:'uploaded',story_review_status:'selected',consent_status:'approved_public',capture_stage:'during'}]:[]);
   if(table==='daip_media_processing_jobs')return respond([]);
