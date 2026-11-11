@@ -1,13 +1,12 @@
-// Build 841: signed-in staff module launcher with illustrative image cards.
+// Build 842: signed-in staff launcher with distinct per-module illustrations.
 // Only the existing module flag endpoint is read; no workflow data is loaded.
 (function(globalScope){
   'use strict';
   const $=id=>document.getElementById(id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const root='/assets/themes/standard/images/';
-  const photos=Object.freeze({detailer:'jobday-field-841.webp',operations:'package-complete.webp',admin:'inventory-tools-photo.webp',it:'launch-readiness-photo.webp',finance:'workflow-tablet.webp',daip:'daip-editor-841.webp',socials:'social-creator-841.webp'});
   function card(m){
-    const image=root+(photos[m.key]||'service-photo.webp');
+    const slug=('launcher-'+m.name).normalize('NFKD').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,84).replace(/-$/,'');
+    const image='/assets/card-art-842/'+slug+'.svg';
     return `<article class="panel app-card"><img class="module-link-card__photo" src="${esc(image)}" alt="Illustrative image for ${esc(m.name)}" loading="lazy" decoding="async"><span class="badge">${esc(m.status==='runtime'?'Active runtime':m.status==='control'?'Control plane':'Lazy module')}</span><h2>${esc(m.name)}</h2><p class="mini">${esc(m.description||'Loads only when selected.')}</p><a class="btn primary" href="${esc(m.href)}" data-module="${esc(m.key)}">Open ${esc(m.name)}</a></article>`;
   }
   async function boot(){

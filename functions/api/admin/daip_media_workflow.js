@@ -3,7 +3,7 @@ import {serviceReady,rest,clean} from '../_lib/creative-projects.js';
 
 const uuid=value=>/^[0-9a-f-]{36}$/i.test(String(value||''));
 
-function workflowFor({project,assets=[],jobs=[],sessions=[],drafts=[]}){
+export function workflowFor({project,assets=[],jobs=[],sessions=[],drafts=[]}){
   const uploaded=assets.filter(row=>row.upload_status==='uploaded');
   const reviewed=uploaded.filter(row=>['selected','excluded'].includes(row.story_review_status));
   const selected=uploaded.filter(row=>row.story_review_status==='selected');

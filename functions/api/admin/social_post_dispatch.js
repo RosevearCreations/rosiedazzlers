@@ -3,6 +3,7 @@ import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, isUuid } fr
 import { withSocialCors, socialCorsHeaders } from "../_lib/social-dispatch.js";
 import { attemptPlatformPublish, publishViaWebhook } from "../_lib/social-platform-dispatch.js";
 import { assertSocialPostPublishable, buildApprovalPatch, stripSocialComplianceFields } from "../_lib/social-compliance.js";
+import {verifyAttachedDerivative842,ownerActor842,SOURCE_TYPE_842} from '../_lib/jobday-social-842.js';
 
 const STATUS_BY_ACTION = {
   mark_ready: "ready",
@@ -35,8 +36,16 @@ export async function onRequestPost(context) {
 
     const post = await loadSocialPost(env, id);
     if (!post) return withSocialCors(json({ ok: false, error: "Social post was not found." }, 404));
+    // Historical mark_ready shortcut lacks explicit privacy approval. Tagged
+    // original job media may only use the independently gated approve_ready.
+    if(post.source_type===SOURCE_TYPE_842&&action==='mark_ready')return withSocialCors(json({ok:false,error:'Build 842 tagged job posts require explicit owner approve_ready review. Legacy mark_ready is blocked.'},409));
 
     if (action === "approve_ready") {
+      if(post.source_type===SOURCE_TYPE_842){
+        if(!ownerActor842(actor)||body.confirmed_build842_owner_review!==true||body.customer_consent_confirmed!==true||body.plate_privacy_confirmed!==true||body.no_private_info_confirmed!==true)return withSocialCors(json({ok:false,error:'An authorized owner must explicitly confirm Build 842 consent, plate/privacy, caption and derivative review before approval.'},403));
+        const gate=await verifyAttachedDerivative842(env,post);
+        if(!gate.ok)return withSocialCors(json({ok:false,error:'DAIP public derivative gate is HOLD: '+gate.reason,blockers:gate.blockers||[]},409));
+      }
       return withSocialCors(await handleApproveReady({ env, post, actor, body }));
     }
 
@@ -83,6 +92,13 @@ export async function onRequestPost(context) {
 
 
 async function blockPublishIfNotReady({ env, post, actor, action }) {
+  if(post.source_type===SOURCE_TYPE_842){
+    const gate=await verifyAttachedDerivative842(env,post);
+    if(!gate.ok){
+      await logAttempt(env,{social_post_id:post.id,platform:post.platform,status:'blocked',request_summary:{action,actor:actor.full_name||actor.email||'Staff'},response_summary:{blocked_by:'build842_derivative_gate'},error_message:String(gate.reason).slice(0,500)});
+      return json({ok:false,error:'Build 842 derivative/consent gate HOLD: '+gate.reason,blockers:gate.blockers||[],publication_happened:false},409);
+    }
+  }
   const publishable = assertSocialPostPublishable(post);
   if (publishable.ok) return null;
   await logAttempt(env, {

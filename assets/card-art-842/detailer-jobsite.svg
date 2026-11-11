@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-label="Illustrative Jobsite artwork">
+<title>Jobsite — original Rosie workflow illustration</title><defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111925"/><stop offset=".55" stop-color="#43361e"/><stop offset="1" stop-color="#090f19"/></linearGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e6bb6b"/><stop offset="1" stop-color="#64a636"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#f1b950" stop-opacity=".36"/><stop offset="1" stop-color="#64a636" stop-opacity="0"/></radialGradient></defs>
+<rect width="640" height="360" fill="url(#bg)"/><circle cx="48" cy="70" r="280" fill="url(#glow)"/>
+<path d="M-15 274 Q152 187 312 277T656 240V370H-15Z" fill="#775922" opacity=".19"/>
+<path d="M0 305 Q527 208 640 298" fill="none" stroke="url(#metal)" stroke-opacity=".33" stroke-width="3"/>
+<g stroke="#ebc784" fill="none" opacity=".15"><path d="M152 0 0 160M640 27 430 360"/><circle cx="548" cy="78" r="57"/><circle cx="548" cy="78" r="110"/></g>
+<rect x="165" y="54" width="308" height="253" rx="36" fill="#0b1320" fill-opacity=".72" stroke="#e6bb6b" stroke-opacity=".3" stroke-width="2"/>
+<rect x="185" y="74" width="268" height="213" rx="29" fill="url(#metal)" fill-opacity=".08"/>
+<g transform="translate(229 92) scale(1.08)" stroke="url(#metal)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M20 74 31 48q4-10 16-10h72q12 0 16 10l11 26M23 75h121l8 14v15H16V89z"/><path d="M37 74h94M30 104v11h23v-11m64 0v11h23v-11"/><circle cx="43" cy="88" r="7"/><circle cx="125" cy="88" r="7"/></g>
+<g transform="translate(18 222) rotate(8 56 56) scale(.68)" stroke="#e5d8b9" stroke-opacity=".65" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m84 18 14 47 47 14-47 14-14 47-14-47-47-14 47-14zM138 18l5 17 17 5-17 5-5 17-5-17-17-5 17-5z"/></g>
+<rect x="30" y="39" width="72" height="6" rx="3" fill="url(#metal)" opacity=".65"/>
+<g fill="#ebc784" opacity=".7"><circle cx="85" cy="301" r="5"/><circle cx="108" cy="301" r="3"/><circle cx="128" cy="301" r="2"/></g>
+</svg>
