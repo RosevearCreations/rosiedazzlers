@@ -1,6 +1,6 @@
 # Rosie Dazzlers Build 848 — Recovery reclosure, independent Master receipt freshness and owner marketing exceptions
 
-**Source:** Rosie Dazzlers owned-business shell. **Feature release:** pending protected `dev` / `main` merge and exact-SHA Cloudflare Production GREEN verification. **Independent live provider/custodian, original-device, all public mirrors and AI Data runtime acceptance:** HOLD until separately verified.
+**Source:** Rosie Dazzlers owned-business shell. **Software Production GREEN:** [protected dev PR #971](https://github.com/RosevearCreations/rosiedazzlers/pull/971), [protected main PR #970](https://github.com/RosevearCreations/rosiedazzlers/pull/970) and [six successful Cloudflare Production jobs #43088073907](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/43088073907), including exact deployed feature revision `cfcd2043e99f9683924928598d1f075a8be3bea4`. Documentation-only release-ledger revisions must have their own protected exact-current-main acceptance. **Independent live provider/custodian, original-device, all public mirrors and AI Data runtime acceptance:** HOLD until separately verified.
 
 ## Recovered recall evidence
 
