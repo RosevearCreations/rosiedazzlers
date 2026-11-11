@@ -193,3 +193,4 @@ node scripts/build839_module_trends_owner_signoff_test.mjs
 node scripts/build840_suite_pilot_final_business_gate_test.mjs
 node scripts/build841_jobday_social_media_test.mjs
 node scripts/build842_owner_device_derivative_delivery_test.mjs
+node scripts/build843_platform_recall_mobile_closure_test.mjs

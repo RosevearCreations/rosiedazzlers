@@ -17,14 +17,16 @@ export async function sourceGate842(env,post){
   if(projectRows?.length!==1)return {ok:false,reason:'No unique DAIP Creative Project for this booking.'};
   const project=projectRows[0];
   if(project.consent_expires_at&&Date.parse(project.consent_expires_at)<=Date.now())return {ok:false,reason:'DAIP public consent has expired.'};
-  const [media,assets,jobs,sessions,tag]=await Promise.all([
+  const [media,assets,jobs,sessions,tag,revocations]=await Promise.all([
     rest(env,`job_media?select=id,booking_id,kind&booking_id=eq.${encodeURIComponent(post.booking_id)}&id=eq.${encodeURIComponent(post.source_id)}&limit=1`),
     rest(env,`daip_project_media_assets?select=id,capture_stage,consent_status,upload_status,story_review_status&project_id=eq.${encodeURIComponent(project.id)}&limit=500`),
     rest(env,`daip_media_processing_jobs?select=id,status,dead_lettered_at&project_id=eq.${encodeURIComponent(project.id)}&limit=500`),
     rest(env,`creative_project_sessions?select=id,approved_for_story&project_id=eq.${encodeURIComponent(project.id)}&limit=500`),
-    rest(env,`creative_project_audit?select=id&project_id=eq.${encodeURIComponent(project.id)}&event_type=eq.updated&safe_note=eq.${encodeURIComponent(`Build 841 job media source tag: ${post.source_id}; metadata only, no media copied or published.`)}&limit=1`)
+    rest(env,`creative_project_audit?select=id&project_id=eq.${encodeURIComponent(project.id)}&event_type=eq.updated&safe_note=eq.${encodeURIComponent(`Build 841 job media source tag: ${post.source_id}; metadata only, no media copied or published.`)}&limit=1`),
+    rest(env,`creative_project_audit?select=id,safe_note&project_id=eq.${encodeURIComponent(project.id)}&event_type=eq.updated&safe_note=like.${encodeURIComponent('Build 843 consent revoked:*')}&order=created_at.desc&limit=1`)
   ]);
   if(!media?.length||!tag?.length)return {ok:false,reason:'Source media or original DAIP source-tag audit is missing.'};
+  if(revocations?.length)return {ok:false,project_id:project.id,reason:'Build 843 consent withdrawal is permanent until a separate new owner-approved consent episode; existing approvals cannot silently restore publication.'};
   const workflow=workflowFor({project,assets:assets||[],jobs:jobs||[],sessions:sessions||[]});
   if(!workflow.public_handoff_ready)return {ok:false,project_id:project.id,reason:'DAIP public-derivative approval is HOLD.',blockers:workflow.blockers};
   return {ok:true,project_id:project.id,source_id:post.source_id,workflow};
