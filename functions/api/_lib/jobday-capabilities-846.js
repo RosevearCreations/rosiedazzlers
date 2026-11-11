@@ -1,7 +1,7 @@
 // Build 846 — authenticated read capability, independent CDN evidence and
 // source-only Master projection. No platform write capability is inferred.
 import {providerSetup845,verifyAccount845} from './jobday-provider-845.js';
-import {recallState847} from './jobday-pilot-847.js';
+import {recallState848} from './jobday-recovery-848.js';
 export const CAPABILITY_AUDIT_846='Build 846 provider read capability:';
 export const CDN_STATUS_846='cdn_witness_verified_invalidation';
 export const SLA_STATUS_846='recall_sla_closed_scoped';
@@ -63,9 +63,9 @@ export function masterSocialProjection846({posts=[],attempts=[],capabilityAudits
   const timestamp=Date.parse(now);
   const valid=new Set(posts.map(p=>p.id)),byPost=new Map();
   for(const a of attempts){if(!valid.has(a.social_post_id))continue;let list=byPost.get(a.social_post_id)||[];list.push(a);byPost.set(a.social_post_id,list);}
-  const count={source_posts:posts.length,recall_required:0,recall_open:0,recall_closed_scoped:0,recall_critical_72h:0,recall_reopened_verified:0,recall_reopen_required:0,verified_removed_witness:0,authenticated_post_read:0,cdn_witness_invalidation:0};
-  for(const p of posts){const list=byPost.get(p.id)||[],recall=list.find(a=>a.status==='recall_required'),state=recallState847(list,Number.isFinite(timestamp)?timestamp:Date.now());
-    if(recall){count.recall_required++;if(state.state==='CLOSED_SCOPED_EXTERNAL_MIRRORS_HOLD')count.recall_closed_scoped++;else{count.recall_open++;if(state.state==='REOPENED_VERIFIED_PROVIDER_CONFLICT_HOLD')count.recall_reopened_verified++;if(state.state==='CONFLICT_REOPEN_REQUIRED')count.recall_reopen_required++;if(Number.isFinite(Date.parse(recall.created_at))&&Number.isFinite(timestamp)&&timestamp-Date.parse(recall.created_at)>=72*3600e3)count.recall_critical_72h++;}}
+  const count={source_posts:posts.length,recall_required:0,recall_open:0,recall_closed_scoped:0,recall_critical_72h:0,recall_reopened_verified:0,recall_reopen_required:0,recall_reclosed_verified:0,verified_removed_witness:0,authenticated_post_read:0,cdn_witness_invalidation:0};
+  for(const p of posts){const list=byPost.get(p.id)||[],recall=list.find(a=>a.status==='recall_required'),state=recallState848(list,Number.isFinite(timestamp)?timestamp:Date.now());
+    if(recall){count.recall_required++;if(['CLOSED_SCOPED_EXTERNAL_MIRRORS_HOLD','RECLOSED_VERIFIED_RECOVERY_EXTERNAL_MIRRORS_HOLD'].includes(state.state)){count.recall_closed_scoped++;if(state.state==='RECLOSED_VERIFIED_RECOVERY_EXTERNAL_MIRRORS_HOLD')count.recall_reclosed_verified++;}else{count.recall_open++;if(state.state==='REOPENED_VERIFIED_PROVIDER_CONFLICT_HOLD')count.recall_reopened_verified++;if(state.state==='CONFLICT_REOPEN_REQUIRED')count.recall_reopen_required++;if(Number.isFinite(Date.parse(recall.created_at))&&Number.isFinite(timestamp)&&timestamp-Date.parse(recall.created_at)>=72*3600e3)count.recall_critical_72h++;}}
     if(list.some(a=>a.status==='provider_witness_verified_removed'))count.verified_removed_witness++;
     if(list.some(a=>a.status==='provider_api_authenticated_post_visible'))count.authenticated_post_read++;
     if(list.some(a=>a.status===CDN_STATUS_846))count.cdn_witness_invalidation++;

@@ -28,7 +28,7 @@ export async function onRequestGet({request,env}){
     const posts=await privateRead(env,'social_post_queue','select=id,platform,status&source_type=eq.daip_job_media_tag&order=created_at.desc&limit=200');
     const ids=posts.map(p=>p.id);
     const [attempts,audits]=await Promise.all([
-      ids.length?privateRead(env,'social_dispatch_attempts',`select=social_post_id,status,created_at&social_post_id=in.(${ids.join(',')})&order=created_at.desc&limit=500`):[],
+      ids.length?privateRead(env,'social_dispatch_attempts',`select=social_post_id,status,created_at,request_summary,response_summary&social_post_id=in.(${ids.join(',')})&order=created_at.desc&limit=500`):[],
       privateRead(env,'creative_project_audit',`select=id,created_at&event_type=eq.updated&safe_note=like.${encodeURIComponent(CAPABILITY_AUDIT_846+'*')}&order=created_at.desc&limit=250`)
     ]);
     const truncated=posts.length===200||attempts.length===500||audits.length===250;
