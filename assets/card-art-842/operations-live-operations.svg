@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-label="Illustrative Live Operations artwork">
+<title>Live Operations — original Rosie workflow illustration</title><defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111925"/><stop offset=".55" stop-color="#433b1e"/><stop offset="1" stop-color="#090f19"/></linearGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e6c96b"/><stop offset="1" stop-color="#80a636"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#f1cb50" stop-opacity=".36"/><stop offset="1" stop-color="#80a636" stop-opacity="0"/></radialGradient></defs>
+<rect width="640" height="360" fill="url(#bg)"/><circle cx="48" cy="70" r="280" fill="url(#glow)"/>
+<path d="M-15 274 Q144 198 312 277T656 240V370H-15Z" fill="#776322" opacity=".19"/>
+<path d="M0 305 Q479 208 640 298" fill="none" stroke="url(#metal)" stroke-opacity=".33" stroke-width="3"/>
+<g stroke="#ebd384" fill="none" opacity=".15"><path d="M144 0 0 160M640 15 430 360"/><circle cx="548" cy="78" r="77"/><circle cx="548" cy="78" r="110"/></g>
+<rect x="165" y="54" width="308" height="253" rx="36" fill="#0b1320" fill-opacity=".72" stroke="#e6c96b" stroke-opacity=".3" stroke-width="2"/>
+<rect x="185" y="74" width="268" height="213" rx="29" fill="url(#metal)" fill-opacity=".08"/>
+<g transform="translate(229 92) scale(1.08)" stroke="url(#metal)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M21 60c35-37 91-37 126 0M39 81c25-27 65-27 90 0M60 102c14-15 34-15 48 0"/><circle cx="84" cy="124" r="8"/></g>
+<g transform="translate(18 222) rotate(4 56 56) scale(.68)" stroke="#e5d8b9" stroke-opacity=".65" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M27 58h114v83H27zM19 58l20-35h90l20 35-9 20-16-12-16 12-17-12-17 12-16-12-16 12z"/><path d="M62 140V99h43v41"/></g>
+<rect x="30" y="39" width="72" height="6" rx="3" fill="url(#metal)" opacity=".65"/>
+<g fill="#ebd384" opacity=".7"><circle cx="140" cy="301" r="5"/><circle cx="163" cy="301" r="3"/><circle cx="183" cy="301" r="2"/></g>
+</svg>

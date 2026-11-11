@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-label="Illustrative Sanity Checks artwork">
+<title>Sanity Checks — original Rosie workflow illustration</title><defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111925"/><stop offset=".55" stop-color="#1e3043"/><stop offset="1" stop-color="#090f19"/></linearGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6ba6e6"/><stop offset="1" stop-color="#5436a6"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#509ef1" stop-opacity=".36"/><stop offset="1" stop-color="#5436a6" stop-opacity="0"/></radialGradient></defs>
+<rect width="640" height="360" fill="url(#bg)"/><circle cx="48" cy="70" r="280" fill="url(#glow)"/>
+<path d="M-15 274 Q158 192 312 277T656 240V370H-15Z" fill="#224b77" opacity=".19"/>
+<path d="M0 305 Q478 208 640 298" fill="none" stroke="url(#metal)" stroke-opacity=".33" stroke-width="3"/>
+<g stroke="#84b6eb" fill="none" opacity=".15"><path d="M158 0 0 160M640 16 430 360"/><circle cx="548" cy="78" r="45"/><circle cx="548" cy="78" r="110"/></g>
+<rect x="165" y="54" width="308" height="253" rx="36" fill="#0b1320" fill-opacity=".72" stroke="#6ba6e6" stroke-opacity=".3" stroke-width="2"/>
+<rect x="185" y="74" width="268" height="213" rx="29" fill="url(#metal)" fill-opacity=".08"/>
+<g transform="translate(229 92) scale(1.08)" stroke="url(#metal)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"><circle cx="84" cy="83" r="23"/><path d="M75 19h18l5 20 15 6 17-11 13 13-11 17 6 15 20 5v18l-20 5-6 15 11 17-13 13-17-11-15 6-5 20H75l-5-20-15-6-17 11-13-13 11-17-6-15-20-5V84l20-5 6-15-11-17 13-13 17 11 15-6z"/></g>
+<g transform="translate(18 222) rotate(4 56 56) scale(.68)" stroke="#e5d8b9" stroke-opacity=".65" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M25 129V37m0 92h126"/><path d="m41 106 30-25 24 11 37-48"/><path d="M132 44v26M106 44h26"/></g>
+<rect x="30" y="39" width="72" height="6" rx="3" fill="url(#metal)" opacity=".65"/>
+<g fill="#84b6eb" opacity=".7"><circle cx="110" cy="301" r="5"/><circle cx="133" cy="301" r="3"/><circle cx="153" cy="301" r="2"/></g>
+</svg>

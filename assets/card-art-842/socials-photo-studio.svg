@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-label="Illustrative Photo Studio artwork">
+<title>Photo Studio — original Rosie workflow illustration</title><defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111925"/><stop offset=".55" stop-color="#411e43"/><stop offset="1" stop-color="#090f19"/></linearGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e06be6"/><stop offset="1" stop-color="#a63647"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#e950f1" stop-opacity=".36"/><stop offset="1" stop-color="#a63647" stop-opacity="0"/></radialGradient></defs>
+<rect width="640" height="360" fill="url(#bg)"/><circle cx="48" cy="70" r="280" fill="url(#glow)"/>
+<path d="M-15 274 Q110 192 312 277T656 240V370H-15Z" fill="#722277" opacity=".19"/>
+<path d="M0 305 Q505 208 640 298" fill="none" stroke="url(#metal)" stroke-opacity=".33" stroke-width="3"/>
+<g stroke="#e684eb" fill="none" opacity=".15"><path d="M110 0 0 160M640 32 430 360"/><circle cx="548" cy="78" r="65"/><circle cx="548" cy="78" r="110"/></g>
+<rect x="165" y="54" width="308" height="253" rx="36" fill="#0b1320" fill-opacity=".72" stroke="#e06be6" stroke-opacity=".3" stroke-width="2"/>
+<rect x="185" y="74" width="268" height="213" rx="29" fill="url(#metal)" fill-opacity=".08"/>
+<g transform="translate(229 92) scale(1.08)" stroke="url(#metal)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"><rect x="18" y="47" width="132" height="86" rx="16"/><circle cx="84" cy="88" r="27"/><path d="M49 47 60 29h49l11 18M129 67h5"/></g>
+<g transform="translate(18 222) rotate(8 56 56) scale(.68)" stroke="#e5d8b9" stroke-opacity=".65" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="M38 118c12-11 15-28 15-51 0-44 62-44 62 0 0 23 3 40 15 51zM70 130c0 18 28 18 28 0"/></g>
+<rect x="30" y="39" width="72" height="6" rx="3" fill="url(#metal)" opacity=".65"/>
+<g fill="#e684eb" opacity=".7"><circle cx="110" cy="301" r="5"/><circle cx="133" cy="301" r="3"/><circle cx="153" cy="301" r="2"/></g>
+</svg>
