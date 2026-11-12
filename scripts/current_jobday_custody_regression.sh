@@ -7,3 +7,6 @@ node scripts/build851_original_device_receiver_test.mjs
 node --check functions/api/_lib/jobday-continuity-852.js
 node --check functions/api/admin/jobday_continuity_852.js
 node scripts/build852_recall_continuity_test.mjs
+node --check functions/api/_lib/jobday-replay-853.js
+node --check functions/api/admin/jobday_replay_853.js
+node scripts/build853_replay_escalation_test.mjs
