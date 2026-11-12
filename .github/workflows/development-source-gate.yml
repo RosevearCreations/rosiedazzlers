@@ -1235,6 +1235,13 @@ jobs:
           node --check assets/daip-server-digest-runtime-565.js
           node scripts/daip_server_digest_runtime_565_test.mjs
 
+      - name: Validate protected Rosie 850 and signed Build 851 custody regression
+        run: |
+          node --check functions/api/_lib/jobday-witness-851.js
+          node --check functions/api/admin/jobday_witness_851.js
+          node scripts/build850_custody_receiver_test.mjs
+          node scripts/build851_original_device_receiver_test.mjs
+
 
   source-gate:
     name: source checks
