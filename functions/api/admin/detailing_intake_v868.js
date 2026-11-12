@@ -145,7 +145,7 @@ export async function onRequest({request,env}){
    const uploadUrl=link.startsWith('http')?link:
     new URL(link.startsWith('/storage/v1/')?link:
       link.startsWith('/object/')?'/storage/v1'+link:
-      '/storage/v1/'+link.replace(/^\\/+/,''),origin).toString();
+      '/storage/v1/'+(link.startsWith('/')?link.slice(1):link),origin).toString();
    if(new URL(uploadUrl).origin!==origin)throw Error('Unsigned storage target rejected');
    return json({ok:true,build:868,asset_id:assetId,upload_url:uploadUrl,
     method:'PUT',content_type:mime,public_url:null,

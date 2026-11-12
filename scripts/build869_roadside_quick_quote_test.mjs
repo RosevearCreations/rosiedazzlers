@@ -55,6 +55,8 @@ for(const term of ['compressForRoadside','createImageBitmap','canvas.toBlob',
 for(const term of ["write('save_quick_quote'","write('link_existing_booking'",
  'storageView','rdSaveQuickQuote','rdLinkedBookingId'])
  assert(quoteUi.includes(term),'Missing quote/handoff UI behavior: '+term);
+assert(captureApi.includes("link.startsWith('/')?link.slice(1):link"),
+ 'Cloudflare upload URL normalization must not use ambiguous regular-expression syntax');
 assert(!quoteUi.includes('deposit_collected:true'),
  'No intake path may assert payment confirmed');
 console.log('Rosie 869 roadside photo compression, private storage budget, quote and safe canonical booking handoff PASS');
