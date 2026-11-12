@@ -28,7 +28,7 @@ async function db(env,table,{method='GET',query='',data}={}){
  if(!r.ok||!Array.isArray(result))throw Error('Private Rosie database operation unavailable');
  return result;
 }
-const byId=(id)=>'?id=eq.'+encodeURIComponent(id)+'&select=id,temporary_label,display_title,notes,status,created_at,updated_at,expires_at';
+const byId=(id)=>'?id=eq.'+encodeURIComponent(id)+'&select=id,temporary_label,display_title,notes,status,created_at,updated_at,expires_at,private_photo_permission';
 async function draft(env,id){
  const records=await db(env,'rosie_detailing_intake_v868',{query:byId(id)+'&limit=2'});
  if(records.length!==1||records[0].status!=='intake_draft')throw Error('Original draft unavailable');
@@ -112,14 +112,25 @@ export async function onRequest({request,env}){
     booking_created:false,appointment_reserved:false},200,noStore);
   }
   if(action==='sign_upload'){
+   if(current.private_photo_permission!==true)
+    return err('Confirm permission for private vehicle photos before upload.',409);
    const mime=txt(body.content_type,90).toLowerCase();
    const size=Number(body.file_size_bytes);
    if(!MIME[mime]||!Number.isInteger(size)||size<1||size>MIME[mime].max)
     return err('Photo maximum 12 MB; video maximum 40 MB. Use an allowed image/video format');
-   const existing=await media(env,draftId);
-   if(existing.length>=8)return err('Each detailing request holds up to eight files',409);
    const assetId=crypto.randomUUID(),objectPath=pathFor(draftId,assetId,MIME[mime].ext);
-   // Only server-side service key can sign a write into this private bucket.
+   // An original staff session and captured consent precede this atomic,
+   // bucket-wide SQL reservation; it counts pending AND confirmed bytes.
+   const rawBudget=Number(env.ROSIE_PRIVATE_MEDIA_BUDGET_BYTES);
+   const budget=(Number.isSafeInteger(rawBudget)&&rawBudget>=104857600&&
+     rawBudget<=10737418240)?rawBudget:900*1024*1024;
+   const reservation=await db(env,'rpc/rosie869_reserve_media',{
+    method:'POST',data:{p_draft_id:draftId,p_media_id:assetId,
+     p_object_path:objectPath,p_filename:safeFilename(body.filename),
+     p_content_type:mime,p_expected_bytes:size,p_budget_bytes:budget}});
+   if(reservation.length!==1||reservation[0].outcome!=='RESERVED')
+    return err('Private media storage budget or eight-file limit reached; Admin review required.',409);
+   // Signed URLs remain short-lived and restricted to the original private bucket.
    const signing=await fetch(assetUrl(env,
      'object/upload/sign/'+BUCKET+'/'+objectPath),{
      method:'POST',headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,
@@ -134,13 +145,8 @@ export async function onRequest({request,env}){
    const uploadUrl=link.startsWith('http')?link:
     new URL(link.startsWith('/storage/v1/')?link:
       link.startsWith('/object/')?'/storage/v1'+link:
-      '/storage/v1/'+link.replace(/^\/+/,''),origin).toString();
+      '/storage/v1/'+(link.startsWith('/')?link.slice(1):link),origin).toString();
    if(new URL(uploadUrl).origin!==origin)throw Error('Unsigned storage target rejected');
-   const saved=await db(env,'rosie_detailing_intake_media_v868',{method:'POST',
-    data:[{id:assetId,draft_id:draftId,bucket:BUCKET,
-     object_path:objectPath,original_filename:safeFilename(body.filename),
-     content_type:mime,expected_bytes:size,status:'pending_upload'}]});
-   if(saved.length!==1)throw Error('Private upload intent not saved');
    return json({ok:true,build:868,asset_id:assetId,upload_url:uploadUrl,
     method:'PUT',content_type:mime,public_url:null,
     status:'pending_upload',booking_created:false},200,noStore);

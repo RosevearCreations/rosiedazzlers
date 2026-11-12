@@ -32,39 +32,18 @@
   </header>
 
   <main class="container">
-    <section class="section">
-      <div class="panel">
-        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="hero">
-        <div>
-          <div class="badge">Admin Bookings</div>
-          <h1>Manage bookings and assignments</h1>
-          <p>Review bookings, update status, assign staff, and copy the progress token for the customer progress workflow.</p>
-        </div>
-        <div class="panel">
-          <div class="kicker">Loaded booking</div>
-          <h3 id="bookingTitle" style="margin:6px 0 8px">No booking selected</h3>
-          <div id="bookingMeta" class="kicker">Load bookings below to begin.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div id="pageNotice" class="notice">Ready.</div>
-    </section>
-
     <section class="section" id="newDetailingRequest" aria-labelledby="newDetailingRequestTitle">
       <div class="panel">
-        <div class="badge">New Booking — Private Intake Draft</div>
-        <h2 id="newDetailingRequestTitle">Take Photo(s)/Video to start a detailing request</h2>
-        <p class="kicker">A photo or short video creates a saved private detailing entry with an automatic temporary ID. Rename it and add notes at any time. This does not reserve a date, confirm a customer booking, share media publicly, or collect a payment.</p>
+        <div class="badge">Roadside Quick Capture · Private</div>
+        <h2 id="newDetailingRequestTitle">One-tap photo or video → saved quote request</h2>
+        <p class="kicker">When someone approaches us on a job, capture their vehicle in seconds. We save a temporary ID immediately, then Admin can finish the quote and take a booking/deposit through secure checkout. No booking or payment is created by a photo.</p>
+        <label class="checkline" style="display:flex;gap:8px;align-items:center;margin:12px 0">
+          <input id="rdPrivatePhotoConsent" type="checkbox" />
+          Customer agreed to private vehicle-condition photos/video for this estimate (not public posting)
+        </label>
         <div class="row" style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0">
-          <button class="btn primary" type="button" id="rdTakePhotos">Take Photo(s)</button>
-          <button class="btn" type="button" id="rdTakeVideo">Take Video</button>
+          <button class="btn primary" type="button" id="rdTakePhotos">📸 Take Photo(s)</button>
+          <button class="btn" type="button" id="rdTakeVideo">🎥 Take Video</button>
           <button class="btn" type="button" id="rdSelectMedia">Choose from Device</button>
           <button class="btn ghost" type="button" id="rdCreateIntake">Start Without Media</button>
         </div>
@@ -88,9 +67,60 @@
           <span class="mini">Up to 8 private files per request; photos 12 MB each and short videos 40 MB each. Private uploads require a connection.</span>
         </div>
         <div id="rdIntakeMedia" class="grid2" style="margin-top:12px"></div>
+        <div class="panel" style="margin-top:14px" aria-label="Private storage usage">
+          <div class="mini"><strong>Supabase private storage budget</strong></div>
+          <progress id="rdQuotaProgress" max="100" value="0" style="width:100%;height:14px"></progress>
+          <p id="rdQuotaStatus" class="mini" aria-live="polite">Loading private storage usage…</p>
+        </div>
+        <details id="rdQuotePanel" class="panel" style="margin-top:14px" hidden>
+          <summary><strong>Quick customer quote &amp; booking handoff</strong> — optional now; Admin can finish later</summary>
+          <p class="mini">Request <strong id="rdQuoteDraftName">Not yet created</strong>. Ask permission before recording a customer's contact information.</p>
+          <label class="checkline"><input id="rdContactPermission" type="checkbox" />
+            Customer agreed we may retain these contact details to follow up on this quote</label>
+          <div class="grid2" style="margin-top:10px">
+            <label>Customer name (optional)<input id="rdQuickName" maxlength="100" autocomplete="off" placeholder="Name" /></label>
+            <label>Phone (optional)<input id="rdQuickPhone" type="tel" maxlength="32" autocomplete="off" placeholder="Phone" /></label>
+            <label>Email for booking matching<input id="rdQuickEmail" type="email" maxlength="180" autocomplete="off" placeholder="Email" /></label>
+            <label>Indicative quote in CAD<input id="rdQuickQuote" type="number" min="0.01" max="100000" step="0.01" inputmode="decimal" placeholder="e.g. 185.00" /></label>
+          </div>
+          <div id="rdQuoteReviewState" class="notice mini">Needs an Admin quote.</div>
+          <button class="btn primary" type="button" id="rdSaveQuickQuote">Save Quick Quote</button>
+          <p class="mini">A quote is only an estimate. The booking wizard recalculates package pricing, availability, deposit, cancellation and waiver requirements. Nothing is charged here.</p>
+          <a class="btn" id="rdOpenCanonicalBooking" href="/book" target="_blank" rel="noopener">Open secure booking &amp; deposit checkout</a>
+          <p class="mini">After creating a real booking, return here and paste its booking UUID. The customer email must match. Deposits count only when verified by the established payment system.</p>
+          <label>Existing booking UUID<input id="rdLinkedBookingId" maxlength="80" autocomplete="off" placeholder="UUID of completed canonical booking" /></label>
+          <button class="btn ghost" type="button" id="rdLinkCanonicalBooking">Link this intake to existing booking</button>
+          <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
+        </details>
         <h3 style="margin-top:20px">Resume a saved request</h3>
         <div id="rdSavedIntakes" class="grid2"><p class="kicker">No drafts loaded yet.</p></div>
       </div>
+    </section>
+
+
+    <section class="section">
+      <div class="panel">
+        <img data-banner alt="Rosie Dazzlers banner" style="display:block;width:100%;height:auto;object-fit:contain" />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Admin Bookings</div>
+          <h1>Manage bookings and assignments</h1>
+          <p>Review bookings, update status, assign staff, and copy the progress token for the customer progress workflow.</p>
+        </div>
+        <div class="panel">
+          <div class="kicker">Loaded booking</div>
+          <h3 id="bookingTitle" style="margin:6px 0 8px">No booking selected</h3>
+          <div id="bookingMeta" class="kicker">Load bookings below to begin.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div id="pageNotice" class="notice">Ready.</div>
     </section>
 
     <section class="section">
@@ -335,5 +365,6 @@
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script type="module" src="/assets/admin-booking-v299.js"></script>
   <script type="module" src="/assets/admin-booking-v868.js"></script>
+  <script type="module" src="/assets/admin-booking-v869.js"></script>
 </body>
 </html>
