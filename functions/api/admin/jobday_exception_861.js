@@ -154,16 +154,29 @@ export async function onRequest({request,env}){
    {decision:'HOLD',reason:'ORIGINAL_859_OWNER_DECISION_REQUIRED',
     return_status:'MISSING',intake_status:'MISSING',...HOLD_861};
   const assessment=exceptionAssessment860({custody,latestCheckpoint:checkpoint,aging});
-  const previous=exceptions[0]||null;
+  const originalException=exceptions[0]||null;
+  const aging=intakeExceptionAging861({intakes,
+   exceptions:firstExceptions.length?[firstExceptions[0],
+    ...exceptions.filter(e=>e.id!==firstExceptions[0].id)]:exceptions,
+   discrepancies,txId:tx.id,now:Date.now()});
+  const previousEscalation=escalations[0]||null;
   if(request.method==='GET'){
-   return json({ok:true,build:861,contract:CONTRACT_860,source_revision:env.CF_PAGES_COMMIT_SHA,
-    transaction_reference:txRef,incident_reference:incident,handoff_id:handoff.id,
-    owner_decision_id:ownerDecision?.id||null,latest_checkpoint_id:checkpoint?.id||null,
-    independent_custodian_freshness:custody,original_owner_exception_assessment:assessment,
-    exception_history_window:exceptions.map(x=>({id:x.id,recorded_at:x.recorded_at,
-     review_digest_sha256:x.review_digest_sha256,exception_codes:x.exception_codes,
-     owner_action:x.owner_action,previous_exception_id:x.previous_exception_id})),
-    exception_history_may_be_truncated:exceptions.length>=25,...HOLD_861});
+   return json({ok:true,build:861,contract:CONTRACT_861,
+    source_revision:env.CF_PAGES_COMMIT_SHA,transaction_reference:txRef,
+    incident_reference:incident,original_owner_decision_id:ownerDecision?.id||null,
+    latest_860_exception_id:originalException?.id||null,
+    original_intake_freshness:custody,original_exception_assessment:assessment,
+    intake_exception_aging:aging,
+    signed_custodian_discrepancies:discrepancies.map(x=>({
+     id:x.id,plane:x.plane,intake_860_id:x.intake_860_id,
+     discrepancy_code:x.discrepancy_code,review_digest_sha256:x.review_digest_sha256,
+     recorded_at:x.recorded_at})),
+    owner_hold_escalation_history:escalations.map(x=>({
+     id:x.id,review_digest_sha256:x.review_digest_sha256,
+     owner_action:x.owner_action,aging_status:x.aging_status,
+     age_hours:x.age_hours,issue_codes:x.issue_codes,
+     previous_id:x.previous_id,recorded_at:x.recorded_at})),
+    owner_history_window_may_be_truncated:escalations.length>=25,...HOLD_861});
   }
   if(!ownerDecision)return fail('Original 859 owner HOLD decision must already exist.');
   const nonce=clean(body.review_nonce,100);
