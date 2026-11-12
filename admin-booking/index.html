@@ -57,6 +57,42 @@
       <div id="pageNotice" class="notice">Ready.</div>
     </section>
 
+    <section class="section" id="newDetailingRequest" aria-labelledby="newDetailingRequestTitle">
+      <div class="panel">
+        <div class="badge">New Booking — Private Intake Draft</div>
+        <h2 id="newDetailingRequestTitle">Take Photo(s)/Video to start a detailing request</h2>
+        <p class="kicker">A photo or short video creates a saved private detailing entry with an automatic temporary ID. Rename it and add notes at any time. This does not reserve a date, confirm a customer booking, share media publicly, or collect a payment.</p>
+        <div class="row" style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0">
+          <button class="btn primary" type="button" id="rdTakePhotos">Take Photo(s)</button>
+          <button class="btn" type="button" id="rdTakeVideo">Take Video</button>
+          <button class="btn" type="button" id="rdSelectMedia">Choose from Device</button>
+          <button class="btn ghost" type="button" id="rdCreateIntake">Start Without Media</button>
+        </div>
+        <input id="rdPhotoCapture" type="file" accept="image/*" capture="environment" multiple hidden aria-label="Take vehicle photos"/>
+        <input id="rdVideoCapture" type="file" accept="video/*" capture="environment" hidden aria-label="Record vehicle video"/>
+        <input id="rdMediaPick" type="file" accept="image/*,video/*" multiple hidden aria-label="Choose photos and videos"/>
+        <div id="rdIntakeStatus" class="notice mini" role="status" aria-live="polite">Sign in as an authorized staff member to start a private detailing request.</div>
+        <div class="grid2" style="margin-top:12px">
+          <label for="rdIntakeLabel">Temporary entry name
+            <input id="rdIntakeLabel" type="text" maxlength="100" placeholder="Generated on first capture" disabled />
+          </label>
+          <label for="rdIntakeId">Permanent draft ID
+            <input id="rdIntakeId" type="text" readonly placeholder="Not yet created" />
+          </label>
+        </div>
+        <label for="rdIntakeNotes">Condition notes / work requested
+          <textarea id="rdIntakeNotes" rows="3" maxlength="3000" placeholder="Salt stains, pet hair, condition, customer request, etc." disabled></textarea>
+        </label>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <button id="rdSaveIntake" type="button" class="btn primary" disabled>Save Request Draft</button>
+          <span class="mini">Up to 8 private files per request; photos 12 MB each and short videos 40 MB each. Private uploads require a connection.</span>
+        </div>
+        <div id="rdIntakeMedia" class="grid2" style="margin-top:12px"></div>
+        <h3 style="margin-top:20px">Resume a saved request</h3>
+        <div id="rdSavedIntakes" class="grid2"><p class="kicker">No drafts loaded yet.</p></div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="grid cards">
         <div class="panel">
@@ -298,5 +334,6 @@
   <script src="/assets/admin-option-libraries.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script type="module" src="/assets/admin-booking-v299.js"></script>
+  <script type="module" src="/assets/admin-booking-v868.js"></script>
 </body>
 </html>
