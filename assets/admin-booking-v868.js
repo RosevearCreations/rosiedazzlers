@@ -163,7 +163,7 @@ function boot(){
  if(!$('newDetailingRequest'))return;
  const bindings=[['rdTakePhotos',capture.photos],
   ['rdTakeVideo',capture.video],['rdSelectMedia',capture.choose]];
- for(const [btn,id] of bindings)$ (btn).addEventListener('click',()=>{
+ for(const [btn,id] of bindings)$(btn).addEventListener('click',()=>{
   if(!state.busy)$(id).click();
  });
  for(const [kind,id] of Object.entries(capture)){
