@@ -21,7 +21,7 @@ create table public.rosie_detailing_intake_media_v868(
  id uuid primary key,
  draft_id uuid not null references public.rosie_detailing_intake_v868(id) on delete restrict,
  bucket text not null default 'rosie-intake-private' check(bucket='rosie-intake-private'),
- object_path text not null unique check(object_path ~ '^intakes/[0-9a-f-]{36}/[0-9a-f-]{36}\\.(jpg|png|webp|heic|mp4|mov|webm)$'),
+ object_path text not null unique check(object_path ~ '^intakes/[0-9a-f-]{36}/[0-9a-f-]{36}\.(jpg|png|webp|heic|mp4|mov|webm)$'),
  original_filename text not null check(char_length(original_filename) between 1 and 120),
  content_type text not null check(content_type in('image/jpeg','image/png','image/webp','image/heic',
  'video/mp4','video/quicktime','video/webm')),
