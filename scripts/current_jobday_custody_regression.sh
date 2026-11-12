@@ -28,3 +28,6 @@ node scripts/build858_fresh_handoff_export_test.mjs
 node --check functions/api/_lib/jobday-return-859.js
 node --check functions/api/admin/jobday_return_859.js
 node scripts/build859_return_owner_continuity_test.mjs
+node --check functions/api/_lib/jobday-intake-860.js
+node --check functions/api/admin/jobday_intake_860.js
+node scripts/build860_intake_custodian_exception_test.mjs
