@@ -55,7 +55,8 @@ const route=arg=>routeException867({correlation866,recheck866,
 assert.equal(route().status,'OFFLINE_PLANE_EXCEPTION_REVIEW_ONLY_HOLD');
 assert.equal(route().external_ack_received,false);
 assert.equal(route({plane:'unknown-plane'}).decision,'HOLD');
-assert.equal(route({recheck866:{...recheck866,status:'INCONSISTENT_TWO_PLANE_HOLD'}}).status,
+assert.equal(route({recheck866:{...recheck866,status:'INCONSISTENT_TWO_PLANE_HOLD'},
+ latestRecheck866:{...chk,review_status:'INCONSISTENT_TWO_PLANE_HOLD'}}).status,
  'DISPUTED_PLANE_RECEIPT_REFERENCE_HOLD');
 assert.equal(route({correlation866:{...correlation866,planes:
  [{plane:planes[0],id:null,stale:true},correlation866.planes[1]]}}).decision,'HOLD');
