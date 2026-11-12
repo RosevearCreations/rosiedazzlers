@@ -178,68 +178,73 @@ export async function onRequest({request,env}){
      previous_id:x.previous_id,recorded_at:x.recorded_at})),
     owner_history_window_may_be_truncated:escalations.length>=25,...HOLD_861});
   }
-  if(!ownerDecision)return fail('Original 859 owner HOLD decision must already exist.');
+  if(!ownerDecision||!originalException)return fail(
+   'Original 859 owner decision and 860 owner HOLD exception required.');
+  if(aging.decision!=='ORIGINAL_OWNER_INTAKE_EXCEPTION_AGING_HOLD_ONLY')
+   return fail('Complete original source-bound intake aging window required.');
   const nonce=clean(body.review_nonce,100);
-  if(!safeNonce(nonce))return fail('Unique bounded original-owner review nonce required.',400);
+  if(!safeNonce(nonce))return fail('New unique owner review nonce required.',400);
   const actor=clean(auth.actor?.email,140)||clean(auth.actor?.id,140)||'OriginalOwner';
-  const common={project,bookingId,post,tx,handoff,ownerDecision,checkpoint,nonce,aging,actor};
-  if(body.action==='record_independent_external_intake'){
-   if(body.confirm_external_ed25519_correlation!==true||
-    body.acknowledge_signed_intake_is_not_runtime_delivery!==true)
-    return fail('Original owner must explicitly confirm independent receipt and runtime HOLD.');
-   if(!checkpoint)return fail('Original immutable 859 incident checkpoint required for intake.');
-   const plane=clean(body.plane,40),
-    matches=returnRows.filter(x=>x.plane===plane&&x.kind==='signed_escalation_return');
-   if(matches.length!==1)return fail('One bound original 859 independent custodian return per plane required.');
-   const returnRow=matches[0];
-   const checked=await verifyIntake860(env,body.receipt||{},body.signature,
-    {plane,tx,handoff,returnRow,ownerDecision,checkpoint,bookingId,projectId:project.id,
-      post,caseReference:caseId,incidentReference:incident,now:Date.now()});
+  const common={project,bookingId,post,tx,handoff,ownerDecision,
+   ownerException:originalException,nonce,aging,actor};
+  if(body.action==='record_independent_custodian_discrepancy'){
+   if(body.confirm_external_ed25519_discrepancy_claim!==true||
+      body.acknowledge_discrepancy_is_not_runtime_delivery!==true)
+    return fail('Original owner must confirm independent signature and runtime HOLD.');
+   const plane=clean(body.plane,40),intakeId=clean(body.intake_860_id,80);
+   const matches=intakes.filter(x=>x.id===intakeId&&x.plane===plane&&
+    x.transaction_review_id===tx.id&&x.kind==='signed_external_intake_correlation');
+   if(matches.length!==1)return fail('One exact independently signed 860 intake record required.');
+   const intake=matches[0];
+   const checked=await verifyDiscrepancy861(env,body.receipt||{},body.signature,{
+    plane,tx,handoff,ownerDecision,intake,ownerException:originalException,
+    bookingId,projectId:project.id,postId:post.id,now:Date.now()});
    if(!checked.ok)return fail(checked.reason);
-   const digest=await digest860({kind:'signed_external_intake_correlation',tx,handoff,
-    ownerDecision,returnRow,checked,latestCheckpoint:checkpoint,nonce});
-   const saved=await persist(env,{...common,kind:'signed_external_intake_correlation',
-    plane,returnRow,receipt:checked.receipt_sha256,signer:checked.signer_id,
-    observedAt:checked.observed_at,digest});
+   const digest=await digest861({kind:'signed_external_custodian_discrepancy',
+    tx,handoff,ownerDecision,nonce,checked,intake,ownerException:originalException});
+   const saved=await persist(env,{...common,kind:'signed_external_custodian_discrepancy',
+    plane,intake,checked,digest});
    return json({ok:true,build:861,record_id:saved.id,recorded_at:saved.recorded_at,
-    independent_receipt_sha256:checked.receipt_sha256,review_digest_sha256:digest,
+    independent_claim_sha256:checked.receipt_sha256,
+    review_digest_sha256:digest,discrepancy_code:checked.discrepancy_code,
     decision:checked.decision,...HOLD_861});
   }
-  if(body.action==='record_original_owner_continuity_exception'){
-   if(body.acknowledge_independent_receipt_freshness_state!==true||
-      body.confirm_original_incident_remains_open!==true||
-      body.acknowledge_master_receiver_still_unverified!==true)
-    return fail('Explicit owner open-incident, freshness and Master HOLD review required.');
-   if(assessment.decision!=='ORIGINAL_OWNER_EXCEPTION_REVIEW_HOLD_ONLY')
-    return fail('Original source exception assessment unavailable.');
-   const action=clean(body.owner_action,60);
-   if(!ACTIONS_860.includes(action))return fail('Non-authorizing owner follow-up required.');
-   const digest=await digest860({kind:'owner_continuity_exception_review',tx,handoff,
-    ownerDecision,assessment,latestCheckpoint:checkpoint,
-    previousException:previous,action,nonce});
-   const saved=await persist(env,{...common,kind:'owner_continuity_exception_review',
-    issues:assessment.issues,ownerAction:action,previous,digest});
+  if(body.action==='record_owner_hold_escalation'){
+   if(body.confirm_original_incident_still_open!==true||
+    body.acknowledge_external_discrepancy_unresolved!==true||
+    body.acknowledge_no_master_receiver_ack!==true)
+    return fail('Explicit original-owner open-incident, discrepancy and Master HOLD acknowledgements required.');
+   const action=clean(body.owner_action,80);
+   if(!ACTIONS_861.includes(action))return fail('Only non-authorizing owner escalation permitted.');
+   const digest=await digest861({kind:'owner_hold_escalation_review',
+    tx,handoff,ownerDecision,nonce,aging,action,previous:previousEscalation});
+   const saved=await persist(env,{...common,kind:'owner_hold_escalation_review',
+    digest,action,previous:previousEscalation});
    return json({ok:true,build:861,record_id:saved.id,recorded_at:saved.recorded_at,
-    review_digest_sha256:digest,issues:assessment.issues,owner_action:action,
-    decision:assessment.decision,...HOLD_861});
+    review_digest_sha256:digest,aging_status:aging.aging_status,
+    owner_action:action,decision:'IMMUTABLE_OWNER_HOLD_ESCALATION_ONLY',...HOLD_861});
   }
-  if(body.action==='export_original_owner_exception_review'){
-   if(body.confirm_private_export_and_no_external_transport!==true)
-    return fail('Private owner-only HOLD snapshot acknowledgement required.');
-   const snapshot={format:'rosie.original-owner-custodian-exception.v860',
-    generated_at:new Date().toISOString(),transaction_review_id:tx.id,
-    transaction_reference:tx.transaction_reference,incident_reference:tx.incident_reference,
-    handoff_id:handoff.id,owner_decision_id:ownerDecision.id,
-    independent_custodian_freshness:custody,exception_assessment:assessment,
-    most_recent_exception_id:previous?.id||null,
-    most_recent_exception_sha256:previous?.review_digest_sha256||null,
-    exception_history_window:exceptions.map(x=>({id:x.id,recorded_at:x.recorded_at,
-      review_digest_sha256:x.review_digest_sha256,exception_codes:x.exception_codes})),
-    history_may_be_truncated:exceptions.length>=25,operational_state:{...HOLD_861}};
-   const sha256=await hash860('ROSIE-860-OWNER-EXCEPTION-EXPORT-V1\n'+JSON.stringify(snapshot));
-   return json({ok:true,build:861,decision:'PRIVATE_OWNER_EXCEPTION_EXPORT_HOLD_ONLY',
-    bundle:snapshot,bundle_sha256:sha256,...HOLD_861});
+  if(body.action==='export_original_owner_hold_history'){
+   if(body.confirm_private_hold_export_only!==true)
+    return fail('Private original owner non-authorizing HOLD export acknowledgement required.');
+   const bundle={format:'rosie.original-owner-intake-discrepancy-hold.v861',
+    generated_at:new Date().toISOString(),source_revision:env.CF_PAGES_COMMIT_SHA,
+    transaction_review_id:tx.id,incident_reference:tx.incident_reference,
+    latest_860_exception_id:originalException.id,intake_exception_aging:aging,
+    signed_custodian_discrepancies:discrepancies.map(x=>({
+     id:x.id,plane:x.plane,discrepancy_code:x.discrepancy_code,
+     intake_860_id:x.intake_860_id,review_digest_sha256:x.review_digest_sha256,
+     recorded_at:x.recorded_at})),
+    owner_hold_history:escalations.map(x=>({
+     id:x.id,review_digest_sha256:x.review_digest_sha256,
+     owner_action:x.owner_action,previous_id:x.previous_id,
+     aging_status:x.aging_status,recorded_at:x.recorded_at})),
+    history_window_may_be_truncated:escalations.length>=25,
+    operational_state:{...HOLD_861}};
+   return json({ok:true,build:861,decision:'PRIVATE_OWNER_HOLD_HISTORY_EXPORT',
+    bundle,bundle_sha256:await hash860('ROSIE-861-OWNER-HOLD-EXPORT-V1\\n'+
+    JSON.stringify(bundle)),...HOLD_861});
   }
-  return fail('Unsupported Build 860 original-owner action.',405);
- }catch(e){return fail(e?.message||'Protected Rosie 860 source custody unavailable.',503);}
+  return fail('Unsupported Build 861 original-owner HOLD action.',405);
+ }catch(e){return fail(e?.message||'Protected Rosie 861 source custody unavailable.',503);}
 }
