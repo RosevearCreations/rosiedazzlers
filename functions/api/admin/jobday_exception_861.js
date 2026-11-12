@@ -14,23 +14,24 @@ const sha40=v=>typeof v==='string'&&/^[a-f0-9]{40}$/.test(v);
 const ownerAudit=(rows,a,b,i)=>rows.find(x=>x.safe_note?.startsWith(
  INCIDENT_AUDIT_853+' case '+a+'; post '+b+';')&&x.safe_note.includes(' incident '+i+';'));
 async function persist(env,{project,bookingId,post,tx,handoff,ownerDecision,
- checkpoint,kind,plane=null,returnRow=null,receipt=null,signer=null,observedAt=null,
- digest,nonce,aging,issues=[],ownerAction=null,previous=null,actor}){
+ ownerException,intake=null,kind,plane=null,checked=null,digest,nonce,aging,action=null,
+ previous=null,actor}){
  const params={p_project_id:project.id,p_booking_id:bookingId,p_post_id:post.id,
- p_transaction_review_id:tx.id,p_handoff_858_id:handoff.id,
- p_owner_decision_859_id:ownerDecision.id,p_checkpoint_859_id:checkpoint?.id||null,
- p_return_859_id:returnRow?.id||null,p_kind:kind,p_plane:plane,
- p_source_revision:env.CF_PAGES_COMMIT_SHA,p_receipt_sha256:receipt,
- p_signer_id:signer,p_observed_at:observedAt,p_review_digest_sha256:digest,
- p_review_nonce:nonce,p_exception_codes:issues,p_owner_action:ownerAction,
- p_previous_exception_id:previous?.id||null,
- p_previous_exception_sha256:previous?.review_digest_sha256||null,
- p_open_conflict_count:aging.open_conflict_count,
- p_conflict_aging_status:aging.conflict_aging_status,p_actor_staff_email:actor};
- const rows=await rest(env,'rpc/rosie860_append_intake_exception',
- {method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(params)});
+  p_transaction_review_id:tx.id,p_handoff_858_id:handoff.id,
+  p_owner_decision_859_id:ownerDecision.id,p_owner_exception_860_id:ownerException.id,
+  p_intake_860_id:intake?.id||null,p_kind:kind,p_plane:plane,
+  p_source_revision:env.CF_PAGES_COMMIT_SHA,p_receipt_sha256:checked?.receipt_sha256||null,
+  p_disputed_sha256:checked?.disputed_intake_sha256||null,
+  p_discrepancy_code:checked?.discrepancy_code||null,
+  p_signer_id:checked?.signer_id||null,p_review_digest_sha256:digest,
+  p_review_nonce:nonce,p_age_hours:aging.oldest_exception_age_hours,
+  p_aging_status:aging.aging_status,p_issue_codes:aging.issues,
+  p_owner_action:action,p_previous_id:previous?.id||null,
+  p_previous_sha256:previous?.review_digest_sha256||null,p_actor_staff_email:actor};
+ const rows=await rest(env,'rpc/rosie861_append_discrepancy_escalation',
+  {method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(params)});
  if(!Array.isArray(rows)||rows.length!==1||rows[0].outcome!=='INSERTED'||!isUuid(rows[0].review_id))
-  throw Error('Immutable original external intake or owner exception replay/source drift; HOLD.');
+  throw Error('Exact immutable original 861 claim/HOLD escalation replay or source drift.');
  return {id:rows[0].review_id,recorded_at:rows[0].accepted_at};
 }
 export const onRequestOptions=()=>new Response('',{status:204});
