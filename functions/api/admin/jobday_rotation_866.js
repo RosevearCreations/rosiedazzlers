@@ -108,16 +108,16 @@ export async function onRequest({request,env}){
    list(env,'rosie_owner_rotation_v866',
     'id,kind,transaction_review_id,review_status,review_digest_sha256,previous_id,recorded_at',
     where+'&kind=eq.owner_signed_two_plane_exception_recheck'),
-   unique(env,'rosie_discrepancy_review_v862',
+   list(env,'rosie_discrepancy_review_v862',
     'id,kind,transaction_review_id,sla_status,review_digest_sha256,recorded_at',
-    'id=eq.'+encodeURIComponent(current.original_critical_owner_sla_freshness?.latest_sla_862_id||
-     current.latest_original_sla_862_id||'' )).catch(()=>null),
-   rest(env,'rosie_discrepancy_review_v862?select=id,kind,transaction_review_id,snapshot_sha256,recorded_at&'+
-    where+'&kind=eq.master_hold_custody_export&order=recorded_at.desc,id.desc&limit=2')
+    where+'&kind=eq.owner_aging_sla_recheck'),
+   list(env,'rosie_discrepancy_review_v862',
+    'id,kind,transaction_review_id,snapshot_sha256,recorded_at',
+    where+'&kind=eq.master_hold_custody_export')
   ]);
   if(![snapshotRows,freshRows,escalationRows,rotations,correlations,rechecks]
    .every(a=>a.every(r=>r.transaction_review_id===tx.id))||
-   !Array.isArray(latestPrivateExport)||latestPrivateExport.length>1||
+   !Array.isArray(latestPrivateExport)||!Array.isArray(latestSla)||
    exportRows[0]?.id!==
     current.latest_original_owner_private_snapshot_864_id||
    exportRows[0]?.snapshot_sha256!==
@@ -129,9 +129,10 @@ export async function onRequest({request,env}){
    escalationRows[0]?.id!==
     current.owner_two_plane_hold_escalation_history?.[0]?.id)
    return fail('Original 864/865 private owner immutable tips drifted',503);
-  const originalSla=latestSla||await unique(env,'rosie_discrepancy_review_v862',
-    'id,kind,transaction_review_id,sla_status,review_digest_sha256,recorded_at',
-    where+'&kind=eq.owner_aging_sla_recheck&order=recorded_at.desc,id.desc');
+  const originalSla=latestSla[0]||null;
+  if(!originalSla||originalSla.kind!=='owner_aging_sla_recheck'||
+   originalSla.sla_status!=='CRITICAL_HOLD'||!latestPrivateExport[0])
+   return fail('Original 862 critical SLA and private export unavailable',503);
   const ownerExport864=exportRows[0]||null;
   const latestSnapshot865=snapshotRows[0]||null;
   const latestFreshness865=freshRows[0]||null;
