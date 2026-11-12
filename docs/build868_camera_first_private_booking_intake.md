@@ -1,0 +1,17 @@
+# Rosie Dazzlers 868 — Camera-First New Booking Intake Draft (Private Staff)
+
+**Requested user journey:** Open Rosie Dazzlers → **Bookings** → **New Booking — Private Intake Draft** → **Take Photo(s)**, **Take Video**, or **Choose from Device**. The first selected media creates a server-persisted *detailing intake* (not a confirmed booking) before uploading. Alternatively **Start Without Media** starts a draft. The temporary label defaults to `RD-TMP-YYYYMMDD-XXXXXXXX`, where the suffix is derived from the new random UUID; the immutable UUID remains the permanent identity. The title and notes may be edited without changing the ID. **Save Request Draft** and **Resume request** load stored records across devices for authorized booking staff.
+
+**Not a reservation:** This does not create a row in normal `bookings`, reserve a date, select a detailer, change inventory, send communications, change consent, set a price, trigger a checkout, invoice or collect payment. Later staff completion must use the existing canonical booking/availability/quote system with fresh customer consent and current pricing.
+
+## Private storage
+
+Built on the **already-connected original RosieDazzlers Supabase** service. `rosie-intake-private` is a **private** Storage bucket, not a public media library; `rosie_detailing_intake_v868` and `rosie_detailing_intake_media_v868` are private RLS-enabled service-role-only SQL tables. Authorized `manage_bookings` staff session is required to create, edit, list, sign uploads, confirm uploads, or request a 120-second signed preview; legacy admin fallback and unauthenticated customer uploads are denied. Server signs unique per-draft object paths, client sends binary media directly to Supabase over HTTPS, and server independently checks object metadata before marking media `stored_private`. Retained object paths and titles are visible only to authorized staff; the UI never creates a public URL. Media is not published without a separate explicit consent flow.
+
+The bucket currently allows **8 files per draft**, a photo maximum of **12 MB** and a video maximum of **40 MB**. This fits Supabase Free's current per-file 50 MB ceiling while leaving overhead. A short video is recommended; oversize clips remain unsaved with a clear warning, and the non-media draft remains resumable. The draft has a **30-day review expiry** but there is no automatic deletion job; a later retention schedule will require explicit owner policy and deletion/backup controls. Because Supabase Free includes only about 1 GB of storage, the quota may be exhausted quickly by videos. Cloudflare R2 Standard is a suitable later storage adapter (public published allowance 10 GB-month) without a new consumer cloud drive, but requires private R2 binding/security/deletion verification before enabling. Never make private customer/vehicle media public just to save costs.
+
+## Verification
+
+`node scripts/build868_camera_first_intake_test.mjs`, `node --check` on API and UI, and `bash scripts/current_jobday_custody_regression.sh`. Original Supabase migration: `supabase/migrations/20261113000100_build868_camera_first_private_intake.sql`. Production success requires protected feature→dev→main, four business suites and combined business gate, exact Cloudflare production SHA deployment and release health GREEN; retain all incident/independent Master HOLD conditions.
+
+**Next proposed 869:** Intake Draft → Verified Booking Handoff, Assigned Detailer Media Checklist & Owner-Approved Retention/Quota Dashboard.
