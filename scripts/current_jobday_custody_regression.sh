@@ -31,3 +31,7 @@ node scripts/build859_return_owner_continuity_test.mjs
 node --check functions/api/_lib/jobday-intake-860.js
 node --check functions/api/admin/jobday_intake_860.js
 node scripts/build860_intake_custodian_exception_test.mjs
+
+node --check functions/api/_lib/jobday-exception-861.js
+node --check functions/api/admin/jobday_exception_861.js
+node scripts/build861_intake_discrepancy_hold_test.mjs
