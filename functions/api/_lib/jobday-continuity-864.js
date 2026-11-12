@@ -22,7 +22,8 @@ export function revalidateCritical864({latestSla,criticalHistory=[],aging,now=Da
   !uuid(latestSla?.id)||latestSla.kind!=='owner_aging_sla_recheck'||
   !sha(latestSla.review_digest_sha256)||latestSla.sla_status!=='CRITICAL_HOLD'||
   !Number.isFinite(stamp(latestSla.recorded_at))||
-  aging?.decision!=='ORIGINAL_OWNER_SLA_RECHECK_HOLD_ONLY'||
+  aging?.decision!=='ORIGINAL_OWNER_CRITICAL_SLA_FOLLOW_UP_HOLD_ONLY'||
+  aging?.status!=='CRITICAL_BREACH_HOLD'||
   !Number.isInteger(aging.original_exception_age_hours))
   return {decision:'HOLD',reason:'INCOMPLETE_OR_UNVERIFIED_ORIGINAL_CRITICAL_SLA_SOURCE',...HOLD_864};
  const age=aging.original_exception_age_hours,critical=criticalHistory[0]||null;
