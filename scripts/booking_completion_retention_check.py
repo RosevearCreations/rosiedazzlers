@@ -311,7 +311,8 @@ else:
         errors.append("Build 356 My Account safe-rebook behavior test failed: " + (proc.stdout + proc.stderr).strip())
 
 for build_number in (326, 334, 354, 355, 356):
-    migrations = list(ROOT.glob(f"**/*{build_number}*.sql"))
+    # Match the explicit build identifier, not accidental digits in timestamps.
+    migrations = list(ROOT.glob(f"**/*build{build_number}*.sql"))
     if migrations:
         errors.append(f"Build {build_number} must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
 
