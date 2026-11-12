@@ -25,3 +25,6 @@ node scripts/build857_custody_aging_readback_test.mjs
 node --check functions/api/_lib/jobday-recovery-858.js
 node --check functions/api/admin/jobday_recovery_858.js
 node scripts/build858_fresh_handoff_export_test.mjs
+node --check functions/api/_lib/jobday-return-859.js
+node --check functions/api/admin/jobday_return_859.js
+node scripts/build859_return_owner_continuity_test.mjs
