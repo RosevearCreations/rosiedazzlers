@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {webcrypto} from 'node:crypto';
 import {canonicalDeviceWitness851,canonicalReceiverAck851,validateDeviceWitness851,validateReceiverAck851,consentSafeReview851,CONTRACT_851} from '../functions/api/_lib/jobday-witness-851.js';
 import {MASTER_CONTRACT_850} from '../functions/api/_lib/jobday-custody-850.js';
-globalThis.crypto=globalThis.crypto||webcrypto;
+const crypto=globalThis.crypto||webcrypto;
 const b64=x=>Buffer.from(x).toString('base64url');
 const pair=await crypto.subtle.generateKey('Ed25519',true,['sign','verify']);
 const master=await crypto.subtle.generateKey('Ed25519',true,['sign','verify']);
