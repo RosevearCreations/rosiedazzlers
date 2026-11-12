@@ -53,8 +53,7 @@ async function selectDraft(id){
   $('rdQuickPhone').value=d.customer_phone||'';
   $('rdQuickEmail').value=d.customer_email||'';
   $('rdContactPermission').checked=d.contact_permission===true;
-  $('rdPrivatePhotoConsent').checked=d.private_photo_permission===true||
-   $('rdPrivatePhotoConsent').checked;
+  $('rdPrivatePhotoConsent').checked=d.private_photo_permission===true;
   $('rdQuickQuote').value=d.quote_cents==null?'':(d.quote_cents/100).toFixed(2);
   $('rdQuoteReviewState').textContent=d.linked_booking_id?
    'Linked to booking '+d.linked_booking_id:
