@@ -51,3 +51,7 @@ node scripts/build864_critical_recovery_drift_continuity_test.mjs
 node --check functions/api/_lib/jobday-readback-865.js
 node --check functions/api/admin/jobday_readback_865.js
 node scripts/build865_owner_snapshot_freshness_escalation_test.mjs
+
+node --check functions/api/_lib/jobday-rotation-866.js
+node --check functions/api/admin/jobday_rotation_866.js
+node scripts/build866_owner_rotation_receipt_exception_test.mjs
