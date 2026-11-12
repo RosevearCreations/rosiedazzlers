@@ -53,8 +53,7 @@ for(const term of ['compressForRoadside','createImageBitmap','canvas.toBlob',
  'sessionStorage'])
  assert(captureUi.includes(term),'Missing quick-capture compress/consent/resume: '+term);
 for(const term of ["write('save_quick_quote'","write('link_existing_booking'",
- 'storageView','rdSaveQuickQuote','rdLinkedBookingId',
- "href="/book"".replace('href="','')].filter(x=>x!=='/book"'))
+ 'storageView','rdSaveQuickQuote','rdLinkedBookingId'])
  assert(quoteUi.includes(term),'Missing quote/handoff UI behavior: '+term);
 assert(!quoteUi.includes('deposit_collected:true'),
  'No intake path may assert payment confirmed');
