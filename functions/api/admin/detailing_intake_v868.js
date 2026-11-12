@@ -164,7 +164,7 @@ export async function onRequest({request,env}){
    const previewUrl=link.startsWith('http')?link:
     new URL(link.startsWith('/storage/v1/')?link:
       link.startsWith('/object/')?'/storage/v1'+link:
-      '/storage/v1/'+link.replace(/^\\/+/,''),origin).toString();
+      '/storage/v1/'+(link.startsWith('/') ? link.slice(1) : link),origin).toString();
    if(new URL(previewUrl).origin!==origin)
     throw Error('Private media host mismatch');
    return json({ok:true,build:868,preview_url:previewUrl,
