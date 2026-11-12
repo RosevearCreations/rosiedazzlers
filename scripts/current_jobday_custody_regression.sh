@@ -35,3 +35,7 @@ node scripts/build860_intake_custodian_exception_test.mjs
 node --check functions/api/_lib/jobday-exception-861.js
 node --check functions/api/admin/jobday_exception_861.js
 node scripts/build861_intake_discrepancy_hold_test.mjs
+
+node --check functions/api/_lib/jobday-witness-862.js
+node --check functions/api/admin/jobday_witness_862.js
+node scripts/build862_resolution_witness_sla_hold_test.mjs
