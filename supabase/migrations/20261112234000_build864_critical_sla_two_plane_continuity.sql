@@ -94,7 +94,7 @@ declare inserted uuid; stamped timestamptz; actual_age integer;
   export_tip uuid; recon_tip uuid; critical_tip uuid;
   previous_tip uuid; previous_digest text; previous_export_tip uuid; previous_export_digest text;
   recovery_tip uuid; drift_tip uuid; ai_readback record; comms_readback record;
-  computed_status text;
+  computed_status text; critical_stamp timestamptz; sla_stamp timestamptz;
 begin
  perform pg_advisory_xact_lock(hashtextextended(p_transaction_review_id::text,864));
  if not exists(select 1 from public.rosie_master_transaction_review_v855 t
@@ -152,10 +152,19 @@ begin
     or p_owner_action not in('maintain_hold','request_fresh_independent_master_references',
          'escalate_owner_critical_sla_breach')
   then raise exception 'Only original-owner non-closing critical recovery recheck allowed'; end if;
-  select c.id into critical_tip from public.rosie_postwitness_hold_v863 c
+  select c.id,c.recorded_at into critical_tip,critical_stamp from public.rosie_postwitness_hold_v863 c
     where c.transaction_review_id=p_transaction_review_id
       and c.kind='owner_critical_sla_follow_up'
     order by c.recorded_at desc,c.id desc limit 1;
+  select s.recorded_at into sla_stamp from public.rosie_discrepancy_review_v862 s
+    where s.id=p_latest_sla_862_id;
+  computed_status:=case when critical_tip is null then 'MISSING_FOLLOWUP_HOLD'
+    when clock_timestamp()-sla_stamp>=interval '24 hours' or
+      clock_timestamp()-critical_stamp>=interval '24 hours'
+      then 'STALE_CRITICAL_RECHECK_HOLD'
+    else 'CRITICAL_RECOVERY_RECHECK_HOLD' end;
+  if p_review_status<>computed_status then
+     raise exception 'Independent original critical owner SLA recovery status changed'; end if;
   if critical_tip is distinct from p_critical_followup_863_id then
      raise exception 'Latest owner 863 critical follow-up tip changed'; end if;
  elsif p_kind='owner_two_plane_drift_review' or p_kind='owner_incident_continuity_export' then
@@ -224,7 +233,16 @@ begin
         and r.kind='owner_two_plane_drift_review'
       order by r.recorded_at desc,r.id desc limit 1;
     if recovery_tip is distinct from p_latest_recovery_864_id or
-       drift_tip is distinct from p_latest_drift_864_id then
+       drift_tip is distinct from p_latest_drift_864_id or
+       not exists(select 1 from public.rosie_owner_continuity_v864 r
+         where r.id=p_latest_recovery_864_id and r.kind='owner_critical_recovery_recheck'
+           and r.transaction_review_id=p_transaction_review_id
+           and r.latest_sla_862_id=p_latest_sla_862_id) or
+       not exists(select 1 from public.rosie_owner_continuity_v864 d
+         where d.id=p_latest_drift_864_id and d.kind='owner_two_plane_drift_review'
+           and d.transaction_review_id=p_transaction_review_id
+           and d.latest_sla_862_id=p_latest_sla_862_id
+           and d.latest_export_862_id=p_latest_export_862_id) then
        raise exception 'Owner recovery/drift witness tips moved before export'; end if;
     if not exists(select 1 from public.rosie_owner_continuity_v864 d
       where d.id=p_latest_drift_864_id and d.kind='owner_two_plane_drift_review'
