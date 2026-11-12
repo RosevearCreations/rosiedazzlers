@@ -288,7 +288,7 @@ revoke all on function public.rosie865_append_owner_hold(
  text,text,text,text,text,text,integer,text,uuid,text,text)
  from public,anon,authenticated;
 grant execute on function public.rosie865_append_owner_hold(
- uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,
+ uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,uuid,
  text,text,text,text,text,text,integer,text,uuid,text,text)
  to service_role;
 comment on table public.rosie_owner_readback_v865 is
