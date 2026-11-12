@@ -47,3 +47,7 @@ node scripts/build863_postwitness_critical_sla_readback_test.mjs
 node --check functions/api/_lib/jobday-continuity-864.js
 node --check functions/api/admin/jobday_continuity_864.js
 node scripts/build864_critical_recovery_drift_continuity_test.mjs
+
+node --check functions/api/_lib/jobday-readback-865.js
+node --check functions/api/admin/jobday_readback_865.js
+node scripts/build865_owner_snapshot_freshness_escalation_test.mjs
