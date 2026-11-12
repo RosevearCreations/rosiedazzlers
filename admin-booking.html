@@ -90,6 +90,35 @@
           <p class="mini">After creating a real booking, return here and paste its booking UUID. The customer email must match. Deposits count only when verified by the established payment system.</p>
           <label>Existing booking UUID<input id="rdLinkedBookingId" maxlength="80" autocomplete="off" placeholder="UUID of completed canonical booking" /></label>
           <button class="btn ghost" type="button" id="rdLinkCanonicalBooking">Link this intake to existing booking</button>
+          <section class="panel" style="margin-top:14px" aria-label="Build 870 customer-consented quote sharing">
+            <h4>Share a private quote &amp; prefill booking</h4>
+            <p class="mini">Save the estimate and contact permission above first. No photos, personal details or deposit credentials appear in a shared link. Nothing is sent automatically.</p>
+            <div class="grid2">
+              <label>Suggested service (optional)<select id="rdSharePackage870">
+                <option value="">Let customer choose</option>
+                <option value="premium_wash">Premium Wash</option><option value="basic_detail">Basic Detail</option>
+                <option value="complete_detail">Complete Detail</option><option value="interior_detail">Interior Detail</option>
+                <option value="exterior_detail">Exterior Detail</option>
+              </select></label>
+              <label>Vehicle size (optional)<select id="rdShareSize870">
+                <option value="">Let customer choose</option>
+                <option value="small">Small</option><option value="mid">Mid-sized</option><option value="oversize">Oversized</option>
+              </select></label>
+            </div>
+            <label class="checkline"><input id="rdShareConsent870" type="checkbox"/> Customer expressly agreed to receive a private quote and booking link</label>
+            <label class="checkline"><input id="rdShareDelivery870" type="checkbox"/> Customer approved delivery of this one link through our agreed channel (not marketing)</label>
+            <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+              <button class="btn primary" id="rdCreateShare870" type="button">Create private quote link</button>
+              <button class="btn" id="rdCopyShare870" type="button">Copy link</button>
+              <button class="btn ghost" id="rdRevokeShare870" type="button" disabled>Revoke link</button>
+            </div>
+            <label>Generated private link (visible in this tab only)<input id="rdShareUrl870" type="text" readonly autocomplete="off" placeholder="Only shown when created; not stored in plaintext"/></label>
+            <div id="rdShareExpiry870" class="mini">No active quote link.</div>
+            <p class="mini">After linking the real booking above, check the deposit against the established provider. A return redirect is never payment proof; a historical deposit does not prove no refund.</p>
+            <button class="btn" id="rdReconcileDeposit870" type="button" disabled>Verify original deposit</button>
+            <div id="rdDepositStatus870" class="notice mini" role="status" aria-live="polite">No canonical booking linked.</div>
+            <div id="rdShareStatus" class="notice mini" role="status" aria-live="polite">Share only with customer permission.</div>
+          </section>
           <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
         </details>
         <h3 style="margin-top:20px">Resume a saved request</h3>
@@ -366,5 +395,6 @@
   <script type="module" src="/assets/admin-booking-v299.js"></script>
   <script type="module" src="/assets/admin-booking-v868.js"></script>
   <script type="module" src="/assets/admin-booking-v869.js"></script>
+  <script type="module" src="/assets/admin-booking-v870.js"></script>
 </body>
 </html>
