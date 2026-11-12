@@ -56,7 +56,7 @@ create table public.rosie_owner_readback_v865(
     'MISSING_DISCREPANCY_CUSTODY_HOLD','TWO_PLANE_DISCREPANCY_REVIEW_ONLY_HOLD',
     'MISSING_INDEPENDENT_REFERENCE_HOLD','STALE_TWO_PLANE_REFERENCE_HOLD',
     'TWO_PLANE_REFERENCE_DRIFT_HOLD'))
- );
+ ));
 create index rosie865_owner_case_history on public.rosie_owner_readback_v865
  (transaction_review_id,kind,recorded_at desc,id desc);
 create index rosie865_immutable_snapshot_index on public.rosie_owner_readback_v865
