@@ -16,3 +16,6 @@ node scripts/build854_atomicity_sla_test.mjs
 node --check functions/api/_lib/jobday-transaction-855.js
 node --check functions/api/admin/jobday_transaction_855.js
 node scripts/build855_transaction_replay_test.mjs
+node --check functions/api/_lib/jobday-delivery-856.js
+node --check functions/api/admin/jobday_delivery_856.js
+node scripts/build856_delivery_conflict_export_test.mjs
