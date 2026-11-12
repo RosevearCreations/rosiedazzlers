@@ -16,7 +16,7 @@ async function row(env,table,select,filter){
  return records[0];
 }
 async function persist(env,{scope,kind,nonce:reviewNonce,checked=null,discrepancy=null,
- sla,ownerAction=null,previous=null,snapshotSha=null,actor}){
+ sla,ownerAction=null,previous=null,previousExport=null,snapshotSha=null,actor}){
  const p={p_project_id:scope.project.id,p_booking_id:scope.bookingId,
  p_post_id:scope.postId,p_transaction_review_id:scope.tx.id,
  p_handoff_858_id:scope.handoff.id,p_owner_decision_859_id:scope.ownerDecision.id,
