@@ -43,3 +43,7 @@ node scripts/build862_resolution_witness_sla_hold_test.mjs
 node --check functions/api/_lib/jobday-postwitness-863.js
 node --check functions/api/admin/jobday_postwitness_863.js
 node scripts/build863_postwitness_critical_sla_readback_test.mjs
+
+node --check functions/api/_lib/jobday-continuity-864.js
+node --check functions/api/admin/jobday_continuity_864.js
+node scripts/build864_critical_recovery_drift_continuity_test.mjs
