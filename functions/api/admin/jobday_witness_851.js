@@ -56,7 +56,7 @@ export async function onRequest({request,env}){
       const receipt=body.receipt||{},v=await validateDeviceWitness851(env,receipt,body.signature,{bookingId,projectId:project.id,post,caseReference:caseId,custody,actor});
       if(!v.ok)return fail(v.reason);
       if(ws.some(a=>a.safe_note.includes(' nonce '+receipt.nonce+';')))return fail('Original-device witness nonce replay denied.');
-      const note=DEVICE_AUDIT_851+' '+key+' nonce '+receipt.nonce+'; signed_sha256 '+v.sha256+'; source_revision '+receipt.source_revision+'; provider '+receipt.provider_receipt_id+'; cdn '+receipt.cdn_receipt_id+'; closure '+receipt.closure_receipt_id+'; expires '+v.expires_at+'; scoped only, consent withdrawn, external mirrors and Master HOLD.';
+      const note=DEVICE_AUDIT_851+' '+key+' nonce '+receipt.nonce+'; signer '+receipt.signer_id+'; signed_sha256 '+v.sha256+'; source_revision '+receipt.source_revision+'; provider '+receipt.provider_receipt_id+'; cdn '+receipt.cdn_receipt_id+'; closure '+receipt.closure_receipt_id+'; expires '+v.expires_at+'; scoped only, consent withdrawn, external mirrors and Master HOLD.';
       const id=await audit(env,project.id,actor,note);
       return json({ok:true,build:851,audit_id:id,witness_sha256:v.sha256,original_device_signature_verified:true,decision:'SCOPED_REVIEW_ONLY',master_connection:'HOLD',master_runtime_ack:false,provider_mutation_performed:false,external_mirrors_verified:false,master_events_emitted:0});
     }
@@ -65,6 +65,7 @@ export async function onRequest({request,env}){
       const receipt=body.receipt||{};
       const w=ws.find(a=>a.safe_note.includes(' signed_sha256 '+receipt.witness_sha256+';')&&a.safe_note.includes(' nonce '+receipt.witness_nonce+';'));
       if(!w)return fail('Persisted exact signed original-device witness digest and nonce required.');
+      if(w.safe_note.includes(' signer '+receipt.signer_id+';'))return fail('Master receipt signer must differ from the original-device witness signer.');
       if(as.some(a=>a.safe_note.includes(' ack_nonce '+receipt.nonce+';')))return fail('Independent Master ACK review nonce replay denied.');
       const v=await validateReceiverAck851(env,receipt,body.signature,{bookingId,projectId:project.id,post,caseReference:caseId,witnessSha256:receipt.witness_sha256,witnessNonce:receipt.witness_nonce,actor});
       if(!v.ok)return fail(v.reason);
