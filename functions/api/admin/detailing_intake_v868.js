@@ -145,6 +145,31 @@ export async function onRequest({request,env}){
     method:'PUT',content_type:mime,public_url:null,
     status:'pending_upload',booking_created:false},200,noStore);
   }
+  if(action==='preview_private'){
+   const assetId=txt(body.asset_id,80);
+   if(!isUuid(assetId))return err('Private media ID required');
+   const a=await oneMedia(env,assetId,draftId);
+   if(a.status!=='stored_private')return err('Media not yet verified as saved',409);
+   const signing=await fetch(assetUrl(env,
+    'object/sign/'+BUCKET+'/'+a.object_path),{
+    method:'POST',headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,
+     Authorization:'Bearer '+env.SUPABASE_SERVICE_ROLE_KEY,
+     'Content-Type':'application/json'},
+    body:JSON.stringify({expiresIn:120})});
+   const signed=await signing.json().catch(()=>({}));
+   if(!signing.ok)throw Error('Private media preview unavailable');
+   const link=signed.signedURL||signed.signedUrl||signed.url;
+   if(!link||typeof link!=='string')throw Error('Private preview was not signed');
+   const origin=new URL(env.SUPABASE_URL).origin;
+   const previewUrl=link.startsWith('http')?link:
+    new URL(link.startsWith('/storage/v1/')?link:
+      link.startsWith('/object/')?'/storage/v1'+link:
+      '/storage/v1/'+link.replace(/^\\/+/,''),origin).toString();
+   if(new URL(previewUrl).origin!==origin)
+    throw Error('Private media host mismatch');
+   return json({ok:true,build:868,preview_url:previewUrl,
+    expires_in_seconds:120,public_url:null},200,noStore);
+  }
   if(action==='confirm_upload'){
    const assetId=txt(body.asset_id,80);
    if(!isUuid(assetId))return err('Private media ID required');
