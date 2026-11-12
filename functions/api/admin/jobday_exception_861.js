@@ -155,7 +155,7 @@ export async function onRequest({request,env}){
     return_status:'MISSING',intake_status:'MISSING',...HOLD_861};
   const assessment=exceptionAssessment860({custody,latestCheckpoint:checkpoint,aging});
   const originalException=exceptions[0]||null;
-  const aging=intakeExceptionAging861({intakes,
+  const intakeAging=intakeExceptionAging861({intakes,
    exceptions:firstExceptions.length?[firstExceptions[0],
     ...exceptions.filter(e=>e.id!==firstExceptions[0].id)]:exceptions,
    discrepancies,txId:tx.id,now:Date.now()});
@@ -166,7 +166,7 @@ export async function onRequest({request,env}){
     incident_reference:incident,original_owner_decision_id:ownerDecision?.id||null,
     latest_860_exception_id:originalException?.id||null,
     original_intake_freshness:custody,original_exception_assessment:assessment,
-    intake_exception_aging:aging,
+    intake_exception_aging:intakeAging,
     signed_custodian_discrepancies:discrepancies.map(x=>({
      id:x.id,plane:x.plane,intake_860_id:x.intake_860_id,
      discrepancy_code:x.discrepancy_code,review_digest_sha256:x.review_digest_sha256,
@@ -180,13 +180,13 @@ export async function onRequest({request,env}){
   }
   if(!ownerDecision||!originalException)return fail(
    'Original 859 owner decision and 860 owner HOLD exception required.');
-  if(aging.decision!=='ORIGINAL_OWNER_INTAKE_EXCEPTION_AGING_HOLD_ONLY')
-   return fail('Complete original source-bound intake aging window required.');
+  if(intakeAging.decision!=='ORIGINAL_OWNER_INTAKE_EXCEPTION_AGING_HOLD_ONLY')
+   return fail('Complete original source-bound intake intakeAging window required.');
   const nonce=clean(body.review_nonce,100);
   if(!safeNonce(nonce))return fail('New unique owner review nonce required.',400);
   const actor=clean(auth.actor?.email,140)||clean(auth.actor?.id,140)||'OriginalOwner';
   const common={project,bookingId,post,tx,handoff,ownerDecision,
-   ownerException:originalException,nonce,aging,actor};
+   ownerException:originalException,nonce,aging:intakeAging,actor};
   if(body.action==='record_independent_custodian_discrepancy'){
    if(body.confirm_external_ed25519_discrepancy_claim!==true||
       body.acknowledge_discrepancy_is_not_runtime_delivery!==true)
@@ -217,11 +217,11 @@ export async function onRequest({request,env}){
    const action=clean(body.owner_action,80);
    if(!ACTIONS_861.includes(action))return fail('Only non-authorizing owner escalation permitted.');
    const digest=await digest861({kind:'owner_hold_escalation_review',
-    tx,handoff,ownerDecision,nonce,aging,action,previous:previousEscalation});
+    tx,handoff,ownerDecision,nonce,aging:intakeAging,action,previous:previousEscalation});
    const saved=await persist(env,{...common,kind:'owner_hold_escalation_review',
     digest,action,previous:previousEscalation});
    return json({ok:true,build:861,record_id:saved.id,recorded_at:saved.recorded_at,
-    review_digest_sha256:digest,aging_status:aging.aging_status,
+    review_digest_sha256:digest,aging_status:intakeAging.aging_status,
     owner_action:action,decision:'IMMUTABLE_OWNER_HOLD_ESCALATION_ONLY',...HOLD_861});
   }
   if(body.action==='export_original_owner_hold_history'){
@@ -230,7 +230,7 @@ export async function onRequest({request,env}){
    const bundle={format:'rosie.original-owner-intake-discrepancy-hold.v861',
     generated_at:new Date().toISOString(),source_revision:env.CF_PAGES_COMMIT_SHA,
     transaction_review_id:tx.id,incident_reference:tx.incident_reference,
-    latest_860_exception_id:originalException.id,intake_exception_aging:aging,
+    latest_860_exception_id:originalException.id,intake_exception_aging:intakeAging,
     signed_custodian_discrepancies:discrepancies.map(x=>({
      id:x.id,plane:x.plane,discrepancy_code:x.discrepancy_code,
      intake_860_id:x.intake_860_id,review_digest_sha256:x.review_digest_sha256,
