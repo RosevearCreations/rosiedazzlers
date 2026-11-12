@@ -1,0 +1,31 @@
+name: Rosie 868 Cloudflare Failed Build Diagnostics
+on:
+  push:
+    branches:
+      - codex/rosie868-cloudflare-build-diagnostics-*
+permissions:
+  contents: read
+jobs:
+  inspect-failed-cloudflare-deployment:
+    name: Inspect failed Pages build logs without mutation
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Read known failed 868 deployment build logs
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ -n "$CLOUDFLARE_API_TOKEN" ]] || { echo 'No Cloudflare token'; exit 1; }
+          account="${CLOUDFLARE_ACCOUNT_ID:-c0d5bc25df16ae5b7d47c985c4b7b787}"
+          url="https://api.cloudflare.com/client/v4/accounts/${account}/pages/projects/rosiedazzlers/deployments/527b05ff-d2a6-42e0-82b5-fbf8cc2cd8ba/history/logs"
+          code=$(curl -sS --output /tmp/rosie-failed-build.json --write-out '%{http_code}' --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" "$url")
+          echo "Cloudflare diagnostic HTTP status: $code"
+          if [[ "$code" != "200" ]]; then
+            jq -c '{success,errors:[.errors[]?|{code,message}]}' /tmp/rosie-failed-build.json
+            exit 1
+          fi
+          jq -r '.result.data[]?.line' /tmp/rosie-failed-build.json | tail -n 100 | sed -E 's/[A-Za-z0-9_-]{80,}/[REDACTED]/g'
+          echo 'Read-only diagnostic, no retry or deployment mutation.'
