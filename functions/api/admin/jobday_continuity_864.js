@@ -89,15 +89,11 @@ export async function onRequest({request,env}){
   if(tx.case_reference!==caseRef||tx.incident_reference!==incidentRef)
    return fail('Original owner case/incident scope drift.',409);
   const t='transaction_review_id=eq.'+encodeURIComponent(tx.id);
-  const [latestSla,ownerEscalation,latestExport,reconciliations,criticalHistory,
+  const [latestSla,latestExport,reconciliations,criticalHistory,
    readbacks,recoveryHistory,driftHistory,exportHistory]=await Promise.all([
    exact(env,'rosie_discrepancy_review_v862',
     'id,kind,transaction_review_id,owner_escalation_861_id,review_digest_sha256,sla_status,recorded_at',
     'id=eq.'+encodeURIComponent(original.latest_owner_sla_862_id)),
-   exact(env,'rosie_intake_discrepancy_v861',
-    'id,kind,transaction_review_id,owner_exception_860_id,review_digest_sha256',
-    'id=eq.'+encodeURIComponent(original.owner_critical_follow_up_history?.[0]?.id?
-      original.latest_owner_sla_862_id:'00000000-0000-4000-8000-000000000000')).catch(()=>null),
    original.latest_export_862_id?
     exact(env,'rosie_discrepancy_review_v862',
      'id,kind,transaction_review_id,previous_id,review_digest_sha256,snapshot_sha256,recorded_at',
@@ -136,7 +132,7 @@ export async function onRequest({request,env}){
    original.owner_reconciliation_history?.[0]?.id!==latestRecon?.id||
    readbacks.some((r,i)=>i>0&&
     Date.parse(r.recorded_at)>Date.parse(readbacks[i-1].recorded_at))||
-   criticalHistory.some(r=>r.latest_sla_862_id!==latestSla.id))
+   latestCritical&&latestCritical.latest_sla_862_id!==latestSla.id)
    return fail('Private original 863 protected evidence tip or signed history drift.',503);
   const critical=revalidateCritical864({latestSla,criticalHistory,
    aging:original.critical_owner_sla_follow_up,now:Date.now()});
