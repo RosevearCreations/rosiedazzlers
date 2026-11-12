@@ -89,15 +89,12 @@ export async function onRequest({request,env}){
   if(tx.case_reference!==caseRef||tx.incident_reference!==incidentRef)
    return fail('Original protected owner incident/case mismatch.');
   const filter='transaction_review_id=eq.'+encodeURIComponent(tx.id);
-  const [latestSla,escalation861,privateExport862,recoveryRows,driftRows,
+  const [latestSla,privateExport862,recoveryRows,driftRows,
    exportRows,criticalRows,reconciliationRows,discrepancies,readbacks,
    snapshotHistory,freshnessHistory,escalationHistory]=await Promise.all([
     exact(env,'rosie_discrepancy_review_v862',
      'id,kind,transaction_review_id,owner_escalation_861_id,review_digest_sha256,sla_status,recorded_at',
      'id=eq.'+encodeURIComponent(original.latest_original_sla_862_id)),
-    exact(env,'rosie_intake_discrepancy_v861',
-     'id,kind,transaction_review_id,owner_exception_860_id,review_digest_sha256',
-     'id=eq.'+encodeURIComponent(original.latest_original_sla_862_id)).catch(()=>null),
     original.latest_private_862_export_id?
      exact(env,'rosie_discrepancy_review_v862',
       'id,kind,transaction_review_id,review_digest_sha256,snapshot_sha256,previous_id',
@@ -130,8 +127,10 @@ export async function onRequest({request,env}){
    latestSla.sla_status!=='CRITICAL_HOLD'||!scoped(escalation,tx.id)||
    escalation.kind!=='owner_hold_escalation_review'||!isUuid(escalation.owner_exception_860_id)||
    ![recoveryRows,driftRows,exportRows,criticalRows,reconciliationRows,
-    discrepancies,readbacks,snapshotHistory,freshnessHistory,escalationHistory]
+    readbacks,snapshotHistory,freshnessHistory,escalationHistory]
    .every(a=>Array.isArray(a)&&a.length<25&&a.every(r=>scoped(r,tx.id)))||
+   !Array.isArray(discrepancies)||discrepancies.length>=100||
+   discrepancies.some(r=>!scoped(r,tx.id))||
    original.private_original_incident_continuity_export_history?.[0]?.id!==exportRows[0]?.id||
    original.owner_two_plane_drift_history?.[0]?.id!==driftRows[0]?.id||
    original.owner_recovery_recheck_history?.[0]?.id!==recoveryRows[0]?.id||
