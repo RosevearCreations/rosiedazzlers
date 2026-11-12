@@ -63,3 +63,7 @@ node scripts/build867_owner_renewal_route_retention_test.mjs
 node --check functions/api/admin/detailing_intake_v868.js
 node --check assets/admin-booking-v868.js
 node scripts/build868_camera_first_intake_test.mjs
+
+node --check functions/api/admin/detailing_intake_v869.js
+node --check assets/admin-booking-v869.js
+node scripts/build869_roadside_quick_quote_test.mjs
