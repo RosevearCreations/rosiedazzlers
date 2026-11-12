@@ -174,6 +174,7 @@ export async function onRequest({request,env}){
     return fail('Signed claim cannot be interpreted as a Master delivery/ACK.');
    if(!latestExport||!latestRecon||!latestCritical||
     latestRecon.review_status!=='BOTH_PLANES_WITNESS_REVIEW_HOLD'||
+    reconciliation.status!=='BOTH_PLANES_WITNESS_REVIEW_HOLD'||
     critical.decision!=='ORIGINAL_OWNER_CRITICAL_SLA_FOLLOW_UP_HOLD_ONLY')
     return fail('Current two-plane witness review, critical owner follow-up and 862 private export required.');
    const plane=clean(body.plane,40),witnessId=clean(body.witness_862_id,80);
