@@ -10,3 +10,6 @@ node scripts/build852_recall_continuity_test.mjs
 node --check functions/api/_lib/jobday-replay-853.js
 node --check functions/api/admin/jobday_replay_853.js
 node scripts/build853_replay_escalation_test.mjs
+node --check functions/api/_lib/jobday-atomic-854.js
+node --check functions/api/admin/jobday_atomicity_854.js
+node scripts/build854_atomicity_sla_test.mjs
