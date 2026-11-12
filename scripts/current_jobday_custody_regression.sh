@@ -22,3 +22,6 @@ node scripts/build856_delivery_conflict_export_test.mjs
 node --check functions/api/_lib/jobday-custody-857.js
 node --check functions/api/admin/jobday_custody_857.js
 node scripts/build857_custody_aging_readback_test.mjs
+node --check functions/api/_lib/jobday-recovery-858.js
+node --check functions/api/admin/jobday_recovery_858.js
+node scripts/build858_fresh_handoff_export_test.mjs
