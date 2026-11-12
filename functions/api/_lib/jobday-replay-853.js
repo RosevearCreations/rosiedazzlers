@@ -36,7 +36,7 @@ export async function verifyReplayLedger853(env,r,signature,{bookingId,projectId
   if(![issued,observed,expires].every(Number.isFinite)||issued>now+300000||observed>now+300000||now-issued>600000||now-observed>600000||observed<issued-300000||observed>expires||expires<=now||expires<=issued||expires-issued>900000)return {ok:false,reason:'Independent ledger review expired, stale or future-dated.'};
   if(!nonce(r.nonce)||r.nonce===priorConsumerNonce||!safeName(r.signer_id,5,120)||r.signer_id.toLowerCase()===String(actor).toLowerCase())return {ok:false,reason:'Distinct independent reviewer and new safe replay nonce required.'};
   const pub=decode(env?.ROSIE_AIDATA_REPLAY_LEDGER_ED25519_PUBLIC_KEY_853,32),sig=decode(signature,64);
-  if(!pub||!sig||env.ROSIE_AIDATA_REPLAY_LEDGER_ED25519_PUBLIC_KEY_853===env.ROSIE_ORIGINAL_DEVICE_WITNESS_ED25519_PUBLIC_KEY_851)return {ok:false,reason:'Distinct independent replay-ledger public identity and signed receipt required.'};
+  if(!pub||!sig||(env.ROSIE_AIDATA_REPLAY_LEDGER_ED25519_PUBLIC_KEY_853===env.ROSIE_ORIGINAL_DEVICE_WITNESS_ED25519_PUBLIC_KEY_851||env.ROSIE_AIDATA_REPLAY_LEDGER_ED25519_PUBLIC_KEY_853===env.ROSIE_AIDATA_CONSUMER_DECISION_ED25519_PUBLIC_KEY_852))return {ok:false,reason:'Distinct independent replay-ledger public identity and signed receipt required.'};
   try{
     const payload=canonicalReplay853(r),key=await crypto.subtle.importKey('raw',pub,{name:'Ed25519'},false,['verify']);
     if(!await crypto.subtle.verify('Ed25519',key,sig,new TextEncoder().encode(payload)))return {ok:false,reason:'Signed replay-ledger snapshot failed cryptographic verification.'};
