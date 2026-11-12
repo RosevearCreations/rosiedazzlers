@@ -36,6 +36,10 @@ export async function readbackSnapshot865({bundle,exportRow,tx,latestSla,
   bundle.private_export_snapshot_862_sha256!==latestPrivateExport.snapshot_sha256||
   bundle.latest_864_recovery_id!==exportRow.latest_recovery_864_id||
   bundle.latest_864_drift_id!==exportRow.latest_drift_864_id||
+  bundle.latest_863_owner_reconciliation_id!==exportRow.reconciliation_863_id||
+  bundle.latest_863_owner_critical_followup_id!==exportRow.critical_followup_863_id||
+  bundle.previous_continuity_export_id!==(exportRow.previous_export_id||null)||
+  bundle.previous_continuity_export_sha256!==(exportRow.previous_export_sha256||null)||
   bundle.delivery_state!=='NOT_TRANSMITTED_HOLD_ONLY'||
   bundle.source_history_truncated!==false||
   bundle.master_connected!==false||
