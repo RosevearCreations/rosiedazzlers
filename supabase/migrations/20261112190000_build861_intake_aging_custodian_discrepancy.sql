@@ -116,7 +116,9 @@ begin
    or p_receipt_sha256 !~ '^[a-f0-9]{64}$'
    or p_disputed_sha256 !~ '^[a-f0-9]{64}$'
    or p_discrepancy_code not in ('INTAKE_DIGEST_DISPUTED','INTAKE_OBSERVATION_STALENESS_DISPUTED')
-   or (p_discrepancy_code='INTAKE_DIGEST_DISPUTED' and p_disputed_sha256=p_receipt_sha256)
+   or (p_discrepancy_code='INTAKE_DIGEST_DISPUTED' and exists(
+      select 1 from public.rosie_external_intake_custody_v860 i
+      where i.id=p_intake_860_id and i.receipt_sha256=p_disputed_sha256))
    or p_signer_id !~ '^[A-Za-z0-9][A-Za-z0-9_-]{5,95}$'
    or p_owner_action is not null or p_previous_id is not null
    or not exists(select 1 from public.rosie_external_intake_custody_v860 i
