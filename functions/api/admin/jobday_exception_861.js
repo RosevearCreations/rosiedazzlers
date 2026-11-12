@@ -122,7 +122,7 @@ export async function onRequest({request,env}){
   if(aging.decision!=='AGING_REVIEW_ONLY'||!(aging.open_conflict_count>0))
    return fail('Bounded unresolved original 856 conflict and aging required.');
   const suffix='&transaction_review_id=eq.'+encodeURIComponent(tx.id);
-  const [reviews,checkpoints,intakes,exceptions]=await Promise.all([
+  const [reviews,checkpoints,intakes,exceptions,firstExceptions,discrepancies,escalations]=await Promise.all([
    rest(env,'rosie_incident_continuity_v859?select=id,kind,plane,transaction_review_id,handoff_858_id,owner_export_858_id,owner_decision_859_id,review_source_revision,receipt_sha256,review_digest_sha256,signer_id,owner_action,recorded_at'+
     suffix+'&kind=neq.incident_continuity_checkpoint&order=recorded_at.desc&limit=100'),
    rest(env,'rosie_incident_continuity_v859?select=id,kind,transaction_review_id,owner_decision_859_id,review_digest_sha256,recorded_at,previous_checkpoint_id'+
@@ -130,10 +130,18 @@ export async function onRequest({request,env}){
    rest(env,'rosie_external_intake_custody_v860?select=id,kind,plane,transaction_review_id,handoff_858_id,owner_decision_859_id,return_859_id,source_revision,receipt_sha256,signer_id,observed_at,review_digest_sha256,recorded_at'+
     suffix+'&kind=eq.signed_external_intake_correlation&order=recorded_at.desc&limit=100'),
    rest(env,'rosie_external_intake_custody_v860?select=id,kind,transaction_review_id,checkpoint_859_id,exception_codes,owner_action,previous_exception_id,previous_exception_sha256,review_digest_sha256,recorded_at'+
-    suffix+'&kind=eq.owner_continuity_exception_review&order=recorded_at.desc&limit=25')
+    suffix+'&kind=eq.owner_continuity_exception_review&order=recorded_at.desc&limit=25'),
+   rest(env,'rosie_external_intake_custody_v860?select=id,kind,transaction_review_id,review_digest_sha256,recorded_at'+
+    suffix+'&kind=eq.owner_continuity_exception_review&order=recorded_at.asc&limit=1'),
+   rest(env,'rosie_intake_discrepancy_v861?select=id,kind,plane,transaction_review_id,intake_860_id,receipt_sha256,discrepancy_code,disputed_sha256,review_digest_sha256,recorded_at'+
+    suffix+'&kind=eq.signed_external_custodian_discrepancy&order=recorded_at.desc&limit=100'),
+   rest(env,'rosie_intake_discrepancy_v861?select=id,kind,transaction_review_id,review_digest_sha256,owner_action,aging_status,age_hours,issue_codes,previous_id,recorded_at'+
+    suffix+'&kind=eq.owner_hold_escalation_review&order=recorded_at.desc&limit=25')
   ]);
   if(!Array.isArray(reviews)||reviews.length>=100||!Array.isArray(checkpoints)||
-   !Array.isArray(intakes)||intakes.length>=100||!Array.isArray(exceptions))
+   !Array.isArray(intakes)||intakes.length>=100||!Array.isArray(exceptions)||
+   !Array.isArray(firstExceptions)||!Array.isArray(discrepancies)||discrepancies.length>=100||
+   !Array.isArray(escalations))
    return fail('Private independent custodian and owner exception source window incomplete.',503);
   const decisionRows=reviews.filter(x=>x.kind==='owner_recovery_decision'&&
    x.transaction_review_id===tx.id&&x.handoff_858_id===handoff.id);
