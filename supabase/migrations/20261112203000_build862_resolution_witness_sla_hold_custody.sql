@@ -107,7 +107,8 @@ begin
    and e.owner_decision_859_id=p_owner_decision_859_id)
  or not exists(select 1 from public.rosie_intake_discrepancy_v861 a
   where a.id=p_owner_escalation_861_id and a.kind='owner_hold_escalation_review'
-   and a.transaction_review_id=p_transaction_review_id)
+   and a.transaction_review_id=p_transaction_review_id
+   and a.owner_exception_860_id=p_owner_exception_860_id)
  or not exists(select 1 from public.rosie_delivery_conflict_evidence_v856 k
   where k.transaction_review_id=p_transaction_review_id and k.kind='replay_conflict_review')
  then raise exception 'Original revoked-consent and open 855→861 owner HOLD custody required'; end if;
@@ -115,6 +116,11 @@ begin
   where a.transaction_review_id=p_transaction_review_id
    and a.kind='owner_hold_escalation_review'
   order by a.recorded_at desc,a.id desc limit 1;
+ if (select e.id from public.rosie_external_intake_custody_v860 e
+  where e.transaction_review_id=p_transaction_review_id
+   and e.kind='owner_continuity_exception_review'
+  order by e.recorded_at desc,e.id desc limit 1) is distinct from p_owner_exception_860_id
+ then raise exception 'Original 860 owner exception tip moved'; end if;
  if current_owner is distinct from p_owner_escalation_861_id then
   raise exception 'Original 861 owner HOLD tip moved'; end if;
  if p_source_revision !~ '^[a-f0-9]{40}$'
@@ -141,7 +147,8 @@ begin
    or p_previous_id is not null or p_previous_export_id is not null
    or not exists(select 1 from public.rosie_intake_discrepancy_v861 d
      where d.id=p_discrepancy_861_id and d.kind='signed_external_custodian_discrepancy'
-     and d.transaction_review_id=p_transaction_review_id and d.plane=p_plane)
+     and d.transaction_review_id=p_transaction_review_id and d.plane=p_plane
+      and d.owner_exception_860_id=p_owner_exception_860_id)
   then raise exception 'Independent exact signed review witness required'; end if;
  elsif p_kind='owner_aging_sla_recheck' then
   if p_plane is not null or p_discrepancy_861_id is not null or p_receipt_sha256 is not null
