@@ -61,7 +61,8 @@ export function ownerIncidentDecision853({action,platform,route,caseReference,in
   if(routing?.decision!=='ROUTING_REVIEW_ONLY'||!entry)reasons.push('INCOMPLETE_PLATFORM_ROUTING_EVIDENCE');
   if(!ACTIONS.has(action))reasons.push('UNSUPPORTED_OWNER_INCIDENT_ACTION');
   if(entry&&route!==entry.route)reasons.push('ESCALATION_ROUTE_MISMATCH');
-  if(action==='request_independent_ledger_recheck'&&!ledgerReviewRecorded)reasons.push('SIGNED_LEDGER_SNAPSHOT_REVIEW_MISSING');
+  // Requesting independent ledger evidence must remain possible when proof is missing.
+  // It is an internal owner review proposal, not a dispatched Master request.
   if(entry?.priority==='CRITICAL'&&!['acknowledge_critical_review','request_provider_evidence_recheck','assign_supervisor_followup','maintain_external_hold'].includes(action))reasons.push('CRITICAL_CASE_ESCALATION_REQUIRED');
   return {decision:reasons.length?'HOLD':'OWNER_REVIEW_RECORDED_ONLY',reasons:[...new Set(reasons)],action:action||null,route:entry?.route||null,priority:entry?.priority||'NONE',notification_sent:false,incident_closed:false,provider_mutation_performed:false,master_events_emitted:0,atomic_ledger_uniqueness_verified:false,master_connection:'HOLD',consumer_authorized:false,external_mirrors_verified:false};
 }
