@@ -31,6 +31,8 @@ async function persist(env,{scope,kind,nonce:reviewNonce,checked=null,discrepanc
  p_owner_action:ownerAction,p_snapshot_sha256:snapshotSha,
  p_previous_id:previous?.id||null,
  p_previous_sha256:previous?.review_digest_sha256||null,
+ p_previous_export_id:previousExport?.id||null,
+ p_previous_export_sha256:previousExport?.review_digest_sha256||null,
  p_actor_staff_email:actor};
  const records=await rest(env,'rpc/rosie862_append_hold_custody',
   {method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(p)});
@@ -184,7 +186,8 @@ export async function onRequest({request,env}){
    ownerAction,previous,snapshotSha});
   scope.digest=digest;
   const saved=await persist(env,{scope,kind,nonce:reviewNonce,checked,discrepancy,
-   sla:summary,ownerAction,previous,snapshotSha,actor});
+   sla:summary,ownerAction,previous,previousExport:kind==='master_hold_custody_export'?previousExport:null,
+   snapshotSha,actor});
   return json({ok:true,build:862,decision:kind==='signed_resolution_review_witness'?
    checked.decision:kind==='owner_aging_sla_recheck'?
    'ORIGINAL_OWNER_SLA_RECHECK_RECORDED_HOLD_ONLY':'DURABLE_PRIVATE_MASTER_HOLD_EXPORT',
