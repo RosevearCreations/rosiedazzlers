@@ -13,3 +13,6 @@ node scripts/build853_replay_escalation_test.mjs
 node --check functions/api/_lib/jobday-atomic-854.js
 node --check functions/api/admin/jobday_atomicity_854.js
 node scripts/build854_atomicity_sla_test.mjs
+node --check functions/api/_lib/jobday-transaction-855.js
+node --check functions/api/admin/jobday_transaction_855.js
+node scripts/build855_transaction_replay_test.mjs
