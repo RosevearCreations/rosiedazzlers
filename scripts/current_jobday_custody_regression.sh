@@ -59,3 +59,7 @@ node scripts/build866_owner_rotation_receipt_exception_test.mjs
 node --check functions/api/_lib/jobday-retention-867.js
 node --check functions/api/admin/jobday_retention_867.js
 node scripts/build867_owner_renewal_route_retention_test.mjs
+
+node --check functions/api/admin/detailing_intake_v868.js
+node --check assets/admin-booking-v868.js
+node scripts/build868_camera_first_intake_test.mjs
