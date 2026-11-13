@@ -220,6 +220,21 @@
               <button type="button" class="btn" id="rd876Revalidate" disabled>Revalidate downloaded owner dossier</button>
               <div id="rd876ArtifactStatus" class="notice mini" role="status" aria-live="polite">No original artifact reviewed.</div>
             </section>
+            <section class="panel" style="margin-top:14px" aria-label="Build 877 authenticated provider and independent owner evidence">
+              <h4>Build 877 — Provider Enrollment, Owner SLA &amp; Provenance</h4>
+              <p class="mini">Verify the original configured Resend webhook registration against the live provider account. Matching endpoint and events is not itself a valid signed receipt. We never create or change a provider webhook here.</p>
+              <button id="rd877Enrollment" class="btn ghost" type="button">Check original provider enrollment</button>
+              <div id="rd877EnrollmentStatus" class="notice mini" role="status" aria-live="polite">Original provider enrollment not checked.</div>
+              <p class="mini">Audit original unresolved refund-case deadlines, including breached, on-time, and missing source timestamps. A refresh does not reset the original case clock.</p>
+              <button id="rd877Sla" class="btn" type="button" disabled>Audit original owner refund SLA</button>
+              <div id="rd877SlaStatus" class="notice mini" role="status" aria-live="polite">Choose a saved roadside draft.</div>
+              <p class="mini">A previously downloaded closure dossier can receive a separately keyed Ed25519 owner-issuer proof only after its SHA-256 and original private ledger records are freshly revalidated. This is not an independent third-party witness.</p>
+              <label>Original owner closure JSON
+                <input id="rd877Artifact" type="file" accept=".json,application/json" disabled />
+              </label>
+              <button id="rd877Renew" class="btn primary" type="button" disabled>Renew signed closure provenance</button>
+              <div id="rd877ProvenanceStatus" class="notice mini" role="status" aria-live="polite">No renewal requested.</div>
+            </section>
 
           </section>
           <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
@@ -503,5 +518,6 @@
   <script type="module" src="/assets/admin-booking-v872.js"></script>
   <script type="module" src="/assets/admin-booking-v875.js"></script>
   <script type="module" src="/assets/admin-booking-v876.js"></script>
+  <script type="module" src="/assets/admin-booking-v877.js"></script>
 </body>
 </html>
