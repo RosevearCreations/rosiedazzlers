@@ -1,0 +1,24 @@
+name: Rosie Dazzlers 879 Native Stability and Pinned Rotation Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build879-native-sla-rotation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Signed provider stability snapshot, owner SLA renewal and supervised rotation proof
+        run: |
+          node scripts/build879_native_stability_rotation_test.mjs
+          node scripts/build878_native_ack_pinned_test.mjs
+          node scripts/build877_provider_sla_provenance_test.mjs
+          node scripts/build876_native_escalation_artifact_test.mjs
