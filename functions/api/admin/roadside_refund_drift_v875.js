@@ -3,6 +3,7 @@
 import {requireStaffAccess,serviceHeaders,json,isUuid} from '../_lib/staff-auth.js';
 import {refundReadback} from './roadside_audit_v871.js';
 import {assessRoadsideRefundDrift} from '../_lib/roadside-refund-drift-v875.js';
+import {classifyRoadsideRefundEscalation} from '../_lib/roadside-escalation-policy-v876.js';
 const headers={'Cache-Control':'no-store, private','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'};
 const fail=(error,status=400)=>json({ok:false,build:875,error,
  release_approved:false,booking_or_payment_mutated:false},status,headers);
@@ -38,9 +39,11 @@ export async function onRequestGet({request,env}){
   // value or infer completeness from local refund records alone.
   const live=await refundReadback(env,bookingId);
   const drift=assessRoadsideRefundDrift({snapshot:checks[0]||null,live,bookingId});
+  const escalation=classifyRoadsideRefundEscalation(drift,{lastCheckAt:checks[0]?.checked_at});
   return json({ok:true,build:875,draft_id:id,booking_linked:true,
    latest_check_id:checks[0]?.id||null,latest_check_at:checks[0]?.checked_at||null,
    ...drift,owner_attention_required:drift.alert,
+   escalation_policy:escalation,
    external_notification_sent:false,owner_pilot_automatically_closed:false},200,headers);
  }catch{
   return fail('Fresh original provider readback unavailable; manual HOLD remains',503);

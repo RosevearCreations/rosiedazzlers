@@ -1,0 +1,20 @@
+name: Rosie Dazzlers 876 Original Provider, Escalation and Closure Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build876-original-source-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Native signed source, refund escalation and owner artifact source tests
+        run: node scripts/build876_native_escalation_artifact_test.mjs
