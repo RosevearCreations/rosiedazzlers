@@ -76,6 +76,8 @@ export function evaluateCIQueue780({sha,runs,checks,branch='main',budget=BUDGET7
     }
     report.superseded_check_records+=normalized.superseded;
     const authoritative=normalized.checks;
+    if(authoritative.some(c=>bad.has(c.conclusion)))
+      report.violations.push(`FAILED_CHECK_RUN:${run.id}`);
     const starts=authoritative.map(c=>stamp(c.started_at));
     const ends=authoritative.map(c=>stamp(c.completed_at));
     const created=stamp(run.created_at);
