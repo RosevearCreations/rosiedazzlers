@@ -19,7 +19,7 @@ async function db(env,table,method='GET',query='',data){
 }
 async function getDraft(env,id){
  const rows=await db(env,'rosie_detailing_intake_v868','GET','?select=id,status,expires_at,'+
-  'contact_permission,customer_email,quote_cents,linked_booking_id'+
+  'contact_permission,customer_email,quote_cents,linked_booking_id,quote_share_withdrawn_at'+
   '&id=eq.'+encodeURIComponent(id)+'&limit=2');
  return rows.length===1&&rows[0].status==='intake_draft'?rows[0]:null;
 }
@@ -100,6 +100,7 @@ export async function onRequest({request,env}){
    const links=await shares(env,id);
    return json({ok:true,build:870,share:activeLink(links),links:links.map(x=>({
     ...x,active:!x.revoked_at&&Date.parse(x.expires_at)>Date.now()})),
+    quote_consent_withdrawn:Boolean(draft.quote_share_withdrawn_at),
     deposit:draft.linked_booking_id?await deposit(env,draft.linked_booking_id):
      {state:'not_booked',verified:false},
     booking_created:false,deposit_collected:false},200,headers);
@@ -109,6 +110,7 @@ export async function onRequest({request,env}){
    if(data.confirm_customer_quote_sharing!==true||
       data.confirm_customer_receive_link!==true)
     return fail('Customer must explicitly agree to quote sharing and this one-link delivery',400);
+   if(draft.quote_share_withdrawn_at)return fail('Customer withdrew quote sharing; begin a fresh consented intake',409);
    if(draft.contact_permission!==true||!draft.customer_email||
       !Number.isInteger(draft.quote_cents)||draft.quote_cents<1)
     return fail('A saved contact-consented quote with customer email is required',409);
@@ -125,13 +127,16 @@ export async function onRequest({request,env}){
     quote_snapshot_cents:draft.quote_cents,package_code:packageCode||null,
     vehicle_size:size||null,consent_attested:true,consent_recorded_at:now.toISOString(),
     created_by_staff:actor,expires_at:expiry.toISOString()};
-   const added=await db(env,'rosie_roadside_quote_shares_v870','POST','',[row]);
-   if(added.length!==1)throw Error('Quote share was not saved');
+   const added=await db(env,'rpc/rosie871_issue_roadside_share','POST','',{
+    p_share_id:row.id,p_draft_id:id,p_token_hash:digest,
+    p_package_code:row.package_code,p_vehicle_size:row.vehicle_size,p_actor:actor});
+   if(added.length!==1||added[0].outcome!=='ISSUED_CONSENTED')
+    throw Error('Atomic consent-bound quote issuance unavailable');
    // Fragment keeps the bearer secret out of HTTP requests, server access logs,
    // redirects, and canonical booking query strings.
    const link='https://rosiedazzlers.ca/roadside-quote.html#share='+value;
    return json({ok:true,build:870,share_url:link,share_id:row.id,
-    expires_at:row.expires_at,quote_cad:row.quote_snapshot_cents/100,
+    expires_at:added[0].valid_until,quote_cad:Number(added[0].quote_amount_cents)/100,
     customer_delivery_performed:false,booking_created:false,deposit_collected:false},201,headers);
   }
   if(action==='revoke'){
