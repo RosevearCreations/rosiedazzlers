@@ -137,9 +137,16 @@ export async function onRequest({request,env}){
     return bad('Original private capture consent is unavailable',409);
    if(body.confirm_original_device_present!==true)
     return bad('Confirm the physical roadside device is present',400);
+   const jwk=body.public_key;
+   if(!jwk||jwk.kty!=='EC'||jwk.crv!=='P-256'||'d' in jwk||
+      !/^[A-Za-z0-9_-]{43}$/.test(jwk.x||'')||
+      !/^[A-Za-z0-9_-]{43}$/.test(jwk.y||''))
+    return bad('Same-browser enrolled public signing key required',400);
+   const keyDigest=await sha(jwk.x+'.'+jwk.y);
    const now=Date.now(),id=uuid(),nonce=hexRandom();
    const result=await db(env,'rosie_roadside_device_challenges_v872','POST','',[{
     id,draft_id:draftId,challenge_nonce:nonce,issued_by:actor,
+    public_key_digest:keyDigest,
     expires_at:new Date(now+5*60*1000).toISOString()
    }]);
    if(result.length!==1)throw Error('Original browser challenge not stored');
@@ -156,7 +163,7 @@ export async function onRequest({request,env}){
     return bad('Original on-device camera capability and private media required');
    const [challenges,medias]=await Promise.all([
     db(env,'rosie_roadside_device_challenges_v872','GET',
-     '?select=id,issued_by,issued_at,expires_at,challenge_nonce,state'+
+     '?select=id,issued_by,issued_at,expires_at,challenge_nonce,state,public_key_digest'+
      '&id=eq.'+challengeId+'&draft_id=eq.'+draftId+'&limit=2'),
     db(env,'rosie_detailing_intake_media_v868','GET',
      '?select=id,draft_id,status,verified_at,content_type'+
@@ -169,7 +176,8 @@ export async function onRequest({request,env}){
      Date.parse(m.verified_at)<Date.parse(c.issued_at))
     return bad('Fresh same-session original private media/challenge evidence required',409);
    const verified=await originalProof(body,c,mediaId,draftId);
-   if(verified.verified!==true)return bad('P-256 browser challenge signature verification failed',409);
+   if(verified.verified!==true||verified.keyDigest!==c.public_key_digest)
+    return bad('Original enrolled browser key/signature mismatch',409);
    const patched=await db(env,'rosie_roadside_device_challenges_v872','PATCH',
     '?id=eq.'+challengeId+'&draft_id=eq.'+draftId+
     '&state=eq.challenge_pending&completed_at=is.null&expires_at=gt.'+encodeURIComponent(new Date().toISOString()),{
