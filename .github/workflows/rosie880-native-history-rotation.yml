@@ -1,0 +1,25 @@
+name: Rosie Dazzlers 880 Native History and Grace Expiry Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build880-immutable-native-grace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Private source-bound history, server-only immutable custody and grace expiry regression
+        run: |
+          node scripts/build880_native_history_immutable_rotation_test.mjs
+          node scripts/build879_native_stability_rotation_test.mjs
+          node scripts/build878_native_ack_pinned_test.mjs
+          node scripts/build877_provider_sla_provenance_test.mjs
+          node scripts/build876_native_escalation_artifact_test.mjs

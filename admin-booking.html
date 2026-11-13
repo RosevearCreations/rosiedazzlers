@@ -279,6 +279,19 @@
               <button class="btn ghost" type="button" id="rd879Rotation" disabled>Verify supervised post-rotation operator pins</button>
               <div id="rd879RotationResult" class="notice mini" role="status" aria-live="polite">No supervised readback performed.</div>
             </section>
+            <section class="panel" style="margin-top:14px" aria-label="Build 880 immutable original evidence history">
+              <h4>Build 880 — Immutable Native History &amp; Historical Issuer Grace Monitoring</h4>
+              <p class="mini">Explicitly record a fresh original vendor-native delivery and current refund source check in private append-only history. No synthetic delivery, automatic acknowledgment or payments.</p>
+              <button class="btn" type="button" id="rd880Capture" disabled>Append verified original delivery snapshot</button>
+              <div id="rd880CaptureResult" class="notice mini" role="status" aria-live="polite">No original snapshot recorded.</div>
+              <p class="mini">Append an immutable owner-supervised issuer readback only after actual Cloudflare operator pins have been updated and the original Build 879 old/new proof verifies. Uses the original files, fingerprints and owner note above. Never changes a key.</p>
+              <button class="btn ghost" type="button" id="rd880Receipt" disabled>Append supervised issuer rotation receipt</button>
+              <div id="rd880ReceiptResult" class="notice mini" role="status" aria-live="polite">No original ceremony receipt recorded.</div>
+              <p class="mini">Compare bounded historical receipts to current trusted operator grace expiry. Refresh manually to see upcoming 7-day expiry warnings; no background scheduler is implied.</p>
+              <button class="btn" type="button" id="rd880History" disabled>Review immutable history and grace expiries</button>
+              <div id="rd880HistoryResult" class="notice mini" role="status" aria-live="polite">No private history reviewed.</div>
+              <div id="rd880GraceResult" class="notice mini" role="status" aria-live="polite">Historical issuer grace not checked.</div>
+            </section>
 
           </section>
           <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
@@ -565,5 +578,6 @@
   <script type="module" src="/assets/admin-booking-v877.js"></script>
   <script type="module" src="/assets/admin-booking-v878.js"></script>
   <script type="module" src="/assets/admin-booking-v879.js"></script>
+  <script type="module" src="/assets/admin-booking-v880.js"></script>
 </body>
 </html>
