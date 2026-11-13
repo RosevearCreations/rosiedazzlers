@@ -34,8 +34,8 @@ async function refresh(){
  const value=await request('GET');
  const link=(value.links||[]).find(x=>!x.revoked_at)||null;
  shareId=link?.id||'';
- rd('rdCreateShare870').disabled=Boolean(shareId);
- rd('rdRevokeShare870').disabled=!shareId;
+ rd('rdCreateShare870').disabled=Boolean(shareId)||value.quote_consent_withdrawn===true;
+ rd('rdRevokeShare870').disabled=!shareId||value.quote_consent_withdrawn===true;
  rd('rdShareExpiry870').textContent=link?
   (link.active?'Active until ':'Expired on ')+new Date(link.expires_at).toLocaleString()+
    ' (lost links must be revoked before reissue).':
@@ -62,6 +62,7 @@ async function issue(){
   rd('rdShareUrl870').value=out.share_url;
   message('Link created; no message was sent automatically. Copy it and share only through the agreed channel. Estimate '+cash(out.quote_cad)+'.');
   await refresh();
+  window.dispatchEvent(new CustomEvent('rosie:roadside-share-changed',{detail:{draft_id:draftId}}));
  }catch(e){message(e.message,true);rd('rdCreateShare870').disabled=false;}
  finally{busy=false;}
 }
@@ -79,6 +80,7 @@ async function revoke(){
   rd('rdShareUrl870').value='';shareId='';
   message('Link revoked. Its token no longer grants quote access.');
   await refresh();
+  window.dispatchEvent(new CustomEvent('rosie:roadside-share-changed',{detail:{draft_id:draftId}}));
  }catch(e){message(e.message,true);}
  finally{busy=false;}
 }
@@ -100,6 +102,10 @@ function boot(){
  rd('rdRevokeShare870').addEventListener('click',revoke);
  rd('rdReconcileDeposit870').addEventListener('click',reconcile);
  window.addEventListener('rosie:intake-selected',e=>choose(e.detail?.id||''));
+ window.addEventListener('rosie:roadside-consent-withdrawn',()=>{
+  rd('rdShareUrl870').value='';shareId='';
+  refresh().catch(e=>message(e.message,true));
+ });
  if(rd('rdIntakeId')?.value)choose(rd('rdIntakeId').value);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);

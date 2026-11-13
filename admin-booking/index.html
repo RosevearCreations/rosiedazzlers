@@ -119,6 +119,44 @@
             <div id="rdDepositStatus870" class="notice mini" role="status" aria-live="polite">No canonical booking linked.</div>
             <div id="rdShareStatus" class="notice mini" role="status" aria-live="polite">Share only with customer permission.</div>
           </section>
+          <section class="panel" style="margin-top:14px" aria-label="Build 871 customer quote delivery and refund audit">
+            <h4>Customer Quote Delivery Audit &amp; Consent Withdrawal</h4>
+            <div id="rd871ShareLabel" class="mini">Save a quote and create an active private link above.</div>
+            <p class="mini">Manual attestation only: creating or copying a link does NOT send a message or confirm customer delivery. Choose the event witnessed by staff.</p>
+            <div class="grid2">
+              <label>Delivery channel<select id="rd871Channel">
+                <option value="in_person">Handed to customer in person</option>
+                <option value="email_manual">Email sent outside this screen</option>
+                <option value="sms_manual">Text sent outside this screen</option>
+                <option value="phone_manual">Phone handoff</option>
+                <option value="other_manual">Other manual channel</option>
+              </select></label>
+              <label>Staff-observed event<select id="rd871EventType">
+                <option value="staff_handoff_attested">Staff confirms link handoff</option>
+                <option value="customer_receipt_attested">Customer acknowledged receiving link</option>
+                <option value="delivery_failed">Manual delivery attempt failed</option>
+              </select></label>
+            </div>
+            <label class="checkline"><input id="rd871ConfirmDelivery" type="checkbox"/> I witnessed this specific customer delivery event; do not infer email/SMS provider confirmation</label>
+            <button type="button" class="btn" id="rd871LogDelivery" disabled>Record manual delivery event</button>
+            <details class="panel" style="margin-top:12px">
+              <summary><strong>Customer withdrew consent?</strong></summary>
+              <p class="mini">For a customer's request to stop sharing this quote, revoke all outstanding quote links and remove saved contact details from this draft. A new draft with fresh consent is needed to share again. Existing booking/payment records remain governed by their own retention requirements.</p>
+              <label class="checkline"><input id="rd871ConfirmWithdraw" type="checkbox"/> Customer expressly asked us to withdraw quote-sharing permission</label>
+              <label class="checkline"><input id="rd871ConfirmRevoke" type="checkbox"/> I understand ALL outstanding quote links will be revoked</label>
+              <label class="checkline"><input id="rd871StopCapture" type="checkbox"/> Also stop any FUTURE private photo/video capture for this draft (existing media remains private pending owner retention review)</label>
+              <button type="button" class="btn ghost" id="rd871WithdrawConsent">Withdraw quote consent &amp; revoke links</button>
+            </details>
+            <div id="rd871Consent" class="notice mini" role="status" aria-live="polite">Checking customer sharing permission…</div>
+            <details class="panel" style="margin-top:12px"><summary>Manual delivery / withdrawal history</summary>
+              <div id="rd871AuditTrail" aria-live="polite">No entries yet.</div>
+            </details>
+            <h4 style="margin-top:16px">Refund-Aware Original Deposit Reconciliation</h4>
+            <p class="mini">Recheck the actual linked booking's current Stripe/PayPal source. Show net original deposit only when the provider evidence is complete. Partial refund evidence that cannot be valued precisely stays on HOLD. This does NOT mark an invoice paid or change the customer's booking.</p>
+            <button type="button" class="btn" id="rd871Reconcile" disabled>Recheck current deposit &amp; refunds</button>
+            <div id="rd871NetStatus" class="notice mini" role="status" aria-live="polite">No refund-aware review on record.</div>
+            <div id="rd871Notice" class="notice mini" role="status" aria-live="polite">Ready for an authorized staff review.</div>
+          </section>
           <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
         </details>
         <h3 style="margin-top:20px">Resume a saved request</h3>
@@ -396,5 +434,6 @@
   <script type="module" src="/assets/admin-booking-v868.js"></script>
   <script type="module" src="/assets/admin-booking-v869.js"></script>
   <script type="module" src="/assets/admin-booking-v870.js"></script>
+  <script type="module" src="/assets/admin-booking-v871.js"></script>
 </body>
 </html>
