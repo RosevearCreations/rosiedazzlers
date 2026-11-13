@@ -41,7 +41,7 @@ export async function onRequestGet({request,env}){
     'provider_message_id,event_type,effective_state,signature_verified,received_at'+
     '&dispatch_id=eq.'+encodeURIComponent(dispatch.id)+'&order=received_at.desc&limit=100')
   ]);
-  const consent={...drafts[0],share_revoked_at:shares[0]?.revoked_at??'missing',
+  const consent={...drafts[0],share_revoked_at:shares.length===1?shares[0].revoked_at:'missing',
    share_expires_at:shares[0]?.expires_at??null};
   if(env.ROSIE_ROADSIDE_NATIVE_PROVIDER!=='resend_svix'||!env.RESEND_API_KEY||
      !env.ROSIE_ROADSIDE_RESEND_WEBHOOK_SECRET){
