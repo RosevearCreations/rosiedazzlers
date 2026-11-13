@@ -47,7 +47,8 @@ export async function onRequestGet({request,env}){
    lastCheckAt:snapshot?.checked_at});
   const audit=auditOriginalEscalationSla({policy,cases,nowMs:now});
   return json({ok:true,build:877,policy:{severity:policy.severity,action:policy.action},
-   ...audit,checked_at:new Date(now).toISOString(),
+   ...audit,latest_original_source_check_id:snapshot?.id||null,
+   checked_at:new Date(now).toISOString(),
    original_case_count:cases.filter(x=>['open','reviewed_hold'].includes(x.state)).length,
    live_provider_source_checked:true,financial_clearance:false,
    original_owner_followup_not_auto_approved:true,
