@@ -7,8 +7,11 @@ create table if not exists public.rosie_roadside_native_watch_v880 (
  delivery_state text not null check (delivery_state in ('ORIGINAL_DELIVERY_CURRENT_SNAPSHOT','ORIGINAL_DELIVERY_AGED_REVIEW')),
  source_chain_sha256 text not null check (source_chain_sha256 ~ '^[a-f0-9]{64}$'),
  latest_signed_event_at timestamptz not null,
- owner_sla_state text not null check (owner_sla_state in ('OWNER_SLA_RENEWAL_REQUIRED','CURRENT_SOURCE_ACKNOWLEDGED')),
- source_check_id uuid not null,
+ owner_sla_state text not null check (owner_sla_state in ('OWNER_SLA_RENEWAL_REQUIRED','CURRENT_SOURCE_ACKNOWLEDGED','OWNER_SLA_RENEWAL_HOLD')),
+ source_check_id uuid,
+ constraint rosie880_watch_sla_source_consistency check
+ ((owner_sla_state='OWNER_SLA_RENEWAL_HOLD' and source_check_id is null) or
+  (owner_sla_state<>'OWNER_SLA_RENEWAL_HOLD' and source_check_id is not null)),
  previous_entry_sha256 text check (previous_entry_sha256 ~ '^[a-f0-9]{64}$'),
  entry_sha256 text not null unique check (entry_sha256 ~ '^[a-f0-9]{64}$'),
  observed_at timestamptz not null default clock_timestamp()
@@ -65,10 +68,12 @@ create or replace function public.rosie880_append_native_watch(
 language plpgsql security invoker set search_path='' as $$
 declare prior text; t timestamptz:=clock_timestamp(); digest_value text;
 begin
- if p_id is null or p_draft_id is null or p_source_check_id is null
+ if p_id is null or p_draft_id is null
   or coalesce(length(trim(p_actor)),0) not between 3 and 140
   or p_delivery_state not in ('ORIGINAL_DELIVERY_CURRENT_SNAPSHOT','ORIGINAL_DELIVERY_AGED_REVIEW')
-  or p_sla_state not in ('OWNER_SLA_RENEWAL_REQUIRED','CURRENT_SOURCE_ACKNOWLEDGED')
+  or p_sla_state not in ('OWNER_SLA_RENEWAL_REQUIRED','CURRENT_SOURCE_ACKNOWLEDGED','OWNER_SLA_RENEWAL_HOLD')
+  or (p_sla_state='OWNER_SLA_RENEWAL_HOLD' and p_source_check_id is not null)
+  or (p_sla_state<>'OWNER_SLA_RENEWAL_HOLD' and p_source_check_id is null)
   or p_source_chain_sha256 !~ '^[a-f0-9]{64}$'
   or p_latest_signed_event_at is null or p_latest_signed_event_at>t+interval '5 minutes'
   or not exists(select 1 from public.rosie_detailing_intake_v868 where id=p_draft_id)
