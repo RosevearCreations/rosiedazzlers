@@ -1,6 +1,7 @@
 // Rosie 875: opt-in original Resend-native signed callback, no user/staff claims.
 // Disabled by default. A native signature is checked BEFORE any source lookup.
 import {serviceHeaders,json} from './_lib/staff-auth.js';
+import {nativeProviderEventKey} from './_lib/roadside-native-field-v876.js';
 import {verifyResendSvix,parseResendNativeDelivery,matchOriginalResendDispatch} from './_lib/roadside-native-resend-v875.js';
 const headers={'Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'};
 const fail=(error,status=400)=>json({ok:false,build:875,error,
@@ -42,8 +43,10 @@ export async function onRequestPost({request,env}){
   if(rows.length!==1)return fail('Native message identity is not unique to an original dispatch',409);
   const match=await matchOriginalResendDispatch(mapped,rows[0]);
   if(!match.ok)return fail(match.reason,409);
+  const nativeEventKey=nativeProviderEventKey(proof.native_event_id);
+  if(!nativeEventKey)return fail('Native event ID exceeds bounded original ledger contract',422);
   const payload={p_receipt_id:crypto.randomUUID(),
-   p_dispatch_id:match.dispatch_id,p_provider_event_id:proof.native_event_id,
+   p_dispatch_id:match.dispatch_id,p_provider_event_id:nativeEventKey,
    p_provider_message_id:mapped.provider_email_id,p_event_type:match.event_type};
   try{
    const result=await admit(env,payload);
@@ -58,7 +61,7 @@ export async function onRequestPost({request,env}){
    // Signed retry: accept only the same original, stored provider event ID.
    const prior=await readRows(env,
     'rosie_roadside_provider_receipts_v872?select=dispatch_id,provider_message_id,event_type,effective_state'+
-    '&provider_event_id=eq.'+encodeURIComponent(proof.native_event_id)+'&limit=2');
+    '&provider_event_id=eq.'+encodeURIComponent(nativeEventKey)+'&limit=2');
    if(prior.length===1&&prior[0].dispatch_id===match.dispatch_id&&
       prior[0].provider_message_id===mapped.provider_email_id&&
       prior[0].event_type===match.event_type)
