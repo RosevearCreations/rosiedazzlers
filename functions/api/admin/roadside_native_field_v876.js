@@ -46,7 +46,7 @@ export async function onRequestGet({request,env}){
   if(env.ROSIE_ROADSIDE_NATIVE_PROVIDER!=='resend_svix'||!env.RESEND_API_KEY||
      !env.ROSIE_ROADSIDE_RESEND_WEBHOOK_SECRET){
    const result=await verifyOriginalResendField({dispatch,receipts,email:null,consent});
-   return json({ok:true,build:876,...result,provider_api_queried:false,
+   return json({ok:true,build:876,...result,original_dispatch_id:dispatch.id,provider_api_queried:false,
     reason:'Original Resend native provider account/signing authority not enrolled'},200,headers);
   }
   if(!/^[A-Za-z0-9._:-]{8,160}$/.test(dispatch.provider_message_id||''))
@@ -55,11 +55,11 @@ export async function onRequestGet({request,env}){
    redirect:'error',headers:{Authorization:'Bearer '+env.RESEND_API_KEY}});
   const email=r.ok?await r.json().catch(()=>null):null;
   if(!r.ok||!email)return json({ok:true,build:876,state:'NATIVE_PROVIDER_HOLD',
-   reason:'Original provider live email lookup unavailable',provider_api_queried:true,
+   reason:'Original provider live email lookup unavailable',original_dispatch_id:dispatch.id,provider_api_queried:true,
    original_native_signature_proven:false,provider_delivered:false,
    customer_read_proven:false},200,headers);
   const result=await verifyOriginalResendField({dispatch,receipts,email,consent});
-  return json({ok:true,build:876,...result,provider_api_queried:true,
+  return json({ok:true,build:876,...result,original_dispatch_id:dispatch.id,provider_api_queried:true,
    signed_native_events:receipts.filter(x=>typeof x.provider_event_id==='string'&&
     x.provider_event_id.startsWith('native-resend:')).length,
    original_customer_read_not_attested:true,no_booking_or_payment_mutation:true},200,headers);
