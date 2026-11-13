@@ -17,4 +17,6 @@ jobs:
         with:
           node-version: '22'
       - name: Authenticated original enrollment, owner SLA, and issuer provenance tests
-        run: node scripts/build877_provider_sla_provenance_test.mjs
+        run: |
+          node scripts/build877_provider_sla_provenance_test.mjs
+          node scripts/build780_ci_queue_budget_test.mjs
