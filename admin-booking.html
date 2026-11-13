@@ -205,6 +205,21 @@
               </div>
               <div id="rd875Closure" class="notice mini" role="status" aria-live="polite">Choose a saved original roadside draft.</div>
             </section>
+            <section class="panel" style="margin-top:14px" aria-label="Build 876 owner provider and closure verification">
+              <h4>Build 876 — Original Provider Evidence &amp; Owner Escalation</h4>
+              <p class="mini">Read back signed native provider receipts against the original live provider account. Missing provider enrollment or original signed source remains on HOLD; email delivery does not prove a customer read it.</p>
+              <button type="button" class="btn ghost" id="rd876NativeCheck" disabled>Verify original native provider evidence</button>
+              <div id="rd876NativeStatus" class="notice mini" role="status" aria-live="polite">No original native provider field readback.</div>
+              <p class="mini">Check automated refund drift severity and owner follow-up policy. The scheduled owner alert runs only after the original private monitoring secret is enrolled.</p>
+              <button type="button" class="btn" id="rd876Policy" disabled>Evaluate owner refund escalation</button>
+              <div id="rd876PolicyStatus" class="notice mini" role="status" aria-live="polite">No current escalation assessment.</div>
+              <p class="mini">After downloading a real owner closure dossier above, choose its original JSON file to recheck the digest and independent source references. No current payment clearance is inferred.</p>
+              <label>Original closure JSON file
+                <input type="file" id="rd876ArtifactFile" accept=".json,application/json" disabled />
+              </label>
+              <button type="button" class="btn" id="rd876Revalidate" disabled>Revalidate downloaded owner dossier</button>
+              <div id="rd876ArtifactStatus" class="notice mini" role="status" aria-live="polite">No original artifact reviewed.</div>
+            </section>
 
           </section>
           <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
@@ -487,5 +502,6 @@
   <script type="module" src="/assets/admin-booking-v871.js"></script>
   <script type="module" src="/assets/admin-booking-v872.js"></script>
   <script type="module" src="/assets/admin-booking-v875.js"></script>
+  <script type="module" src="/assets/admin-booking-v876.js"></script>
 </body>
 </html>
