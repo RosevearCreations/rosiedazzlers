@@ -235,6 +235,31 @@
               <button id="rd877Renew" class="btn primary" type="button" disabled>Renew signed closure provenance</button>
               <div id="rd877ProvenanceStatus" class="notice mini" role="status" aria-live="polite">No renewal requested.</div>
             </section>
+            <section class="panel" style="margin-top:14px" aria-label="Build 878 original native event and owner acknowledgment proof">
+              <h4>Build 878 — Original Native Delivery, Owner Acknowledgment &amp; Pinned Proof</h4>
+              <p class="mini">Independently correlate the originally signed webhook events, original dispatch and the live vendor registration and email account readbacks. A delivered email does not establish a customer opened it.</p>
+              <button class="btn ghost" type="button" id="rd878Native" disabled>Verify original signed native delivery</button>
+              <div id="rd878NativeResult" class="notice mini" role="status" aria-live="polite">Select an original roadside request.</div>
+              <p class="mini">Review unresolved original refund cases and their persisted, source-bound owner acknowledgments. Acknowledging an alert is not a refund resolution or deadline extension.</p>
+              <button class="btn" type="button" id="rd878AckAudit" disabled>Review original SLA acknowledgments</button>
+              <div id="rd878AckResult" class="notice mini" role="status" aria-live="polite">No original case reviewed.</div>
+              <label>Original unresolved refund case
+                <select id="rd878AckCase" aria-label="Original refund case"></select>
+              </label>
+              <label>Owner acknowledgment explanation
+                <textarea id="rd878AckNote" rows="2" placeholder="Original source and unresolved issue reviewed; follow-up required." maxlength="500" disabled></textarea>
+              </label>
+              <button class="btn ghost" type="button" id="rd878AckSend" disabled>Persist owner SLA acknowledgment</button>
+              <p class="mini">Verify the original closure JSON plus its signed Build 877 issuer sidecar against independently pinned public keys held in the production environment. Revoked and expired rotation keys stay on HOLD.</p>
+              <label>Original private closure JSON
+                <input id="rd878OriginalDossier" type="file" accept=".json,application/json" disabled />
+              </label>
+              <label>Signed owner issuer sidecar JSON
+                <input id="rd878IssuerSidecar" type="file" accept=".json,application/json" disabled />
+              </label>
+              <button class="btn" type="button" id="rd878VerifyPin" disabled>Verify pinned issuer and rotation</button>
+              <div id="rd878PinResult" class="notice mini" role="status" aria-live="polite">No pinned proof reviewed.</div>
+            </section>
 
           </section>
           <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
@@ -519,5 +544,6 @@
   <script type="module" src="/assets/admin-booking-v875.js"></script>
   <script type="module" src="/assets/admin-booking-v876.js"></script>
   <script type="module" src="/assets/admin-booking-v877.js"></script>
+  <script type="module" src="/assets/admin-booking-v878.js"></script>
 </body>
 </html>

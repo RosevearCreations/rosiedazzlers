@@ -1,0 +1,34 @@
+# Rosie Dazzlers 878 — Original Vendor-Native Webhook Event Delivery Evidence, Persisted Owner SLA Acknowledgment & Pinned Provenance Verification/Rotation Readiness
+
+## Owner acceptance boundaries
+Code/Cloudflare `main` GREEN is distinct from authentic signed Resend webhooks, original field acceptance, live financial clearance, or independent third-party witnessing. This build does **not** send a real email, issue a refund, enroll a vendor or manufacture source evidence. Provider-native capability is disabled unless the original production vendor is explicitly Resend with separate original signing/API credentials.
+
+## 1. Native webhook delivery evidence
+Owner-only GET `/api/admin/roadside_native_delivery_v878?draft_id=<UUID>` requires a real signed-in Admin session and the exact original draft. Independently invokes the Build 877 live Resend webhook registration readback and Build 876 live Resend email readback, then uses the original private `rosie_roadside_provider_receipts_v872` (only `native-resend:` event IDs admitted by the separately HMAC/Svix-verified Build 875 receiver).
+
+The result `ORIGINAL_NATIVE_DELIVERY_CORROBORATED` requires every original source to agree: exact original dispatch/draft, native signed delivery receipt, active consent and nonrevoked share (Build 876), provider email ID, SHA-256 consented recipient hash, live `last_event=delivered`, matching enabled live registration, and latest signed native event delivered. It returns only a redacted SHA-256 chain digest and counts/timestamps; no original customer email, quote link token or raw signature. A missing, duplicated, stale, truncated, conflicting or after-withdrawal source returns HOLD. If Resend's account API redacts the signing secret, `provider_signing_secret_remote_binding_verified=false` remains disclosed separately. This claim never establishes that a customer opened or read the message.
+
+## 2. Persisted owner SLA acknowledgement
+New private RLS table `public.rosie_roadside_sla_acks_v878` and service-role-only security-invoker RPC `rosie878_ack_owner_sla`. Migration `supabase/migrations/20261113000700_build878_owner_sla_acknowledgements.sql`.
+
+- Owner GET `/api/admin/roadside_sla_ack_v878?draft_id=<UUID>` reuses the independently checked original live Stripe/PayPal readback and SLA policy (877). It loads original unresolved refund cases and immutable acknowledged evidence. Shows `OWNER_ACK_REQUIRED`, `OWNER_ACKNOWLEDGED`, or `ACK_SOURCE_HOLD` for each case/source/severity. No original case means no acknowledgment can be represented.
+- Owner POST `/api/admin/roadside_sla_ack_v878` requires a signed-in Admin session, exact same-origin JSON request, exact draft/case/current source check IDs and a 12–500-character explanation. Server independently rechecks live refund source/policy; the service-only SQL RPC locks the original open case and verifies the latest source check before appending an acknowledgement. A unique `(case_id,source_check_id,severity)` key enforces idempotence. A changed source check or severity requires a new acknowledgment; old immutable evidence is preserved.
+- Original case `opened_at` and owner acknowledgment time are written by Postgres; clients cannot supply or backdate the timestamps. Acknowledgment does **not** reset the SLA, resolve an existing case, create a case, send an alert, mutate a payment, or infer owner acceptance of final closure. Only service-role can select/insert rows; no public, anon or authenticated table/RPC grants.
+
+## 3. Independently pinned signature verification and rotation readiness
+Owner POST `/api/admin/roadside_provenance_verify_v878` receives the **original Build 874 closure dossier** plus its **signed Build 877 Ed25519 sidecar**. The server first invokes the original Build 876 independent digest/database source revalidation with signed-in Admin authority. If genuine closure evidence is absent, the request returns HOLD before any cryptographic acceptance.
+
+The verifier then uses **operator-trusted Cloudflare server-side pins**, never just the sidecar-supplied public key:
+- `ROSIE_CLOSURE_TRUSTED_ED25519_KEYS_JSON`: a bounded array of key entries, 1–6 keys, exactly one `active`. Each entry has `status` (`active`, `previous`, `revoked`), `public_jwk` (OKP/Ed25519), and for `previous` an explicit `issued_before` and `verify_until` ISO timestamp. Revoked keys always HOLD; historical previous keys verify only while the predeclared grace window remains valid and the signature's original issuance precedes cutoff. Duplicate keys and multiple active keys are rejected.
+- If the explicit roster is not enrolled, the **existing separately configured** `ROSIE_CLOSURE_ISSUER_ED25519_PUBLIC_JWK` may serve as the sole active operator pin. The uploaded sidecar's `issuer_public_jwk` is never an alternative trust anchor.
+- The verifier validates original artifact digest, exact original draft/closure IDs, signed payload claims, original issue time, independent issuer key fingerprint and native Ed25519 signature against the pinned key. Returns `ACTIVE_PIN_ONLY`, `ACTIVE_PIN_WITH_PREVIOUS_READY`, or `PREVIOUS_PIN_WITHIN_GRACE` only when the signature genuinely verifies. This is an owner-origin pinned key proof, **not** third-party witness, external timestamp or current refund source clearance.
+- No automatic key rotation, issuer signing, key deletion or secret disclosure occurs in this build. Rotations are owner-controlled configuration changes and must be separately supervised.
+
+## UI and tests
+Both `admin-booking.html` and `admin-booking/index.html` now expose native signed-delivery evidence, original open-case SLA acknowledgment, and two-file pinned provenance verification. Original private IDs are visible only to signed-in Admin. Site operators must not distribute closure JSON publicly.
+
+`node scripts/build878_native_ack_pinned_test.mjs` tests valid native event chains, fake generic receipt exclusion, bounced/after-withdrawal/future event HOLD, duplicate and stale original acknowledgment HOLD, and active/previous/revoked or tampered Ed25519 proofs. Protected GitHub workflow also reruns Build 876 and 877 regressions. Do not promote unless feature→`dev` and `dev`→`main` source/business gates pass, and exact final `main` SHA Cloudflare Pages Production plus **Release Health Dashboard GREEN** are independently verified. An applied/matching original Supabase migration is a separate acceptance requirement.
+
+References: https://resend.com/docs/api-reference/webhooks/get-webhook ; https://resend.com/docs/api-reference/webhooks/list-webhooks ; https://supabase.com/docs/guides/database/postgres/row-level-security ; https://docs.github.com/en/actions .
+
+**Next proposed Build 879 — Original Native Delivery Stability Watch, Owner SLA Acknowledgment Renewal and Supervised Pinned-Issuer Rotation Execution.**
