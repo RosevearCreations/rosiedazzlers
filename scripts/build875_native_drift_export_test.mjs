@@ -28,7 +28,7 @@ assert(signedRoute.indexOf('verifyResendSvix(')<signedRoute.indexOf('const rows=
 assert(signedRoute.includes('rosie872_admit_provider_receipt'));
 assert(!signedRoute.includes('NOTIFICATIONS_EMAIL_WEBHOOK_URL'));
 const driftRoute=read('functions/api/admin/roadside_refund_drift_v875.js');
-assert(driftRoute.includes('allowLegacyAdminFallback:false')&&driftRoute.includes("auth.actor?.is_admin!==true"));
+assert(driftRoute.includes('allowLegacyAdminFallback:false')&&driftRoute.includes("access.actor?.is_admin!==true"));
 assert(driftRoute.includes('refundReadback(env,bookingId)'));
 assert(driftRoute.includes('external_notification_sent:false'));
 const proofKey=Buffer.alloc(32,0x37),secret='whsec_'+proofKey.toString('base64');
