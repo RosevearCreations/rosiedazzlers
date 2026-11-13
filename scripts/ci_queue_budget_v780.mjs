@@ -14,12 +14,46 @@ const stamp=x=>x?Date.parse(x):NaN;
 const p95=a=>a[Math.max(0,Math.ceil(.95*a.length)-1)];
 const round=x=>Math.round(x*10)/10;
 
+// A successful completed workflow can retain an obsolete, older queued check
+// record when GitHub replaces a job attempt. Select the newer completed record
+// ONLY when every discarded duplicate has the same check name and an earlier
+// valid start time. A genuine pending, failed, missing or different-named check
+// still blocks release-health measurement.
+export function reconcileCompletedCheckAttempts780(linked,run){
+ const groups=new Map();
+ for(const check of linked){
+  const key=String(check?.name||'');
+  if(!groups.has(key))groups.set(key,[]);
+  groups.get(key).push(check);
+ }
+ const accepted=[];let superseded=0;
+ for(const attempts of groups.values()){
+  if(attempts.length===1){accepted.push(attempts[0]);continue;}
+  if(run?.status!=='completed'||run?.conclusion!=='success')
+   return {ok:false,checks:linked,superseded:0};
+  const passed=attempts.filter(c=>c?.status==='completed'&&c.conclusion==='success'&&
+   Number.isFinite(stamp(c.started_at))&&Number.isFinite(stamp(c.completed_at)));
+  if(!passed.length)return {ok:false,checks:linked,superseded:0};
+  passed.sort((a,b)=>stamp(b.started_at)-stamp(a.started_at)||
+    stamp(b.completed_at)-stamp(a.completed_at));
+  const latest=passed[0];
+  if(attempts.some(c=>c!==latest&&(
+    !Number.isFinite(stamp(c.started_at))||
+    stamp(c.started_at)>stamp(latest.started_at)||
+    !(c.status==='completed'&&c.conclusion==='success'||
+      c.status==='queued'&&c.conclusion==null)
+  )))return {ok:false,checks:linked,superseded:0};
+  accepted.push(latest);superseded+=attempts.length-1;
+ }
+ return {ok:true,checks:accepted,superseded};
+}
+
 export function evaluateCIQueue780({sha,runs,checks,branch='main',budget=BUDGET780}={}){
   const base={schema:'rosie-ci-queue-budget-v780',build:780,sha,
     branch,read_only:true,production_checks_bypassed:false,
     workflow_runs:0,measured_runs:0,pending_runs:0,
     queue_p95_seconds:null,runtime_p95_seconds:null,
-    runtime_max_seconds:null,budget,violations:[],state:'HOLD_UNVERIFIED_CI_EVIDENCE'};
+    runtime_max_seconds:null,superseded_check_records:0,budget,violations:[],state:'HOLD_UNVERIFIED_CI_EVIDENCE'};
   if(!SHA.test(sha||'')||!Array.isArray(runs)||!Array.isArray(checks))return base;
   // Exclude the observer itself; otherwise its own in-progress check would
   // prevent an exact-commit snapshot from ever becoming complete.
@@ -36,11 +70,17 @@ export function evaluateCIQueue780({sha,runs,checks,branch='main',budget=BUDGET7
     const linked=checks.filter(c=>typeof c.details_url==='string'&&
       c.details_url.includes(`/actions/runs/${run.id}/`));
     if(!linked.length){report.violations.push(`MISSING_CHECK_RUN:${run.id}`);continue;}
-    const starts=linked.map(c=>stamp(c.started_at));
-    const ends=linked.map(c=>stamp(c.completed_at));
+    const normalized=reconcileCompletedCheckAttempts780(linked,run);
+    if(!normalized.ok){
+      report.violations.push(`INCOMPLETE_CHECK_TIMELINE:${run.id}`);continue;
+    }
+    report.superseded_check_records+=normalized.superseded;
+    const authoritative=normalized.checks;
+    const starts=authoritative.map(c=>stamp(c.started_at));
+    const ends=authoritative.map(c=>stamp(c.completed_at));
     const created=stamp(run.created_at);
     if(!Number.isFinite(created)||starts.some(x=>!Number.isFinite(x))||
-      ends.some(x=>!Number.isFinite(x))||linked.some(c=>c.status!=='completed')){
+      ends.some(x=>!Number.isFinite(x))||authoritative.some(c=>c.status!=='completed')){
       report.violations.push(`INCOMPLETE_CHECK_TIMELINE:${run.id}`);continue;
     }
     const started=Math.min(...starts),ended=Math.max(...ends);
@@ -106,7 +146,7 @@ export function summary780(result){
     `- Queue p95: ${text(result.queue_p95_seconds)}s / ${result.budget.queue_p95_seconds}s budget.`,
     `- Runtime p95: ${text(result.runtime_p95_seconds)}s / ${result.budget.runtime_p95_seconds}s budget.`,
     `- Runtime max: ${text(result.runtime_max_seconds)}s / ${result.budget.runtime_max_seconds}s budget.`,
-    `- Pending: ${result.pending_runs}; violations: ${result.violations.length?result.violations.join(', '):'none'}.`,
+    `- Pending: ${result.pending_runs}; superseded completed-run duplicate check records: ${result.superseded_check_records||0}; violations: ${result.violations.length?result.violations.join(', '):'none'}.`,
     '- Missing, mismatched, failed or incomplete evidence is not reported as a passing measurement.',
     '- This read-only monitor never cancels a required gate or authorizes a production/custody decision.',''].join('\n');
 }
