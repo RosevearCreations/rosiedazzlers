@@ -24,7 +24,7 @@ assert(ui.includes('URL.createObjectURL')&&ui.includes('URL.revokeObjectURL'));
 assert(ui.includes("e875('rd875Download').disabled=true"));
 const signedRoute=read('functions/api/roadside_native_resend_v875.js');
 assert(signedRoute.includes("ROSIE_ROADSIDE_NATIVE_PROVIDER!=='resend_svix'"));
-assert(signedRoute.indexOf('verifyResendSvix(')<signedRoute.indexOf("readRows(env,"));
+assert(signedRoute.indexOf('verifyResendSvix(')<signedRoute.indexOf('const rows=await readRows(env,'));
 assert(signedRoute.includes('rosie872_admit_provider_receipt'));
 assert(!signedRoute.includes('NOTIFICATIONS_EMAIL_WEBHOOK_URL'));
 const driftRoute=read('functions/api/admin/roadside_refund_drift_v875.js');
