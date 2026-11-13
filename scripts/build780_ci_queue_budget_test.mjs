@@ -31,6 +31,36 @@ assert.equal(missing.state,'HOLD_INCOMPLETE_OR_FAILED_CI_EVIDENCE');
 const failed=verify([{...fixtures[0],run:{...fixtures[0].run,conclusion:'failure'}}]);
 assert.equal(failed.state,'HOLD_INCOMPLETE_OR_FAILED_CI_EVIDENCE');
 assert.equal(verify(fixtures,{sha:'invalid'}).state,'HOLD_UNVERIFIED_CI_EVIDENCE');
+
+const queuedOld={...fixtures[0].check,status:'queued',conclusion:null,
+ started_at:ts(10),completed_at:null,
+ details_url:'https://github.com/example/rosiedazzlers/actions/runs/1/job/998'};
+const replaced=evaluateCIQueue780({sha,runs:[fixtures[0].run],
+ checks:[queuedOld,fixtures[0].check]});
+assert.equal(replaced.state,'WITHIN_BUDGET',
+ 'A provably older queued duplicate on an already successful job must not block release health');
+assert.equal(replaced.superseded_check_records,1);
+const queuedNew={...queuedOld,started_at:ts(30)};
+const unresolvedNew=evaluateCIQueue780({sha,runs:[fixtures[0].run],
+ checks:[fixtures[0].check,queuedNew]});
+assert.equal(unresolvedNew.state,'HOLD_INCOMPLETE_OR_FAILED_CI_EVIDENCE',
+ 'Newer queued record must remain HOLD');
+const unrelatedQueued={...queuedOld,name:'another required job'};
+assert.equal(evaluateCIQueue780({sha,runs:[fixtures[0].run],
+ checks:[fixtures[0].check,unrelatedQueued]}).state,
+ 'HOLD_INCOMPLETE_OR_FAILED_CI_EVIDENCE',
+ 'Different-name incomplete required job must remain HOLD');
+const failedOld={...queuedOld,status:'completed',conclusion:'failure',
+ completed_at:ts(12)};
+assert.equal(evaluateCIQueue780({sha,runs:[fixtures[0].run],
+ checks:[failedOld,fixtures[0].check]}).state,
+ 'HOLD_INCOMPLETE_OR_FAILED_CI_EVIDENCE',
+ 'Duplicate failed checks must not be silently erased');
+const allGoodTwo={...fixtures[0].check,started_at:ts(15),
+ completed_at:ts(18),details_url:queuedOld.details_url};
+assert.equal(evaluateCIQueue780({sha,runs:[fixtures[0].run],
+ checks:[allGoodTwo,fixtures[0].check]}).state,'WITHIN_BUDGET');
+
 const cross=verify([...fixtures,{...create(999,999,25),run:{...create(999,999,25).run,head_sha:'b'.repeat(40)}}]);
 assert.equal(cross.state,'WITHIN_BUDGET');
 const monitored=[
