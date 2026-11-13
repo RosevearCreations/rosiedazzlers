@@ -16,7 +16,9 @@ const watch={ok:true,delivery_watch:{verified:true,state:'ORIGINAL_DELIVERY_CURR
  owner_sla_renewal:{state:'CURRENT_SOURCE_ACKNOWLEDGED',source_check_id:id}};
 assert.equal(eligibleWatch880(watch).verified,true);
 assert.equal(eligibleWatch880({...watch,delivery_watch:{...watch.delivery_watch,verified:false}}).verified,false);
-assert.equal(eligibleWatch880({...watch,owner_sla_renewal:{state:'OWNER_SLA_RENEWAL_HOLD'}}).verified,false);
+assert.equal(eligibleWatch880({...watch,owner_sla_renewal:{state:'OWNER_SLA_RENEWAL_HOLD'}}).verified,true);
+assert.equal(eligibleWatch880({...watch,owner_sla_renewal:{state:'OWNER_SLA_RENEWAL_HOLD'}}).source_check_id,null);
+assert.equal(eligibleWatch880({...watch,owner_sla_renewal:{state:'UNEXPECTED'}}).verified,false);
 assert.equal(eligibleWatch880({...watch,owner_sla_renewal:{state:'OWNER_SLA_RENEWAL_REQUIRED',source_check_id:id}}).verified,true);
 const older={id:'old',observed_at:new Date(t-10000).toISOString(),
  entry_sha256:'b'.repeat(64),previous_entry_sha256:null};
@@ -36,6 +38,7 @@ const roster={ok:true,rows:[{issuer_id:prev,status:'previous',verify_until:expir
  {issuer_id:active,status:'active'}]};
 assert.equal(graceExpiry880({receipts:[receipt],roster,nowMs:t}).state,'OWNER_GRACE_REVIEW_REQUIRED');
 assert.equal(graceExpiry880({receipts:[receipt],roster,nowMs:t+7200000}).receipts[0].state,'GRACE_EXPIRED');
+assert.equal(graceExpiry880({receipts:[{...receipt,grace_verify_until:expiry.replace('Z','+00:00')}],roster,nowMs:t}).receipts[0].state,'GRACE_EXPIRING_7_DAYS');
 assert.equal(graceExpiry880({receipts:[receipt],roster:{ok:false},nowMs:t}).verified,false);
 assert.equal(graceExpiry880({receipts:[receipt],roster:{ok:true,rows:[roster.rows[1]]},nowMs:t}).receipts[0].state,
  'HISTORICAL_PIN_REMOVED_HOLD');
