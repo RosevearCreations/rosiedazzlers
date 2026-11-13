@@ -36,7 +36,7 @@ async function jsonGet(url,headers){
  return data;
 }
 function centsToCad(c){return c===null||c===undefined?null:Number(c)/100;}
-async function refundReadback(env,bookingId){
+export async function refundReadback(env,bookingId){
  const rows=await db(env,'bookings',{query:'?select=id,status,deposit_cents,payment_provider,'+
   'stripe_session_id,stripe_payment_intent_id,paypal_order_id,paypal_capture_id'+
   '&id=eq.'+encodeURIComponent(bookingId)+'&limit=2'});

@@ -190,6 +190,21 @@
               </details>
               <div id="rd872Status" class="notice mini" aria-live="polite" role="status">Choose a saved roadside draft to review.</div>
             </section>
+            <section class="panel" style="margin-top:14px" aria-label="Build 875 provider authenticity and owner evidence export">
+              <h4>Build 875 — Original Provider Proof &amp; Owner Evidence</h4>
+              <p class="mini">Native provider validation is disabled until the original email service is explicitly enrolled. A test or configured key is not an actual signed delivery callback.</p>
+              <button type="button" class="btn ghost" id="rd875CheckNative" disabled>Check native provider enrollment</button>
+              <div id="rd875Native" class="notice mini" role="status" aria-live="polite">Original provider enrollment unverified.</div>
+              <p class="mini">Compare the last saved original booking deposit with a fresh live Stripe/PayPal readback. This is a read-only owner alert; it does not send a message, refund money, or update accounting.</p>
+              <button type="button" class="btn" id="rd875Drift" disabled>Check refund source drift</button>
+              <div id="rd875Refund" class="notice mini" role="status" aria-live="polite">No current live refund comparison performed.</div>
+              <p class="mini">A downloadable private evidence dossier is available only when the independently accepted original roadside pilot closure exists. No customer photos or private quote links appear in this export.</p>
+              <div class="actions">
+                <button type="button" class="btn ghost" id="rd875CheckClosure" disabled>Check owner closure</button>
+                <button type="button" class="btn primary" id="rd875Download" disabled>Download owner evidence (.json)</button>
+              </div>
+              <div id="rd875Closure" class="notice mini" role="status" aria-live="polite">Choose a saved original roadside draft.</div>
+            </section>
 
           </section>
           <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
@@ -471,5 +486,6 @@
   <script type="module" src="/assets/admin-booking-v870.js"></script>
   <script type="module" src="/assets/admin-booking-v871.js"></script>
   <script type="module" src="/assets/admin-booking-v872.js"></script>
+  <script type="module" src="/assets/admin-booking-v875.js"></script>
 </body>
 </html>
