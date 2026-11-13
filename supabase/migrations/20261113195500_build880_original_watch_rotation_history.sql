@@ -39,6 +39,8 @@ alter table public.rosie_roadside_native_watch_v880 enable row level security;
 alter table public.rosie_roadside_rotation_receipts_v880 enable row level security;
 revoke all on public.rosie_roadside_native_watch_v880 from public,anon,authenticated;
 revoke all on public.rosie_roadside_rotation_receipts_v880 from public,anon,authenticated;
+revoke all on public.rosie_roadside_native_watch_v880 from service_role;
+revoke all on public.rosie_roadside_rotation_receipts_v880 from service_role;
 grant select,insert on public.rosie_roadside_native_watch_v880 to service_role;
 grant select,insert on public.rosie_roadside_rotation_receipts_v880 to service_role;
 -- True append-only even under elevated application credentials: no UPDATE or DELETE.
