@@ -1,0 +1,27 @@
+name: Rosie 881 Scheduled Original Native Drift and Issuer Grace Owner Alerts
+on:
+  schedule:
+    - cron: '23 */2 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: rosie881-original-history-owner-alert
+  cancel-in-progress: false
+jobs:
+  original-history-owner-alert:
+    if: github.repository == 'RosevearCreations/rosiedazzlers'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Read bounded original delivery history and deployed issuer grace; escalate redacted owner issue
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ROSIE881_OWNER_WATCH_JOB_SECRET: ${{ secrets.ROSIE881_OWNER_WATCH_JOB_SECRET }}
+        run: node scripts/build881_native_drift_alert_runner.mjs
