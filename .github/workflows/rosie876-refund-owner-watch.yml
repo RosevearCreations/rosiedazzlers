@@ -1,0 +1,27 @@
+name: Rosie 876 Original Refund Drift Owner Watch
+on:
+  schedule:
+    - cron: '17 */2 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: rosie876-refund-drift-owner-watch
+  cancel-in-progress: false
+jobs:
+  original-source-owner-watch:
+    if: github.repository == 'RosevearCreations/rosiedazzlers'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check bounded original refund source and alert private owner
+        run: node scripts/build876_refund_watch_runner.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ROSIE_ROADSIDE_ESCALATION_JOB_SECRET: ${{ secrets.ROSIE_ROADSIDE_ESCALATION_JOB_SECRET }}
