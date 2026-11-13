@@ -21,6 +21,7 @@ export function chainWindow880(rows,kind){
  const hash=kind==='rotation'?'receipt_sha256':'entry_sha256';
  const previous=kind==='rotation'?'previous_receipt_sha256':'previous_entry_sha256';
  if(!Array.isArray(rows)||rows.length>50)return hold880('Original custody history unavailable or truncated');
+ if(rows.length===0)return hold880('No original persisted custody records yet');
  const ids=new Set();
  for(const r of rows){
   if(!/^[a-f0-9]{64}$/.test(r?.[hash]||'')||ids.has(r.id)||
@@ -39,6 +40,7 @@ export function chainWindow880(rows,kind){
 export function graceExpiry880({receipts=[],roster,nowMs=Date.now()}={}){
  if(!roster?.ok)return hold880('Operator-trusted active/previous issuer roster unavailable');
  if(!Array.isArray(receipts)||receipts.length>50)return hold880('Historical receipt window incomplete');
+ if(receipts.length===0)return hold880('No original supervised rotation receipts are persisted');
  const current=roster.rows.filter(k=>k.status==='active');
  if(current.length!==1)return hold880('Exactly one operator active issuer required');
  const states=receipts.map(r=>{
