@@ -1,0 +1,20 @@
+name: Rosie Dazzlers 877 Original Provider Enrollment and Issuer Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build877-original-enrollment-sla-provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Authenticated original enrollment, owner SLA, and issuer provenance tests
+        run: node scripts/build877_provider_sla_provenance_test.mjs

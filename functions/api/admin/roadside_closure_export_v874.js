@@ -37,7 +37,7 @@ export async function onRequestGet({request,env}){
     'id,draft_id,state,issued_at,completed_at,media_id,owner_accepted_by,owner_accepted_at','id',closure.device_challenge_id),
    one(env,'rosie_roadside_net_deposit_checks_v871',
     'id,draft_id,booking_id,provider,source,state,gross_cents,refunded_cents,net_cents,net_verified,checked_at','id',closure.net_check_id),
-   db(env,'rosie_roadside_provider_receipts_v872?select=id,dispatch_id,provider_event_id,event_type,effective_state,received_at,signature_verified'+
+   db(env,'rosie_roadside_provider_receipts_v872?select=id,dispatch_id,provider_event_id,provider_message_id,event_type,effective_state,received_at,signature_verified'+
     '&dispatch_id=eq.'+encodeURIComponent(closure.dispatch_id)+'&order=received_at.desc&limit=100'),
    db(env,'rosie_roadside_refund_cases_v872?select=id,state,issue_code,opened_at,closed_at,closed_source_check_id'+
     '&draft_id=eq.'+encodeURIComponent(draftId)+'&order=opened_at.desc&limit=100')

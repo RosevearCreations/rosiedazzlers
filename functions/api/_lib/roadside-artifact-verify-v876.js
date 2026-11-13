@@ -50,7 +50,9 @@ export function compareOriginalClosureEvidence(artifact,original){
   !exists(original.receipts)||!exists(original.cases))return false;
  for(const r of artifact.independent_provider_receipts){
   const source=original.receipts.find(x=>x.id===r.id);
-  if(!source||!same(r,source,receipt))return false;
+  const receiptFields=Object.hasOwn(r,'provider_message_id')?receipt:
+   receipt.filter(k=>k!=='provider_message_id');
+  if(!source||!same(r,source,receiptFields))return false;
  }
  for(const c of artifact.refund_case_history){
   const source=original.cases.find(x=>x.id===c.id);
