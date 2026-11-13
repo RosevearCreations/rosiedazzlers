@@ -260,6 +260,25 @@
               <button class="btn" type="button" id="rd878VerifyPin" disabled>Verify pinned issuer and rotation</button>
               <div id="rd878PinResult" class="notice mini" role="status" aria-live="polite">No pinned proof reviewed.</div>
             </section>
+            <section class="panel" style="margin-top:14px" aria-label="Build 879 original native stability and supervised issuer rotation">
+              <h4>Build 879 — Delivery Watch, Current SLA Renewal &amp; Supervised Issuer Rotation</h4>
+              <p class="mini">Read current original native signed-delivery and source-bound refund evidence. Historical stability is not established by one successful check.</p>
+              <button class="btn" type="button" id="rd879Watch" disabled>Run native delivery and owner SLA watch</button>
+              <div id="rd879WatchResult" class="notice mini" role="status" aria-live="polite">Select a saved roadside request.</div>
+              <div id="rd879AckResult" class="notice mini" role="status" aria-live="polite">Current source-bound owner acknowledgment not reviewed.</div>
+              <p class="mini">Supervised rotation readback ONLY after an authorized operator updates Cloudflare production public-key pins. Use the original Build 878 closure/sidecar file fields above. This tool never rotates production secrets or authorizes refund closure.</p>
+              <label>Previous independently pinned public key fingerprint
+                <input id="rd879OldKey" type="text" autocomplete="off" placeholder="ed25519-sha256:..." maxlength="130" disabled />
+              </label>
+              <label>New active independently pinned public key fingerprint
+                <input id="rd879NewKey" type="text" autocomplete="off" placeholder="ed25519-sha256:..." maxlength="130" disabled />
+              </label>
+              <label>Original owner supervised review note
+                <textarea id="rd879OwnerNote" rows="2" maxlength="500" placeholder="We independently verified the deployed new active pin and the grace period for original historical proofs." disabled></textarea>
+              </label>
+              <button class="btn ghost" type="button" id="rd879Rotation" disabled>Verify supervised post-rotation operator pins</button>
+              <div id="rd879RotationResult" class="notice mini" role="status" aria-live="polite">No supervised readback performed.</div>
+            </section>
 
           </section>
           <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
@@ -545,5 +564,6 @@
   <script type="module" src="/assets/admin-booking-v876.js"></script>
   <script type="module" src="/assets/admin-booking-v877.js"></script>
   <script type="module" src="/assets/admin-booking-v878.js"></script>
+  <script type="module" src="/assets/admin-booking-v879.js"></script>
 </body>
 </html>
