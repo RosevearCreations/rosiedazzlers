@@ -146,7 +146,9 @@ for needle in ["final_balance_checkout_create", "payment_recovery_readiness", 'm
 if "min-height:44px" not in admin_page or "grid-template-columns:1fr" not in customer_page:
     errors.append("Build 320 is missing required touch/mobile layout safeguards")
 
-# Retained Build 320 was source-only. Only match its actual build marker,\n# never unrelated later migration timestamps that happen to contain 320.\nmigrations = [p for p in ROOT.rglob("*.sql") if re.search(r"(?:^|_)build320(?:_|\.)", p.name, re.I)]
+# Retained Build 320 was source-only. Only match its actual build marker,
+# never unrelated later migration timestamps that happen to contain 320.
+migrations = [p for p in ROOT.rglob("*.sql") if re.search(r"(?:^|_)build320(?:_|\.)", p.name, re.I)]
 if migrations:
     errors.append("Build 320 must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
 
