@@ -69,3 +69,5 @@ node --check assets/admin-booking-v869.js
 node scripts/build869_roadside_quick_quote_test.mjs
 
 node scripts/build870_consent_roadside_quote_test.mjs
+
+node scripts/build871_delivery_consent_refund_test.mjs

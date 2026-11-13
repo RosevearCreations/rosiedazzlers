@@ -39,9 +39,9 @@ export async function onRequest({request,env}){
   if(!s||s.revoked_at||Date.parse(s.expires_at)<=Date.now())
    return fail('Quote link is no longer available. Please request a new link.',410);
   const d=await query(env,'rosie_detailing_intake_v868',
-   'id,status,expires_at,contact_permission,quote_cents,linked_booking_id',
+   'id,status,expires_at,contact_permission,quote_cents,linked_booking_id,quote_share_withdrawn_at',
    'id=eq.'+encodeURIComponent(s.draft_id));
-  if(!d||d.status!=='intake_draft'||d.contact_permission!==true||
+  if(!d||d.status!=='intake_draft'||d.quote_share_withdrawn_at||d.contact_permission!==true||
       Date.parse(d.expires_at)<=Date.now()||d.quote_cents!==s.quote_snapshot_cents)
    return fail('This quote changed or expired. Please request a fresh link.',410);
   const params=new URLSearchParams();
