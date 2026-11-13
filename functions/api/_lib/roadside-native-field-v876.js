@@ -22,7 +22,8 @@ export async function verifyOriginalResendField({dispatch,receipts,email,consent
     !dispatch.receipt_at||!dispatch.provider_accepted_at)
   return hold('No originally accepted and provider-confirmed dispatch to revalidate');
  if(!consent||consent.contact_permission!==true||consent.quote_share_withdrawn_at||
-    consent.share_revoked_at||Date.parse(consent.share_expires_at)<=nowMs)
+    consent.share_revoked_at||!Number.isFinite(Date.parse(consent.share_expires_at))||
+    Date.parse(consent.share_expires_at)<=nowMs)
   return hold('Original quote sharing consent or link is no longer active');
  if(!Array.isArray(receipts)||!receipts.length||receipts.length>=100)
   return hold('Original signed native receipt timeline is unavailable or incomplete');
