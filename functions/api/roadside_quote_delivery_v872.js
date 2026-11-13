@@ -42,6 +42,7 @@ export async function onRequestPost({request,env}){
  try{payload=JSON.parse(body)}catch{return fail('JSON payload required');}
  const dispatchId=safe(payload.dispatch_id,80),eventId=safe(payload.provider_event_id),
   reference=safe(payload.provider_message_id),event=safe(payload.event_type,32);
+ if(eventId.startsWith('native-resend:'))return fail('Reserved native provider event identity',401);
  if(!isUuid(dispatchId)||!(/^[A-Za-z0-9._:-]{8,160}$/.test(eventId))||
    !(/^[A-Za-z0-9._:-]{8,160}$/.test(reference))||
    !['delivered','failed','bounced'].includes(event))return fail('Invalid provider receipt reference');
