@@ -32,7 +32,7 @@ export function reviewRenewal879(audit){
       reason:'Original acknowledgment custody is conflicting or unavailable'};
   const required=audit.cases.filter(x=>x.state==='OWNER_ACK_REQUIRED').length;
   return {state:required?'OWNER_SLA_RENEWAL_REQUIRED':'CURRENT_SOURCE_ACKNOWLEDGED',
-    renewal_required:required>0,required_cases:required,open_cases:audit.cases.length,
+    renewal_required:required>0,required_cases:required,open_cases:audit.cases.length,source_check_id:audit.source_check_id,
     original_sla_state:audit.original_sla_state,original_deadline_unchanged:true,
     automatic_acknowledgment:false,no_refund_or_case_mutation:true};
 }
