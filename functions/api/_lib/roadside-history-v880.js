@@ -8,13 +8,14 @@ export function eligibleWatch880(watch){
   !['ORIGINAL_DELIVERY_CURRENT_SNAPSHOT','ORIGINAL_DELIVERY_AGED_REVIEW'].includes(d.state)||
   !/^[a-f0-9]{64}$/.test(d.source_chain_sha256||'')||
   !Number.isFinite(Date.parse(d.latest_original_signed_event_at))||
-  !['OWNER_SLA_RENEWAL_REQUIRED','CURRENT_SOURCE_ACKNOWLEDGED'].includes(a?.state)||
-  !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(a?.source_check_id||''))
+  !['OWNER_SLA_RENEWAL_REQUIRED','CURRENT_SOURCE_ACKNOWLEDGED','OWNER_SLA_RENEWAL_HOLD'].includes(a?.state)||
+  (a.state!=='OWNER_SLA_RENEWAL_HOLD'&&
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(a?.source_check_id||'')))
   return hold880('Current original provider and exact refund source were not independently revalidated');
  return {state:'ORIGINAL_SOURCE_ELIGIBLE_FOR_APPEND',verified:true,
   delivery_state:d.state,source_chain_sha256:d.source_chain_sha256,
   latest_signed_event_at:d.latest_original_signed_event_at,
-  owner_sla_state:a.state,source_check_id:a.source_check_id};
+  owner_sla_state:a.state,source_check_id:a.state==='OWNER_SLA_RENEWAL_HOLD'?null:a.source_check_id};
 }
 export function chainWindow880(rows,kind){
  const hash=kind==='rotation'?'receipt_sha256':'entry_sha256';
@@ -44,7 +45,8 @@ export function graceExpiry880({receipts=[],roster,nowMs=Date.now()}={}){
   const pin=roster.rows.find(k=>k.issuer_id===r.previous_issuer_key_id);
   let state='HISTORICAL_PIN_REMOVED_HOLD';
   if(pin?.status==='revoked')state='HISTORICAL_PIN_REVOKED_HOLD';
-  else if(pin?.status==='previous'&&pin.verify_until===r.grace_verify_until){
+  else if(pin?.status==='previous'&&Number.isFinite(Date.parse(pin.verify_until))&&
+   Date.parse(pin.verify_until)===Date.parse(r.grace_verify_until)){
    const left=Date.parse(r.grace_verify_until)-nowMs;
    state=!Number.isFinite(left)?'INVALID_GRACE_HOLD':left<=0?'GRACE_EXPIRED':
     left<=604800000?'GRACE_EXPIRING_7_DAYS':'GRACE_WITHIN_WINDOW';
