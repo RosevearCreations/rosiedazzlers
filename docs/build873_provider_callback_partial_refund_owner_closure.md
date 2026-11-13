@@ -1,0 +1,18 @@
+# Rosie Dazzlers 873 — Original Provider Callback Enrollment, Partial-Refund Source Confirmation & Owner Roadside Pilot Closure
+
+## Contract
+- Original Cloudflare Functions callback remains `POST /api/roadside_quote_delivery_v872`. Configure the provider's own webhook mapping using the dedicated `ROSIE_QUOTE_RECEIPT_WEBHOOK_SECRET` (32+ characters), independent from outbound credentials. Signature: `sha256=HMAC_SHA256(secret, timestamp + "." + raw_body)`, headers `x-rosie-quote-timestamp`, `x-rosie-quote-signature`. Provider must send original `dispatch_id`, stable `provider_event_id`, exact `provider_message_id` and `event_type`. Never create test receipts in production. Setting a secret alone does **not** prove provider configuration or callback receipt.
+- Owner GET `/api/admin/roadside_pilot_v873?draft_id=<original UUID>` requires authenticated Admin session and shows source-bound candidate IDs and gates. `callback_external_provider_registration_verified:false` intentionally means external enrollment is **not proven by source code**; actual signed receipt is required.
+- Stripe partial refunds use the original Build 871 live charge and complete refund ledger; incomplete, pending or inconsistent source proof remains HOLD. PayPal `PARTIALLY_REFUNDED` remains HOLD until exact provider refund amount can be independently verified; do not fabricate a net amount.
+- POST to the same private endpoint: `{action:"close_original_roadside_pilot",draft_id,dispatch_id,device_challenge_id,net_check_id,owner_note,confirm_original_provider_callback_witnessed:true,confirm_original_device_owner_witnessed:true,confirm_current_refund_source_reviewed:true}`. Protected Supabase RPC rechecks under the original draft lock: live consent, original quote not revoked, actual independently HMAC-admitted provider-delivered event, separately accepted physical-device field proof, latest exact booking provider readback <=15 minutes, arithmetic and known source, and **zero open/refund HOLD cases**. Unique closure row prevents repeat closure.
+- Closure is a witnessed operational pilot decision, **not** a payment/refund operation, customer message read/open acknowledgement, new booking, or manufacturer device attestation.
+- No new payment or storage provider. Apply `supabase/migrations/20261113000600_build873_original_roadside_pilot_closure.sql` **after** 868–872 migrations in the original Rosie Supabase project. Keep service-role key private. No direct anon/authenticated access to closure table or RPC.
+
+## Release and pilot gate
+1. Check source tests (Builds 868–872), new endpoint syntax, SQL migration review, protected dev and main CI and exact commit SHA.
+2. Provision dedicated webhook signing key and native provider callback mapping on the ORIGINAL provider account; verify signed fresh provider event arrives from original provider and correlates with stored dispatch/message identity. Avoid duplicate dispatch attempts.
+3. On actual roadside device capture a new consented private photo/video and obtain separate Admin acceptance. Refresh provider refund readback from the original booking. Partial PayPal amounts remain HOLD until separately supported by trustworthy source logic.
+4. Review current GET gate; close only with the three explicit owner confirmations and reason. Keep HOLD if any prerequisite is missing.
+5. Confirm exact final `main` SHA deployed by Cloudflare, original Functions-aware business acceptance and live production health before stating `Production = GREEN`.
+
+Next proposed Build 874 — Native Provider Webhook Mapping Self-Test, PayPal Partial-Refund Transaction Ledger Verification & Owner Closure Evidence Export.
