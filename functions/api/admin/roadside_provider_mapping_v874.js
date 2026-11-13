@@ -36,6 +36,10 @@ export async function onRequest({request,env}){
     independent_provider_receipt_observed:dispatches.some(x=>x.state==='delivery_confirmed'&&x.receipt_at),
     candidate_dispatch_count:dispatches.length,
     mapping_contract:'rosie_notification_adapter_v1',
+    native_adapter_enabled:env.ROSIE_ROADSIDE_NATIVE_PROVIDER==='resend_svix'&&
+     /^whsec_[A-Za-z0-9+/]+={0,2}$/.test(env.ROSIE_ROADSIDE_RESEND_WEBHOOK_SECRET||''),
+    native_adapter_kind:env.ROSIE_ROADSIDE_NATIVE_PROVIDER==='resend_svix'?'resend_svix':'not_enrolled',
+    native_external_provider_registration_verified:false,
     dry_run_only:true,no_provider_request_made:true,no_receipt_written:true},200,h);
   }
   if(body.action!=='dry_run_native_receipt_mapping'||body.confirm_no_customer_send===false)
