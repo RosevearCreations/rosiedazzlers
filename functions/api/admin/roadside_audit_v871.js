@@ -3,6 +3,7 @@
 import { requireStaffAccess,serviceHeaders,json,isUuid } from '../_lib/staff-auth.js';
 import { onRequestGet as verifyCanonicalBooking } from '../booking_confirmation.js';
 import { assessStripeRefunds,assessPaypalCapture,holdResult } from '../_lib/roadside-refund-871.js';
+import {assessPaypalPartialRefundLedger} from '../_lib/roadside-paypal-refund-v874.js';
 const headers={ 'Cache-Control':'no-store','Referrer-Policy':'no-referrer' };
 const txt=(x,n=180)=>String(x??'').trim().slice(0,n);
 const fail=(error,status=400)=>json({ok:false,build:871,error,
@@ -106,8 +107,27 @@ async function refundReadback(env,bookingId){
   ]);
   if(!order||order.id!==booking.paypal_order_id)
    return {...base,...holdResult('PayPal original order readback unavailable','paypal_live')};
-  const result=assessPaypalCapture({order,capture,bookingId,
+  let result=assessPaypalCapture({order,capture,bookingId,
    captureId:booking.paypal_capture_id,expectedCents:booking.deposit_cents});
+  if(capture?.status==='PARTIALLY_REFUNDED'){
+   // Original saved refund IDs are leads, never the financial authority.
+   // Only PayPal's live individual transactions plus cumulative refund amount
+   // may unlock an exact net value. No refund/posting action is performed.
+   const refundRows=await db(env,'quote_deposit_refund_records',{
+    query:'?select=id,booking_id,provider,provider_refund_id,refund_amount_cents,currency'+
+     '&booking_id=eq.'+encodeURIComponent(bookingId)+
+     '&provider=eq.paypal&order=created_at.asc&limit=25'
+   });
+   let liveRefunds=[];
+   if(refundRows.length>0&&refundRows.length<25&&
+      refundRows.every(x=>/^[A-Za-z0-9._:-]{8,160}$/.test(x.provider_refund_id||''))){
+    liveRefunds=await Promise.all(refundRows.map(x=>
+     jsonGet(root+'/v2/payments/refunds/'+encodeURIComponent(x.provider_refund_id),headers)));
+   }
+   result=assessPaypalPartialRefundLedger({order,capture,bookingId,
+    captureId:booking.paypal_capture_id,expectedCents:booking.deposit_cents,
+    refundRows,liveRefunds});
+  }
   return {...base,...result,net_cad:centsToCad(result.net_cents),
    refunded_cad:centsToCad(result.refunded_cents),
    note:result.note||result.reason||null};
