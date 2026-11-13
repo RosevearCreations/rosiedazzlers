@@ -156,6 +156,41 @@
             <button type="button" class="btn" id="rd871Reconcile" disabled>Recheck current deposit &amp; refunds</button>
             <div id="rd871NetStatus" class="notice mini" role="status" aria-live="polite">No refund-aware review on record.</div>
             <div id="rd871Notice" class="notice mini" role="status" aria-live="polite">Ready for an authorized staff review.</div>
+            <section class="panel" aria-label="Build 872 original provider and device acceptance" style="margin-top:14px">
+              <h4>Build 872 — Provider Delivery, Refund Exceptions &amp; Device Test</h4>
+              <p class="mini">Provider-accepted is NOT customer delivered. The customer must agree to this one-time send, and an independently signed provider callback must report delivery. No automatic retry.</p>
+              <label class="checkline"><input id="rd872ConsentSend" type="checkbox"/> Customer specifically agreed to receive this estimate using the saved email address</label>
+              <label class="checkline"><input id="rd872NoRetry" type="checkbox"/> I understand this is one attempt per private quote link; an unknown result must be reviewed, not sent again automatically</label>
+              <button type="button" class="btn" id="rd872Send" disabled>Send original quote through configured email provider</button>
+              <pre id="rd872ProviderStatus" class="notice mini" style="white-space:pre-wrap">No provider receipt yet.</pre>
+              <details class="panel" style="margin-top:12px">
+                <summary><strong>Owner refund exception review</strong></summary>
+                <p class="mini">Recheck the original deposit above first. Open a review for a HOLD, partial refund or full refund. Owner closure requires a fresh exact-source net-deposit check, never a refund mutation.</p>
+                <button type="button" class="btn" id="rd872OpenCase" disabled>Open original deposit exception</button>
+                <pre id="rd872CaseStatus" class="mini" style="white-space:pre-wrap">No exceptions.</pre>
+                <label>Owner review reason<textarea id="rd872OwnerReason" rows="3" placeholder="Reason and source evidence reviewed (do not enter personal payment details)"></textarea></label>
+                <div class="actions">
+                  <button type="button" class="btn ghost" id="rd872ReviewHold" disabled>Record owner HOLD review</button>
+                  <button type="button" class="btn" id="rd872CloseCase" disabled>Close only with fresh verified source</button>
+                </div>
+              </details>
+              <details class="panel" style="margin-top:12px">
+                <summary><strong>Original roadside device field test</strong></summary>
+                <p class="mini">This is a real-device workflow, NOT a simulated CI acceptance. Start on the device being tested, take and privately save a NEW photo/video above, then complete the cryptographic browser challenge within five minutes in the same tab. Owner sign-off remains separate.</p>
+                <label class="checkline"><input id="rd872PhysicalDevice" type="checkbox"/> We have the original physical roadside device with its camera present</label>
+                <div class="actions">
+                  <button type="button" class="btn" id="rd872StartDevice">Start 5-minute device challenge</button>
+                  <button type="button" class="btn ghost" id="rd872CompleteDevice">Verify new private media &amp; browser signature</button>
+                </div>
+                <pre id="rd872DeviceStatus" class="mini" style="white-space:pre-wrap">No device field proof recorded.</pre>
+                <label class="checkline"><input id="rd872OwnerObserved" type="checkbox"/> Owner physically witnessed this device and camera in use</label>
+                <label class="checkline"><input id="rd872OwnerPrivateMedia" type="checkbox"/> Owner reviewed the newly saved original private media evidence</label>
+                <button type="button" class="btn" id="rd872OwnerAccept" disabled>Owner accept witnessed original-device test</button>
+                <p class="mini">This proves a fresh browser challenge plus private media and recorded owner observation; it does not certify hardware identity, send a quote or make a booking.</p>
+              </details>
+              <div id="rd872Status" class="notice mini" aria-live="polite" role="status">Choose a saved roadside draft to review.</div>
+            </section>
+
           </section>
           <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
         </details>
@@ -435,5 +470,6 @@
   <script type="module" src="/assets/admin-booking-v869.js"></script>
   <script type="module" src="/assets/admin-booking-v870.js"></script>
   <script type="module" src="/assets/admin-booking-v871.js"></script>
+  <script type="module" src="/assets/admin-booking-v872.js"></script>
 </body>
 </html>
