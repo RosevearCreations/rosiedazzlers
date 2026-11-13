@@ -24,13 +24,16 @@ function originalUpLink(refund,captureId){
 export function assessPaypalPartialRefundLedger({order,capture,bookingId,captureId,expectedCents,refundRows,liveRefunds}={}){
  const base=assessPaypalCapture({order,capture,bookingId,captureId,expectedCents});
  if(capture?.status!=='PARTIALLY_REFUNDED')return base;
+ const unit=Array.isArray(order?.purchase_units)?order.purchase_units[0]:null;
  if(!safe(expectedCents)||expectedCents<2||!ref(captureId)||
+  !unit||unit.reference_id!==bookingId||unit.custom_id!==bookingId||
+  capture?.id!==captureId||money(capture.amount)!==expectedCents||
   base?.state!=='refund_review_hold')return HOLD('Original PayPal capture authority mismatch');
- if(!Array.isArray(refundRows)||!refundRows.length||refundRows.length>=100||
+ if(!Array.isArray(refundRows)||!refundRows.length||refundRows.length>=25||
   !Array.isArray(liveRefunds)||liveRefunds.length!==refundRows.length)
   return HOLD('Complete original PayPal refund ID ledger not available');
- const unit=order.purchase_units[0];
- const orderCapture=unit.payments.captures.find(x=>x.id===captureId);
+ const matches=Array.isArray(unit.payments?.captures)?unit.payments.captures.filter(x=>x?.id===captureId):[];
+ const orderCapture=matches.length===1?matches[0]:null;
  if(!orderCapture||orderCapture.status!=='PARTIALLY_REFUNDED')
   return HOLD('PayPal order and capture refund states differ');
  const captureTotal=money(capture.seller_receivable_breakdown?.total_refunded_amount);
