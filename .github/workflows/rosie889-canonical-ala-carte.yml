@@ -1,0 +1,21 @@
+name: Rosie 889 Canonical À La Carte Booking Contract
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+permissions:
+  contents: read
+jobs:
+  standalone-checkout-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/build889_ala_carte_checkout.test.mjs
+      - run: node scripts/build888_booking_paths_test.mjs
+      - run: node --check assets/ala-carte-booking-v889.js
+      - run: node --check functions/api/checkout.js
