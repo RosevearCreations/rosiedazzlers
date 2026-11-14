@@ -1,0 +1,22 @@
+name: Rosie 882 Signed Scheduler/Anchor/Acknowledgment Source Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  signed-enrollment-anchor-owner-ack-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Build 882 and retained original 881 evidence gates
+        run: |
+          node scripts/build882_enrollment_anchor_ack_test.mjs
+          node scripts/build881_scheduled_anchor_grace_test.mjs

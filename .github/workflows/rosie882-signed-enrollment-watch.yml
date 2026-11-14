@@ -1,0 +1,48 @@
+name: Rosie 882 Signed Enrollment, Independent Anchor Readback and Owner Grace ACK
+on:
+  schedule:
+    - cron: '55 */2 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: read
+concurrency:
+  group: rosie882-signed-enrollment-readback-continuity
+  cancel-in-progress: false
+jobs:
+  owner-grace-ack:
+    if: github.repository == 'RosevearCreations/rosiedazzlers'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original signed enrollment and current owner grace ACK
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          ROSIE882_MODE: watch
+          ROSIE881_OWNER_WATCH_JOB_SECRET: ${{ secrets.ROSIE881_OWNER_WATCH_JOB_SECRET }}
+          ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK: ${{ secrets.ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK }}
+        run: node scripts/build882_enrollment_anchor_ack.mjs
+  external-anchor-reconciliation:
+    if: github.repository == 'RosevearCreations/rosiedazzlers'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify signed enrollment and all exact original external anchors
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          ROSIE882_MODE: anchor
+          ROSIE881_ANCHOR_JOB_SECRET: ${{ secrets.ROSIE881_ANCHOR_JOB_SECRET }}
+          ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK: ${{ secrets.ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK }}
+        run: node scripts/build882_enrollment_anchor_ack.mjs
