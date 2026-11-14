@@ -90,7 +90,7 @@ const late=monitorSchedulerSla885(matureSource.filter(x=>
  Date.parse(x.recorded_at)<now-6*3600000),runs,{now});
 assert.equal(late.horizon['4h'],'SCHEDULER_SLA_HOLD');
 const broken=monitorSchedulerSla885(matureSource,
- runs.map(r=>r.id===50360?{...r,conclusion:'failure'}:r),{now});
+ runs.map(r=>r.id>=50359?{...r,conclusion:'failure'}:r),{now});
 assert.equal(broken.horizon['4h'],'SCHEDULER_SLA_HOLD');
 const noDual=monitorSchedulerSla885(matureSource.filter(x=>x.mode==='watch'),runs,{now});
 assert.equal(noDual.horizon['24h'],'SCHEDULER_SLA_HOLD');
