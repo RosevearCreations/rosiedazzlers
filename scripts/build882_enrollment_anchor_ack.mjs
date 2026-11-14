@@ -3,7 +3,7 @@
 import {randomBytes,createPrivateKey,createPublicKey,sign,createHash} from 'node:crypto';
 import {github881,originalIssue881,repo881} from './build881_owner_issue_client.mjs';
 import {safeReport881} from './build881_native_drift_alert_runner.mjs';
-import {keyId881,verifyAnchor881,parseAnchorComment881} from './build881_independent_anchor_runner.mjs';
+import {keyId881,verifyAnchor881,parseAnchorComment881,anchorComment881} from './build881_independent_anchor_runner.mjs';
 const root='https://rosiedazzlers.ca/api/';
 const watchTitle='[Rosie 881] Original signed native history / issuer grace owner alert';
 const anchorTitle='[Rosie 881] Independently signed original rotation digest anchors';
@@ -43,7 +43,7 @@ export function reconcileExternalAnchors882(d,comments){
   if(!c?.body?.includes('rosie881-rotation-anchor:'))continue;
   const item=parseAnchorComment881(c.body);
   if(!item||!verifyAnchor881(item,d.external_witness_public_jwk)||
-    !c.body.startsWith('<!-- rosie881-rotation-anchor:'+item.payload.receipt_sha256+' -->'))
+    c.body!==anchorComment881(item.payload,item.signature_ed25519))
    throw Error('EXTERNAL_SIGNATURE_OR_READBACK_HOLD');
   const digest=item.payload.receipt_sha256;
   if(!digests.has(digest)||seen.has(digest))throw Error('UNEXPECTED_OR_DUPLICATE_EXTERNAL_ANCHOR_HOLD');
