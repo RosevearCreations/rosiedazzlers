@@ -1,0 +1,31 @@
+name: Rosie 885 Original Owner-Gated Closure Receipt Renewal
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+  issues: write
+concurrency:
+  group: rosie885-original-owner-closure-renewal
+  cancel-in-progress: false
+jobs:
+  original-owner-supervised-renewal:
+    if: github.repository == 'RosevearCreations/rosiedazzlers' && github.ref == 'refs/heads/main' && github.actor == 'RosevearCreations'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Revalidate original signed chain, 884 owner closure, current ACK and anchors before signing renewal
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          ROSIE881_OWNER_WATCH_JOB_SECRET: ${{ secrets.ROSIE881_OWNER_WATCH_JOB_SECRET }}
+          ROSIE881_ANCHOR_JOB_SECRET: ${{ secrets.ROSIE881_ANCHOR_JOB_SECRET }}
+          ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK: ${{ secrets.ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK }}
+        run: node scripts/build885_owner_closure_renewal.mjs
