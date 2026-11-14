@@ -95,7 +95,7 @@ assert.equal((await closureDecision884({...eligible,approvalComments:[{...approv
 assert.equal((await closureDecision884({...eligible,ownerAck:{state:'OWNER_ACK_RENEWAL_HOLD'}})).close,false);
 assert.equal((await closureDecision884({...eligible,anchors:{state:'EXTERNAL_ANCHOR_EXCEPTION_HOLD'}})).close,false);
 assert.equal((await closureDecision884({...eligible,drift:{state:'ORIGINAL_SCHEDULER_DRIFT_HOLD'}})).close,false);
-assert.equal((await closureDecision884({...eligible,retentionBody:cp.replace('SIGNED','UNSIGNED')})).close,false);
+assert.equal((await closureDecision884({...eligible,retentionBody:cp.replace('verified_receipts":2','verified_receipts":1')})).close,false);
 const a=read('admin-booking.html');
 assert.equal(a,read('admin-booking/index.html'));
 for(const marker of ['rd884Review','rd884Retention','rd884Drift','rd884Closure',
