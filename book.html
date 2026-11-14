@@ -116,10 +116,10 @@
           <span id="guidedDesc888">Use our five-step wizard to choose a date, vehicle, package, optional extras and payment.</span>
           <span class="booking-paths-888__action">Start guided booking →</span>
         </a>
-        <a class="booking-paths-888__choice" id="manualPath888" href="#services" aria-describedby="manualDesc888">
+        <a class="booking-paths-888__choice" id="manualPath888" href="/book-custom" aria-describedby="manualDesc888">
           <strong>Let me choose services</strong>
-          <span id="manualDesc888">Compare packages and add-ons yourself, with a running estimate before finishing in the booking planner. Individual standalone service checkout is being added next.</span>
-          <span class="booking-paths-888__action">Browse services →</span>
+          <span id="manualDesc888">Build your own approved individual-service basket without choosing a package. We verify the service prices and availability before secure payment.</span>
+          <span class="booking-paths-888__action">Build my service →</span>
         </a>
       </div>
       <p class="muted mini" id="bookingPathStatus888" role="status" aria-live="polite">Choose whichever booking style is easiest for you.</p>
@@ -580,7 +580,7 @@
   <script id="booking-paths-script-888">
     (function(){
       const status=document.getElementById('bookingPathStatus888');
-      const choices=[['guidedPath888','Guided booking selected. Continue with the five-step planner.'],['manualPath888','Service browsing selected. Choose a package and extras, then continue to the shared booking planner.']];
+      const choices=[['guidedPath888','Guided booking selected. Continue with the five-step planner.'],['manualPath888','Individual service booking selected. The next page verifies owner-approved standalone prices and shares the canonical checkout.']];
       for(const [id,message] of choices){
         const link=document.getElementById(id);
         if(link)link.addEventListener('click',()=>{if(status)status.textContent=message;});

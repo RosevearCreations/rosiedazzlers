@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Build Your Own Mobile Detailing | Rosie Dazzlers</title>
+  <meta name="description" content="Select individually approved detailing services and book a mobile detailing appointment with Rosie Dazzlers.">
+  <link rel="stylesheet" href="/assets/site.css?v=20261101build734">
+  <style>
+    .build889{max-width:1040px;margin:auto;padding:24px 16px 80px;display:grid;gap:16px}
+    .build889 *{box-sizing:border-box}
+    .build889 .panel{padding:20px;min-width:0}
+    .build889 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .build889 .choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .build889 .choice{border:1px solid rgba(255,255,255,.28);border-radius:16px;padding:14px;display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.04)}
+    .build889 .choice label{cursor:pointer;display:grid;gap:6px;line-height:1.45}
+    .build889 .choice input{width:22px;height:22px;flex:none}
+    .build889 input,.build889 select{width:100%;max-width:100%;min-height:44px;margin-top:5px}
+    .build889 label{display:block;font-weight:600}
+    .build889 .choice label{font-weight:500}
+    .build889 fieldset{border:1px solid rgba(255,255,255,.2);padding:16px;border-radius:14px}
+    .build889 legend{font-weight:750;padding:0 8px}
+    .build889 .muted{opacity:.85}
+    .build889 .status{padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.24)}
+    .build889 .actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+    .build889 button{min-height:48px;padding:10px 20px;cursor:pointer}
+    .build889 button:disabled{opacity:.5;cursor:not-allowed}
+    .build889 :focus-visible{outline:3px solid #a4b8ff;outline-offset:3px}
+    .build889 .totals{display:grid;grid-template-columns:1fr auto;gap:9px}
+    .build889 .totals strong{text-align:right}
+    .build889 .list-note{font-size:.9rem;opacity:.9}
+    .build889 .check{display:flex;align-items:start;gap:10px;padding:6px 0}
+    .build889 .check input{height:20px;width:20px;min-height:20px;flex:none;margin:0}
+    @media(max-width:720px){.build889 .grid{grid-template-columns:1fr}.build889 .panel{padding:16px}}
+    @media(max-width:400px){.build889{padding:16px 10px 60px}.build889 .actions{align-items:stretch;flex-direction:column}.build889 .actions>*{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="build889" id="main">
+    <div><p><a href="/book">← Back to booking options</a></p>
+      <h1>Build your own detailing service</h1>
+      <p>Choose individually approved services instead of a full detailing package. All prices and availability are checked again by Rosie before any payment.</p>
+      <p><a href="/book#booking">Prefer step-by-step help? Use our guided booking wizard.</a></p></div>
+    <div class="status" id="catalogStatus889" role="status" aria-live="polite">Checking the current Rosie service catalogue…</div>
+    <form id="alaCarteForm889" novalidate>
+      <section class="panel">
+        <h2>1. Vehicle and individual services</h2>
+        <div class="grid">
+          <label>Vehicle size
+            <select name="vehicle_size" required>
+              <option value="">Choose a size</option>
+              <option value="small">Small — compact car</option>
+              <option value="mid">Mid — crossover or SUV</option>
+              <option value="oversize">Oversize — large SUV, truck or van</option>
+            </select>
+          </label>
+          <label>Service area
+            <select name="service_area" required><option value="">Loading available service zones…</option></select>
+          </label>
+        </div>
+        <h3>Choose one or more services</h3>
+        <div id="standaloneServices889" class="choices" role="group" aria-label="Individual services"></div>
+        <p class="list-note">Quote-required and package-only work cannot be charged through this self-service path. Contact Rosie for a custom quote.</p>
+      </section>
+      <section class="panel">
+        <h2>2. Your date, vehicle and worksite</h2>
+        <div class="grid">
+          <label>Preferred date <input name="service_date" type="date" required></label>
+          <label>Time
+            <select name="start_slot" required>
+              <option value="">Choose a slot</option>
+              <option value="AM">Morning (half day)</option>
+              <option value="PM">Afternoon (half day)</option>
+              <option value="FULL">Full day</option>
+            </select>
+          </label>
+          <label>Vehicle year <input name="vehicle_year" type="number" min="1950" max="2100" required></label>
+          <label>Vehicle make <input name="vehicle_make" maxlength="100" required></label>
+          <label>Vehicle model <input name="vehicle_model" maxlength="100" required></label>
+          <label>Street address <input name="address_line1" autocomplete="street-address" maxlength="200" required></label>
+          <label>City <input name="city" autocomplete="address-level2" maxlength="120"></label>
+          <label>Postal code <input name="postal_code" autocomplete="postal-code" maxlength="12"></label>
+        </div>
+        <p id="availabilityStatus889" class="status" role="status" aria-live="polite">Choose a date and slot to check availability.</p>
+        <fieldset>
+          <legend>Worksite safety and local conditions</legend>
+          <div class="grid">
+            <label>Permitted place to work <select name="site_access" required><option value="">Choose…</option><option value="private_safe">Safe permitted private driveway/work area</option><option value="shared_or_street">Shared area / street / permission needed</option><option value="unsure">Unsure — staff review</option></select></label>
+            <label>Surface and access <select name="site_surface" required><option value="">Choose…</option><option value="clear_level">Clear, stable, level and unobstructed</option><option value="unsafe">Unsafe or restricted</option><option value="unsure">Unsure — staff review</option></select></label>
+            <label>Expected weather <select name="site_weather" required><option value="">Choose…</option><option value="suitable">Suitable, no known cold or storm risk</option><option value="hazard">Cold, snow, ice, high wind or precipitation</option><option value="unsure">Unsure — staff review</option></select></label>
+            <label>Water/runoff rules <select name="site_runoff" required><option value="">Choose…</option><option value="compliant">Applicable site and local rules can be met</option><option value="restricted">Restriction or approval issue</option><option value="unsure">Unsure — staff review</option></select></label>
+          </div>
+          <p class="muted">Rosie brings standard detailing water and power. November–March and uncertain site conditions require review before automatic reservation.</p>
+        </fieldset>
+      </section>
+      <section class="panel">
+        <h2>3. Review your price and deposit</h2>
+        <div id="basketSummary889" class="totals" aria-live="polite"></div>
+        <p class="muted">Amounts shown are CAD service prices from the current catalogue. Tax, travel, availability, and final payable amount are revalidated by the secure server. The deposit is not a separate extra charge.</p>
+        <div class="grid">
+          <label>Your name <input name="customer_name" autocomplete="name" maxlength="140" required></label>
+          <label>Email <input name="customer_email" type="email" autocomplete="email" maxlength="200" required></label>
+          <label>Phone (optional) <input name="customer_phone" type="tel" autocomplete="tel" maxlength="40"></label>
+          <label>Payment provider
+            <select name="payment_provider" required><option value="stripe">Stripe (card)</option><option value="paypal">PayPal</option></select>
+          </label>
+        </div>
+        <fieldset>
+          <legend>Required acknowledgments</legend>
+          <label class="check"><input name="ack_driveway" type="checkbox" required><span>I can provide a safe, permitted worksite.</span></label>
+          <label class="check"><input name="ack_bylaw" type="checkbox" required><span>I acknowledge applicable environmental, water and local site rules.</span></label>
+          <label class="check"><input name="ack_cancellation" type="checkbox" required><span>I have reviewed the cancellation and weather rescheduling policy.</span></label>
+          <p><a href="/policies">Review Rosie Dazzlers policies</a></p>
+        </fieldset>
+        <p id="checkoutStatus889" class="status" role="status" aria-live="polite">No reservation or payment has been made.</p>
+        <div class="actions"><button class="btn primary" id="checkout889" type="submit" disabled>Check availability and pay deposit</button><a class="btn ghost" href="/contact">Need a quote or help?</a></div>
+      </section>
+    </form>
+  </main>
+  <script type="module" src="/assets/ala-carte-booking-v889.js"></script>
+</body>
+</html>
