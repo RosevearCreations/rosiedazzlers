@@ -1,0 +1,24 @@
+name: Rosie 884 Signed Retention, Execution Drift and Owner Closure Protected Source Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build884-original-retention-drift-owner-closure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Signed retention continuity, drift, owner closure and retained 883/882/881 regression
+        run: |
+          node scripts/build884_retention_drift_owner_closure_test.mjs
+          node scripts/build883_execution_receipt_renewal_recovery_test.mjs
+          node scripts/build882_enrollment_anchor_ack_test.mjs
+          node scripts/build881_scheduled_anchor_grace_test.mjs

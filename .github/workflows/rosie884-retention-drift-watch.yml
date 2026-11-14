@@ -1,0 +1,32 @@
+name: Rosie 884 Original Signed Receipt Retention and Execution Drift Escalation
+on:
+  schedule:
+    - cron: '17 */2 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+  issues: write
+concurrency:
+  group: rosie884-original-receipt-retention-drift
+  cancel-in-progress: false
+jobs:
+  independent-signed-retention-watch:
+    if: github.repository == 'RosevearCreations/rosiedazzlers' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original signed receipts, continue bounded checkpoints and escalate execution drift
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          ROSIE881_ANCHOR_JOB_SECRET: ${{ secrets.ROSIE881_ANCHOR_JOB_SECRET }}
+          ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK: ${{ secrets.ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK }}
+        run: node scripts/build884_retention_drift_watch.mjs

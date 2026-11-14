@@ -1,0 +1,31 @@
+name: Rosie 884 Owner-Gated Original Renewal/Execution Drift Exception Closure
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+  issues: write
+concurrency:
+  group: rosie884-owner-gated-renewal-closure
+  cancel-in-progress: false
+jobs:
+  supervised-original-owner-closure:
+    if: github.repository == 'RosevearCreations/rosiedazzlers' && github.ref == 'refs/heads/main' && github.actor == 'RosevearCreations'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Re-verify original sources, current ACK, pinned signer and explicit owner approval before issue-only closure
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          ROSIE881_OWNER_WATCH_JOB_SECRET: ${{ secrets.ROSIE881_OWNER_WATCH_JOB_SECRET }}
+          ROSIE881_ANCHOR_JOB_SECRET: ${{ secrets.ROSIE881_ANCHOR_JOB_SECRET }}
+          ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK: ${{ secrets.ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK }}
+        run: node scripts/build884_owner_gated_closure.mjs
