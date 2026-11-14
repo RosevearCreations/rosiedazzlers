@@ -46,7 +46,7 @@ test('unauthenticated forged audit is HOLD',async()=>{
  assert.match((await certifyOriginalClosure887(x)).reasons.join(),/SIGNATURE/);
 });
 test('duplicate original run is HOLD',async()=>{
- const x=await opts();x.auditComments=[...audits,mkAudit(1,5)];
+ const x=await opts();x.auditComments=[...audits,{...mkAudit(1,5),id:6}];
  assert.match((await certifyOriginalClosure887(x)).reasons.join(),/DUPLICATE/);
 });
 test('immature 30d horizon is HOLD',async()=>{
