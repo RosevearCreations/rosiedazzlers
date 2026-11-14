@@ -38,7 +38,7 @@ assert.match(initial.window_sha256,/^[a-f0-9]{64}$/);
 await assert.rejects(()=>sourceWindow884(original,pin,{sourceIssue:73,sourceCount:3,now}),
  /UNATTESTED_PREVIOUS_HISTORY/);
 await assert.rejects(()=>sourceWindow884(original,pin,{sourceIssue:73,sourceCount:2,
- previousLastId:999,now}),/CURSOR_GAP/);
+ previousLastId:999,previousSourceCount:1,now}),/CURSOR_GAP/);
 await assert.rejects(()=>sourceWindow884([first,first],pin,{sourceIssue:73,
  sourceCount:2,now}),/INVALID/);
 await assert.rejects(()=>sourceWindow884([{...first,body:first.body.replace('VERIFY_STEP_SUCCESS','VERIFY_STEP_HOLD')},second],
