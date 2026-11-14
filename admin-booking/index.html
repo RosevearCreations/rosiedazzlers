@@ -299,6 +299,19 @@
               <div id="rd881OwnerStatus" class="notice mini" role="status" aria-live="polite">No original source-health readback yet. Scheduled GitHub delivery and separately signed external anchors require verified original credentials and evidence.</div>
               <p class="mini">Proactive GitHub owner alerts run every 2 hours after enrollment. Separate Ed25519 receipt-digest anchoring runs every 6 hours after genuine signed owner receipts and separate signer enrollment. No customer identifiers enter these GitHub records; incomplete source histories remain HOLD.</p>
             </section>
+            <section class="panel" style="margin-top:14px" aria-label="Build 883 signed scheduler execution, owner acknowledgment renewal and supervised anchor recovery">
+              <h4>Build 883 — Signed Scheduler Receipt Ledger, Owner ACK Renewal &amp; Anchor Recovery</h4>
+              <p class="mini">Original GitHub Actions signed workflow-step receipts are checked against the complete workflow run. Original source observations, real anchor comments and owner acknowledgment are independently reviewed. Software Production GREEN does not confirm operational enrollment or original vendor delivery.</p>
+              <button id="rd883Inspect" class="btn ghost" type="button">Review original scheduler and custody evidence</button>
+              <div id="rd883Ledger" class="notice mini" role="status" aria-live="polite">No original signed execution receipt or workflow readback reviewed yet.</div>
+              <div id="rd883Ack" class="notice mini" role="status" aria-live="polite">No current owner acknowledgment or grace renewal evidence reviewed yet.</div>
+              <button id="rd883CopyAck" class="btn ghost" type="button" disabled>Copy current owner ACK text</button>
+              <a id="rd883AckIssue" class="btn ghost" target="_blank" rel="noopener noreferrer" hidden>Open original GitHub owner alert</a>
+              <div id="rd883CopyStatus" class="notice mini" role="status" aria-live="polite">Copying does not submit or approve an owner acknowledgment.</div>
+              <div id="rd883Anchor" class="notice mini" role="status" aria-live="polite">No original external anchor reconciliation reviewed yet.</div>
+              <p class="mini">If genuine evidence is missing, review the original issue and use the <a href="https://github.com/RosevearCreations/rosiedazzlers/actions/workflows/rosie883-manual-anchor-recovery.yml" target="_blank" rel="noopener noreferrer">supervised anchor recovery workflow</a>. It reports exceptions without automatically rewriting anchors, changing keys or acknowledging on behalf of the owner.</p>
+            </section>
+
 
           </section>
           <div id="rdQuickQuoteStatus" class="notice mini" role="status" aria-live="polite">Ready for a quick quote or Admin review.</div>
@@ -587,5 +600,6 @@
   <script type="module" src="/assets/admin-booking-v879.js"></script>
   <script type="module" src="/assets/admin-booking-v880.js"></script>
   <script type="module" src="/assets/admin-booking-v881.js"></script>
+  <script type="module" src="/assets/admin-booking-v883.js"></script>
 </body>
 </html>

@@ -18,6 +18,7 @@ jobs:
           node-version: '22'
       - name: Scheduled owner issues, source-only drift and distinct Ed25519 external anchor regressions
         run: |
+          node scripts/build883_execution_receipt_renewal_recovery_test.mjs
           node scripts/build882_enrollment_anchor_ack_test.mjs
           node scripts/build881_scheduled_anchor_grace_test.mjs
           node scripts/build880_native_history_immutable_rotation_test.mjs
