@@ -108,8 +108,9 @@ export async function onRequestGet({request,env}){
    runs.push(run);
   }
   const drift=assessExecutionDrift884(signedRows,runs);
-  const noCoverage=!!ledgerIssue&&ledgerIssue.comments>100;
-  if(noCoverage)drift.state='ORIGINAL_HISTORY_BOUNDED_PARTIAL_HOLD';
+  // Only the newest bounded signed receipts are reviewed. Older history may be partial,
+  // but a recent fresh, linked checkpoint may still support a current owner decision.
+  const historyTruncated=!!ledgerIssue&&ledgerIssue.comments>100;
   const closure=latest&&retained.state==='SIGNED_RETENTION_CURRENT'?
    await closureDecision884({retentionBody:latest.body,pin,drift,
     ownerAck:original.owner_ack,anchors:original.anchors,
@@ -119,7 +120,7 @@ export async function onRequestGet({request,env}){
   const fingerprint=retained.state==='SIGNED_RETENTION_CURRENT'?
    await digest883(latest.body):null;
   return json({ok:true,build:884,state:'ORIGINAL_OWNER_READ_ONLY',
-   retention:retained,execution_drift:drift,
+   retention:retained,execution_drift:{...drift,older_history_not_exhaustive:historyTruncated},
    closure:{state:closure.state,approved:closure.close,
     owner_approval_command:fingerprint?
      'ROSIE884-CLOSE: '+fingerprint:null,

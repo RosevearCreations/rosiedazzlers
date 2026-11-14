@@ -4,7 +4,7 @@
 import {createPrivateKey,createPublicKey} from 'node:crypto';
 import {github881,originalIssue881,repo881} from './build881_owner_issue_client.mjs';
 import {safeReport881} from './build881_native_drift_alert_runner.mjs';
-import {ledgerTitle883,alertTitle883,anchorTitle883,
+import {ledgerTitle883,alertTitle883,anchorTitle883,digest883,
  ownerRenewal883,classifyAnchorRecovery883,
  parseExecutionReceipt883,verifyExecutionReceipt883}
  from '../functions/api/_lib/roadside-custody-v883.js';
@@ -23,10 +23,16 @@ async function source884(path,secret){
 }
 async function issueComments884(issue,limit=100){
  if(!issue||!Number.isSafeInteger(issue.number)||!Number.isSafeInteger(issue.comments)||
-  issue.comments>100)throw Error('ORIGINAL_ISSUE_COMMENT_COVERAGE_HOLD');
- const data=await github881('/issues/'+issue.number+'/comments?per_page=100');
- if(!Array.isArray(data)||data.length!==issue.comments)throw Error('GITHUB_COMMENT_COUNT_DRIFT_HOLD');
- return data.slice(-limit);
+  issue.comments>2000)throw Error('ORIGINAL_ISSUE_COMMENT_COVERAGE_HOLD');
+ const last=Math.max(1,Math.ceil(issue.comments/100)),pages=last>1?[last-1,last]:[last];
+ const all=[];
+ for(const page of pages){
+  const data=await github881('/issues/'+issue.number+'/comments?per_page=100&page='+page);
+  if(!Array.isArray(data))throw Error('GITHUB_COMMENT_COUNT_DRIFT_HOLD');
+  all.push(...data);
+ }
+ if(issue.comments<=100&&all.length!==issue.comments)throw Error('GITHUB_COMMENT_COUNT_DRIFT_HOLD');
+ return all.slice(-limit);
 }
 export async function ownerClose884(){
  if(process.env.GITHUB_REPOSITORY!==repo881||process.env.GITHUB_REF!=='refs/heads/main'||
@@ -61,7 +67,14 @@ export async function ownerClose884(){
   cp.source_comment_count!==ledgerIssue.comments||
   cp.last_comment_id!==ledgerComments.at(-1)?.id)
   throw Error('EXPIRED_OR_STALE_ORIGINAL_RETENTION_HOLD');
- if(ledgerComments.length!==ledgerIssue.comments)throw Error('UNBOUNDED_ORIGINAL_EXECUTION_HISTORY_HOLD');
+ if(ledgerIssue.comments<=100&&ledgerComments.length!==ledgerIssue.comments)
+  throw Error('ORIGINAL_EXECUTION_INVENTORY_DRIFT_HOLD');
+ const previousCheckpoint=checkComments.at(-2);
+ if(cp.previous_checkpoint_sha256!==null&&(!previousCheckpoint||
+  !await verifyRetention884(previousCheckpoint.body,pin)||
+  cp.previous_checkpoint_sha256!==await digest883(previousCheckpoint.body)))
+  throw Error('SIGNED_RETENTION_CHECKPOINT_CHAIN_HOLD');
+
  const rows=[];
  for(const c of ledgerComments){
   if(c.user?.login!=='github-actions[bot]'||!await verifyExecutionReceipt883(c.body,pin))
@@ -85,6 +98,7 @@ export async function ownerClose884(){
  const [ownerIssue,anchorIssue]=await Promise.all([
   watch.alert?originalIssue881(alertTitle883):Promise.resolve(null),
   originalIssue881(anchorTitle883)]);
+ if(anchorIssue.comments>=100)throw Error('ORIGINAL_EXTERNAL_ANCHOR_COVERAGE_HOLD');
  const [ownerComments,anchorComments]=await Promise.all([
   ownerIssue?issueComments884(ownerIssue):Promise.resolve([]),
   issueComments884(anchorIssue)]);

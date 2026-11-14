@@ -45,9 +45,12 @@ await assert.rejects(()=>sourceWindow884([{...first,body:first.body.replace('VER
  pin,{sourceIssue:73,sourceCount:2,now}),/INVALID/);
 const third={id:1003,user:githubActor,body:receipt('watch',1235,now-300000)};
 const extended=await sourceWindow884([first,second,third],pin,{
- sourceIssue:73,sourceCount:3,previousLastId:1002,now});
+ sourceIssue:73,sourceCount:3,previousLastId:1002,previousSourceCount:2,now});
 assert.equal(extended.verified_receipts,1);
 assert.equal(extended.first_comment_id,1003);
+await assert.rejects(()=>sourceWindow884([first,second,third],pin,{
+ sourceIssue:73,sourceCount:4,previousLastId:1002,previousSourceCount:2,now}),
+ /RETENTION_SOURCE_COUNT_GAP/);
 const checkpoint={schema:'rosie884-scheduler-retention-v1',
  repository:'RosevearCreations/rosiedazzlers',run_id:'3333',
  source_issue_number:73,source_comment_count:2,

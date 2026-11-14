@@ -56,7 +56,7 @@ export async function run884(){
  const past=await comments884(checkIssue,{limit:2});
  if(past.length!==Math.min(checkIssue.comments,2))
   throw Error('RETENTION_CHECKPOINT_INVENTORY_HOLD');
- let predecessor=null,previousLastId=null;
+ let predecessor=null,previousLastId=null,previousSourceCount=null;
  if(past.length){
   const last=past.at(-1),prior=past.at(-2);
   if(last.user?.login!=='github-actions[bot]'||
@@ -69,11 +69,12 @@ export async function run884(){
    throw Error('RETENTION_CHECKPOINT_CHAIN_COVERAGE_HOLD');
   predecessor=sha(last.body);
   previousLastId=parseRetention884(last.body).payload.last_comment_id;
+  previousSourceCount=parseRetention884(last.body).payload.source_comment_count;
  }
  let win=null,drift=null,reason=null;
  try{
   win=await sourceWindow884(original,pin,{sourceIssue:ledger.number,
-   sourceCount:ledger.comments,previousLastId});
+   sourceCount:ledger.comments,previousLastId,previousSourceCount});
   // Assess the full original last-100 window, not only the newly checkpointed rows.
   const full=await Promise.all(original.map(async c=>{
    if(!await verifyExecutionReceipt883(c.body,pin))throw Error('UNSIGNED_LATEST_SOURCE_HOLD');
@@ -135,5 +136,29 @@ export async function run884(){
   '; execution='+drift.state+'; immutable/WORM claim=false');
  if(drift.state!=='ORIGINAL_EXECUTION_WINDOW_VERIFIED')throw Error(drift.state);
 }
+async function escalateFailure884(error){
+ if(process.env.GITHUB_REPOSITORY!==repo881||process.env.GITHUB_REF!=='refs/heads/main')
+  return;
+ const original=String(error?.message||'ORIGINAL_SOURCE_HOLD');
+ const state=/^[A-Z0-9_]{4,100}_HOLD$/.test(original)?
+  original:'ORIGINAL_RETENTION_VERIFICATION_HOLD';
+ const body='<!-- rosie884-drift-failure:'+state+' -->\n'+
+  '## Original Signed Scheduler / Retention Exception — Owner Review\n'+
+  'Original verification: **'+state+'**.\n'+
+  'The protected scheduled source was unavailable or incomplete. No signed retention,'+
+  ' provider delivery, finance closure or human ACK has been invented.\n'+
+  'An original owner must inspect the signed GitHub workflow logs and source evidence.'+
+  ' This exception is never automatically closed.\n';
+ const issue=await originalIssue881(driftTitle884,body);
+ if(issue.body!==body||issue.state==='closed')
+  await github881('/issues/'+issue.number,'PATCH',{body,state:'open'});
+ const actual=await github881('/issues/'+issue.number);
+ if(actual.body!==body||actual.state!=='open')
+  throw Error('FAIL_CLOSED_OWNER_ESCALATION_READBACK_HOLD');
+}
 if(import.meta.url===new URL('file://'+process.argv[1]).href)
- run884().catch(e=>{console.error('Rosie 884: '+e.message);process.exitCode=1;});
+ run884().catch(async e=>{
+  try{await escalateFailure884(e);}
+  catch(x){console.error('Rosie 884 escalation HOLD: '+x.message);}
+  console.error('Rosie 884: '+e.message);process.exitCode=1;
+ });

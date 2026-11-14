@@ -44,10 +44,12 @@ export async function verifyRetention884(body,pin,now=Date.now()){
 }
 // A cursor must occur in the bounded original source window: never skip uncovered entries.
 export async function sourceWindow884(comments,pin,{sourceIssue,sourceCount,previousLastId=null,
- now=Date.now()}={}){
+ previousSourceCount=null,now=Date.now()}={}){
  if(!validId(sourceIssue)||!validId(sourceCount)||!Array.isArray(comments)||
   comments.length<1||comments.length>100||
-  (previousLastId!==null&&!validId(previousLastId)))
+  (previousLastId!==null&&!validId(previousLastId))||
+  (previousLastId!==null&&(!validId(previousSourceCount)||
+   previousSourceCount>=sourceCount)))
   throw Error('ORIGINAL_LEDGER_COVERAGE_HOLD');
  const sorted=[...comments].sort((a,b)=>a.id-b.id);
  const unique=new Set(),rows=[];
@@ -68,6 +70,8 @@ export async function sourceWindow884(comments,pin,{sourceIssue,sourceCount,prev
   const found=rows.findIndex(x=>x.id===previousLastId);
   if(found<0)throw Error('SOURCE_RETENTION_CURSOR_GAP_HOLD');
   rows.splice(0,found+1);
+  if(rows.length!==sourceCount-previousSourceCount)
+   throw Error('RETENTION_SOURCE_COUNT_GAP_HOLD');
   if(!rows.length)throw Error('NO_NEW_SIGNED_RECEIPTS_HOLD');
  }
  if(!rows.length)throw Error('NO_ORIGINAL_SIGNED_RECEIPTS_HOLD');
