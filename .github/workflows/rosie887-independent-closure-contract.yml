@@ -1,0 +1,18 @@
+name: Rosie 887 Independent Closure Certification Contract
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+permissions:
+  contents: read
+jobs:
+  independent-closure-certification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/build886_recurrence_reconciliation.test.mjs tests/build887_independent_closure.test.mjs
