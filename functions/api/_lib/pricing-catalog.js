@@ -97,6 +97,9 @@ export function normalizeCatalog(raw) {
     },
     // Build 274: do not allow stale App Management JSON to contradict the mobile operating model.
     public_requirements: [...ROSIE_PUBLIC_REQUIREMENTS],
+    // An optional owner-approved policy only. Missing fields leave individual checkout HOLD.
+    ala_carte_policy: bookingRuleSource.ala_carte_policy && typeof bookingRuleSource.ala_carte_policy === "object"
+      ? { ...bookingRuleSource.ala_carte_policy } : null,
     travel_pricing: {
       urban: numberOr(bookingRuleSource?.travel_pricing?.urban, DEFAULT_BOOKING_RULES.travel_pricing.urban),
       township: numberOr(bookingRuleSource?.travel_pricing?.township, DEFAULT_BOOKING_RULES.travel_pricing.township),

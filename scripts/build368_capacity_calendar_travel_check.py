@@ -26,7 +26,7 @@ required_availability = [
     "Travel context is descriptive only",
     "/rest/v1/date_blocks?select=blocked_date,reason",
     "/rest/v1/slot_blocks?select=blocked_date,slot,reason",
-    "/rest/v1/bookings?select=status,start_slot,duration_slots",
+    "/rest/v1/bookings?select=id,status,job_status,start_slot,duration_slots",
 ]
 for token in required_availability:
     assert token in availability, f"Build 368 availability missing authority token: {token}"
@@ -34,11 +34,16 @@ for token in required_availability:
 # Checkout remains the race/collision backstop. Build 368 must not replace this with client trust.
 required_checkout = [
     'if (![1,2].includes(Number(body.duration_slots)))',
+    'if (Number(body.duration_slots) === 2 && String(body.start_slot) !== "AM")',
     '/rest/v1/date_blocks?select=blocked_date,reason',
-    '/rest/v1/slot_blocks?select=blocked_date,slot,reason',
-    'const bookingConflict = await supa(',
-    'const requestedSlots = Number(body.duration_slots) === 2 ? ["AM","PM"]',
-    'if (isBlocked) return corsJson({ error: "Selected slot not available" }, 409);',
+    '/rest/v1/slot_blocks?select=slot,reason',
+    '/rest/v1/bookings?select=id,status,job_status,start_slot,duration_slots',
+    'const bookingConflict = await checkCheckoutCapacity738',
+    'evaluateCapacity738({',
+    'if (!review.ok || review.requested_fit !== true)',
+    'if (bookingConflict.status === 409)',
+    'insertBookingWithOptionalFields(supa, bookingPayload)',
+    'one_car_capacity_conflict',
 ]
 for token in required_checkout:
     assert token in checkout, f"Checkout collision authority regressed: {token}"
