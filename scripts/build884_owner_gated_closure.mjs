@@ -90,7 +90,7 @@ export async function ownerClose884(){
   const r=await github881('/actions/runs/'+item.run_id);
   if(r?.repository?.full_name!==repo881||
    typeof r.path!=='string'||
-   !r.path.split('@')[0].endsWith('/.github/workflows/rosie882-signed-enrollment-watch.yml'))
+   !r.path.split('@')[0].endsWith('.github/workflows/rosie882-signed-enrollment-watch.yml'))
    throw Error('ORIGINAL_GITHUB_SCHEDULER_WORKFLOW_IDENTITY_HOLD');
   runs.push(r);
  }
