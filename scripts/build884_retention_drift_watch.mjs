@@ -88,7 +88,7 @@ export async function run884(){
   for(const item of latest){
    const r=await github881('/actions/runs/'+item.run_id);
    if(r?.repository?.full_name!==repo881||
-    typeof r.path!=='string'||!r.path.split('@')[0].endsWith('/.github/workflows/rosie882-signed-enrollment-watch.yml'))
+    typeof r.path!=='string'||!r.path.split('@')[0].endsWith('.github/workflows/rosie882-signed-enrollment-watch.yml'))
     throw Error('ORIGINAL_SCHEDULER_WORKFLOW_PROVENANCE_HOLD');
    runs.push(r);
   }

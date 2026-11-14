@@ -39,7 +39,7 @@ export async function originalScheduleRuns885(now=Date.now()){
   const fetched=response.workflow_runs;
   for(const r of fetched){
    if(r?.repository?.full_name!==repo881||
-    typeof r.path!=='string'||!r.path.split('@')[0].endsWith('/.github/workflows/rosie882-signed-enrollment-watch.yml'))
+    typeof r.path!=='string'||!r.path.split('@')[0].endsWith('.github/workflows/rosie882-signed-enrollment-watch.yml'))
     throw Error('ORIGINAL_WORKFLOW_REPOSITORY_PROVENANCE_HOLD');
    if(!Number.isFinite(Date.parse(r.created_at)))
     throw Error('ORIGINAL_WORKFLOW_TIMESTAMP_HOLD');
