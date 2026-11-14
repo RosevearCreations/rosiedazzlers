@@ -5,6 +5,7 @@
 // - validates gift codes and records gift metadata for later reconciliation
 
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
+import { resolveAlaCarte889 } from "./_lib/ala-carte-v889.js";
 import { resolveTrustedBookingLocation, buildTrustedLocationPatch } from "./_lib/booking-location.js";
 import { resolveCheckoutCustomerIdentity } from "./_lib/checkout-customer-identity.js";
 import { evaluateCapacity738 } from "./_lib/booking-capacity-v738.js";
@@ -20,8 +21,12 @@ export async function onRequestPost({ request, env }) {
     const body = await request.json().catch(() => null);
     if (!body || typeof body !== "object") return corsJson({ error: "Invalid JSON body" }, 400);
 
+    const isAlaCarte889 = body.booking_mode === "ala_carte";
+    if (body.booking_mode && !["guided", "ala_carte"].includes(body.booking_mode))
+      return corsJson({ error: "Unknown booking method", booking_created:false, payment_attempted:false }, 400);
     const required = [
-      "service_date", "start_slot", "duration_slots", "service_area", "package_code", "vehicle_size",
+      "service_date", "start_slot", "duration_slots", "service_area",
+      ...(!isAlaCarte889 ? ["package_code"] : []), "vehicle_size",
       "customer_name", "customer_email", "address_line1"
     ];
     for (const key of required) {
@@ -71,22 +76,31 @@ export async function onRequestPost({ request, env }) {
       },
       serviceAreaMeta
     });
-    const pkg = pricing.package_map[String(body.package_code || "")];
+    const alaCarte889 = isAlaCarte889 ? resolveAlaCarte889(pricing, body) : null;
+    if (isAlaCarte889 && !alaCarte889.ok)
+      return corsJson({ error:alaCarte889.error, reason:alaCarte889.reason,
+        booking_created:false, payment_attempted:false }, 409);
+    const pkg = isAlaCarte889
+      ? {code:alaCarte889.package_code,deposit_cad:alaCarte889.deposit_cents / 100}
+      : pricing.package_map[String(body.package_code || "")];
     if (!pkg) return corsJson({ error: "Unknown package_code" }, 400);
 
     const vehicleSize = String(body.vehicle_size || "");
-    const baseCad = pkg.prices_cad?.[vehicleSize];
+    const baseCad = isAlaCarte889 ? 0 : pkg.prices_cad?.[vehicleSize];
     if (!Number.isFinite(baseCad)) return corsJson({ error: "Unknown package/vehicle size combination" }, 400);
 
-    const addonCodes = Array.isArray(body.addon_codes) ? body.addon_codes.map((v) => String(v || "").trim()).filter(Boolean) : [];
+    const addonCodes = isAlaCarte889 ? alaCarte889.items.map(item=>item.code) :
+      (Array.isArray(body.addon_codes) ? body.addon_codes.map((v) => String(v || "").trim()).filter(Boolean) : []);
     const addonsChosen = [];
     const quoteAddonsChosen = [];
     let addonsTotalCents = 0;
     for (const code of addonCodes) {
       const addon = pricing.addon_map[code];
-      if (!addon) continue;
+      if (!addon) return corsJson({ error: "Selected service is no longer available", booking_created:false, payment_attempted:false }, 400);
       const requiredPackages = Array.isArray(addon.requires_package_codes_any) ? addon.requires_package_codes_any.map((v) => String(v || "").trim()).filter(Boolean) : [];
       const standaloneAllowed = addon.standalone_allowed === true;
+      if (isAlaCarte889 && (!standaloneAllowed || addon.quote_required === true))
+        return corsJson({ error:"Standalone service is not approved for instant checkout", booking_created:false, payment_attempted:false },409);
       if (requiredPackages.length && !standaloneAllowed && !requiredPackages.includes(pkg.code)) {
         return corsJson({ error: addon.requirement_note || `${addon.name} requires a different base package first.` }, 400);
       }
@@ -126,8 +140,12 @@ export async function onRequestPost({ request, env }) {
     }
 
     let totalCents = Math.round(baseCad * 100) + addonsTotalCents;
+    if (isAlaCarte889 && totalCents !== alaCarte889.subtotal_cents)
+      return corsJson({ error:"Standalone service price changed. Review your basket.", booking_created:false, payment_attempted:false },409);
     let depositCents = Math.round((Number(pkg.deposit_cad || 0) || 0) * 100);
-    if (depositCents <= 0) depositCents = ["premium_wash", "basic_detail"].includes(pkg.code) ? 5000 : 10000;
+    if (isAlaCarte889 && depositCents !== alaCarte889.deposit_cents)
+      return corsJson({ error:"Standalone deposit policy mismatch", booking_created:false, payment_attempted:false },409);
+    if (!isAlaCarte889 && depositCents <= 0) depositCents = ["premium_wash", "basic_detail"].includes(pkg.code) ? 5000 : 10000;
 
     const supa = async (method, path, payload, extraHeaders = {}) => {
       const res = await fetch(`${env.SUPABASE_URL}${path}`, {
@@ -205,6 +223,7 @@ export async function onRequestPost({ request, env }) {
     }
 
     const notes = [];
+    if (isAlaCarte889) notes.push("Owner-approved individual standalone services (catalog policy "+alaCarte889.policy_version+"): "+alaCarte889.items.map(i=>i.code).join(", ")+".");
     if (promoApplied) notes.push(`Promo ${promoApplied.code} applied for ${(promoApplied.discount_cents/100).toFixed(2)} CAD.`);
     if (giftCode) notes.push(`Gift code provided: ${giftCode}`);
     if (giftRedeemedCents > 0) notes.push(`Gift redeemed against deposit: ${(giftRedeemedCents/100).toFixed(2)} CAD.`);
