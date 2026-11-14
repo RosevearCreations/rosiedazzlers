@@ -1,0 +1,37 @@
+# Rosie Dazzlers Build 885 — Independent Retention Chain Continuity Audit, Multi-Horizon Scheduler SLA Monitoring & Owner Closure Receipt Renewal
+
+## Key separation: software release vs original operational acceptance
+A protected `dev` → `main` software deployment is GREEN **only after exact-main SHA Cloudflare Production static/contextual HTTP acceptance, protected source/business tests, Release Health GREEN and CI queue budget WITHIN_BUDGET**. That does not establish independent historical original scheduler runs, original customer/vendor delivery, independently witnessed key rotation or human owner approvals. Missing originals stay HOLD. Never fabricate any observation, original receipt, signer or owner approval.
+
+## 1. Independent, bounded full retention-chain reconciliation
+`scripts/build885_independent_retention_sla_audit.mjs`, scheduled every three hours at :43 UTC plus manual dispatch from `.github/workflows/rosie885-independent-audit-watch.yml`, reads the original signed GitHub 883 scheduler step receipts and original signed 884 retention checkpoints **from their actual GitHub issues**, with strict REST paging and bounded exact total-count readback.
+
+The verifier independently checks every bounded `github-actions[bot]`-authored Ed25519 original step receipt against the original Cloudflare-pinned key, detects duplicate run/mode/attempt and GitHub comment IDs, and verifies each original 884 checkpoint signature. It follows every `previous_checkpoint_sha256` back to genesis, insists that the earliest checkpoint has a null predecessor, recomputes the SHA-256 hash for *each exact original signed comment window*, and matches all first/last comment IDs and cumulative source counts. A deleted, replaced, reordered, duplicated, unapproved, orphaned, or uncheckpointed original entry is **HOLD**. The bounded limit is 2,000 comments per original issue (larger archives must be independently migrated/enrolled and are not silently regarded as complete). GitHub comments are mutable and may be deleted by authorized GitHub maintainers; these checks are **tamper evident, not WORM or a guaranteed off-platform lifetime archive**.
+
+A verified readback is separately signed with the GitHub-held Ed25519 private key whose public key must match the original live Cloudflare pin. The signed audit comment is independently read back from the original GitHub audit issue `[Rosie 885] Independent original retention chain and scheduler SLA audit`. On any missing source/credential/signature, the audit fails closed and leaves a redacted owner issue, not a synthetic passing audit.
+
+## 2. Multi-horizon original GitHub scheduler SLA
+`monitorSchedulerSla885` groups originally signed `watch` and `anchor` workflow-step receipts by exact original GitHub run ID, attempt, SHA and scheduled event, then compares them to the original GitHub Actions workflow run list for `rosie882-signed-enrollment-watch.yml`. Only completed successful original scheduled runs with both authentic signed modes qualify. It independently checks **4 hours, 24 hours, 7 days and 30 days**, with nominal 2-hour cron intervals, a 4-hour maximum permissible observed gap and source maturity proof. A 30-day window with only 1 day of source evidence reports **INSUFFICIENT_HISTORY_HOLD**, not 30-day success. Missing original mode, an actual failed workflow, source gaps, changed SHA, lack of scheduler history and incomplete original signer enrollment all remain HOLD. The 4-hour/24-hour horizons are required for the owner's renewal ceremony; 7-day/30-day trend is visibly classified independently.
+
+This is an original GitHub scheduler history SLA observation, **not** an independent physical provider transaction/receipt, HTTP vendor delivery, customer engagement, owner approval, financial closure or guaranteed scheduler uptime between observations.
+
+## 3. Original owner-gated signed closure receipt renewal
+The original owner can review the read-only **Admin Booking → Build 885** screen: chained original checkpoint counts, independent signed audit recency, scheduler SLA for each horizon, latest signed owner renewal and next seven-day renewal due date. The dashboard does not submit an approval.
+
+A renewal is **not** an automatic close/reopen. It requires:
+1. The original Build 884 drift issue is already `closed / completed` by the original `github-actions[bot]` after an original `RosevearCreations` `ROSIE884-CLOSE` comment cryptographically tied to a genuine historical signed checkpoint.
+2. The current Build 885 independently signed audit matches the **current Build 884 checkpoint**, with verified complete bounded original source chain, fresh 4-hour/24-hour scheduler evidence and a recent audit timestamp.
+3. The original Build 881 Cloudflare watch/source and independently signed original rotation receipt digests remain verifiable against the original GitHub anchors; the existing original owner ACK is current (seven days, exact issue snapshot). The separately GitHub-held signer matches the original Cloudflare public verifier.
+4. The original owner manually comments **on the original Build 884 drift issue**, after reading the original sources, exactly:
+   `ROSIE885-RENEW: <latest_checkpoint_sha256>:<latest_signed_audit_sha256>:<previous_signed_renewal_sha256_or_GENESIS>`
+   The comment must come from `RosevearCreations`, be unique, not predate the current audit/previous renewal, and be no older than 24 hours.
+5. **Only** the original `RosevearCreations` GitHub actor may manually dispatch `.github/workflows/rosie885-original-owner-renewal.yml`. Its source script revalidates the actual original 881/883/884/885 data, consent, action origin and signatures. It appends a new pinned-signer Ed25519 receipt to the dedicated `[Rosie 885] Owner-gated closure receipt renewals` issue and independently verifies exact bot-authored GitHub readback and the prior renewal link. No automatic or synthetic consent is posted. The signed renewal's dashboard validity lasts seven days and must be explicitly renewed thereafter.
+
+**This ceremony never closes any original issue, changes a payment, claims a vendor event, rotates or extends an issuer key, changes an original owner/worker role or clears a provider incident.** A software Production GREEN cannot force this gate GREEN.
+
+## Testing and release
+Protected Build 885 regression covers full chained windows, genesis, signature tampering, swapped/deleted/replayed original receipts, missing/orphan checkpoints, unrelated GitHub authors, stale/immature scheduling horizons and exactly matched scheduled GitHub run outcomes; closed-by provenance, original 884 approval attached to a signed historical checkpoint, owner-authored current renewal comment, missing/duplicate/stale approval, audit drift, renewal signed receipt verification and mirrored owner HTML. Existing Build 884/883/882/881 tests remain active.
+
+Feature branch → protected `dev` PR → protected `main` PR (no bypass). Verify exact `main` SHA Cloudflare Production, HTTP static/contextual runtime, source/business PASS, final Release Health GREEN and measured CI queue budget WITHIN_BUDGET. Report original operational HOLD separately.
+
+References: https://docs.github.com/en/rest/issues/comments ; https://docs.github.com/en/rest/actions/workflow-runs ; https://docs.github.com/en/actions/reference/events-that-trigger-workflows ; https://developers.cloudflare.com/workers/runtime-apis/web-crypto/

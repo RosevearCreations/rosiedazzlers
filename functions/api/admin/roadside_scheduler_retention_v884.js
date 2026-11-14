@@ -103,7 +103,7 @@ export async function onRequestGet({request,env}){
   for(const record of recent){
    const run=await api884(env,'/repos/'+repo883+'/actions/runs/'+record.run_id);
    if(run?.repository?.full_name!==repo883||typeof run.path!=='string'||
-    !run.path.split('@')[0].endsWith('/.github/workflows/rosie882-signed-enrollment-watch.yml'))
+    !run.path.split('@')[0].endsWith('.github/workflows/rosie882-signed-enrollment-watch.yml'))
     throw Error('ORIGINAL_WORKFLOW_REPO_PATH_HOLD');
    runs.push(run);
   }
