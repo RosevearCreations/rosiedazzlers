@@ -491,7 +491,7 @@ async function createStripeSession({ env, request, booking, body, payableDeposit
   form.set("cancel_url", cancelUrl.toString());
   form.set("payment_method_types[0]", "card");
   form.set("line_items[0][price_data][currency]", "cad");
-  form.set("line_items[0][price_data][product_data][name]", `${body.package_code} deposit`);
+  form.set("line_items[0][price_data][product_data][name]", `${booking.package_code} deposit`);
   form.set("line_items[0][price_data][unit_amount]", String(payableDepositCents));
   form.set("line_items[0][quantity]", "1");
   form.set("customer_email", String(body.customer_email || ""));
@@ -528,7 +528,7 @@ async function createPayPalOrder({ env, request, booking, body, payableDepositCe
       reference_id: booking.id,
       amount: { currency_code: "CAD", value: (payableDepositCents / 100).toFixed(2) },
       custom_id: booking.id,
-      description: `${body.package_code} deposit`
+      description: `${booking.package_code} deposit`
     }],
     application_context: {
       brand_name: "Rosie Dazzlers",
