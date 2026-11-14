@@ -1,0 +1,27 @@
+name: Rosie 883 Owner-Supervised Original External Anchor Exception Recovery
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: rosie883-original-anchor-manual-triage
+  cancel-in-progress: false
+jobs:
+  original-recovery-source-readback:
+    if: github.repository == 'RosevearCreations/rosiedazzlers' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect original custody and publish bounded owner exception classification (never auto repair)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
+          ROSIE881_ANCHOR_JOB_SECRET: ${{ secrets.ROSIE881_ANCHOR_JOB_SECRET }}
+          ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK: ${{ secrets.ROSIE881_EXTERNAL_ANCHOR_PRIVATE_JWK }}
+        run: node scripts/build883_anchor_exception_triage.mjs
