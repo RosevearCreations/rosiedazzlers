@@ -49,10 +49,10 @@
       qs('#confirmLink').href=d.documents?.confirmation_url||'#';
       const rows=[];
       rows.push({label:d.package?.code ? (d.package?.name||'Service package') : 'Individually selected services', detail:d.booking?.slot_label||d.booking?.service_date||'', amount:d.summary?.base_total_cents||0});
-      (Array.isArray(d.addons)?d.addons:[]).forEach((addon)=>rows.push({label:addon.name, detail:addon.quote_required?'Quote required review':'Add-on', amount:addon.cents||0}));
+      (Array.isArray(d.addons)?d.addons:[]).forEach((addon)=>rows.push({label:addon.name, detail:addon.quote_required?'Quote required review':'Add-on', amount:null}));
       if((d.summary?.discount_cents||0)>0) rows.push({label:'On-site discount / order adjustment', detail:'Discount recorded by office', amount:-(d.summary.discount_cents||0)});
       if((d.summary?.refund_cents||0)>0) rows.push({label:'Refund issued', detail:'Refund recorded by office', amount:-(d.summary.refund_cents||0)});
-      qs('#lineTable').innerHTML=rows.map((row)=>`<div class="line-row"><div><strong>${esc(row.label)}</strong><div class="muted">${esc(row.detail||'')}</div></div><div>${row.amount<0?'Credit':'Charge'}</div><div><strong>${esc(money(row.amount))}</strong></div></div>`).join('');
+      qs('#lineTable').innerHTML=rows.map((row)=>`<div class="line-row"><div><strong>${esc(row.label)}</strong><div class="muted">${esc(row.detail||'')}</div></div><div>${row.amount===null?'Included in booked total':row.amount<0?'Credit':'Charge'}</div><div><strong>${row.amount===null?'—':esc(money(row.amount))}</strong></div></div>`).join('');
       qs('#totalTable').innerHTML=[
         ['Booked total (CAD; server-recorded)', money(d.summary?.base_total_cents||0)],
         ['Discounts', money(-(d.summary?.discount_cents||0))],
