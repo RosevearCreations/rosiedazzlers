@@ -66,6 +66,17 @@
   <link rel="stylesheet" href="/assets/build650-booking-guidance.css?v=build650" />
   <link rel="stylesheet" href="/assets/ux-800-804.css?v=build804" />
   <link rel="stylesheet" href="/assets/checkout-mobile-v808.css?v=build808" />
+  <style id="booking-paths-style-888">
+    .booking-paths-888__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+    .booking-paths-888__choice{display:flex;flex-direction:column;gap:10px;min-width:0;padding:20px;border:2px solid rgba(255,255,255,.22);border-radius:18px;background:rgba(255,255,255,.055);color:inherit;text-decoration:none;min-height:176px}
+    .booking-paths-888__choice strong{font-size:1.17rem}
+    .booking-paths-888__choice span{line-height:1.5}
+    .booking-paths-888__choice:hover,.booking-paths-888__choice:focus-visible{border-color:#a4b8ff;background:rgba(77,119,255,.15)}
+    .booking-paths-888__choice:focus-visible{outline:3px solid #fff;outline-offset:3px}
+    .booking-paths-888__action{margin-top:auto;font-weight:800;text-decoration:underline;text-underline-offset:4px}
+    @media(max-width:720px){.booking-paths-888__grid{grid-template-columns:1fr}.booking-paths-888__choice{min-height:0;padding:16px}}
+    @media(prefers-reduced-motion:no-preference){.booking-paths-888__choice{transition:background .15s,border-color .15s}}
+  </style>
 </head>
 <body>
   <div class="nav">
@@ -94,6 +105,24 @@
         <div class="mini muted" style="margin-top:5px">Complete Detail is the broad inside-and-out reset. Interior or exterior specialists are better when one side is the main concern. Difficult stains, odours, pet hair, paint correction and coatings can be reviewed from photos or notes during booking.</div>
         <div class="row" style="margin-top:10px"><a class="btn primary" href="#services">Compare services</a><a class="btn ghost" href="#booking">Go to availability</a></div>
       </div>
+    </section>
+
+    <section class="panel booking-paths-888" id="bookingPaths888" aria-labelledby="bookingPathsHeading888">
+      <h2 id="bookingPathsHeading888">How would you like to book?</h2>
+      <p class="muted">Both choices use the same live service catalogue, availability and secure checkout. You can change your mind without losing a booking or making a payment.</p>
+      <div class="booking-paths-888__grid" role="group" aria-label="Choose how to book">
+        <a class="booking-paths-888__choice" id="guidedPath888" href="#booking" aria-describedby="guidedDesc888">
+          <strong>Guide me step by step</strong>
+          <span id="guidedDesc888">Use our five-step wizard to choose a date, vehicle, package, optional extras and payment.</span>
+          <span class="booking-paths-888__action">Start guided booking →</span>
+        </a>
+        <a class="booking-paths-888__choice" id="manualPath888" href="#services" aria-describedby="manualDesc888">
+          <strong>Let me choose services</strong>
+          <span id="manualDesc888">Compare packages and add-ons yourself, with a running estimate before finishing in the booking planner. Individual standalone service checkout is being added next.</span>
+          <span class="booking-paths-888__action">Browse services →</span>
+        </a>
+      </div>
+      <p class="muted mini" id="bookingPathStatus888" role="status" aria-live="polite">Choose whichever booking style is easiest for you.</p>
     </section>
 
     <section class="panel" id="services" aria-labelledby="servicesHeading">
@@ -548,5 +577,15 @@
   <script type="module" src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/site-policies.js?v=20261101build737" defer></script>
   <script src="/assets/booking-hours.js" defer></script>
+  <script id="booking-paths-script-888">
+    (function(){
+      const status=document.getElementById('bookingPathStatus888');
+      const choices=[['guidedPath888','Guided booking selected. Continue with the five-step planner.'],['manualPath888','Service browsing selected. Choose a package and extras, then continue to the shared booking planner.']];
+      for(const [id,message] of choices){
+        const link=document.getElementById(id);
+        if(link)link.addEventListener('click',()=>{if(status)status.textContent=message;});
+      }
+    })();
+  </script>
 </body>
 </html>
