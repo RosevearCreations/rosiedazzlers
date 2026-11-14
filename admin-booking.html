@@ -311,6 +311,20 @@
               <div id="rd883Anchor" class="notice mini" role="status" aria-live="polite">No original external anchor reconciliation reviewed yet.</div>
               <p class="mini">If genuine evidence is missing, review the original issue and use the <a href="https://github.com/RosevearCreations/rosiedazzlers/actions/workflows/rosie883-manual-anchor-recovery.yml" target="_blank" rel="noopener noreferrer">supervised anchor recovery workflow</a>. It reports exceptions without automatically rewriting anchors, changing keys or acknowledging on behalf of the owner.</p>
             </section>
+            <section class="panel" style="margin-top:14px" aria-label="Build 884 signed receipt retention, original execution drift and owner-gated closure">
+              <h4>Build 884 — Signed Receipt Retention, Execution Drift &amp; Owner-Gated Renewal Closure</h4>
+              <p class="mini">Review independent signed retention checkpoints and original GitHub scheduling results. Records are signed and bounded; GitHub comments are not immutable storage, and no original vendor delivery is assumed.</p>
+              <button id="rd884Review" class="btn ghost" type="button">Review signed retention and owner closure gates</button>
+              <div id="rd884Retention" class="notice mini" role="status" aria-live="polite">No independently signed retention checkpoint readback verified.</div>
+              <div id="rd884Drift" class="notice mini" role="status" aria-live="polite">No original execution cadence or signed source drift independently reviewed.</div>
+              <div id="rd884Closure" class="notice mini" role="status" aria-live="polite">No owner-gated renewal exception closure approved.</div>
+              <button id="rd884CopyClose" class="btn ghost" type="button" disabled>Copy current owner closure review text</button>
+              <a id="rd884DriftIssue" class="btn ghost" target="_blank" rel="noopener noreferrer" hidden>Open original execution exception</a>
+              <a id="rd884RetentionIssue" class="btn ghost" target="_blank" rel="noopener noreferrer" hidden>Open signed retention evidence</a>
+              <div id="rd884CopyState" class="notice mini" role="status" aria-live="polite">Copying approval text does not submit it or close any issue.</div>
+              <p class="mini">Only after a genuine original owner GitHub comment matching the current checkpoint, use the <a href="https://github.com/RosevearCreations/rosiedazzlers/actions/workflows/rosie884-owner-gated-closure.yml" target="_blank" rel="noopener noreferrer">manual owner-gated closure workflow</a>. It closes only the Build 884 drift issue if every original gate passes; it never repairs anchors or clears provider/finance/issuer incidents.</p>
+            </section>
+
 
 
           </section>
@@ -601,5 +615,6 @@
   <script type="module" src="/assets/admin-booking-v880.js"></script>
   <script type="module" src="/assets/admin-booking-v881.js"></script>
   <script type="module" src="/assets/admin-booking-v883.js"></script>
+  <script type="module" src="/assets/admin-booking-v884.js"></script>
 </body>
 </html>
