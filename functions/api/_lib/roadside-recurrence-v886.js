@@ -34,7 +34,7 @@ export function reconcileAudits886(records, {now = Date.now(), ownerRenewal = nu
     horizons[h]={state,original_audit_count:within.length,source_status:reported};
     if(state!=='VERIFIED') reasons.push('ORIGINAL_'+h.toUpperCase()+'_COVERAGE_'+state);
   }
-  if(!validTime(latest?.recorded_at) || now-latestAt>4*3600000)
+  if(!validTime(latest?.recorded_at) || now-latestAt>=4*3600000)
     reasons.push('LATEST_ORIGINAL_AUDIT_STALE');
   if(!ownerRenewal || ownerRenewal.original_owner_verified!==true ||
      !validTime(ownerRenewal.recorded_at) || !ownerRenewal.audit_run_id ||
