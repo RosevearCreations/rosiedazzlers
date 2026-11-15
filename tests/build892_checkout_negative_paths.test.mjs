@@ -22,7 +22,7 @@ test('sub-cent approved catalogue service never becomes a zero-cost checkout',()
 });
 test('sub-cent owner deposit cannot silently become a zero-cent payment',()=>{
   const c=baseline();c.booking_rules.ala_carte_policy.deposit_cad=0.001;
-  reject(c,body(),'STANDALONE_DEPOSIT_INVALID');
+  reject(c,body(),'STANDALONE_DEPOSIT_NOT_APPROVED');
 });
 test('non-finite and nonnumeric catalogue prices fail closed',()=>{
   for(const value of [NaN,Infinity,-Infinity,'90',null,0,-1]){
@@ -60,4 +60,21 @@ test('unsupported vehicle size, unapproved duration and gift/promo require revie
 test('unsafe deposit cents never authorize a checkout',()=>{
   const c=baseline();c.booking_rules.ala_carte_policy.deposit_cad=Number.MAX_SAFE_INTEGER;
   reject(c,body(),'STANDALONE_DEPOSIT_NOT_APPROVED');
+});
+
+test('fractional-cent catalogue prices and deposits fail closed rather than round',()=>{
+  for(const price of [90.001,90.999,0.009]){
+    const c=baseline();c.addon_map.headlights.prices_cad.mid=price;
+    reject(c,body(),'STANDALONE_PRICE_MISSING');
+  }
+  for(const deposit of [25.001,25.999,0.009]){
+    const c=baseline();c.booking_rules.ala_carte_policy.deposit_cad=deposit;
+    reject(c,body(),'STANDALONE_DEPOSIT_NOT_APPROVED');
+  }
+  const c=baseline();c.addon_map.headlights.prices_cad.mid=90.29;
+  c.booking_rules.ala_carte_policy.deposit_cad=25.29;
+  const accepted=resolveAlaCarte889(c,body());
+  assert.equal(accepted.ok,true);
+  assert.equal(accepted.subtotal_cents,9029);
+  assert.equal(accepted.deposit_cents,2529);
 });
