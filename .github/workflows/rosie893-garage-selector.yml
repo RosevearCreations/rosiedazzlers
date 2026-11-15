@@ -1,0 +1,19 @@
+name: Rosie 893 Customer Garage Selector Security
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+permissions:
+  contents: read
+jobs:
+  garage-selector:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/build893_garage_selector.test.mjs
+      - run: node --check assets/booking-vehicle-selector.js
