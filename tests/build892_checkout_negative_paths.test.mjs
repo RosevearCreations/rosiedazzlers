@@ -42,3 +42,22 @@ test('missing approval, quote-only and tampered browser totals never authorize a
   assert.equal(good.booking_created,false);
   assert.equal(good.payment_attempted,false);
 });
+
+test('duplicate, unknown and mixed service selections fail closed',()=>{
+  const duplicate=body();duplicate.service_codes=['headlights','headlights'];
+  reject(baseline(),duplicate,'STANDALONE_SELECTION_INVALID');
+  const unknown=body();unknown.service_codes=['unlisted'];
+  reject(baseline(),unknown,'STANDALONE_ITEM_NOT_APPROVED');
+  reject(baseline(),{...body(),package_code:'premium'},'MIXED_PACKAGE_AND_ALA_CARTE');
+  reject(baseline(),{...body(),addon_codes:['headlights']},'MIXED_PACKAGE_AND_ALA_CARTE');
+});
+test('unsupported vehicle size, unapproved duration and gift/promo require review',()=>{
+  reject(baseline(),{...body(),vehicle_size:'unknown'},'VEHICLE_SIZE_INVALID');
+  reject(baseline(),{...body(),duration_slots:0},'STANDALONE_DURATION_REVIEW_HOLD');
+  reject(baseline(),{...body(),gift_code:'TEST'},'STANDALONE_GIFT_PROMO_REVIEW_HOLD');
+  reject(baseline(),{...body(),promo_code:'TEST'},'STANDALONE_GIFT_PROMO_REVIEW_HOLD');
+});
+test('unsafe deposit cents never authorize a checkout',()=>{
+  const c=baseline();c.booking_rules.ala_carte_policy.deposit_cad=Number.MAX_SAFE_INTEGER;
+  reject(c,body(),'STANDALONE_DEPOSIT_NOT_APPROVED');
+});
