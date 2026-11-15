@@ -15,5 +15,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test tests/build892_checkout_negative_paths.test.mjs tests/build889_ala_carte_checkout.test.mjs
+      - run: node --test tests/build892_checkout_negative_paths.test.mjs tests/build889_ala_carte_checkout.test.mjs tests/build892_checkout_provider_validation.test.mjs
       - run: node --check functions/api/_lib/ala-carte-v889.js
