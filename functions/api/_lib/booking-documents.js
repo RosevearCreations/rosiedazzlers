@@ -74,10 +74,10 @@ export async function queueOrderConfirmationNotification(env, bookingId, source 
       `Customer: ${payload.booking.customer_name || "Customer"}`,
       `Service date: ${payload.booking.service_date || "TBD"}`,
       `Time: ${payload.booking.slot_label || payload.booking.start_slot || "TBD"}`,
-      `Package: ${payload.package.name}`,
+      `Services: ${payload.package.name}`,
       `Vehicle: ${payload.vehicle.label}`,
       `Service area: ${payload.booking.service_area_label}`,
-      `Deposit due / paid: ${formatMoney(payload.summary.deposit_cents)}`,
+      `Deposit requested (not payment confirmation): ${formatMoney(payload.summary.deposit_cents)}`,
       `Estimated total: ${formatMoney(payload.summary.effective_total_cents)}`,
       `Order confirmation: ${payload.documents.confirmation_url}`,
       `Invoice / summary: ${payload.documents.invoice_url}`,
@@ -91,10 +91,10 @@ export async function queueOrderConfirmationNotification(env, bookingId, source 
       <p><strong>Customer:</strong> ${escapeHtml(payload.booking.customer_name || "Customer")}</p>
       <p><strong>Service date:</strong> ${escapeHtml(payload.booking.service_date || "TBD")}</p>
       <p><strong>Time:</strong> ${escapeHtml(payload.booking.slot_label || payload.booking.start_slot || "TBD")}</p>
-      <p><strong>Package:</strong> ${escapeHtml(payload.package.name)}</p>
+      <p><strong>Services:</strong> ${escapeHtml(payload.package.name)}</p>
       <p><strong>Vehicle:</strong> ${escapeHtml(payload.vehicle.label)}</p>
       <p><strong>Service area:</strong> ${escapeHtml(payload.booking.service_area_label)}</p>
-      <p><strong>Deposit due / paid:</strong> ${escapeHtml(formatMoney(payload.summary.deposit_cents))}</p>
+      <p><strong>Deposit requested (not payment confirmation):</strong> ${escapeHtml(formatMoney(payload.summary.deposit_cents))}</p>
       <p><strong>Estimated total:</strong> ${escapeHtml(formatMoney(payload.summary.effective_total_cents))}</p>
       <p><a href="${payload.documents.confirmation_url}">Open order confirmation</a><br><a href="${payload.documents.invoice_url}">Open invoice / summary</a></p>
       <h2>Before we arrive</h2>
@@ -173,7 +173,7 @@ async function buildPayload(env, booking) {
   const depositCents = toCents(booking.deposit_cents || 0);
   const collectedCents = toCents(finance.collected_total);
   const effectiveTotalCents = Math.max(0, baseTotalCents - discountCents);
-  const balanceDueCents = Math.max(0, effectiveTotalCents - collectedCents + refundCents);
+  const balanceDueCents = Math.max(0, effectiveTotalCents - collectedCents);
   const progressToken = String(booking.progress_token || "").trim() || null;
   const origin = COMPANY.website;
   const serviceAreaLabel =

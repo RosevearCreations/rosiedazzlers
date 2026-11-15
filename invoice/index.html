@@ -30,6 +30,7 @@
         <div class="line-table" id="lineTable"></div>
       </section>
       <section class="totals" id="totalTable"></section>
+      <p class="muted" id="billingNote">Amounts are in Canadian dollars. This invoice displays the server-recorded booked total; it does not claim a separate HST amount unless the authoritative billing record supplies one. A deposit requested is not proof of payment. Quote-required work is subject to review.</p>
       <section class="panel" style="margin-top:16px"><h2 style="margin-top:0">Customer and service summary</h2><div id="summaryRows"></div></section>
       <div class="doc-actions"><button class="btn primary" type="button" onclick="window.print()">Print invoice</button><a id="confirmLink" class="btn ghost" href="#">Open order confirmation</a></div>
     </article>
@@ -47,18 +48,19 @@
       qs('#invoiceDate').textContent=d.booking?.created_at ? new Date(d.booking.created_at).toLocaleString('en-CA') : '';
       qs('#confirmLink').href=d.documents?.confirmation_url||'#';
       const rows=[];
-      rows.push({label:d.package?.name||'Service package', detail:d.booking?.slot_label||d.booking?.service_date||'', amount:d.package?.base_total_cents||d.summary?.base_total_cents||0});
-      (Array.isArray(d.addons)?d.addons:[]).forEach((addon)=>rows.push({label:addon.name, detail:addon.quote_required?'Quote required review':'Add-on', amount:addon.cents||0}));
+      rows.push({label:d.package?.code ? (d.package?.name||'Service package') : 'Individually selected services', detail:d.booking?.slot_label||d.booking?.service_date||'', amount:d.summary?.base_total_cents||0});
+      (Array.isArray(d.addons)?d.addons:[]).forEach((addon)=>rows.push({label:addon.name, detail:addon.quote_required?'Quote required review':'Add-on', amount:null}));
       if((d.summary?.discount_cents||0)>0) rows.push({label:'On-site discount / order adjustment', detail:'Discount recorded by office', amount:-(d.summary.discount_cents||0)});
       if((d.summary?.refund_cents||0)>0) rows.push({label:'Refund issued', detail:'Refund recorded by office', amount:-(d.summary.refund_cents||0)});
-      qs('#lineTable').innerHTML=rows.map((row)=>`<div class="line-row"><div><strong>${esc(row.label)}</strong><div class="muted">${esc(row.detail||'')}</div></div><div>${row.amount<0?'Credit':'Charge'}</div><div><strong>${esc(money(row.amount))}</strong></div></div>`).join('');
+      qs('#lineTable').innerHTML=rows.map((row)=>`<div class="line-row"><div><strong>${esc(row.label)}</strong><div class="muted">${esc(row.detail||'')}</div></div><div>${row.amount===null?'Included in booked total':row.amount<0?'Credit':'Charge'}</div><div><strong>${row.amount===null?'—':esc(money(row.amount))}</strong></div></div>`).join('');
       qs('#totalTable').innerHTML=[
-        ['Booked total', money(d.summary?.base_total_cents||0)],
+        ['Booked total (CAD; server-recorded)', money(d.summary?.base_total_cents||0)],
         ['Discounts', money(-(d.summary?.discount_cents||0))],
         ['Effective total', money(d.summary?.effective_total_cents||0)],
-        ['Collected to date', money(d.summary?.collected_total_cents||0)],
+        ['Deposit requested', money(d.summary?.deposit_cents||0)],
+        ['Payments received and recorded', money(d.summary?.collected_total_cents||0)],
         ['Refunds', money(-(d.summary?.refund_cents||0))],
-        ['Balance due', money(d.summary?.balance_due_cents||0)]
+        ['Remaining balance (after recorded refunds)', money(d.summary?.balance_due_cents||0)]
       ].map(([l,v])=>`<div class="total-row"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
       qs('#summaryRows').innerHTML=[
         ['Customer', d.booking?.customer_name||'—'],
@@ -67,7 +69,9 @@
         ['Vehicle', d.vehicle?.label||'—'],
         ['Service area', d.booking?.service_area_label||'—'],
         ['Address', [d.booking?.address_line1,d.booking?.address_line2,d.booking?.city,d.booking?.postal_code].filter(Boolean).join(', ')||'—'],
-        ['Payment provider', d.booking?.payment_provider||'—'],
+        ['Payment provider', d.booking?.payment_provider||'Not selected'],
+        ['Booking status', d.booking?.status||'Pending verification'],
+        ['Payment verification', (d.summary?.collected_total_cents||0)>0 ? 'Payment recorded by server; see collected amount above' : 'No verified payment recorded; deposit requested is not a receipt'],
         ['Policy version', d.policy_stamp?.version||d.company?.policy_stamp?.version||'current'],
         ['Notes', d.booking?.notes||'None recorded']
       ].map(([l,v])=>`<div class="total-row"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
