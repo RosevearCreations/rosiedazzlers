@@ -22,7 +22,7 @@ test('sub-cent approved catalogue service never becomes a zero-cost checkout',()
 });
 test('sub-cent owner deposit cannot silently become a zero-cent payment',()=>{
   const c=baseline();c.booking_rules.ala_carte_policy.deposit_cad=0.001;
-  reject(c,body(),'STANDALONE_DEPOSIT_INVALID');
+  reject(c,body(),'STANDALONE_DEPOSIT_NOT_APPROVED');
 });
 test('non-finite and nonnumeric catalogue prices fail closed',()=>{
   for(const value of [NaN,Infinity,-Infinity,'90',null,0,-1]){
