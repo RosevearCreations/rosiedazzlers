@@ -39,6 +39,14 @@
     .summary-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}
     .summary-row strong{font-weight:800;text-align:right}
     .wizard-step[hidden]{display:none !important}
+    /* Build 891: keyboard and touch access on phones, tablets and desktops. */
+    .wizard-nav button,.wizard-actions button,.slot-row button{min-height:44px;min-width:44px}
+    .wizard-nav button{white-space:normal;overflow-wrap:anywhere}
+    .wizard-nav button[aria-current="step"]{outline:2px solid currentColor;outline-offset:2px}
+    :is(button,a,input,select,textarea,summary):focus-visible{outline:3px solid #ffda73;outline-offset:3px}
+    @media (prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    @media (max-width:600px){.wizard-nav{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.wizard-nav button{width:100%;min-width:0}.wizard-actions button{flex:1 1 100%}}
+
     .wizard-actions{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px}
     .step-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
     .step-head h2,.step-head h3{margin:0}
@@ -1680,7 +1688,7 @@
       const nav = qs("#wizardNav");
       nav.innerHTML = steps.map((step, idx) => {
         const n = idx + 1;
-        return `<button class="btn ${n === state.currentStep ? "primary" : "ghost"}" type="button" data-step-nav="${n}" ${n > state.currentStep + 1 ? "disabled" : ""}><span>${step.title}</span><br><small>${step.subtitle}</small></button>`;
+        return `<button class="btn ${n === state.currentStep ? "primary" : "ghost"}" type="button" data-step-nav="${n}" ${n > state.currentStep + 1 ? "disabled" : ""} ${n === state.currentStep ? 'aria-current="step"' : ""}><span>${step.title}</span><br><small>${step.subtitle}</small></button>`;
       }).join("");
 
       qsa("[data-step-nav]").forEach((btn) => {
@@ -1706,9 +1714,17 @@
       renderWizardNav();
       if (state.currentStep === 4) renderReviewVehicle();
       if (state.currentStep === 5) renderFinalSummary();
+      // Focus the newly visible step heading for keyboard and screen-reader users.
+      // Keep existing error focus priority when a validation message is present.
+      const activePanel = qs(`.wizard-step[data-step="${state.currentStep}"]`);
+      const heading = activePanel?.querySelector("h2,h3");
+      if (heading && !heading.hasAttribute("tabindex")) heading.setAttribute("tabindex", "-1");
       const errorNode = qs(`#step${state.currentStep}Error`);
       if (errorNode?.textContent?.trim()) {
         try { errorNode.focus({ preventScroll: true }); } catch { errorNode.focus(); }
+      }
+      if (!errorNode?.textContent?.trim() && heading) {
+        try { heading.focus({ preventScroll: true }); } catch { heading.focus(); }
       }
       analyticsTrack("booking_step_view", { step_number: state.currentStep });
       postEmbedState();
