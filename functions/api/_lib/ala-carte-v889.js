@@ -32,6 +32,8 @@ export function resolveAlaCarte889(catalog, body) {
     if (typeof amount!=='number' || !Number.isFinite(amount) || amount<=0 || !Number.isSafeInteger(Math.round(amount*100)))
       return refusal('STANDALONE_PRICE_MISSING','A selected service has no approved price for this vehicle size.');
     const cents=Math.round(amount*100);
+    if (!Number.isSafeInteger(cents) || cents<=0)
+      return refusal('STANDALONE_PRICE_MISSING','A selected service has no approved billable price for this vehicle size.');
     subtotalCents+=cents;
     if (!Number.isSafeInteger(subtotalCents))return refusal('STANDALONE_TOTAL_INVALID','Please contact Rosie Dazzlers for an individual quote.');
     items.push({code:a.code,label:a.name,cents,quote_required:false});
@@ -39,10 +41,10 @@ export function resolveAlaCarte889(catalog, body) {
   if (subtotalCents<=0)return refusal('STANDALONE_TOTAL_INVALID','There is no billable service selected.');
   const deposit=policy.deposit_cad;
   if (typeof deposit!=='number' || !Number.isFinite(deposit) || deposit<=0 ||
-      Math.round(deposit*100)>subtotalCents)
+      !Number.isSafeInteger(Math.round(deposit*100)) || Math.round(deposit*100)>subtotalCents)
     return refusal('STANDALONE_DEPOSIT_NOT_APPROVED','Individual-service deposit terms need owner review before checkout.');
   const depositCents=Math.round(deposit*100);
-  if (!Number.isSafeInteger(depositCents))
+  if (!Number.isSafeInteger(depositCents) || depositCents<=0)
     return refusal('STANDALONE_DEPOSIT_INVALID','Individual-service deposit terms are not valid.');
   // Package gift redemptions and promo discounts are not atomically compatible
   // with a package-free basket until an explicit approved ledger contract exists.
