@@ -21,7 +21,7 @@ export async function onRequestPost({ request, env }) {
     const body = await request.json().catch(() => null);
     if (!body || typeof body !== "object") return corsJson({ error: "Invalid JSON body" }, 400);
 
-    const isAlaCarte889 = body.booking_mode === "ala_carte";
+    // Reject unsupported payment routes before any customer or booking writes.\n    // Never silently treat an unknown provider as a Stripe authorization.\n    if (body.payment_provider != null && !["stripe", "paypal"].includes(String(body.payment_provider).trim().toLowerCase()))\n      return corsJson({ error: "Unsupported payment method. Choose card or PayPal.", booking_created: false, payment_attempted: false }, 400);\n\n    const isAlaCarte889 = body.booking_mode === "ala_carte";
     if (body.booking_mode && !["guided", "ala_carte"].includes(body.booking_mode))
       return corsJson({ error: "Unknown booking method", booking_created:false, payment_attempted:false }, 400);
     const required = [
