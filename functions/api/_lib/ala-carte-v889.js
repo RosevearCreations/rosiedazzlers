@@ -41,7 +41,7 @@ export function resolveAlaCarte889(catalog, body) {
   if (subtotalCents<=0)return refusal('STANDALONE_TOTAL_INVALID','There is no billable service selected.');
   const deposit=policy.deposit_cad;
   if (typeof deposit!=='number' || !Number.isFinite(deposit) || deposit<=0 ||
-      Math.round(deposit*100)>subtotalCents)
+      !Number.isSafeInteger(Math.round(deposit*100)) || Math.round(deposit*100)>subtotalCents)
     return refusal('STANDALONE_DEPOSIT_NOT_APPROVED','Individual-service deposit terms need owner review before checkout.');
   const depositCents=Math.round(deposit*100);
   if (!Number.isSafeInteger(depositCents) || depositCents<=0)
