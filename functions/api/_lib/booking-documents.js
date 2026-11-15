@@ -173,7 +173,7 @@ async function buildPayload(env, booking) {
   const depositCents = toCents(booking.deposit_cents || 0);
   const collectedCents = toCents(finance.collected_total);
   const effectiveTotalCents = Math.max(0, baseTotalCents - discountCents);
-  const balanceDueCents = Math.max(0, effectiveTotalCents - collectedCents + refundCents);
+  const balanceDueCents = Math.max(0, effectiveTotalCents - collectedCents);
   const progressToken = String(booking.progress_token || "").trim() || null;
   const origin = COMPANY.website;
   const serviceAreaLabel =
