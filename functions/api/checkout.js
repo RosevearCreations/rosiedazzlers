@@ -222,6 +222,20 @@ export async function onRequestPost({ request, env }) {
       }, 409);
     }
 
+    // Build 892: fail before inserting a pending booking if the selected
+    // payment provider cannot create its checkout. Otherwise a missing
+    // credential leaves a customer-facing orphan hold consuming capacity.
+    // Gift-only settlement remains on its separate verified path.
+    if (payableDepositCents > 0) {
+      const selectedProvider = String(body.payment_provider || "stripe").trim().toLowerCase();
+      if (selectedProvider === "paypal") {
+        if (!env.PAYPAL_CLIENT_ID || !env.PAYPAL_CLIENT_SECRET)
+          return corsJson({ error: "PayPal checkout is temporarily unavailable. No booking or payment was created.", booking_created: false, payment_attempted: false }, 503);
+      } else if (!env.STRIPE_SECRET_KEY) {
+        return corsJson({ error: "Card checkout is temporarily unavailable. No booking or payment was created.", booking_created: false, payment_attempted: false }, 503);
+      }
+    }
+
     const notes = [];
     if (isAlaCarte889) notes.push("Owner-approved individual standalone services (catalog policy "+alaCarte889.policy_version+"): "+alaCarte889.items.map(i=>i.code).join(", ")+".");
     if (promoApplied) notes.push(`Promo ${promoApplied.code} applied for ${(promoApplied.discount_cents/100).toFixed(2)} CAD.`);
