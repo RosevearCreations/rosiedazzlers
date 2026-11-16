@@ -6,6 +6,7 @@
 
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
 import { resolveAlaCarte889 } from "./_lib/ala-carte-v889.js";
+import { selectedProvider892, providerReady892 } from "./_lib/checkout-provider-v892.js";
 import { resolveTrustedBookingLocation, buildTrustedLocationPatch } from "./_lib/booking-location.js";
 import { resolveCheckoutCustomerIdentity } from "./_lib/checkout-customer-identity.js";
 import { evaluateCapacity738 } from "./_lib/booking-capacity-v738.js";
@@ -23,7 +24,8 @@ export async function onRequestPost({ request, env }) {
 
     // Reject unsupported payment routes before any customer or booking writes.
     // Never silently treat an unknown provider as a Stripe authorization.
-    if (body.payment_provider != null && !["stripe", "paypal"].includes(String(body.payment_provider).trim().toLowerCase()))
+    const selectedPayment892 = selectedProvider892(body.payment_provider);
+    if (!selectedPayment892.ok)
       return corsJson({ error: "Unsupported payment method. Choose card or PayPal.", booking_created: false, payment_attempted: false }, 400);
 
     const isAlaCarte889 = body.booking_mode === "ala_carte";
@@ -231,14 +233,14 @@ export async function onRequestPost({ request, env }) {
     // payment provider cannot create its checkout. Otherwise a missing
     // credential leaves a customer-facing orphan hold consuming capacity.
     // Gift-only settlement remains on its separate verified path.
-    if (payableDepositCents > 0) {
-      const selectedProvider = String(body.payment_provider || "stripe").trim().toLowerCase();
-      if (selectedProvider === "paypal") {
-        if (!env.PAYPAL_CLIENT_ID || !env.PAYPAL_CLIENT_SECRET)
-          return corsJson({ error: "PayPal checkout is temporarily unavailable. No booking or payment was created.", booking_created: false, payment_attempted: false }, 503);
-      } else if (!env.STRIPE_SECRET_KEY) {
-        return corsJson({ error: "Card checkout is temporarily unavailable. No booking or payment was created.", booking_created: false, payment_attempted: false }, 503);
-      }
+    const ready892 = providerReady892({env,provider:selectedPayment892.provider,payableDepositCents});
+    if (!ready892.ok) {
+      const isPayPal = ready892.reason === "paypal_unavailable";
+      return corsJson({
+        error: isPayPal ? "PayPal checkout is temporarily unavailable. No booking or payment was created."
+          : "Card checkout is temporarily unavailable. No booking or payment was created.",
+        booking_created:false,payment_attempted:false
+      }, ready892.reason === "invalid_deposit" ? 409 : 503);
     }
 
     const notes = [];
