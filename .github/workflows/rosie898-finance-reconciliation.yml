@@ -1,0 +1,24 @@
+name: Rosie 898 Finance Reconciliation Source Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  finance898-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source syntax
+        run: node --check functions/api/admin/finance_reconciliation_v898.js
+      - name: Build 898 finance regression tests
+        run: node --test tests/build898_finance_reconciliation.test.mjs
+      - name: Retained Build 832 economic source regression
+        run: node scripts/build832_job_economics_reconciliation_test.mjs
