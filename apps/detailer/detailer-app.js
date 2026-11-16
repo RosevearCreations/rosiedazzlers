@@ -15,7 +15,8 @@
   const requestedJobId=String(new URLSearchParams(location.search).get('job')||'').trim();
   const requestedMessages=location.hash==='#liveJobHost';
   let actor=null,jobs=[],selected=null,liveModule=null,liveModuleMount805=null,currentPolicy=null,deepLinkHandled=false;
-  let mobile745=null,boardFilter='all',reconciliationRequired=true,wasDisconnected=false,continuityEpoch=0;
+  let mobile745=null,mobile895=null,boardFilter='all',reconciliationRequired=true,wasDisconnected=false,continuityEpoch=0;
+  let actionBusy895=false,pendingOutcome895=null,recoveryMessage895='';
   let readiness={jobId:null,state:'idle',intake:null,error:''};
   let readinessRequest=0;
   let workspaceLoading=false;
@@ -154,6 +155,16 @@
     updateActionButtons();
   }
 
+  function renderActionRecovery895(message=''){
+    if(message)recoveryMessage895=message;
+    const node=$('action895RecoveryStatus'),button=$('action895Acknowledge');
+    if(node)node.textContent=!pendingOutcome895?
+      'No unresolved workflow actions in this tab. Only live server evidence confirms completed work.':
+      pendingOutcome895.reconciled?
+        recoveryMessage895+' After reviewing the current source evidence, acknowledge to continue; no action will run automatically.':
+        'A job action may have an uncertain result. Tap Refresh & reconcile jobs; do not press the action again before reviewing the live record.';
+    if(button)button.disabled=!pendingOutcome895?.reconciled||!continuityVerified();
+  }
   function status(message,type=''){
     const box=$('appStatus');
     box.hidden=!message;
@@ -231,15 +242,18 @@
     const gateCurrent=selected&&fieldGate.jobId===String(selected.id)&&fieldGate.loaded===true;
     document.querySelectorAll('[data-job-action]').forEach((button)=>{
       const action=button.dataset.jobAction;
-      let enabled=!!selected&&allowed.has(action)&&continuityVerified();
+      let enabled=!!selected&&allowed.has(action)&&continuityVerified()&&!actionBusy895&&!pendingOutcome895;
       let reason='';
       if(!continuityVerified())reason='Disconnected or stale. Refresh assigned jobs after reconnecting; actions will not replay.';
+      if(actionBusy895)reason='Another job action is already being checked or sent.';
+      if(pendingOutcome895)reason='Refresh and review the uncertain result, then acknowledge before taking another action.';
       if(action==='start'&&stage==='arrived'&&(!gateCurrent||fieldGate.canStart!==true)){enabled=false;reason='Audited onsite review, customer acknowledgements, arrival photo and saved checklist are required before Start job.';}
       if(action==='complete'&&['detailing','paused'].includes(stage)&&(!gateCurrent||fieldGate.canComplete!==true)){enabled=false;reason='Complete all Build 383 field evidence, including after photos, before completing the job.';}
       if(action==='complete'&&['detailing','paused'].includes(stage)&&(!quality749.loaded||quality749.jobId!==String(selected.id)||quality749.summary?.approved!==true)){enabled=false;reason='Independent Build 749 quality review must accept the current complete pre/post evidence before job completion.';}
       button.disabled=!enabled;
       button.title=reason;
     });
+    renderActionRecovery895();
   }
   function renderSelected(){
     $('jobSummary').innerHTML=selected?`<strong>${esc(selected.customer_name||'Customer')}</strong><br>${esc(selected.service_date||'')} · ${esc(selected.start_slot||'')} · ${esc(selected.package_code||'')}<br>Area: ${esc(selected.service_area_municipality||selected.city||selected.service_area||'Confirm with office')}<br>Stage: ${esc(jobStage(selected))}<br>Progress: ${selected.progress_enabled?'enabled':'not enabled'}<br><strong>Staff instructions:</strong> ${esc(selected.notes||'No additional service notes recorded.')}${continuityVerified()?'':'<div class="notice warn">Read-only last-seen snapshot; current assignment and instructions must be reverified.</div>'}${renderReadinessCard()}`:'Choose an assigned job.';
@@ -286,6 +300,8 @@
     if(workspaceLoading)return;
     if(navigator.onLine===false){wasDisconnected=true;continuityState(false,'Offline: last-seen assigned jobs remain visible in this tab only. Nothing can be sent or replayed.');status('Offline. Reconnect and tap Refresh assigned jobs; no request was queued.','warn');renderJobs();renderSelected();return;}
     setWorkspaceBusy(true);
+    // A manual refresh invalidates any action captured before a slow device operation.
+    continuityEpoch++;
     continuityState(false,'Verifying current staff session, assignments and job revisions. Actions are held.');
     const startedEpoch=continuityEpoch;
     if(manual)status('Refreshing assigned jobs…');
@@ -303,6 +319,16 @@
       resetShift748(String(next?.id||''));
       resetQuality749(String(next?.id||''));
       continuityState(true,'Live session and canonical assignments checked. No offline changes were replayed.');
+      if(pendingOutcome895){
+        const former=pendingOutcome895.snapshot;
+        const actual=jobs.find(job=>String(job.id)===former.jobId);
+        pendingOutcome895.reconciled=true;
+        renderActionRecovery895(mobile895.actionRecoveryMessage895({
+          assignmentGone:!actual,
+          stageChanged:!!actual&&jobStage(actual)!==former.stage,
+          revisionChanged:!!actual&&actual.updated_at!==former.revision
+        }));
+      }
       renderJobs();renderSelected();void loadSelectedReadiness();void loadShift748();void loadQuality749();
       const message=mobile745?.reconciliationMessage745({wasOffline:wasDisconnected,assignmentGone:!!oldId&&!jobs.some(job=>String(job.id)===oldId),stageChanged:!!oldId&&!!selected&&String(selected.id)===oldId&&jobStage(selected)!==oldStage})||'Current assignment verified.';
       if(manual||wasDisconnected||message.includes('no longer'))status(message,!!oldId&&!jobs.some(job=>String(job.id)===oldId)?'warn':'ok');
@@ -318,6 +344,8 @@
   }
   async function runAction(action){
     if(!selected)return;
+    if(actionBusy895){status('Another action is already being checked or sent. No duplicate request sent.','warn');return;}
+    if(pendingOutcome895){status('First reconcile and acknowledge the earlier uncertain action. Nothing was repeated.','warn');return;}
     if(!continuityVerified()){status('No change sent. Reconnect, refresh assigned jobs and review the current job first.','warn');return;}
     if(!selected.updated_at){continuityState(false,'Job revision unavailable. Refresh to reverify before any change.');status('The current job revision is missing; no action was sent.','warn');return;}
     if(!allowedActions().allowed.has(action)){status('Action unavailable at the current job stage. No change sent.','warn');return;}
@@ -326,28 +354,51 @@
     if(action==='complete'&&['detailing','paused'].includes(stage)&&(!gateCurrent||fieldGate.canComplete!==true)){status('Completion is blocked until approved-scope, product-use and completion records plus after photos are saved.','warn');return;}
     if(action==='complete'&&['detailing','paused'].includes(stage)&&(!quality749.loaded||quality749.summary?.approved!==true)){status('Complete QC, resolve exceptions and wait for independent Operations acceptance before completing this job.','warn');return;}
     const reason=$('workflowReason').value.trim();
-    const body={booking_id:selected.id,action,reason,client_v745:true,expected_stage:jobStage(selected),expected_updated_at:selected.updated_at};
+    const snapshot=mobile895.actionSnapshot895(selected,action,jobStage(selected),continuityEpoch);
+    if(!snapshot){status('Job action missing a verified identity or revision. No request sent.','warn');return;}
+    const body={booking_id:snapshot.jobId,action,reason,client_v745:true,expected_stage:snapshot.stage,expected_updated_at:snapshot.revision};
     if(action==='start')body.expected_intake_updated_at=fieldGate.setupRevision;
     if(action==='complete')body.expected_quality_revision=quality749.summary?.revision||'';
-    if(action==='arrive'&&navigator.geolocation){
-      try{const pos=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:12000,maximumAge:60000}));body.arrived_latitude=pos.coords.latitude;body.arrived_longitude=pos.coords.longitude;}catch{status('Arrival will continue without device geolocation.','warn');}
-    }
-    const button=document.querySelector(`[data-job-action="${CSS.escape(action)}"]`);if(button)button.disabled=true;
+    actionBusy895=true;updateActionButtons();
     try{
+      if(action==='arrive'&&navigator.geolocation){
+        try{const pos=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:12000,maximumAge:60000}));body.arrived_latitude=pos.coords.latitude;body.arrived_longitude=pos.coords.longitude;}
+        catch{status('Device location unavailable. Assignment still requires revalidation.','warn');}
+      }
+      // Slow geolocation must never permit a stale or different job action.
+      const isCurrent=()=>mobile895.actionStillCurrent895(
+        snapshot,selected,jobStage(selected),continuityEpoch,{
+          verified:continuityVerified(),allowed:allowedActions().allowed.has(action)});
+      if(!isCurrent()){
+        status('Job, connection or revision changed while preparing the action. Nothing was submitted. Refresh and review.','warn');
+        return;
+      }
       const out=await api.requestJson('/api/detailer/job_action',{method:'POST',body:JSON.stringify(body)});
+      if(!isCurrent()){
+        pendingOutcome895={snapshot,reconciled:false};
+        continuityState(false,'Response received after a job or connectivity change. Manual source recheck required.');
+        renderActionRecovery895();
+        status('Server responded after the selected job changed. Do not repeat. Refresh and inspect evidence.','warn');
+        return;
+      }
       if(out.booking){
         const index=jobs.findIndex((job)=>String(job.id)===String(selected.id));
         const merged={...selected,...out.booking};
         if(index>=0)jobs[index]=merged;selected=merged;
       }
       $('workflowReason').value='';
+      pendingOutcome895=null;recoveryMessage895='';
+      renderActionRecovery895();
       renderJobs();renderSelected();
       liveModule?.setJob?.(selected,currentPolicy);
       status(`Job updated: ${action}. Local state was updated from the authoritative response; no follow-up polling was started.`,'ok');
     }catch(error){
+      pendingOutcome895={snapshot,reconciled:false};
       continuityState(false,'Job action outcome needs reconciliation. Refresh assigned jobs before any retry.');
-      status(error.ambiguousMutation?`${error.message} Do not repeat the action until you verify the current job state.`:(error.message||'Could not update job.'),'bad');
-    }finally{renderSelected();}
+      renderActionRecovery895();
+      status(error.ambiguousMutation?`${error.message} Do not repeat the action until you verify the current job state.`:
+        `${error.message||'Could not confirm the job action.'} The result may be uncertain; recheck the live source before another action.`,'bad');
+    }finally{actionBusy895=false;renderSelected();renderActionRecovery895();}
   }
   async function ensureLiveModule(){
     if(!currentPolicy?.may_load_live_module||!selected)return;
@@ -373,6 +424,12 @@
   }
   function bind(){
     $('refreshJobs').addEventListener('click',()=>loadWorkspace({manual:true}));$('mobileRefreshJobs').addEventListener('click',()=>loadWorkspace({manual:true}));
+    $('action895Acknowledge')?.addEventListener('click',()=>{
+      if(!pendingOutcome895?.reconciled||!continuityVerified())return;
+      pendingOutcome895=null;recoveryMessage895='';
+      renderActionRecovery895();updateActionButtons();
+      status('Manual review acknowledged. The live server remains authoritative; no earlier action was replayed.','ok');
+    });
     document.querySelectorAll('[data-build745-filter]').forEach(button=>button.addEventListener('click',()=>{
       boardFilter=button.dataset.build745Filter;
       document.querySelectorAll('[data-build745-filter]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
@@ -396,6 +453,7 @@
   async function boot(){
     if(!api||!policy||!loader||!resolver)throw new Error('Build 271 app-core did not load.');
     mobile745=await import('/assets/detailer-mobile-dayboard-v745.mjs?v=20261102build745');
+    mobile895=await import('/assets/detailer-action-guard-v895.mjs?v=20261115build895');
     continuityState(false,'Waiting for staff session and assignment verification.');
     bind();
     await globalScope.AdminShell.boot({pageKey:'app-detailer',onReady:async({actor:currentActor})=>{
