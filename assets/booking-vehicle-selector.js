@@ -3,6 +3,18 @@
 
 const COOKIE_NAME = "rd_booking_vehicle_selector";
 const BOOK_PATHS = new Set(["/book", "/book/"]);
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+// A garage selector is only a UI hint, never an ownership assertion.
+// Accept exactly a signed-in dashboard row and a non-empty decimal index.
+// The checkout endpoint must independently verify the customer's session and vehicle owner.
+export function garageSelection893(vehicles, rawIndex) {
+  if (typeof rawIndex !== "string" || !/^(0|[1-9][0-9]*)$/.test(rawIndex)) return null;
+  const index = Number(rawIndex);
+  if (!Number.isSafeInteger(index) || !Array.isArray(vehicles) || index >= vehicles.length) return null;
+  const id = vehicles[index]?.id;
+  return typeof id === "string" && UUID.test(id) ? id : null;
+}
 
 export function wireBookingVehicleSelector(root = document) {
   if (!BOOK_PATHS.has(window.location.pathname)) return;
@@ -13,15 +25,12 @@ export function wireBookingVehicleSelector(root = document) {
   root.addEventListener("click", async (event) => {
     const button = event.target?.closest?.("[data-garage-index]");
     if (!button) return;
-    const index = Number(button.getAttribute("data-garage-index"));
-    if (!Number.isInteger(index) || index < 0) {
-      clearSelectorCookie();
-      return;
-    }
-
+    const rawIndex = button.getAttribute("data-garage-index");
+    // Clear the previous selection before asynchronous lookup; on any error,
+    // a stale selection must never be submitted by the next checkout.
+    clearSelectorCookie();
     const vehicles = await vehiclesPromise;
-    const vehicle = Array.isArray(vehicles) ? vehicles[index] || null : null;
-    const vehicleId = String(vehicle?.id || "").trim();
+    const vehicleId = garageSelection893(vehicles, rawIndex);
     if (!vehicleId) {
       clearSelectorCookie();
       return;
