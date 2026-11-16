@@ -1,16 +1,16 @@
 // File: /functions/api/_lib/editable-settings.js
 // Build 189: shared editable site-setting loader with DB-first, JSON-fallback behavior.
 
-import businessProfile from "../../../data/business_profile.json" with { type: "json" };
-import sitePolicies from "../../../data/site_policies.json" with { type: "json" };
-import documentTemplates from "../../../data/document_templates.json" with { type: "json" };
-import businessHoursHolidays from "../../../data/business_hours_holidays.json" with { type: "json" };
-import navigationFooter from "../../../data/navigation_footer.json" with { type: "json" };
-import optionLibraries from "../../../data/admin_option_libraries.json" with { type: "json" };
-import analyticsEventRegistry from "../../../data/analytics_event_registry.json" with { type: "json" };
-import mediaRequirements from "../../../data/media_requirements.json" with { type: "json" };
-import landingPagesContent from "../data/landing_pages_content.json" with { type: "json" };
-import editableSettingValidationSchemas from "../../../data/editable_setting_validation_schemas.json" with { type: "json" };
+import businessProfile from "../../../data/business_profile.json";
+import sitePolicies from "../../../data/site_policies.json";
+import documentTemplates from "../../../data/document_templates.json";
+import businessHoursHolidays from "../../../data/business_hours_holidays.json";
+import navigationFooter from "../../../data/navigation_footer.json";
+import optionLibraries from "../../../data/admin_option_libraries.json";
+import analyticsEventRegistry from "../../../data/analytics_event_registry.json";
+import mediaRequirements from "../../../data/media_requirements.json";
+import landingPagesContent from "../data/landing_pages_content.json";
+import editableSettingValidationSchemas from "../../../data/editable_setting_validation_schemas.json";
 
 export const EDITABLE_SETTING_FALLBACKS = {
   business_profile: businessProfile,
