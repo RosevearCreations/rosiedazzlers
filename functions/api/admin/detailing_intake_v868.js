@@ -40,6 +40,16 @@ async function media(env,id){
  '&select=id,draft_id,original_filename,content_type,expected_bytes,status,created_at,verified_at'+
  '&order=created_at.asc,id.asc&limit=9'});
 }
+// Build 894: only the original, quota-reserved object may be re-signed.
+// Re-signing cannot create a new media row or consume an additional slot.
+export function pendingPrivateRetry894(a,draftId,assetId){
+ if(!a||a.status!=='pending_upload'||a.bucket!==BUCKET||
+    !isUuid(draftId)||!isUuid(assetId)||a.id!==assetId||a.draft_id!==draftId)return false;
+ const policy=MIME[a.content_type];
+ return Boolean(policy&&Number.isSafeInteger(a.expected_bytes)&&
+  a.expected_bytes>0&&a.expected_bytes<=policy.max&&
+  a.object_path===pathFor(draftId,assetId,policy.ext));
+}
 async function oneMedia(env,id,draftId){
  const records=await db(env,'rosie_detailing_intake_media_v868',{query:
  '?id=eq.'+encodeURIComponent(id)+'&draft_id=eq.'+encodeURIComponent(draftId)+
@@ -150,6 +160,36 @@ export async function onRequest({request,env}){
    return json({ok:true,build:868,asset_id:assetId,upload_url:uploadUrl,
     method:'PUT',content_type:mime,public_url:null,
     status:'pending_upload',booking_created:false},200,noStore);
+  }
+  if(action==='retry_upload'){
+   // Authorised staff and an active, consented original draft have already
+   // been checked above. Do not create a second reservation for a retry.
+   if(current.private_photo_permission!==true)
+    return err('Private capture permission is no longer available',409);
+   const assetId=txt(body.asset_id,80);
+   if(!isUuid(assetId))return err('Private media ID required');
+   const a=await oneMedia(env,assetId,draftId);
+   if(!pendingPrivateRetry894(a,draftId,assetId))
+    return err('Only an existing pending private upload can be retried',409);
+   const signing=await fetch(assetUrl(env,
+    'object/upload/sign/'+BUCKET+'/'+a.object_path),{
+    method:'POST',headers:{apikey:env.SUPABASE_SERVICE_ROLE_KEY,
+     Authorization:'Bearer '+env.SUPABASE_SERVICE_ROLE_KEY,
+     'Content-Type':'application/json'},body:JSON.stringify({})});
+   const signed=await signing.json().catch(()=>({}));
+   if(!signing.ok)throw Error('Private upload retry signing unavailable');
+   const link=signed.url||signed.signedURL||signed.signedUrl||signed.signed_url;
+   if(!link||typeof link!=='string')throw Error('Storage signing did not return a retry URL');
+   const origin=new URL(env.SUPABASE_URL).origin;
+   const uploadUrl=link.startsWith('http')?link:
+    new URL(link.startsWith('/storage/v1/')?link:
+      link.startsWith('/object/')?'/storage/v1'+link:
+      '/storage/v1/'+(link.startsWith('/')?link.slice(1):link),origin).toString();
+   if(new URL(uploadUrl).origin!==origin)
+    throw Error('Private retry storage target rejected');
+   return json({ok:true,build:894,asset_id:assetId,
+    upload_url:uploadUrl,method:'PUT',content_type:a.content_type,
+    retry_existing:true,public_url:null,booking_created:false},200,noStore);
   }
   if(action==='preview_private'){
    const assetId=txt(body.asset_id,80);
