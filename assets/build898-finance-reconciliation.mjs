@@ -64,7 +64,6 @@ export function projectFinance898({payments=[],refunds=[],events=[],applications
   if(!['stripe','paypal','manual'].includes(provider))warnings.push('UNKNOWN_PROVIDER');
   if(clean(p.currency)!=='cad')warnings.push('CURRENCY_OR_MISSING_CAD');
   if(paid>0&&expected>0&&paid!==expected)warnings.push('AMOUNT_DIFFERS_FROM_REQUEST');
-  if(paidState.has('paid')&&paid===0)warnings.push('PAID_WITHOUT_AMOUNT');
   if(paidState.has(payState)&&paid===0)warnings.push('PAID_WITHOUT_AMOUNT');
   if(paid>0&&!paidState.has(payState))warnings.push('AMOUNT_WITHOUT_FINAL_PAYMENT_STATUS');
   if(paid>0&&fee===0&&provider!=='manual')warnings.push('PROCESSOR_FEE_NOT_RECORDED');
