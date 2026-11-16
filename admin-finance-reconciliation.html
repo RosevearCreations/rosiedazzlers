@@ -1,0 +1,62 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>Finance Reconciliation | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+.finance898{max-width:1200px;margin:20px auto;padding:16px}.finance898 section{border:1px solid rgba(125,150,190,.45);border-radius:15px;padding:16px;margin:12px 0}
+.finance898 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.finance898 .cards article{padding:14px;border:1px solid rgba(120,145,170,.45);border-radius:12px}
+.finance898 .cards strong{display:block;font-size:1.4rem;margin-top:6px}.finance898 .scroll{overflow:auto}.finance898 table{width:100%;border-collapse:collapse;min-width:740px}
+.finance898 th,.finance898 td{text-align:left;padding:10px 9px;border-bottom:1px solid rgba(120,145,170,.3);vertical-align:top}
+.finance898 .muted{color:#a4adc1}.finance898 .hold{font-weight:700}.finance898 button{min-height:42px;padding:8px 14px}.finance898 a{overflow-wrap:anywhere}
+</style></head><body data-page="admin-finance-reconciliation" data-build898="evidence-review">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html">Rosie Dazzlers Admin</a><nav class="nav-links">
+<a href="/admin.html">Dashboard</a><a href="/admin-accounting.html">Accounting</a><a href="/admin-finance-reconciliation.html" aria-current="page">Finance Review</a>
+</nav></div></header>
+<main class="finance898"><h1>Finance, payments, refunds & HST reconciliation</h1>
+<p>Build 898. Private, read-only evidence review from our existing payment and accounting sources. Figures below are <strong>source-reported</strong>, not independently bank-settled, invoiced or filed with the CRA.</p>
+<p class="hold">BUSINESS ACCEPTANCE HOLD — provider statement, actual invoice, bank settlement, accountant HST workpaper and owner approval must be independently verified.</p>
+<section><button id="refresh" type="button">Refresh original finance evidence</button><p id="status" role="status" aria-live="polite">No finance data loaded.</p><p id="revision" class="muted"></p></section>
+<section><h2>Finance source snapshot</h2><div id="totals" class="cards"><article>No source data loaded.</article></div><p class="muted">No amount shown here is a tax return, booked revenue or authorization to charge/refund.</p></section>
+<section><h2>Exceptions and coverage</h2><ul id="issues"><li>Refresh to inspect private data.</li></ul><p id="coverage"></p></section>
+<section><h2>Individual payment reviews</h2><p>Only the final eight characters of internal identifiers are shown. Provider webhook record presence does not establish bank settlement.</p>
+<div class="scroll"><table><thead><tr><th scope="col">Request</th><th scope="col">Booking</th><th scope="col">Provider/status</th><th scope="col">Reported paid</th><th scope="col">Refund</th><th scope="col">Callback</th><th scope="col">Required review</th></tr></thead>
+<tbody id="items"><tr><td colspan="7">No financial rows loaded.</td></tr></tbody></table></div></section>
+<section><h2>Manual finance and accountant handoff</h2><p>These existing workflows remain separately authorized; Build 898 does not invoke or approve them.</p>
+<nav aria-label="Finance review handoffs"><a href="/admin-accounting.html">General ledger & accounting</a> · <a href="/admin-close.html">Month-end review</a> ·
+<a href="/admin-payroll.html">Payroll review</a> · <a href="/admin-booking.html">Booking finance</a></nav>
+<p>Provider refunds are not automatically retried. Actual tax allocation and HST remittance require original invoices and accountant review.</p></section></main>
+<script type="module">
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format((Number.isSafeInteger(n)?n:0)/100);
+const title=s=>String(s||'').replaceAll('_',' ');
+function list(id,rows){const el=$(id);el.replaceChildren();if(!rows.length){const li=document.createElement('li');li.textContent='No exceptions in bounded sample; not proof of completeness.';el.append(li);return;}for(const row of rows){const li=document.createElement('li');li.textContent=row;el.append(li);}}
+function cell(text){const e=document.createElement('td');e.textContent=String(text??'');return e;}
+function display(report){
+ const t=report.totals||{},metrics=[
+ ['Reported deposit paid',money(t.source_reported_paid_cents)],['Reported completed refunds',money(t.source_reported_refunded_cents)],
+ ['Recorded fees',money(t.source_reported_processor_fee_cents)],['Recorded accounting HST',money(t.recorded_hst_cents)],
+ ['Reported final-balance paid',money(t.source_reported_final_balance_paid_cents)]
+ ];
+ $('totals').replaceChildren();for(const [label,value] of metrics){const a=document.createElement('article'),l=document.createElement('span'),v=document.createElement('strong');l.textContent=label;v.textContent=value;a.append(l,v);$('totals').append(a);}
+ const warnings=Object.entries(report.issue_counts||{}).map(([key,count])=>title(key)+': '+count+' review(s)');
+ if((report.orphan_refund_suffixes||[]).length)warnings.push('Unmatched refund records require review.');
+ if((report.duplicate_application_suffixes||[]).length)warnings.push('Potential duplicate payment applications require review.');
+ list('issues',warnings);
+ $('coverage').textContent='Source windows: '+Object.entries(report.windows||{}).map(([name,v])=>name+': '+v.count+'/'+v.limit+(v.possibly_truncated?' (possibly truncated)':'')).join(' · ')+'; older records remain UNKNOWN.';
+ const body=$('items');body.replaceChildren();
+ for(const row of report.items||[]){const tr=document.createElement('tr');
+ tr.append(cell(row.payment_suffix),cell(row.booking_suffix),cell(row.provider+' / '+row.source_status),
+ cell(money(row.source_paid_cents)),cell(money(row.source_refunded_cents)),
+ cell(row.callback_recorded?'Original callback recorded; settlement still unverified':'No exact processed original callback'),
+ cell((row.exception_codes||[]).length?row.exception_codes.map(title).join('; '):row.review_status));body.append(tr);}
+ if(!body.children.length){const tr=document.createElement('tr'),td=cell('No payment records in bounded sample; no zero-revenue inference.');td.colSpan=7;tr.append(td);body.append(tr);}
+ $('status').textContent='Source review loaded. Business acceptance remains HOLD; no payment or tax state changed.';
+ $('revision').textContent='Sampled '+report.sampled_at+' · Source revision '+(report.source_revision||'unknown');
+}
+async function load(){
+ $('refresh').disabled=true;$('status').textContent='Loading original protected finance sources…';
+ try{const res=await fetch('/api/admin/finance_reconciliation_v898',{credentials:'same-origin',cache:'no-store'});
+ const data=await res.json().catch(()=>({}));if(!res.ok||!data.ok)throw Error(data.error||'Private finance source failed');display(data.report);
+ }catch(e){$('status').textContent=e.message+' Reconciliation HOLD; no financial result inferred.';$('totals').replaceChildren();$('items').replaceChildren();$('issues').replaceChildren();$('coverage').textContent='No current finance source report.'}
+ finally{$('refresh').disabled=false;}
+}
+$('refresh').addEventListener('click',load);load();
+</script></body></html>
