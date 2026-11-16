@@ -3,6 +3,11 @@
 // approve owner pricing or settle a payment. All unapproved cases fail closed.
 export const ALA_CARTE_PACKAGE_CODE_889 = 'ala_carte';
 const sizes = new Set(['small','mid','oversize']);
+// Catalogue currency must be exact to the cent; do not silently round an
+// owner-entered fractional-cent price or deposit into a different charge.
+const exactCadCents = value => typeof value === 'number' && Number.isFinite(value) &&
+  value > 0 && /^\d+(?:\.\d{1,2})?$/.test(String(value)) &&
+  Number.isSafeInteger(Math.round(value * 100));
 const refusal = (code, message) => ({ok:false,reason:code,error:message,
   booking_created:false,payment_attempted:false});
 
@@ -29,20 +34,21 @@ export function resolveAlaCarte889(catalog, body) {
     if (!a || a.standalone_allowed !== true || a.quote_required === true)
       return refusal('STANDALONE_ITEM_NOT_APPROVED','One selected service requires a custom quote or a full package. Review your choices.');
     const amount=a.prices_cad?.[body.vehicle_size];
-    if (typeof amount!=='number' || !Number.isFinite(amount) || amount<=0 || !Number.isSafeInteger(Math.round(amount*100)))
+    if (!exactCadCents(amount))
       return refusal('STANDALONE_PRICE_MISSING','A selected service has no approved price for this vehicle size.');
     const cents=Math.round(amount*100);
+    if (!Number.isSafeInteger(cents) || cents<=0)
+      return refusal('STANDALONE_PRICE_MISSING','A selected service has no approved billable price for this vehicle size.');
     subtotalCents+=cents;
     if (!Number.isSafeInteger(subtotalCents))return refusal('STANDALONE_TOTAL_INVALID','Please contact Rosie Dazzlers for an individual quote.');
     items.push({code:a.code,label:a.name,cents,quote_required:false});
   }
   if (subtotalCents<=0)return refusal('STANDALONE_TOTAL_INVALID','There is no billable service selected.');
   const deposit=policy.deposit_cad;
-  if (typeof deposit!=='number' || !Number.isFinite(deposit) || deposit<=0 ||
-      Math.round(deposit*100)>subtotalCents)
+  if (!exactCadCents(deposit) || Math.round(deposit*100)>subtotalCents)
     return refusal('STANDALONE_DEPOSIT_NOT_APPROVED','Individual-service deposit terms need owner review before checkout.');
   const depositCents=Math.round(deposit*100);
-  if (!Number.isSafeInteger(depositCents))
+  if (!Number.isSafeInteger(depositCents) || depositCents<=0)
     return refusal('STANDALONE_DEPOSIT_INVALID','Individual-service deposit terms are not valid.');
   // Package gift redemptions and promo discounts are not atomically compatible
   // with a package-free basket until an explicit approved ledger contract exists.
