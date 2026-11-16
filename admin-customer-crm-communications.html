@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>CRM Consent & Comms | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+.crm897{max-width:1100px;margin:24px auto;padding:16px}.crm897-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.crm897 section{border:1px solid #57616c;border-radius:14px;padding:16px;margin:12px 0}
+.crm897 label{display:grid;gap:6px;margin:8px 0}.crm897 input,.crm897 select{width:100%;min-height:42px}
+.crm897 button{min-height:42px;padding:8px 14px}.crm897 .status{padding:12px;border:1px solid #858585;border-radius:10px}
+.crm897 ul{padding-left:20px}.crm897 li{margin-bottom:8px;overflow-wrap:anywhere}.crm897 .held{font-weight:700}
+</style></head><body data-page="admin-crm-consent" data-build897="source-only">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html">Rosie Dazzlers Admin</a>
+<nav class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-customers.html">Customers</a>
+<a href="/admin-customer-crm-work-queue.html">CRM Queue</a><a href="/admin-customer-crm-communications.html" aria-current="page">Consent & Comms</a></nav></div></header>
+<main class="crm897">
+<h1>Customer CRM, consent & communications handoff</h1>
+<p>Build 897: staff-only follow-up review for original Rosie customers. Saving a plan never sends email, SMS, makes a call or sends data to Master Comms.</p>
+<p class="held">Comms Hub: HOLD — independent issuer enrollment, approved audience, durable ACK and provider delivery evidence not verified.</p>
+<section><label for="customerId">Existing customer profile ID</label>
+<input id="customerId" autocomplete="off" spellcheck="false" maxlength="36" placeholder="Customer UUID">
+<button id="load" type="button">Review customer and current consent</button>
+<p id="status" role="status" aria-live="polite" class="status">Enter an exact customer ID or open from the CRM Queue.</p></section>
+<div class="crm897-grid"><section><h2>Internal follow-up plan</h2>
+<form id="plan"><label for="template">Follow-up type</label><select id="template" required></select>
+<label for="channel">Contact channel to review</label><select id="channel"><option value="email">Email</option><option value="sms">SMS</option><option value="phone">Manual phone</option></select>
+<label for="due">Internal review due date</label><input id="due" type="date" required>
+<p id="consent" aria-live="polite">Load current consent first.</p><p id="templatePreview"></p>
+<button id="save" type="submit" disabled>Save internal plan — no send</button></form>
+</section><section><h2>Inbound customer support</h2><p>Private original worksite concerns; responses require separate approval.</p><ul id="inbound"><li>Load a customer first.</li></ul></section></div>
+<section><h2>Planned follow-ups</h2><p>These records are not proof of contact. Permission must be rechecked again immediately before any separately approved send.</p><ul id="tasks"></ul></section>
+<section><h2>Outbound notification status</h2><p>Sent or queued status does not prove inbox/handset delivery. There is no automatic retry.</p><ul id="notifications"></ul></section>
+<p><a href="/admin-customer-crm-work-queue.html">Back to CRM work queue</a></p>
+</main><script type="module">
+const $=id=>document.getElementById(id);
+const state={data:null,pending:null};
+$('customerId').value=new URL(location.href).searchParams.get('customer_profile_id')||'';
+$('due').value=new Date(Date.now()+86400000).toISOString().slice(0,10);
+function status(s){$('status').textContent=s;}
+function list(id,rows,fmt){
+ const root=$(id);root.replaceChildren();if(!rows.length){const li=document.createElement('li');li.textContent='No matching records in this bounded view.';root.append(li);return;}
+ for(const row of rows){const li=document.createElement('li');li.textContent=fmt(row);root.append(li);}
+}
+function decision(){return state.data?.consent[$('template').value+':'+$('channel').value]||null;}
+function preview(){
+ const t=state.data?.templates.find(x=>x.id===$('template').value);
+ $('templatePreview').textContent=t?t.preview:'';
+ const d=decision();
+ $('consent').textContent=!d?'Load current consent before planning.':d.allowed?
+  'Current preference allows internal planning. An actual send still requires separate authority and a fresh recheck.':
+  'CONSENT HOLD: '+d.reason+'. Save only as an internal blocked review; no contact is approved.';
+ $('save').disabled=!state.data;
+}
+async function request(url,opt){
+ const res=await fetch(url,{credentials:'same-origin',cache:'no-store',...opt});
+ const data=await res.json().catch(()=>({}));if(!res.ok)throw Error(data.error||'Private source request failed');return data;
+}
+async function load(){
+ const id=$('customerId').value.trim();
+ state.data=null;state.pending=null;$('save').disabled=true;status('Reading private CRM, consent and notification history…');
+ try{
+  const d=await request('/api/admin/crm_consent_handoff_v897?customer_profile_id='+encodeURIComponent(id));
+  state.data=d;$('template').replaceChildren();
+  for(const t of d.templates){const o=document.createElement('option');o.value=t.id;o.textContent=t.label+' ('+t.purpose+')';$('template').append(o);}
+  list('inbound',d.inbound_support||[],x=>x.category+' / '+x.status+' / '+(x.submitted_at||'date unavailable')+' (issue '+x.id+')');
+  list('tasks',d.task_history||[],x=>x.template_id+' / '+x.channel+' / due '+x.due_date+' / '+x.state+' — no message sent');
+  list('notifications',d.notification_history||[],x=>x.event_type+' / '+x.channel+' / '+x.evidence.label+' — '+x.next_action);
+  status('Private data loaded. '+(d.preference_recorded_at?'Latest preference '+d.preference_recorded_at+'. ':'No purpose-specific preference recorded. ')+'Master Comms remains HOLD.');
+  preview();
+ }catch(err){$('inbound').replaceChildren();$('tasks').replaceChildren();$('notifications').replaceChildren();status(err.message+' No message sent.');preview();}
+}
+$('load').addEventListener('click',load);
+for(const key of ['template','channel','due'])$(key).addEventListener('change',()=>{state.pending=null;preview();});
+$('customerId').addEventListener('input',()=>{state.data=null;state.pending=null;preview();});
+$('plan').addEventListener('submit',async event=>{
+ event.preventDefault();if(!state.data)return;
+ const input={customer_profile_id:state.data.customer_profile_id,template_id:$('template').value,channel:$('channel').value,due_date:$('due').value};
+ const fingerprint=JSON.stringify(input);
+ if(!state.pending||state.pending.fingerprint!==fingerprint)state.pending={fingerprint,client_request_id:crypto.randomUUID()};
+ $('save').disabled=true;status('Saving internal task only. No communications are sent.');
+ try{const result=await request('/api/admin/crm_consent_handoff_v897',{method:'POST',headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({...input,client_request_id:state.pending.client_request_id})});
+  status((result.duplicate?'Existing record reconciled. ':'Internal follow-up saved. ')+'Comms delivery remains HOLD. No message sent.');
+  await load();
+ }catch(err){status(err.message+' No message sent.');$('save').disabled=false;}
+});
+if($('customerId').value)load();
+</script></body></html>
