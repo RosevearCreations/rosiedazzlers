@@ -41,5 +41,23 @@
     "authorityTransfer": false
   },
   "runtimeConnectedNotInferred": true,
-  "state": "CONTRACT_READY"
+  "state": "CONTRACT_READY",
+  "releaseCoordination": {
+    "protocolVersion": "1.1",
+    "compatibleWithExistingProtocol": "1.0",
+    "lockstepReleaseRequired": false,
+    "applicationLocalChangesMayReleaseIndependently": true,
+    "peerContractCompatibilityRequiredForCrossAppCapabilities": true,
+    "unavailablePeerBlocksOnlyDependentCrossAppCapability": true,
+    "unrelatedLocalOperationsContinue": true,
+    "additiveChangesMustRemainBackwardCompatible": true,
+    "breakingChangesRequireMajorVersionBump": true,
+    "breakingChangesRequireExplicitPeerHandoff": true,
+    "unknownCapabilitiesFailClosed": true,
+    "rawSecretSynchronization": false,
+    "directPeerDatabaseSynchronization": false,
+    "vercelQuotaOnOneApplicationDoesNotBlockUnrelatedPeerRelease": true
+  },
+  "peerRuntimeVerification": "UNVERIFIED",
+  "activeCrossApplicationReleaseBlockedByPeerQuota": false
 }

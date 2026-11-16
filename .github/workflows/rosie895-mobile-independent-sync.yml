@@ -1,0 +1,23 @@
+name: Rosie 895 Detailer Mobile Safety and Independent Sync
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+permissions:
+  contents: read
+jobs:
+  mobile-action-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/build895_detailer_mobile_sync.test.mjs
+      - run: node scripts/build745_detailer_mobile_offline_continuity_test.mjs
+      - run: node scripts/build805_mobile_job_guide_test.mjs
+      - run: node --check apps/detailer/detailer-app.js
+      - run: node --check assets/detailer-action-guard-v895.mjs
+      - run: node --check assets/rosie-sync-compat-v895.mjs
