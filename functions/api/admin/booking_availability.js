@@ -36,6 +36,9 @@ import {
   isUuid
 } from "../_lib/staff-auth.js";
 import { occupiedSlots738, isActiveBookingHold738 } from "../_lib/booking-capacity-v738.js";
+import { requestedOccupancy896, schedulePreview896 } from "../_lib/scheduling-preview-v896.js";
+import { loadPricingCatalog } from "../_lib/pricing-catalog.js";
+import { loadBusinessHoursStatus } from "../availability.js";
 
 export async function onRequestOptions() {
   return new Response("", {
@@ -65,6 +68,9 @@ export async function onRequestPost(context) {
     const service_date = cleanDate(body.service_date);
     const start_slot = normalizeSlot(body.start_slot);
     const exclude_booking_id = cleanBookingId(body.exclude_booking_id);
+    const requestedDuration896=body.duration_slots===undefined||body.duration_slots===null
+      ? null : Number(body.duration_slots);
+    const area896=cleanText(body.service_area).slice(0,120);
 
     if (!service_date) {
       return withCors(json({ error: "Valid service_date is required." }, 400));
@@ -76,6 +82,9 @@ export async function onRequestPost(context) {
 
     if (body.exclude_booking_id && !exclude_booking_id) {
       return withCors(json({ error: "Invalid exclude_booking_id." }, 400));
+    }
+    if(!requestedOccupancy896(start_slot,requestedDuration896)) {
+      return withCors(json({error:"Duration must be an AM/PM half-day or an AM full day."},400));
     }
 
     const headers = serviceHeaders(env);
@@ -125,6 +134,22 @@ export async function onRequestPost(context) {
 
     const available = !isDateClosed && !isSlotBlocked && slotBookings.length === 0;
 
+    // Build 896 adds a separate read-only planning summary; it cannot approve
+    // staff/worksite or override the original DB advisory-locked booking gate.
+    // Fetch trusted owner catalogue and hours server-side, never from browser flags.
+    const [ownerCatalog896,hours896]=await Promise.all([
+      loadPricingCatalog(env).catch(()=>null),
+      loadBusinessHoursStatus(env,service_date).catch(()=>null)
+    ]);
+    const planning896=schedulePreview896({
+      date:service_date,startSlot:start_slot,durationSlots:requestedDuration896,
+      bookings,dateBlocks,slotBlocks,
+      businessHours:hours896,minimumLeadDays:ownerCatalog896?.booking_rules?.minimum_lead_days||0,
+      excludeBookingId:exclude_booking_id,serviceArea:area896,
+      ownerServiceAreas:ownerCatalog896?.service_areas||[],
+      staffingVerified:false,staffingWindows:null,worksiteVerified:false
+    });
+
     return withCors(
       json({
         ok: true,
@@ -143,6 +168,7 @@ export async function onRequestPost(context) {
           slot_blocked: isSlotBlocked,
           active_bookings_on_slot: slotBookings.length
         },
+        planning_896:planning896,
         matching_bookings: slotBookings.map((row) => ({
           id: row.id,
           service_date: row.service_date || null,
