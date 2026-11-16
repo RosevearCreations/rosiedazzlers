@@ -1,0 +1,22 @@
+name: Rosie 894 Private Media Recovery
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+permissions:
+  contents: read
+jobs:
+  private-upload-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/build894_private_retry.test.mjs
+      - run: node scripts/build868_camera_first_intake_test.mjs
+      - run: node scripts/build869_roadside_quick_quote_test.mjs
+      - run: node --check assets/admin-booking-v868.js
+      - run: node --check functions/api/admin/detailing_intake_v868.js
