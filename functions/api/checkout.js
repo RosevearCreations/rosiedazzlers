@@ -6,6 +6,7 @@
 
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
 import { resolveAlaCarte889 } from "./_lib/ala-carte-v889.js";
+import { selectedProvider892, providerReady892 } from "./_lib/checkout-provider-v892.js";
 import { resolveTrustedBookingLocation, buildTrustedLocationPatch } from "./_lib/booking-location.js";
 import { resolveCheckoutCustomerIdentity } from "./_lib/checkout-customer-identity.js";
 import { evaluateCapacity738 } from "./_lib/booking-capacity-v738.js";
@@ -20,6 +21,12 @@ export async function onRequestPost({ request, env }) {
   try {
     const body = await request.json().catch(() => null);
     if (!body || typeof body !== "object") return corsJson({ error: "Invalid JSON body" }, 400);
+
+    // Reject unsupported payment routes before any customer or booking writes.
+    // Never silently treat an unknown provider as a Stripe authorization.
+    const selectedPayment892 = selectedProvider892(body.payment_provider);
+    if (!selectedPayment892.ok)
+      return corsJson({ error: "Unsupported payment method. Choose card or PayPal.", booking_created: false, payment_attempted: false }, 400);
 
     const isAlaCarte889 = body.booking_mode === "ala_carte";
     if (body.booking_mode && !["guided", "ala_carte"].includes(body.booking_mode))
@@ -220,6 +227,20 @@ export async function onRequestPost({ request, env }) {
         owner_recovery_hold: true,
         reason: 'mixed_gift_provider_settlement_not_atomic'
       }, 409);
+    }
+
+    // Build 892: fail before inserting a pending booking if the selected
+    // payment provider cannot create its checkout. Otherwise a missing
+    // credential leaves a customer-facing orphan hold consuming capacity.
+    // Gift-only settlement remains on its separate verified path.
+    const ready892 = providerReady892({env,provider:selectedPayment892.provider,payableDepositCents});
+    if (!ready892.ok) {
+      const isPayPal = ready892.reason === "paypal_unavailable";
+      return corsJson({
+        error: isPayPal ? "PayPal checkout is temporarily unavailable. No booking or payment was created."
+          : "Card checkout is temporarily unavailable. No booking or payment was created.",
+        booking_created:false,payment_attempted:false
+      }, ready892.reason === "invalid_deposit" ? 409 : 503);
     }
 
     const notes = [];
