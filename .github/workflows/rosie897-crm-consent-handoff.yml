@@ -1,0 +1,24 @@
+name: Rosie 897 CRM Consent and Comms Source Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  crm-consent-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check source syntax
+        run: node --check functions/api/admin/crm_consent_handoff_v897.js
+      - name: Build 897 tests
+        run: node --test tests/build897_crm_consent_handoff.test.mjs
+      - name: Existing Build 743 consent tests
+        run: node scripts/build743_consent_notification_reconciliation_test.mjs
