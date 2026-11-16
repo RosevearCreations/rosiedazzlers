@@ -33,9 +33,9 @@ test('missing Stripe/PayPal credentials reject a positive deposit before booking
  for(const value of [-1,0.25,NaN,Infinity])
    assert.equal(providerReady892({provider:'stripe',payableDepositCents:value}).ok,false);
  const guard=checkout.indexOf('providerReady892({env,provider:selectedPayment892.provider,payableDepositCents})');
- const insert=checkout.indexOf('const bookingInsert');
+ const insert=checkout.indexOf('await insertBookingWithOptionalFields(supa, bookingPayload)');
  assert.ok(guard>=0,'production handler must call same tested provider guard');
- assert.ok(insert<0 || guard<insert,'provider guard must run before booking insertion');
+ assert.ok(insert>guard,'provider guard must run before booking insertion');
 });
 test('Cloudflare Pages esbuild-compatible JSON imports are retained',()=>{
  assert.doesNotMatch(editable,/\bwith\s*\{\s*type\s*:\s*["']json["']\s*\}/,
