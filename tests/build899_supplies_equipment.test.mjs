@@ -81,6 +81,10 @@ test('private database migration restricts client grants and forbids mutation/ow
  assert.match(m,/check \(not owner_verified\)/);
  assert.match(m,/check \(not stock_adjustment_applied\)/);
  assert.doesNotMatch(m,/grant .* to authenticated/);
+ const g=readFileSync(new URL('../supabase/migrations/20261116231000_build899_immutable_staff_evidence_guard.sql',import.meta.url),'utf8');
+ assert.match(g,/before update or delete/g);
+ assert.match(g,/before truncate/g);
+ assert.match(g,/rosie899_reject_record_mutation/g);
 });
 test('private signed supervisor session and same-origin state-changing route',()=>{
  const a=readFileSync(new URL('../functions/api/admin/supplies_equipment_v899.js',import.meta.url),'utf8');
