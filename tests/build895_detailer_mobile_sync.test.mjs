@@ -32,7 +32,7 @@ test('uncertain outcomes require staff review rather than automatic replay',()=>
   assert.match(app,/actionBusy895=true;updateActionButtons\(\)/);
   assert.match(app,/if\(actionBusy895\)/);
   assert.match(app,/if\(pendingOutcome895\)/);
-  assert.match(app,/continuityEpoch\\+\\+/);
+  assert.match(app,/continuityEpoch\+\+/);
   assert.match(app,/const isCurrent=\(\)=>mobile895\.actionStillCurrent895/);
   assert.ok(app.indexOf('if(!isCurrent()){') < app.indexOf("api.requestJson('/api/detailer/job_action'"),'must revalidate before POST');
   assert.match(app,/pendingOutcome895=\{snapshot,reconciled:false\}/);
