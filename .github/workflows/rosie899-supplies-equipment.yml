@@ -1,0 +1,24 @@
+name: Rosie 899 Supplies Inventory Equipment Source Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inventory899:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify Cloudflare Functions syntax
+        run: node --check functions/api/admin/supplies_equipment_v899.js
+      - name: Run strict Build 899 inventory and maintenance tests
+        run: node --test tests/build899_supplies_equipment.test.mjs
+      - name: Retain original inventory job-cost accounting boundary
+        run: node scripts/build409_inventory_job_cost_operational_evidence_test.mjs

@@ -1,0 +1,125 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>Supplies & Equipment | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+.ops899{max-width:1260px;padding:18px;margin:auto}.ops899 h1{margin:10px 0}.ops899 section{margin:14px 0;border:1px solid #657083;border-radius:16px;padding:16px}
+.ops899 .metrics,.ops899 .forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.ops899 article{border:1px solid #647086;border-radius:14px;padding:12px}.ops899 article strong{display:block;font-size:1.45rem}
+.ops899 label{display:grid;gap:6px;margin:8px 0}.ops899 select,.ops899 input,.ops899 textarea{width:100%;min-height:42px}
+.ops899 textarea{min-height:85px}.ops899 button{min-height:42px;padding:9px 15px}
+.ops899 .scroll{overflow-x:auto}.ops899 table{width:100%;min-width:840px;border-collapse:collapse}
+.ops899 th,.ops899 td{text-align:left;vertical-align:top;border-bottom:1px solid #515d6e;padding:9px}
+.ops899 .hold{font-weight:700}.ops899 .status{padding:10px;border:1px solid #657083;border-radius:10px}
+.ops899 .muted{color:#adbbce}.ops899 a{overflow-wrap:anywhere}
+</style></head><body data-page="admin-supplies-equipment-v899" data-build899="source-governed">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html">Rosie Dazzlers Admin</a><nav class="nav-links">
+<a href="/admin.html">Dashboard</a><a href="/admin-catalog.html">Catalog & Inventory</a><a href="/admin-accounting.html">Accounting</a>
+<a href="/admin-supplies-equipment.html" aria-current="page">Supplies & Equipment</a></nav></div></header>
+<main class="ops899"><h1>Supplies, inventory & equipment service</h1>
+<p>Build 899 combines original Rosie supplies and tools with maintenance scheduling and proposed physical stock counts. Nothing on this screen automatically buys supplies, adjusts inventory, issues payments or certifies completed maintenance.</p>
+<p class="hold">OWNER EVIDENCE HOLD — staff reports and counts remain unverified until physically reviewed through the owning process.</p>
+<section><button id="refresh" type="button">Refresh original inventory</button>
+<p class="status" role="status" aria-live="polite" id="status">Loading…</p><p id="source" class="muted"></p></section>
+<section><h2>Inventory and maintenance overview</h2><div class="metrics" id="metrics"></div>
+<p class="muted">Low stock is a reorder review, not an automatic purchase. An unscheduled tool is a review candidate, not proof it is unsafe.</p></section>
+<section><h2>Stock & tools</h2><div class="scroll"><table><thead><tr>
+<th scope="col">Original item</th><th scope="col">Type</th><th scope="col">Stock</th><th scope="col">Reorder</th>
+<th scope="col">Purchase status</th><th scope="col">Service attention</th><th scope="col">Physical count review</th></tr></thead>
+<tbody id="items"><tr><td colspan="7">Waiting for original data.</td></tr></tbody></table></div></section>
+<div class="forms">
+<section><h2>Equipment maintenance</h2><form id="service">
+<label for="tool">Original tool</label><select id="tool" required></select>
+<label for="event_kind">Record type</label><select id="event_kind"><option value="planned">Schedule service</option>
+<option value="staff_reported">Report work already done (unverified)</option></select>
+<label for="service_type">Service type</label><select id="service_type">
+<option value="inspection">Inspection</option><option value="cleaning">Cleaning</option><option value="filter_service">Filter service</option>
+<option value="calibration">Calibration</option><option value="repair">Repair</option><option value="preventive">Preventive service</option></select>
+<label for="service_date">Planned or observed date</label><input type="date" id="service_date" required>
+<label for="service_note">What needs doing / original work observation</label><textarea id="service_note" required minlength="8" maxlength="500"></textarea>
+<button type="submit" id="saveService" disabled>Save staff maintenance record</button>
+</form><p class="muted">Reporting actual work never grants owner certification or safety approval.</p></section>
+<section><h2>Physical stock-count review</h2><form id="count">
+<label for="countItem">Original inventory item</label><select id="countItem" required></select>
+<label for="review_kind">Count reason</label><select id="review_kind">
+<option value="cycle_count">Routine cycle count</option><option value="before_job">Before job</option>
+<option value="after_job">After job</option><option value="recount">Recount / discrepancy</option></select>
+<label for="observed_qty">Quantity physically observed</label><input type="number" id="observed_qty" min="0" max="100000000" step="0.001" required>
+<label for="count_date">Observation date</label><input type="date" id="count_date" required>
+<label for="count_note">Count method and observation</label><textarea id="count_note" minlength="8" maxlength="500" required></textarea>
+<button type="submit" id="saveCount" disabled>Save proposed count (no stock change)</button>
+</form><p class="muted">The original catalog quantity is snapshotted, but not replaced.</p></section>
+</div>
+<section><h2>Service and count history</h2><div class="forms">
+<div><h3>Maintenance events</h3><ul id="serviceLog"><li>No original records loaded.</li></ul></div>
+<div><h3>Count reviews</h3><ul id="countLog"><li>No original records loaded.</li></ul></div></div></section>
+<p><a href="/admin-catalog.html">Existing catalog</a> · <a href="/admin-accounting.html">Original accounting</a></p></main>
+<script type="module">
+const $=id=>document.getElementById(id),today=new Date().toISOString().slice(0,10);
+$('service_date').value=today;$('count_date').value=today;
+const state={data:null,serviceKey:null,countKey:null};
+function status(msg){$('status').textContent=msg;}
+const fmt=x=>String(x??'');
+function populate(id,items){const s=$(id);s.replaceChildren();for(const x of items){const o=document.createElement('option');o.value=x.id;o.textContent=x.name+' ('+x.item_type+')';s.append(o);}}
+function appendRow(target,values){const tr=document.createElement('tr');for(const val of values){const td=document.createElement('td');td.textContent=fmt(val);tr.append(td);}target.append(tr);}
+function list(id,rows,build){const el=$(id);el.replaceChildren();if(!rows.length){const li=document.createElement('li');li.textContent='No original records in this bounded window.';el.append(li);return;}for(const row of rows){const li=document.createElement('li');li.textContent=build(row);el.append(li);}}
+function render(report){
+ const s=report.summary;
+ $('metrics').replaceChildren();for(const [label,num] of [
+ ['Consumables',s.consumables],['Tools',s.tools],['Low-stock items',s.low_stock],
+ ['Reorder review',s.reorder_review_needed],['Service due within 14 days',s.service_due_soon],
+ ['Tool schedule review',s.tool_schedule_review],['Count variances for review',s.count_variance_review]]){
+ const a=document.createElement('article'),labelNode=document.createElement('span'),number=document.createElement('strong');
+ labelNode.textContent=label;number.textContent=String(num);a.append(labelNode,number);$('metrics').append(a);
+ }
+ const body=$('items');body.replaceChildren();for(const i of report.items){
+  const qty=i.qty_on_hand+' '+i.unit_label,stock=i.low_stock?'LOW STOCK':'Review thresholds',
+   po=i.open_purchase_order?'Open original PO (not proof of receipt)':i.reorder_review_needed?'Reorder review due':'No active PO';
+  const service=i.item_type==='tool'?(i.service_due_soon+' due soon; '+i.service_planned_overdue+' overdue; '+(i.unscheduled_service_review?'schedule review':'planned')):'Not equipment';
+  const count=i.latest_count_review?('Staff-reported '+i.latest_count_review.observed_qty+'; variance '+i.latest_count_review.variance_qty+'; owner HOLD'):'No recent count review';
+  appendRow(body,[i.name,i.item_type,qty+' · '+(i.low_stock?'LOW STOCK':'catalog snapshot'),i.reorder_point,po,service,count]);
+ }
+ if(!report.items.length)appendRow(body,['No original active inventory records','','','','','','']);
+ populate('tool',report.items.filter(i=>i.item_type==='tool'));
+ populate('countItem',report.items);
+ $('saveService').disabled=!report.items.some(i=>i.item_type==='tool');
+ $('saveCount').disabled=!report.items.length;
+ const names=new Map(report.items.map(x=>[x.id,x.name]));
+ list('serviceLog',report.service_events||[],x=>(names.get(x.inventory_item_id)||'Existing original item')+
+  ' · '+x.service_type+' · '+x.event_kind+' · '+x.due_date+' · staff report (unverified)');
+ list('countLog',report.count_reviews||[],x=>(names.get(x.inventory_item_id)||'Existing original item')+
+  ' · '+x.review_kind+' · '+x.observed_on+' · owner approval HOLD');
+ const cap=Object.entries(report.windows).filter(([k,v])=>v.possibly_truncated).map(([k])=>k);
+ $('source').textContent='Original data sampled '+report.sampled_at+' · source '+(report.source_revision||'unknown')+
+  ' · '+report.original_movements_sampled+' movement records in window'+(cap.length?' · BOUNDED/TRUNCATED: '+cap.join(', '):' · windows bounded')+
+  '. No automatic purchase, posting or service certification.';
+ status('Private inventory and maintenance evidence loaded. Owner verification remains HOLD.');
+}
+async function request(url,options={}){const res=await fetch(url,{credentials:'same-origin',cache:'no-store',...options});
+ const data=await res.json().catch(()=>({}));if(!res.ok||!data.ok)throw Error(data.error||'Original source request failed');return data;}
+async function load(){state.data=null;$('refresh').disabled=true;$('saveService').disabled=true;$('saveCount').disabled=true;status('Reading private inventory sources…');
+ try{const data=await request('/api/admin/supplies_equipment_v899');state.data=data;render(data.report);}
+ catch(err){status(err.message+' Evidence remains on HOLD.');$('metrics').replaceChildren();$('items').replaceChildren();}
+ finally{$('refresh').disabled=false;}}
+function fingerprint(input){return JSON.stringify(input);}
+async function save(kind){
+ if(!state.data)return;
+ const input=kind==='service'?
+  {kind,inventory_item_id:$('tool').value,event_kind:$('event_kind').value,service_type:$('service_type').value,
+   review_date:$('service_date').value,staff_note:$('service_note').value}:
+  {kind,inventory_item_id:$('countItem').value,review_kind:$('review_kind').value,
+   observed_qty:$('observed_qty').value,review_date:$('count_date').value,staff_note:$('count_note').value};
+ const key=kind==='service'?'serviceKey':'countKey',hash=fingerprint(input);
+ if(!state[key]||state[key].hash!==hash)state[key]={hash,id:crypto.randomUUID()};
+ const button=$(kind==='service'?'saveService':'saveCount');button.disabled=true;
+ status('Saving internal staff evidence only. No stock or equipment verification changed.');
+ try{const result=await request('/api/admin/supplies_equipment_v899',{
+  method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...input,client_request_id:state[key].id})});
+  state[key]=null;
+  status((result.duplicate?'Existing record reconciled. ':'Staff evidence recorded. ')+'Owner verification and stock adjustment remain HOLD.');
+  await load();}
+ catch(err){status(err.message+' No stock changed.');button.disabled=false;}
+}
+$('service').addEventListener('submit',e=>{e.preventDefault();save('service');});
+$('count').addEventListener('submit',e=>{e.preventDefault();save('count');});
+$('refresh').addEventListener('click',load);
+load();
+</script></body></html>
