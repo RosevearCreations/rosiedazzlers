@@ -19,7 +19,7 @@
   </style>
 </head>
 <!-- Build 400 mobile QoL layer over the Build 383 field workflow; Build 264 lazy runtime architecture retained. -->
-<body data-page="app-detailer" data-app-module="detailer" data-build="400" data-build432="detailer-staff-workflow-refinement" data-build745="manual-offline-reconciliation" data-build746="audited-onsite-setup" data-build805="mobile-job-guide-and-proof-recovery" data-build745-sync="review_required">
+<body data-page="app-detailer" data-app-module="detailer" data-build="400" data-build432="detailer-staff-workflow-refinement" data-build745="manual-offline-reconciliation" data-build746="audited-onsite-setup" data-build805="mobile-job-guide-and-proof-recovery" data-build895="manual-action-outcome-reconciliation" data-build745-sync="review_required">
   <main class="app-shell">
     <header class="app-head">
       <a class="app-brand" href="/app/"><img data-logo alt="Rosie Dazzlers logo"/><span><strong>Rosie Dazzlers</strong><br><span class="mini">Detailer Mobile App</span></span></a>
@@ -29,6 +29,12 @@
     <section class="panel stack" aria-labelledby="detailer-title">
       <div><span class="badge">Build 805 · mobile field guidance and private photo proof</span><h1 id="detailer-title" style="margin:8px 0 6px">Detailer Mobile App</h1><p style="margin:0">Your authorized jobs, grouped by service day and scheduled slot. After arrival, use the guided checklist, private before/after photo steps and explicit evidence recheck. Schedule order is not a driving route.</p></div>
       <div id="build745ContinuityStatus" class="build745-continuity warn" role="status" aria-live="polite" aria-atomic="true">Checking current assignment and connection. Workflow changes are held.</div>
+      <div class="panel stack" id="action895RecoveryPanel" aria-labelledby="action895RecoveryTitle">
+        <h2 id="action895RecoveryTitle" style="margin:0;font-size:1.05rem">Action recovery · manual confirmation</h2>
+        <p id="action895RecoveryStatus" class="mini" role="status" aria-live="polite">No unresolved workflow actions in this tab. Only live server evidence confirms completed work.</p>
+        <div class="job-actions"><button class="btn ghost" id="action895Acknowledge" type="button" disabled>I've reviewed the current job</button></div>
+        <p class="mini">When an action's result is uncertain, refresh assigned jobs, compare the latest stage and private evidence, then acknowledge. This never repeats a job action automatically.</p>
+      </div>
       <p class="mini" style="margin:0">Offline: only the last-seen list in this open tab remains readable. No assigned-job snapshot, timer, or action queue is saved for offline use; there is no automatic replay. After reconnecting, manually refresh and review the latest assignment, stage and instructions before acting.</p>
       <div class="runtime-strip">
         <div class="runtime-card"><span class="mini">Runtime mode</span><strong id="runtimeMode">Starting…</strong><span class="mini" id="runtimeReason">Checking assigned jobs once.</span></div>
