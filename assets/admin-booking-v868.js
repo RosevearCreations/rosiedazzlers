@@ -1,7 +1,7 @@
 // Rosie 868: authenticated staff camera-first private detailing intake.
 const $=id=>document.getElementById(id);
 const capture={photos:'rdPhotoCapture',video:'rdVideoCapture',choose:'rdMediaPick'};
-const state={draft:null,busy:false};
+const state={draft:null,busy:false,retryFiles:new Map()};
 const MIME={'jpg':'image/jpeg','jpeg':'image/jpeg','png':'image/png',
  'webp':'image/webp','heic':'image/heic','mp4':'video/mp4',
  'mov':'video/quicktime','webm':'video/webm'};
@@ -96,10 +96,81 @@ function labelMedia(items){
    });
    p.append(view);
   }
+  if(a.status==='pending_upload'){
+   const check=document.createElement('button');
+   check.type='button';check.className='btn ghost small';
+   check.textContent='Check saved upload';
+   check.addEventListener('click',()=>checkPending894(a.id));
+   p.append(check);
+   const retained=state.retryFiles.get(a.id);
+   if(retained?.draftId===state.draft?.id){
+    const retry=document.createElement('button');
+    retry.type='button';retry.className='btn small';
+    retry.textContent='Retry this file';
+    retry.addEventListener('click',()=>retryPending894(a.id));
+    p.append(retry);
+   }
+  }
   box.append(p);
  }
 }
+async function reloadDraft894(draftId){
+ const refreshed=await read(draftId);
+ if(!refreshed.drafts?.[0])throw Error('Saved draft could not be reopened');
+ showDraft(refreshed.drafts[0],refreshed.media||[]);
+ await listSaved();
+ window.dispatchEvent(new CustomEvent('rosie:intake-media-updated',
+  {detail:{id:draftId}}));
+}
+async function checkPending894(assetId){
+ if(state.busy||!state.draft)return;
+ const draftId=state.draft.id;
+ toggleBusy(true);
+ try{
+  const confirmed=await call('confirm_upload',{draft_id:draftId,asset_id:assetId});
+  if(confirmed.status!=='stored_private')throw Error('File is not yet saved');
+  state.retryFiles.delete(assetId);
+  await reloadDraft894(draftId);
+  status('Existing upload confirmed privately.');
+ }catch(e){status((e.message||'Upload not confirmed')+
+  '. If the original file is still in this tab, use Retry this file.',true);}
+ finally{toggleBusy(false);}
+}
+async function retryPending894(assetId){
+ if(state.busy||!state.draft)return;
+ const draftId=state.draft.id;
+ const retained=state.retryFiles.get(assetId);
+ if(!retained||retained.draftId!==draftId){
+  status('Original file is no longer in this tab. Check saved upload, then ask Admin to review the pending reservation.',true);
+  return;
+ }
+ toggleBusy(true);
+ try{
+  // First check whether an earlier transfer succeeded but confirmation failed.
+  const already=await call('confirm_upload',{draft_id:draftId,
+   asset_id:assetId}).catch(()=>null);
+  if(already?.status!=='stored_private'){
+   const signed=await call('retry_upload',{draft_id:draftId,asset_id:assetId});
+   if(signed.retry_existing!==true||signed.asset_id!==assetId||
+      signed.content_type!==retained.type)
+    throw Error('Private upload retry contract mismatch');
+   state.retryFiles.set(signed.asset_id,{file,type,draftId:state.draft.id});
+   const response=await fetch(signed.upload_url,{method:'PUT',
+    headers:{'Content-Type':retained.type},body:retained.file});
+   if(!response.ok)throw Error('Private transfer retry failed');
+   const confirmed=await call('confirm_upload',{draft_id:draftId,
+    asset_id:assetId});
+   if(confirmed.status!=='stored_private')throw Error('Retry is awaiting confirmation');
+  }
+  state.retryFiles.delete(assetId);
+  await reloadDraft894(draftId);
+  status('Retried file stored privately; no additional draft or media slot created.');
+ }catch(e){status((e.message||'Private retry failed')+
+  '. Draft retained. Retry here or ask Admin to review pending storage.',true);}
+ finally{toggleBusy(false);}
+}
 function showDraft(row,assets=[]){
+ if(state.draft?.id!==row.id)state.retryFiles.clear();
  state.draft=row;
  try{sessionStorage.setItem('rd-intake-active-v869',row.id);}catch{}
  window.dispatchEvent(new CustomEvent('rosie:intake-selected',{detail:{id:row.id}}));
@@ -160,6 +231,9 @@ async function uploadFiles(files,kind){
  try{
   if(!state.draft)await create();
   await authorizePrivateCapture();
+  const before=await read(state.draft.id);
+  if((before.media||[]).length+files.length>8)
+   throw Error('This private draft permits at most eight total saved or pending files. Check any unfinished uploads before selecting more.');
   let complete=0;
   for(const original of files){
    const file=await compressForRoadside(original);
@@ -182,15 +256,16 @@ async function uploadFiles(files,kind){
    const confirmed=await call('confirm_upload',{
     draft_id:state.draft.id,asset_id:signed.asset_id});
    if(confirmed.status!=='stored_private')throw Error('Private upload not yet confirmed');
+   state.retryFiles.delete(signed.asset_id);
    complete++;
    status('Uploaded '+complete+' '+capText[kind]+' file(s) privately.');
   }
-  const refreshed=await read(state.draft.id);
-  showDraft(refreshed.drafts[0],refreshed.media);
-  await listSaved();
-  window.dispatchEvent(new CustomEvent('rosie:intake-media-updated',{
-   detail:{id:state.draft.id}}));
- }catch(e){status(e.message,true);}
+  await reloadDraft894(state.draft.id);
+ }catch(e){
+  const message=e.message||'Private media transfer could not finish';
+  if(state.draft){try{await reloadDraft894(state.draft.id);}catch{}}
+  status(message+'. The draft remains private. Check saved upload or retry the file from this tab.',true);
+ }
  finally{toggleBusy(false);}
 }
 async function save(){
