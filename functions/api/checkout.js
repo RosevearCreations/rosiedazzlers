@@ -21,6 +21,11 @@ export async function onRequestPost({ request, env }) {
     const body = await request.json().catch(() => null);
     if (!body || typeof body !== "object") return corsJson({ error: "Invalid JSON body" }, 400);
 
+    // Reject unsupported payment routes before any customer or booking writes.
+    // Never silently treat an unknown provider as a Stripe authorization.
+    if (body.payment_provider != null && !["stripe", "paypal"].includes(String(body.payment_provider).trim().toLowerCase()))
+      return corsJson({ error: "Unsupported payment method. Choose card or PayPal.", booking_created: false, payment_attempted: false }, 400);
+
     const isAlaCarte889 = body.booking_mode === "ala_carte";
     if (body.booking_mode && !["guided", "ala_carte"].includes(body.booking_mode))
       return corsJson({ error: "Unknown booking method", booking_created:false, payment_attempted:false }, 400);
@@ -220,6 +225,20 @@ export async function onRequestPost({ request, env }) {
         owner_recovery_hold: true,
         reason: 'mixed_gift_provider_settlement_not_atomic'
       }, 409);
+    }
+
+    // Build 892: fail before inserting a pending booking if the selected
+    // payment provider cannot create its checkout. Otherwise a missing
+    // credential leaves a customer-facing orphan hold consuming capacity.
+    // Gift-only settlement remains on its separate verified path.
+    if (payableDepositCents > 0) {
+      const selectedProvider = String(body.payment_provider || "stripe").trim().toLowerCase();
+      if (selectedProvider === "paypal") {
+        if (!env.PAYPAL_CLIENT_ID || !env.PAYPAL_CLIENT_SECRET)
+          return corsJson({ error: "PayPal checkout is temporarily unavailable. No booking or payment was created.", booking_created: false, payment_attempted: false }, 503);
+      } else if (!env.STRIPE_SECRET_KEY) {
+        return corsJson({ error: "Card checkout is temporarily unavailable. No booking or payment was created.", booking_created: false, payment_attempted: false }, 503);
+      }
     }
 
     const notes = [];
