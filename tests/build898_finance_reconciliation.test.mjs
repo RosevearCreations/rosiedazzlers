@@ -67,6 +67,7 @@ test('private finance API enforces signed-session finance role and no provider c
  assert.match(s,/auth_mode!=='session'/);
  assert.match(s,/finance\.view/);assert.match(s,/finance\.reconcile/);
  assert.match(s,/allowLegacyAdminFallback:false/);assert.match(s,/onRequestPost=no/);
+ assert.match(s,/final_balance_payment_requests\?select=id,booking_id,status,amount_cents/);
  assert.doesNotMatch(s,/api\.stripe\.com|api-m\.paypal\.com|method:'PATCH'|method:'POST'/);
  const ui=readFileSync(new URL('../admin-finance-reconciliation.html',import.meta.url),'utf8');
  assert.match(ui,/data-build898/);assert.match(ui,/BUSINESS ACCEPTANCE HOLD/);

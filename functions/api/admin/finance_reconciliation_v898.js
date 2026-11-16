@@ -8,7 +8,7 @@ const QUERY={
  events:'quote_payment_webhook_events?select=id,quote_deposit_payment_request_id,provider,provider_event_id,provider_event_type,status,replay_status,created_at&order=created_at.desc&limit=150',
  applications:'payment_applications?select=id,source_type,source_id,target_type,target_id,booking_id,amount_cents,currency,application_status,created_at&order=created_at.desc&limit=100',
  accounting:'accounting_records?select=id,booking_id,accounting_stage,total_cad,tax_cad,deposit_paid_cad,final_paid_cad,refund_cad,balance_due_cad,created_at&order=created_at.desc&limit=100',
- finalBalances:'final_balance_payment_requests?select=id,booking_id,provider,status,amount_cents,paid_amount_cents,provider_event_id,paid_at,updated_at&order=updated_at.desc&limit=60'
+ finalBalances:'final_balance_payment_requests?select=id,booking_id,status,amount_cents,paid_amount_cents,provider_event_id,paid_at,updated_at&order=updated_at.desc&limit=60'
 };
 const answer=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{
  'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store',
