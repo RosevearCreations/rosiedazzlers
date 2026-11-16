@@ -1,0 +1,23 @@
+name: Rosie 896 Scheduling Capacity Territory and Staffing Review
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+permissions:
+  contents: read
+jobs:
+  owner-scheduling-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/build896_scheduling_capacity_territory.test.mjs
+      - run: node scripts/build738_availability_capacity_manual_exceptions_test.mjs
+      - run: node scripts/build739_winter_workability_service_area_test.mjs
+      - run: node --check functions/api/_lib/scheduling-preview-v896.js
+      - run: node --check functions/api/admin/booking_availability.js
+      - run: node --check assets/admin-booking-v896.js

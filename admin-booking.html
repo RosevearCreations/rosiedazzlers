@@ -608,6 +608,23 @@
         </div>
       </div>
     </section>
+    <section class="panel container" id="rd896Planning" aria-labelledby="rd896PlanningTitle" data-build896="read-only-owner-planning">
+      <h2 id="rd896PlanningTitle">Schedule planning — capacity, territory &amp; crew</h2>
+      <p class="mini">Read-only owner review. Checking a date never reserves a vehicle, assigns staff, approves a worksite or takes a deposit. Booking remains subject to its protected server capacity check.</p>
+      <form id="rd896PlanningForm" class="form">
+        <label>Service date <input id="rd896Date" type="date" required autocomplete="off"></label>
+        <label>Appointment length
+          <select id="rd896Slot" required>
+            <option value="AM">AM half-day</option>
+            <option value="PM">PM half-day</option>
+            <option value="FULL">Full day (AM + PM)</option>
+          </select>
+        </label>
+        <label>Configured service area <input id="rd896Area" type="text" maxlength="120" required placeholder="e.g. Tillsonburg, ON" autocomplete="off"></label>
+        <button class="btn" id="rd896Check" type="submit">Review capacity — no booking</button>
+      </form>
+      <div id="rd896Result" class="notice mini" role="status" aria-live="polite">Choose a date, duration and service area to view the server's provisional planning result.</div>
+    </section>
   </main>
 
   <footer class="footer container" data-footer></footer>
@@ -632,5 +649,6 @@
   <script type="module" src="/assets/admin-booking-v883.js"></script>
   <script type="module" src="/assets/admin-booking-v884.js"></script>
   <script type="module" src="/assets/admin-booking-v885.js"></script>
+  <script type="module" src="/assets/admin-booking-v896.js"></script>
 </body>
 </html>
