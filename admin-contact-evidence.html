@@ -1,0 +1,125 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>Manual Contact Evidence | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+body{background:#071626;color:#e7f3ff;background-image:linear-gradient(133deg,transparent 55%,#122d46 55%,#122d46 60%,transparent 60%);}
+.x905{max-width:1260px;margin:auto;padding:20px}.hero{border-left:9px solid #deb974;border-top:2px solid #deb974;padding:25px;background:linear-gradient(135deg,#28435c,#102032);clip-path:polygon(0 0,98% 0,100% 28px,100% 100%,0 100%)}
+.eyebrow{color:#f3cc88;font-weight:800;letter-spacing:.15em}.hero h1{font-size:clamp(1.8rem,3.4vw,2.9rem);margin:10px 0}
+.hold{color:#ffe1a3;font-weight:800}.sub{color:#bed4e7}.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.wide{grid-column:1/-1}
+section{background:#11273c;border:1px solid #54718f;margin:16px 0;padding:18px;min-width:0}h2{font-size:1.22rem;margin:0 0 12px}
+label{display:grid;gap:5px;margin:10px 0;font-weight:650}input,select,textarea,button{box-sizing:border-box;min-height:44px;padding:10px;border-radius:2px}
+input,select,textarea{width:100%;background:#19324d;color:#f2f7fc;border:1px solid #829bb3}textarea{resize:vertical;min-height:88px}
+button{background:#806439;border:1px solid #e5bb78;color:white;cursor:pointer;font-weight:700}
+button:disabled{opacity:.43;cursor:not-allowed}.status{border-left:5px solid #e5bb78;padding:13px;background:#2a4661}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.metrics article{background:#25435c;padding:14px;border-top:3px solid #deb974;overflow-wrap:anywhere}
+.metrics strong{display:block;margin-top:8px}li{padding:9px 0;border-bottom:1px solid #405d76;overflow-wrap:anywhere}
+:focus-visible{outline:3px solid #fff3b5;outline-offset:2px}a{color:#addfff}
+@media(max-width:800px){.cols{grid-template-columns:1fr}.wide{grid-column:auto}.metrics{grid-template-columns:1fr}}
+</style></head><body data-page="rosie905-evidence-no-send">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html">Rosie Dazzlers</a>
+<nav class="nav-links"><a href="/admin.html">Admin</a><a href="/admin-manual-outbox.html">904 Manual Review</a>
+<a href="/admin-exception-routing.html">903 Ownership</a></nav></div></header>
+<main class="x905"><div class="hero"><div class="eyebrow">BUILD 905 / ORIGINAL STAFF CUSTODY</div>
+<h1>Consent invalidation & manual-contact evidence</h1>
+<p>Reconcile the original Build 904 internal authority with current consent. A staff member may record a genuine manual attempt and its non-PII log reference; a different signed supervisor independently reviews that attestation.</p>
+<p class="hold">NO AUTO-SEND · NO EMAIL/SMS/PHONE PROVIDER API · NO CLAIM OF CUSTOMER RECEIPT. Staff evidence is not externally verified delivery.</p>
+<p class="sub">Never enter a customer's name, phone, email, message body, payment data or other private information in these notes or evidence IDs. If the contact never happened, do not create an attestation.</p></div>
+<section><h2>Original active booking & incident</h2>
+<label>Booking<select id="booking"></select></label>
+<label>Original job-day incident<select id="issue"></select></label>
+<button type="button" id="refresh">Recheck source and current consent</button>
+<p id="status" role="status" aria-live="polite" class="status">Checking signed session…</p></section>
+<section><h2>Reconciliation (read-only until staff acts)</h2><div class="metrics" id="metrics"></div>
+<p id="summary" class="hold">No verified source loaded.</p>
+<p class="sub">An invalidation or expired authority never triggers a message, even after a previous contact attestation. A new manual-contact attempt requires a new valid internal authority.</p></section>
+<div class="cols">
+<section><h2>1 · Record observed invalidation</h2><form id="invalidate">
+<label>Signed source-based explanation<textarea id="invalidateNote" required minlength="12" maxlength="350"></textarea></label>
+<button id="invalidateSave" type="submit" disabled>Record observed consent/authority HOLD</button></form>
+<p class="sub">Only original owner or reviewer. This records a durable observation; current consent is always derived from the live original source.</p></section>
+<section><h2>2 · Owner attests a genuine manual contact</h2><form id="attest">
+<label>Original manually used channel<select id="channel"><option value="phone">Telephone</option><option value="email">Email</option><option value="sms">SMS</option></select></label>
+<label>Actual time of manual contact<input id="occurred" type="datetime-local" required></label>
+<label>Observed result<select id="outcome"><option value="attempted">Attempted</option><option value="reached">Reached (staff claim)</option><option value="voicemail">Voicemail left (staff claim)</option></select></label>
+<label>Original log type<select id="basis"><option value="call_log">Call log</option><option value="sent_folder">Email sent-folder record</option><option value="sms_log">SMS log</option><option value="customer_ack">Existing customer acknowledgement</option></select></label>
+<label>Non-personal external log ID<input id="reference" required minlength="8" maxlength="80" pattern="[A-Za-z0-9._:-]{8,80}" placeholder="LOG-REFERENCE-ID"></label>
+<label>Signed observation<textarea id="attestNote" required minlength="12" maxlength="350"></textarea></label>
+<button id="attestSave" type="submit" disabled>Attest manual staff action (no send)</button></form>
+<p class="sub">The app does not dial, send or verify this claim against a provider. The real owner must have already performed the contact manually, within the 15-minute authority window.</p></section>
+<section><h2>3 · Different supervisor reviews evidence</h2><form id="verify">
+<label>Independent finding<select id="decision"><option value="hold">HOLD — insufficient original evidence</option><option value="corroborated">Corroborated staff evidence (not delivery proof)</option></select></label>
+<label>Evidence source reviewed<select id="verifyBasis"><option value="call_log">Original call log</option><option value="sent_folder">Original sent folder</option><option value="sms_log">Original SMS log</option><option value="customer_ack">Original acknowledgement record</option></select></label>
+<label>Signed review explanation<textarea id="verifyNote" required minlength="12" maxlength="350"></textarea></label>
+<button id="verifySave" type="submit" disabled>Record independent staff review</button></form>
+<p class="sub">The reviewer must be the original separate Build 904 supervisor and cannot approve their own contact attestation.</p></section>
+<section><h2>Original immutable source history</h2><ul id="history"><li>No source selected.</li></ul>
+<p class="sub">This audit does not expose customer contact information, message text or the private log reference in the browser.</p></section>
+</div></main>
+<script type="module">
+const $=id=>document.getElementById(id),s={jobs:[],d:null,retries:new Map()},params=new URL(location.href).searchParams;
+const status=x=>$('status').textContent=String(x);
+async function api(u,o={}){const r=await fetch(u,{credentials:'same-origin',cache:'no-store',...o});
+ const x=await r.json().catch(()=>({}));if(!r.ok||!x.ok)throw Error(x.error||'Original signed source unavailable');return x;}
+function options(id,arr,label){const el=$(id);el.replaceChildren();for(const x of arr){const o=document.createElement('option');o.value=x.id;o.textContent=label(x);el.append(o);}}
+function list(text){const x=document.createElement('li');x.textContent=String(text);return x;}
+function show(){const d=s.d;if(!d)return;const r=d.report905,a=d.report904,actor=d.actor_id;
+ $('metrics').replaceChildren();for(const [k,v] of [['Source',a.state],['Live consent',a.consent_allowed?'EXPLICIT TRUE':'HOLD'],['Reconciliation',r.state]]){
+  const x=document.createElement('article'),t=document.createElement('span'),b=document.createElement('strong');
+  t.textContent=k;b.textContent=String(v);x.append(t,b);$('metrics').append(x);}
+ $('summary').textContent='Original authority '+(a.authority_id||'NONE')+' · expiry '+(a.expires_at||'not established')+
+  ' · manual evidence only · NO provider calls · NO contact asserted by this software.';
+ $('history').replaceChildren();for(const x of d.history){
+  $('history').append(list(x.recorded_at+' · '+x.event_kind+' · '+(x.decision||x.outcome||'')+
+   ' · staff '+x.staff_user_id.slice(0,8)+' · source '+x.source_state));}
+ if(!d.history.length)$('history').append(list('No original Build 905 evidence exists.'));
+ const allowed=actor===a.owner_staff_user_id||actor===a.review_actor_id;
+ $('invalidateSave').disabled=!(allowed&&r.can_record_invalidation);
+ $('attestSave').disabled=!(actor===a.owner_staff_user_id&&r.can_record_manual_contact);
+ const contact=d.history.find(x=>x.event_kind==='attest_contact');
+ $('verifySave').disabled=!(actor===a.review_actor_id&&r.consent_current&&r.invalidation_count===0&&contact&&!d.history.some(x=>x.event_kind==='verify_contact'));
+ if(contact)$('verifyBasis').value=contact.evidence_basis||'call_log';
+ if(a.channel)$('channel').value=a.channel;
+}
+async function load(){const booking_id=$('booking').value;if(!booking_id)return;
+ s.d=null;for(const k of ['invalidateSave','attestSave','verifySave'])$(k).disabled=true;
+ status('Reading original 904 review and CURRENT consent…');
+ try{
+  const first=await api('/api/admin/outbox_manual_review_v904?booking_id='+encodeURIComponent(booking_id));
+  options('issue',first.exceptions||[],x=>(x.open?'OPEN':'CLOSED')+' · '+x.subject+' · '+x.id.slice(0,8));
+  if(params.get('exception_id')&&first.exceptions.some(x=>x.id===params.get('exception_id')))
+    $('issue').value=params.get('exception_id');
+  const issue=$('issue').value;if(!issue){status('No original incidents found.');return;}
+  await selected();
+ }catch(e){status(e.message+' Source/HOLD.');}}
+async function selected(){const id=$('booking').value,x=$('issue').value;if(!id||!x)return;
+ try{s.d=await api('/api/admin/outbox_manual_evidence_v905?booking_id='+encodeURIComponent(id)+'&exception_id='+encodeURIComponent(x));
+ show();status('Source reconciled; zero automatic messages or provider sends.');}
+ catch(e){s.d=null;status(e.message+' NO SEND.');}}
+async function jobs(){try{const d=await api('/api/admin/workforce_safety_v900');s.jobs=d.jobs||[];
+ options('booking',s.jobs,x=>x.service_date+' · '+(x.package_code||'Detail')+' · '+x.id.slice(0,8));
+ if(params.get('booking_id')&&s.jobs.some(x=>x.id===params.get('booking_id')))$('booking').value=params.get('booking_id');
+ if(s.jobs.length)await load();else status('No authorized original jobs for this session.');}
+ catch(e){status(e.message);}}
+async function post(action,values,button){const d=s.d;if(!d?.report904?.authority_id)return;
+ const p={action,booking_id:d.booking_id,exception_id:d.exception_id,authority_id:d.report904.authority_id,...values},
+ key=JSON.stringify(p),request_id=s.retries.get(key)||crypto.randomUUID();
+ s.retries.set(key,request_id);$(button).disabled=true;
+ status('Recording real signed staff evidence only; NO SEND…');
+ try{const x=await api('/api/admin/outbox_manual_evidence_v905',{method:'POST',
+  headers:{'Content-Type':'application/json'},body:JSON.stringify({...p,client_request_id:request_id})});
+ if(!x.source_recorded||x.provider_calls!==0||x.delivery_verified!==false)throw Error('Source or no-send evidence unavailable.');
+ s.retries.delete(key);await selected();status('Signed '+action+' '+(x.duplicate?'reconfirmed':'recorded')+'; no automated customer contact.');}
+ catch(e){status(e.message+' Check original source before retry.');$(button).disabled=false;}}
+$('invalidate').addEventListener('submit',e=>{e.preventDefault();post('invalidate',{note:$('invalidateNote').value},'invalidateSave')});
+$('attest').addEventListener('submit',e=>{e.preventDefault();
+ const stamp=$('occurred').value,utc=stamp?new Date(stamp).toISOString():null;
+ post('attest_contact',{channel:$('channel').value,occurred_at:utc,outcome:$('outcome').value,
+ evidence_basis:$('basis').value,evidence_reference:$('reference').value,note:$('attestNote').value},'attestSave')});
+$('verify').addEventListener('submit',e=>{e.preventDefault();
+ const contact=s.d?.history.find(x=>x.event_kind==='attest_contact');
+ post('verify_contact',{contact_receipt_id:contact?.id,decision:$('decision').value,
+ evidence_basis:$('verifyBasis').value,note:$('verifyNote').value},'verifySave')});
+$('booking').addEventListener('change',load);$('issue').addEventListener('change',selected);
+$('refresh').addEventListener('click',selected);
+$('occurred').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+jobs();
+</script></body></html>

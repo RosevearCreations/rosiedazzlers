@@ -40,6 +40,7 @@ body{background:radial-gradient(ellipse at 84% -12%,#304862,transparent 58%),#07
 <p>Independently review an original Build 903 unsent draft, check live versioned customer preferences, then record a time-limited internal manual readiness or revoke it.</p>
 <p class="hold">NO AUTOMATIC SEND. NO PROVIDER CALL. “Manual readiness” is an internal control record—not permission for this screen to email, text or telephone a customer.</p>
 <p class="muted">Versioned explicit service-channel consent is required; withdrawn consent or profile changes invalidate readiness. The reviewer must differ from the original owner. A separate customer-contact workflow must recheck live consent before any real contact.</p>
+<p><a id="evidence905" href="/admin-contact-evidence.html">Build 905 · Consent invalidation and manual evidence</a></p>
 <p><a href="/admin-exception-routing.html">Manage original Build 903 draft and owner</a> · <a href="/admin-jobday-exceptions.html">Inspect signed Build 902 handoff</a></p></div>
 
 <section><h2>Original supervisor work order</h2>
@@ -117,7 +118,8 @@ async function load(){const booking=$('job').value,exceptionId=$('exception').va
  status('Reading original signed receipts and CURRENT customer consent version…');
  try{const url='/api/admin/outbox_manual_review_v904?booking_id='+encodeURIComponent(booking)+
   (exceptionId?'&exception_id='+encodeURIComponent(exceptionId):'');
-  const d=await api(url);s.detail=d;options('exception',d.exceptions,x=>(x.open?'OPEN':'CLOSED')+' · '+x.subject+' · '+x.id.slice(0,8));
+  const d=await api(url);s.detail=d;
+  $('evidence905').href='/admin-contact-evidence.html?booking_id='+encodeURIComponent(d.booking.id)+'&exception_id='+encodeURIComponent(d.report904?.exception_id||'');options('exception',d.exceptions,x=>(x.open?'OPEN':'CLOSED')+' · '+x.subject+' · '+x.id.slice(0,8));
   if(d.report904)$('exception').value=d.report904.exception_id;
   text('source','Original booking '+d.booking.id+' · release '+(d.source_revision||'unavailable')+' · provider deliveries=0.');
   render();status('Live original consent revalidated. No messages delivered or sent.');
