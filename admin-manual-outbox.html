@@ -1,0 +1,159 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive">
+<title>Supervisor Manual Outbox Review | Rosie Dazzlers</title><link rel="stylesheet" href="/assets/site.css">
+<style>
+:root{--gold:#dbb674;--steel:#6685a3;--white:#ecf5ff}
+body{background:radial-gradient(ellipse at 84% -12%,#304862,transparent 58%),#071526;color:var(--white)}
+.x904{max-width:1320px;margin:0 auto;padding:20px}
+.x904 .hero{border-top:2px solid var(--gold);border-left:9px solid var(--gold);padding:25px;background:linear-gradient(133deg,#253e58,#101e31 70%);clip-path:polygon(0 0,98.5% 0,100% 21px,100% 100%,0 100%)}
+.x904 .eyebrow{font-weight:850;letter-spacing:.16em;color:var(--gold)}
+.x904 h1{font-size:clamp(1.8rem,4vw,3.05rem);margin:9px 0}
+.x904 h2{font-size:1.15rem;margin:0 0 10px}
+.x904 section{background:#102337;border:1px solid #5c7993;padding:18px;margin:16px 0;min-width:0}
+.x904 .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.x904 .wide{grid-column:1/-1}
+.x904 label{display:grid;gap:6px;margin:11px 0;font-weight:600}
+.x904 :is(select,input,textarea){box-sizing:border-box;border:1px solid #869fb8;background:#182e45;color:var(--white);padding:10px;min-height:43px;width:100%;border-radius:2px}
+.x904 textarea{min-height:82px;resize:vertical}
+.x904 button{background:#7e6334;color:#fff;border:1px solid var(--gold);padding:10px 13px;min-height:43px;cursor:pointer;border-radius:2px}
+.x904 button:disabled{opacity:.4;cursor:not-allowed}
+.x904 :is(button,select,textarea,a):focus-visible{outline:3px solid #fff5ba;outline-offset:2px}
+.x904 .muted{color:#b8cada}
+.x904 .hold{font-weight:800;color:#ffdfa1}
+.x904 .status{border-left:5px solid var(--gold);padding:13px;background:#253d56}
+.x904 .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.x904 .metrics article{padding:12px;border-top:3px solid var(--gold);background:#233d53}
+.x904 .metrics strong{font-size:1.12rem;display:block;overflow-wrap:anywhere}
+.x904 ul{padding-left:19px}
+.x904 li{margin:9px 0;overflow-wrap:anywhere}
+.x904 .queue li{border-bottom:1px solid #526f8b;padding:7px 0}
+.x904 .queue button{min-height:33px;padding:5px;margin-left:9px}
+.x904 a{color:#addfff}
+@media(max-width:820px){.x904 .cols{grid-template-columns:1fr}.x904 .wide{grid-column:auto}.x904 .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.x904 .metrics{grid-template-columns:1fr}}
+</style></head>
+<body data-page="admin-manual-outbox-v904" data-build904="consent-fresh-no-send">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html">Rosie Dazzlers</a>
+<nav class="nav-links"><a href="/admin.html">Admin</a><a href="/admin-jobday-exceptions.html">Exceptions 902</a>
+<a href="/admin-exception-routing.html">Ownership 903</a><a href="/admin-jobday-dispatch.html">Dispatch 901</a></nav></div></header>
+<main class="x904"><div class="hero"><div class="eyebrow">BUILD 904 / CONSENT CONTROL</div>
+<h1>Supervisor outbox review & manual readiness</h1>
+<p>Independently review an original Build 903 unsent draft, check live versioned customer preferences, then record a time-limited internal manual readiness or revoke it.</p>
+<p class="hold">NO AUTOMATIC SEND. NO PROVIDER CALL. “Manual readiness” is an internal control record—not permission for this screen to email, text or telephone a customer.</p>
+<p class="muted">Versioned explicit service-channel consent is required; withdrawn consent or profile changes invalidate readiness. The reviewer must differ from the original owner. A separate customer-contact workflow must recheck live consent before any real contact.</p>
+<p><a href="/admin-exception-routing.html">Manage original Build 903 draft and owner</a> · <a href="/admin-jobday-exceptions.html">Inspect signed Build 902 handoff</a></p></div>
+
+<section><h2>Original supervisor work order</h2>
+<label>Original booking<select id="job"><option value="">Reading original authorized work orders…</option></select></label>
+<label>Original Build 901 exception<select id="exception"></select></label>
+<button id="refresh" type="button">Revalidate live consent and source</button>
+<button id="queueRefresh" type="button">Refresh review queue</button>
+<p id="status" class="status" role="status" aria-live="polite">Verifying signed supervisor authority…</p>
+<p id="source" class="muted"></p></section>
+
+<section><h2>Live consent and independent review state</h2>
+<div id="metrics" class="metrics"></div><p id="summary" class="hold">No original source loaded.</p>
+<p id="channels" class="muted">No customer contact details are displayed. Consent eligibility only.</p>
+<p class="muted">Manual readiness expires 15 minutes after its original server receipt. It can be invalidated sooner by a profile/preference change, new owner, suppressed draft, or source safety closure.</p></section>
+
+<div class="cols">
+<section class="wide"><h2>Original UNSENT review submissions</h2><ul id="queue" class="queue"><li>Reading bounded source index…</li></ul>
+<p class="muted">Queue entries are unverified pointers; selecting one always reloads the original work order and latest consent before deciding anything.</p></section>
+
+<section><h2>1 · Current owner submits internal draft for review</h2>
+<form id="submit">
+<label>Requested MANUAL channel, not a send action<select id="channel">
+<option value="email">Email — manual readiness only</option><option value="sms">SMS — manual readiness only</option><option value="phone">Telephone — manual readiness only</option></select></label>
+<label>Original owner review request<textarea id="submit_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="submitSave" type="submit" disabled>Submit UNSENT draft for independent review</button></form>
+<p class="muted">Requires the exact live Build 903 UNSENT draft, current verified owner, and explicit customer preference version. No customer message is prepared by this form.</p></section>
+
+<section><h2>2 · Different supervisor reviews</h2><form id="review">
+<label>Independent review outcome<select id="reviewDecision"><option value="hold">HOLD — do not authorize</option><option value="approved">Approve internal manual readiness review</option></select></label>
+<label>Independent source-based review explanation<textarea id="review_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="reviewSave" type="submit" disabled>Record independent supervisor review</button></form>
+<p class="muted">A reviewer who is also the draft owner cannot approve. Review does not establish customer contact consent by itself.</p></section>
+
+<section><h2>3 · Original owner confirms manual readiness</h2><form id="authorize">
+<label>Original approval and live consent cross-check<textarea id="authorize_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="authorizeSave" type="submit" disabled>Record 15-minute manual readiness</button></form>
+<p class="hold">This only creates a signed internal receipt. It cannot send or prove delivery.</p></section>
+
+<section><h2>4 · Original owner or reviewer revokes</h2><form id="revoke">
+<label>Reason to revoke prior manual readiness<textarea id="revoke_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="revokeSave" type="submit" disabled>Record independent revocation</button></form>
+<p class="muted">An expired, invalidated or revoked receipt never automatically contacts anyone.</p></section>
+
+<section class="wide"><h2>Signed, append-only review history</h2><ul id="history"><li>No original source selected.</li></ul>
+<p class="muted">The source contains no delivered flags, provider acknowledgement, customer address, email body or phone number. Only masked operational consent status is shown.</p></section>
+</div></main>
+<script type="module">
+const $=id=>document.getElementById(id),s={detail:null,jobs:[],queue:null,retries:new Map()};
+const status=x=>$('status').textContent=String(x||''),text=(id,x)=>$(id).textContent=String(x??'');
+function options(id,data,fmt){const root=$(id);root.replaceChildren();for(const r of data){const o=document.createElement('option');o.value=r.id;o.textContent=fmt(r);root.append(o);}}
+function li(label){const x=document.createElement('li');x.textContent=String(label);return x;}
+async function api(url,opts={}){const r=await fetch(url,{credentials:'same-origin',cache:'no-store',...opts}),j=await r.json().catch(()=>({}));
+ if(!r.ok||!j.ok)throw Error(j.error||'Original consent/custody source unavailable');return j;}
+function render(){const d=s.detail;if(!d)return;const r=d.report904,owner=d.report903?.owner_staff_user_id,actor=d.role.actor_id;
+ const root=$('metrics');root.replaceChildren();
+ for(const [k,v] of [['Review state',r?.state||'NO ORIGINAL'],['Live consent',r?.consent.allowed?'EXPLICIT ALLOWED':'HOLD'],
+ ['Manual readiness',r?.manual_review_ready?'READY (NO SEND)':'HOLD'],['Expiry',r?.authority_expires_at||'NOT RECORDED']]){
+  const b=document.createElement('article'),name=document.createElement('span'),value=document.createElement('strong');
+  name.textContent=k;value.textContent=String(v);if(String(v).length>20)value.style.fontSize='.86rem';b.append(name,value);root.append(b);}
+ text('summary',r?'Original '+r.exception_id+' · '+r.state+' · current owner '+(owner||'UNCLAIMED'):'No original exception or internal draft.');
+ text('channels',Object.entries(d.consent_channels).map(([c,v])=>c.toUpperCase()+': '+(v.allowed?'explicitly eligible':'HOLD '+v.reason)+
+  (v.recorded_at?' · version '+v.recorded_at:'')).join(' | '));
+ const rows=$('history');rows.replaceChildren();if(!d.history.length)rows.append(li('No signed manual-review events.'));
+ for(const h of d.history)rows.append(li(h.recorded_at+' · '+h.event_kind+' · '+(h.decision||'')+' · '+h.channel+
+   ' · staff '+h.staff_user_id.slice(0,8)+' · '+h.note));
+ const originalValid=!!d.report903?.owner_current&&!!d.report903?.outbox?.id;
+ const hasSubmit=!!r?.submission_id,hasReview=!!r?.review_id,hasAuthority=!!r?.authority_id;
+ $('submitSave').disabled=!(originalValid&&!hasSubmit&&owner===actor&&d.consent_channels[$('channel').value]?.allowed);
+ $('reviewSave').disabled=!(originalValid&&hasSubmit&&!hasReview&&owner!==actor);
+ $('authorizeSave').disabled=!(originalValid&&hasSubmit&&hasReview&&!hasAuthority&&owner===actor&&r.review_decision==='approved'&&r.review_fresh&&r.consent.allowed&&r.source_current&&r.state==='REVIEWED_PENDING_OWNER_AUTHORITY');
+ $('revokeSave').disabled=!(hasAuthority&&r.state!=='MANUAL_AUTHORITY_REVOKED'&&(owner===actor||r.review_actor_id===actor));
+}
+async function load(){const booking=$('job').value,exceptionId=$('exception').value;if(!booking)return;
+ s.detail=null;for(const b of ['submitSave','reviewSave','authorizeSave','revokeSave'])$(b).disabled=true;
+ status('Reading original signed receipts and CURRENT customer consent version…');
+ try{const url='/api/admin/outbox_manual_review_v904?booking_id='+encodeURIComponent(booking)+
+  (exceptionId?'&exception_id='+encodeURIComponent(exceptionId):'');
+  const d=await api(url);s.detail=d;options('exception',d.exceptions,x=>(x.open?'OPEN':'CLOSED')+' · '+x.subject+' · '+x.id.slice(0,8));
+  if(d.report904)$('exception').value=d.report904.exception_id;
+  text('source','Original booking '+d.booking.id+' · release '+(d.source_revision||'unavailable')+' · provider deliveries=0.');
+  render();status('Live original consent revalidated. No messages delivered or sent.');
+ }catch(e){status(e.message+' Manual readiness HOLD.');}}
+async function jobs(){try{const d=await api('/api/admin/workforce_safety_v900');s.jobs=d.jobs||[];
+  options('job',s.jobs,x=>x.service_date+' · '+(x.package_code||'Detail')+' · '+x.id.slice(0,8));
+  if(s.jobs.length)await load();else status('No original authorized work orders in this session.');
+ }catch(e){status(e.message);}}
+async function queue(){const root=$('queue');root.replaceChildren();
+ try{const d=await api('/api/admin/outbox_manual_review_v904');s.queue=d;
+ if(!d.queue.length){root.append(li('No original manual-review submissions.'));return;}
+ for(const item of d.queue){const e=li(item.submitted_at+' · UNVERIFIED RECHECK REQUIRED · job '+item.booking_id.slice(0,8)+
+  ' · issue '+item.exception_id.slice(0,8));
+  const b=document.createElement('button');b.type='button';b.textContent='Revalidate original';
+  b.addEventListener('click',async()=>{
+   if(!s.jobs.some(j=>j.id===item.booking_id)){s.jobs.push({id:item.booking_id,service_date:'Original supervisor queue',package_code:'Source review'});
+    options('job',s.jobs,x=>x.service_date+' · '+(x.package_code||'Detail')+' · '+x.id.slice(0,8));}
+   $('job').value=item.booking_id;options('exception',[],()=>'' );await load();$('exception').value=item.exception_id;await load();
+  });e.append(b);root.append(e);}
+ }catch(e){root.append(li(e.message+' No manual review state inferred.'));}}
+async function post(action,values,button){const d=s.detail;if(!d?.report904)return;
+ const p={action,booking_id:d.booking.id,exception_id:d.report904.exception_id,...values},
+  signature=JSON.stringify(p),id=s.retries.get(signature)||crypto.randomUUID();s.retries.set(signature,id);
+ $(button).disabled=true;status('Recording original signed internal receipt. NO PROVIDER CALL…');
+ try{const r=await api('/api/admin/outbox_manual_review_v904',{method:'POST',
+  headers:{'Content-Type':'application/json'},body:JSON.stringify({...p,client_request_id:id})});
+ if(!r.source_recorded||r.sent_count!==0)throw Error('Source write or NO-SEND assurance unavailable');
+ s.retries.delete(signature);await load();await queue();status('Signed '+action+' receipt '+(r.duplicate?'reconfirmed':'recorded')+'; zero customer messages sent.');
+ }catch(e){status(e.message+' Verify original source before retry.');$(button).disabled=false;}}
+const wire=(id,action,button,fields)=>$(id).addEventListener('submit',e=>{e.preventDefault();post(action,fields(),button);});
+wire('submit','submit','submitSave',()=>({draft_id:s.detail?.report903?.outbox?.id,channel:$('channel').value,note:$('submit_note').value}));
+wire('review','review','reviewSave',()=>({submission_id:s.detail?.report904?.submission_id,decision:$('reviewDecision').value,note:$('review_note').value}));
+wire('authorize','authorize','authorizeSave',()=>({review_id:s.detail?.report904?.review_id,note:$('authorize_note').value}));
+wire('revoke','revoke','revokeSave',()=>({authority_id:s.detail?.report904?.authority_id,note:$('revoke_note').value}));
+$('job').addEventListener('change',()=>{options('exception',[],()=>'' );load();});$('exception').addEventListener('change',load);
+$('channel').addEventListener('change',render);
+$('refresh').addEventListener('click',load);$('queueRefresh').addEventListener('click',queue);
+jobs();queue();
+</script></body></html>

@@ -1,0 +1,29 @@
+name: Rosie 904 Manual Outbox Review and Consent Source Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  consent904:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse original consent and server functions
+        run: |
+          node --check assets/build904-manual-review.mjs
+          node --check functions/api/admin/outbox_manual_review_v904.js
+          node --check functions/api/admin/exception_routing_v903.js
+          node --check functions/api/admin/jobday_exceptions_v902.js
+          node --check functions/api/detailer/job_action.js
+      - name: Prove independent manual review, stale consent HOLD and never-send invariants
+        run: node --test tests/build904_manual_review_consent.test.mjs
+      - name: Preserve Builds 899-903 source contracts
+        run: node --test tests/build899_supplies_equipment.test.mjs tests/build900_workforce_safety.test.mjs tests/build901_jobday_dispatch_safety.test.mjs tests/build902_jobday_exception_sla_handoff.test.mjs tests/build903_exception_routing.test.mjs
