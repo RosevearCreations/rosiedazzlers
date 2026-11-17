@@ -1,0 +1,124 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>Exception Ownership & Internal Outbox | Rosie Dazzlers</title><link rel="stylesheet" href="/assets/site.css"><style>
+:root{--gold:#d9b575;--edge:#516c86;--ink:#ecf5ff}body{background:radial-gradient(ellipse at 82% -10%,#29445f,transparent 60%),#071424;color:var(--ink)}
+.x903{max-width:1280px;margin:auto;padding:20px}.x903 h1{font-size:clamp(1.8rem,4vw,3.1rem);margin:9px 0}
+.x903 .hero{border-left:8px solid var(--gold);border-top:1px solid var(--gold);background:linear-gradient(135deg,#192f49,#0b1c2e);padding:24px;clip-path:polygon(0 0,98.5% 0,100% 19px,100% 100%,0 100%)}
+.x903 .eyebrow{letter-spacing:.14em;color:var(--gold);font-weight:800}
+.x903 section{background:#102235;border:1px solid var(--edge);padding:18px;margin:15px 0;min-width:0}
+.x903 h2{font-size:1.2rem;margin:0 0 10px}.x903 .layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.x903 label{display:grid;gap:5px;margin:10px 0}.x903 :is(select,textarea,input){box-sizing:border-box;min-height:42px;width:100%;padding:10px;border:1px solid #829bb1;color:var(--ink);background:#162e46;border-radius:3px}
+.x903 textarea{min-height:82px;resize:vertical}.x903 button{padding:10px 13px;border:1px solid var(--gold);background:#785d30;color:#fff;min-height:43px;border-radius:2px;cursor:pointer}
+.x903 button:disabled{opacity:.4;cursor:not-allowed}.x903 :is(button,input,select,textarea,a):focus-visible{outline:3px solid #fff3b2;outline-offset:2px}
+.x903 .muted{color:#bdcee0}.x903 .hold{font-weight:750;color:#ffe1a6}.x903 .status{padding:12px;border-left:5px solid var(--gold);background:#263d52}
+.x903 ul{padding-left:20px}.x903 li{margin:8px 0;overflow-wrap:anywhere}.x903 .queue li{border-bottom:1px solid #4c6681;padding:8px 0}
+.x903 .queue button{min-height:32px;padding:5px;margin-left:10px}.x903 .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.x903 .metrics article{border-top:3px solid var(--gold);background:#253d54;padding:10px}.x903 .metrics strong{display:block;font-size:1.5rem}
+.x903 a{color:#a8dfff}.x903 .full{grid-column:1/-1}
+@media(max-width:830px){.x903 .layout{grid-template-columns:1fr}.x903 .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.x903 .full{grid-column:auto}}
+@media(max-width:480px){.x903 .metrics{grid-template-columns:1fr}}
+</style></head><body data-page="admin-exception-routing-v903" data-build903="unsent-private-only">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html">Rosie Dazzlers</a><nav class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-workforce-safety.html">Safety</a>
+<a href="/admin-jobday-dispatch.html">Dispatch</a><a href="/admin-jobday-exceptions.html">SLA/Handoff</a></nav></div></header>
+<main class="x903"><div class="hero"><div class="eyebrow">BUILD 903 / SUPERVISOR CONTROL</div><h1>Exception ownership, routing & internal outbox</h1>
+<p>Claim an original verified crew handoff, transfer ownership with a separate supervisor acknowledgement, and create internal unsent review notices. All records are tied to existing safety exceptions.</p>
+<p class="hold">Consent boundary: INTERNAL STAFF TASKS ONLY. This workspace cannot send SMS, email, push notifications or customer messages. No delivery or customer consent is assumed.</p>
+<p><a href="/admin-jobday-exceptions.html">Open original Build 902 supervisor handoffs</a> · <a href="/admin-jobday-dispatch.html">Original Build 901 stop-work decisions</a></p></div>
+<section><h2>Original booking and exception</h2>
+<label>Original work order<select id="job"><option value="">Reading staff work orders…</option></select></label>
+<label>Original safety exception<select id="exception"></select></label>
+<button id="refresh" type="button">Refresh original custody</button> <button id="queueRefresh" type="button">Refresh owner queue</button>
+<p id="status" class="status" role="status" aria-live="polite">Checking original signed supervisor session…</p><p id="source" class="muted"></p></section>
+<section><h2>Signed owner dashboard</h2><p id="ownership" class="hold">No original exception selected.</p><div id="metrics" class="metrics"></div>
+<p id="boundary" class="muted">The outbox remains unapproved for customer communication or delivery regardless of its internal draft status.</p></section>
+<div class="layout">
+<section class="full"><h2>Original supervisor exceptions</h2><ul id="queue" class="queue"><li>Loading bounded private supervisor queue…</li></ul></section>
+<section><h2>Claim verified original handoff</h2>
+<p class="muted">The receiving supervisor may claim only after independently signing the Build 902 crew handoff acceptance.</p>
+<form id="claim"><label>Original owner claim rationale<textarea id="claim_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="claimSave" type="submit" disabled>Claim original exception</button></form></section>
+<section><h2>Route to another supervisor</h2>
+<form id="route"><label>Active original supervisor<select id="recipient"></select></label>
+<label>Reason for routing<textarea id="route_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="routeSave" type="submit" disabled>Offer independent supervisor route</button></form>
+<p class="muted">A pending route holds new drafts until the nominated recipient responds.</p></section>
+<section><h2>Accept or reject supervisor route</h2><p id="routeState" class="hold">No original pending route.</p>
+<form id="accept_route"><label>Response<select id="route_decision"><option value="accepted">Accept ownership</option><option value="rejected">Reject route</option></select></label>
+<label>Independent acknowledgement<textarea id="ack_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="ackSave" type="submit" disabled>Record signed routing response</button></form></section>
+<section><h2>Prepare UNSENT internal notice</h2><form id="draft">
+<label>Internal notice template<select id="template"><option value="sla_overdue">Supervisor SLA review</option><option value="safety_hold">Safety HOLD review</option><option value="handoff_pending">Handoff review</option></select></label>
+<label>Private reason for preparing task<textarea id="draft_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="draftSave" type="submit" disabled>Prepare INTERNAL UNSENT draft</button></form>
+<p class="muted">Draft preview uses a safe template with an original exception reference only. It contains no customer data or free-form message body.</p></section>
+<section><h2>Unsent outbox and suppression</h2><p id="preview" class="status">No original active internal draft.</p>
+<form id="suppress"><label>Suppression reason<textarea id="suppress_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="suppressSave" type="submit" disabled>Suppress UNSENT draft</button></form></section>
+<section><h2>Immutable original audit trail</h2><ul id="history"><li>Choose original exception.</li></ul>
+<p class="muted">No delivery acknowledgment, owner certification, safety override, catalog mutation, payroll or accounting posting is inferred.</p></section>
+</div></main>
+<script type="module">
+const $=id=>document.getElementById(id),state={detail:null,jobs:[],queue:null,requests:new Map()};
+const status=m=>$('status').textContent=String(m||''),set=(id,value)=>$(id).textContent=String(value??'');
+function options(id,rows,label){const e=$(id);e.replaceChildren();for(const x of rows){const o=document.createElement('option');o.value=x.id;o.textContent=label(x);e.append(o);}}
+function li(value){const e=document.createElement('li');e.textContent=String(value);return e;}
+async function call(url,opts={}){const r=await fetch(url,{credentials:'same-origin',cache:'no-store',...opts}),v=await r.json().catch(()=>({}));if(!r.ok||!v.ok)throw Error(v.error||'Original source operation failed');return v;}
+function render(){const d=state.detail;if(!d)return;
+ const r=d.report,orig=d.exception,actor=d.role.actor_id,owner=r?.owner_staff_user_id;
+ const stat=r?.owner_state||'NO_ORIGINAL_EXCEPTION',box=$('metrics');box.replaceChildren();
+ for(const [title,val] of [['Owner status',stat],['SLA',r?.sla_state||'—'],['Pending route',r?.pending_route?'YES':'NO'],['UNSENT draft',r?.outbox?'1':'0']]){
+  const el=document.createElement('article'),label=document.createElement('span'),v=document.createElement('strong');
+  label.textContent=title;v.textContent=String(val);if(String(val).length>17)v.style.fontSize='.9rem';el.append(label,v);box.append(el);}
+ set('ownership',r?'Source owner: '+(owner||'UNCLAIMED')+' · '+stat+' · due '+r.original_due_at:'No original exception.');
+ set('routeState',r?.pending_route?'Pending route '+r.pending_route.id+' to '+r.pending_route.recipient_staff_user_id:'No pending route.');
+ set('preview',r?.outbox?.preview||'No active UNSENT internal notice. No customer contact is permitted.');
+ options('recipient',d.supervisors.filter(s=>s.id!==actor),s=>s.name+' · '+s.role);
+ $('claimSave').disabled=!(orig?.open&&r&&!owner&&orig.handoff.verified&&orig.handoff.recipient_staff_user_id===actor);
+ $('routeSave').disabled=!(orig?.open&&r?.owner_current&&owner===actor);
+ $('ackSave').disabled=!(orig?.open&&r?.pending_route?.recipient_staff_user_id===actor&&owner!==actor);
+ $('draftSave').disabled=!(orig?.open&&r?.owner_current&&owner===actor&&!r.pending_route);
+ $('suppressSave').disabled=!(r?.outbox&&owner===actor);
+ const log=$('history');log.replaceChildren();if(!d.history.length)log.append(li('No owner/routing/outbox receipts yet.'));
+ for(const item of d.history)log.append(li(item.recorded_at+' · '+item.event_kind+' · '+(item.decision||item.template_key||'')+' · '+item.note));
+}
+async function load(){const booking_id=$('job').value,exception_id=$('exception').value;if(!booking_id)return;
+ state.detail=null;for(const id of ['claimSave','routeSave','ackSave','draftSave','suppressSave'])$(id).disabled=true;
+ status('Reading source owner, handoff and draft evidence…');
+ try{const url='/api/admin/exception_routing_v903?booking_id='+encodeURIComponent(booking_id)+(exception_id?'&exception_id='+encodeURIComponent(exception_id):'');
+  const d=await call(url);state.detail=d;
+  options('exception',d.exceptions,x=>(x.open?'OPEN':'CLOSED')+' · '+x.subject+' · '+x.sla_state+' · '+x.id.slice(0,8));
+  if(d.exception)$('exception').value=d.exception.id;
+  set('source','Original booking '+d.booking.id+' · release '+(d.source_revision||'unavailable')+' · INTERNAL UNSENT ONLY.');
+  render();status('Original custody loaded. No notification sent.');
+ }catch(e){status(e.message+' Safety and outbox remain HOLD.');}}
+async function loadJobs(){try{const j=await call('/api/admin/workforce_safety_v900');state.jobs=j.jobs||[];
+ options('job',state.jobs,x=>x.service_date+' · '+(x.package_code||'Detail')+' · '+x.id.slice(0,8));
+ if(state.jobs.length)await load();else status('No original available work orders for this session.');}catch(e){status(e.message);}}
+async function loadQueue(){const list=$('queue');list.replaceChildren();
+ try{const data=await call('/api/admin/exception_routing_v903');state.queue=data;
+ if(!data.queue.length){list.append(li('No open original supervisor exceptions in bounded source.'));return;}
+ for(const item of data.queue){const e=li((item.sla_state||'')+' · '+item.subject+' · owner '+item.owner_state+
+  ' · '+(item.pending_route?'ROUTING':'')+' · '+(item.unsent_draft?'UNSENT DRAFT':'')+' · '+item.booking_id.slice(0,8));
+  const b=document.createElement('button');b.type='button';b.textContent='Inspect';b.addEventListener('click',async()=>{
+    if(!state.jobs.some(j=>j.id===item.booking_id)){state.jobs.push({id:item.booking_id,service_date:'Original queue',package_code:'Supervisor exception'});options('job',state.jobs,x=>x.service_date+' · '+(x.package_code||'Detail')+' · '+x.id.slice(0,8));}
+    $('job').value=item.booking_id;$('exception').replaceChildren();await load();$('exception').value=item.exception_id;await load();
+  });e.append(b);list.append(e);}
+ }catch(e){list.append(li(e.message+' Source queue not verified.'));}}
+async function send(action,fields,button){const d=state.detail;if(!d?.exception||!d.booking)return;
+ const payload={action,booking_id:d.booking.id,exception_id:d.exception.id,...fields};
+ const finger=JSON.stringify(payload),id=state.requests.get(finger)||crypto.randomUUID();state.requests.set(finger,id);
+ $(button).disabled=true;status('Recording immutable internal source; NO customer/provider delivery…');
+ try{const r=await call('/api/admin/exception_routing_v903',{method:'POST',headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({...payload,client_request_id:id})});
+ if(!r.source_recorded||r.delivery_enabled!==false||r.sent_count!==0)throw Error('Source boundary not verified');
+ state.requests.delete(finger);await load();await loadQueue();status('Original '+action+' receipt '+(r.duplicate?'reconfirmed':'recorded')+'. No messages sent.');
+ }catch(e){status(e.message+' Refresh original source before further action.');$(button).disabled=false;}}
+function wire(id,action,button,fields){$(id).addEventListener('submit',e=>{e.preventDefault();send(action,fields(),button);});}
+wire('claim','claim','claimSave',()=>({note:$('claim_note').value}));
+wire('route','route','routeSave',()=>({recipient_staff_user_id:$('recipient').value,note:$('route_note').value}));
+wire('accept_route','accept_route','ackSave',()=>({route_id:state.detail?.report?.pending_route?.id,decision:$('route_decision').value,note:$('ack_note').value}));
+wire('draft','draft','draftSave',()=>({template_key:$('template').value,note:$('draft_note').value}));
+wire('suppress','suppress','suppressSave',()=>({draft_id:state.detail?.report?.outbox?.id,note:$('suppress_note').value}));
+$('job').addEventListener('change',()=>{options('exception',[],()=>'' );load();});$('exception').addEventListener('change',load);
+$('refresh').addEventListener('click',load);$('queueRefresh').addEventListener('click',loadQueue);
+loadJobs();loadQueue();
+</script></body></html>
