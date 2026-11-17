@@ -183,3 +183,6 @@ export async function onRequestPost({request,env}){
    provider_calls:0,customer_contact_executed:false,master_deliveries:0},201);
  }catch{return reply({ok:false,error:'Original live consent and custody unavailable. Manual authority HOLD; no delivery.'},503);}
 }
+
+// Additive 905 reuse: preserve the 904 signed source/role/consent checks without bypassing them.
+export {staff as staff904,rawBooking as rawBooking904,source as source904,state as state904};

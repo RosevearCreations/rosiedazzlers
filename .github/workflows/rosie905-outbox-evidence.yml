@@ -1,0 +1,27 @@
+name: Rosie 905 Consent Invalidation and Manual Evidence Source Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  outbox905:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse safe outbox modules
+        run: |
+          node --check assets/build905-outbox-evidence.mjs
+          node --check functions/api/admin/outbox_manual_evidence_v905.js
+          node --check functions/api/admin/outbox_manual_review_v904.js
+      - name: Prove strict invalidation, independent manual evidence and no-auto-send
+        run: node --test tests/build905_outbox_invalidation_evidence.test.mjs
+      - name: Preserve complete 899–904 source contracts
+        run: node --test tests/build899_supplies_equipment.test.mjs tests/build900_workforce_safety.test.mjs tests/build901_jobday_dispatch_safety.test.mjs tests/build902_jobday_exception_sla_handoff.test.mjs tests/build903_exception_routing.test.mjs tests/build904_manual_review_consent.test.mjs
