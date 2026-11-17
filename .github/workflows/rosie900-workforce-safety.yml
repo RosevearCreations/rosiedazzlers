@@ -1,0 +1,24 @@
+name: Rosie 900 Workforce Equipment Safety Source Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  safety900:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original signed safety API syntax
+        run: node --check functions/api/admin/workforce_safety_v900.js
+      - name: Run Build 900 independent role and readiness tests
+        run: node --test tests/build900_workforce_safety.test.mjs
+      - name: Retain protected equipment and staff baseline
+        run: node --test tests/build899_supplies_equipment.test.mjs tests/build895_detailer_mobile_sync.test.mjs
