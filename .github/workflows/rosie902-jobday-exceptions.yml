@@ -1,0 +1,28 @@
+name: Rosie 902 Job-Day Exception SLA and Handoff Source Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exceptions902:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify original API and pure projection parse
+        run: |
+          node --check assets/build902-jobday-exceptions.mjs
+          node --check functions/api/admin/jobday_exceptions_v902.js
+          node --check functions/api/admin/jobday_dispatch_v901.js
+          node --check functions/api/detailer/job_action.js
+      - name: Run Build 902 source-based privacy and SLA tests
+        run: node --test tests/build902_jobday_exception_sla_handoff.test.mjs
+      - name: Preserve Builds 899, 900 and 901 source gates
+        run: node --test tests/build899_supplies_equipment.test.mjs tests/build900_workforce_safety.test.mjs tests/build901_jobday_dispatch_safety.test.mjs
