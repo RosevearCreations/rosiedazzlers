@@ -57,7 +57,7 @@ export function project903({booking_id,exception,receipts903=[],now=new Date()})
     e.recipient_staff_user_id===owner)throw Error('Conflicting original owner route');
    pendingRoute=e;
   } else if(e.event_kind==='accept_route'){
-   if(!pendingRoute||pendingRoute.id!==e.route_id||e.staff_user_id!==pendingRoute.recipient_staff_user_id||
+   if(!pendingRoute||pendingRoute.id!==e.related_receipt_id||e.staff_user_id!==pendingRoute.recipient_staff_user_id||
     e.staff_user_id===owner||!['accepted','rejected'].includes(e.decision))throw Error('Invalid two-person route custody');
    if(e.decision==='accepted')owner=e.staff_user_id;
    pendingRoute=null;
@@ -65,13 +65,13 @@ export function project903({booking_id,exception,receipts903=[],now=new Date()})
    if(!owner||e.staff_user_id!==owner||pendingRoute||
     !TEMPLATE_KEYS903.includes(e.template_key))throw Error('Draft without current verified owner');
   }else if(e.event_kind==='suppress'){
-   const draft=records.find(x=>x.id===e.draft_id&&x.event_kind==='draft');
+   const draft=records.find(x=>x.id===e.related_receipt_id&&x.event_kind==='draft');
    if(!draft||!owner||e.staff_user_id!==owner||draft.recorded_at>e.recorded_at)
     throw Error('Invalid original outbox suppression');
   }
  }
  const drafts=newest(records.filter(x=>x.event_kind==='draft'));
- const suppressed=new Set(records.filter(x=>x.event_kind==='suppress').map(x=>x.draft_id));
+ const suppressed=new Set(records.filter(x=>x.event_kind==='suppress').map(x=>x.related_receipt_id));
  const currentDraft=drafts[0]&&!suppressed.has(drafts[0].id)?drafts[0]:null;
  const sourceOwner=owner||null;
  const staleOwner=!!sourceOwner&&exception.handoff?.verified!==true;
