@@ -1,0 +1,128 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>Job-Day Exception Command | Rosie Dazzlers</title><link rel="stylesheet" href="/assets/site.css">
+<style>
+:root{--gold:#ddbb75;--line:#53718b;--ink:#eaf4ff;--muted:#bbcade}
+body{background:radial-gradient(ellipse at top right,#1c3650,transparent 62%),#071320;color:var(--ink)}
+.x902{max-width:1320px;margin:auto;padding:18px}
+.x902 .hero{background:linear-gradient(120deg,#1b344a,#101d2d 70%);border-top:1px solid var(--gold);border-left:7px solid var(--gold);padding:25px;clip-path:polygon(0 0,98.5% 0,100% 17px,100% 100%,0 100%)}
+.x902 h1{font-size:clamp(1.7rem,3.5vw,3rem);margin:8px 0}.x902 h2{font-size:1.25rem;margin:0 0 9px}
+.x902 .eyebrow{text-transform:uppercase;color:var(--gold);letter-spacing:.15em;font-weight:800}
+.x902 .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.x902 section{border:1px solid var(--line);background:#102033;padding:18px;margin:16px 0;min-width:0}
+.x902 .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.x902 .metrics article{background:#223a52;border-top:3px solid var(--gold);padding:12px}
+.x902 .metrics strong{display:block;font-size:1.45rem}
+.x902 label{display:grid;gap:5px;margin:10px 0}.x902 :is(input,select,textarea){background:#162c42;border:1px solid #899eb2;color:var(--ink);width:100%;box-sizing:border-box;padding:10px;min-height:42px;border-radius:2px}
+.x902 textarea{min-height:84px}.x902 button{border:1px solid var(--gold);background:#765d2f;color:#fff;padding:10px 14px;min-height:43px;cursor:pointer;border-radius:2px}
+.x902 button:disabled{opacity:.45;cursor:not-allowed}.x902 :is(button,a,textarea,select):focus-visible{outline:3px solid #fff5b7;outline-offset:2px}
+.x902 .muted{color:var(--muted)}.x902 .hold{color:#ffdc9e;font-weight:750}.x902 .status{background:#223a52;border-left:4px solid var(--gold);padding:12px}
+.x902 ul{padding-left:20px}.x902 li{margin:9px 0;overflow-wrap:anywhere}.x902 a{color:#a7dfff}.x902 .queue li{border-bottom:1px solid #455e74;padding:8px 0}
+.x902 .queue button{font-size:.86rem;padding:6px;min-height:34px;margin-left:8px}.x902 .full{grid-column:1/-1}
+@media(max-width:840px){.x902 .cols{grid-template-columns:1fr}.x902 .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.x902 .full{grid-column:auto}}
+@media(max-width:480px){.x902 .metrics{grid-template-columns:1fr}}
+</style></head><body data-page="admin-jobday-exceptions-v902" data-build902="signed-original-sla">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html">Rosie Dazzlers</a>
+<nav class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-workforce-safety.html">Safety 900</a><a href="/admin-jobday-dispatch.html">Dispatch 901</a><a href="/detailer-jobs.html">Detailer Jobs</a></nav></div></header>
+<main class="x902"><div class="hero"><span class="eyebrow">Build 902 / Operations command</span><h1>Exceptions, SLA & verified crew handoff</h1>
+<p>Source-linked exception priorities, supervisor response deadlines and signed two-person transfer of responsibility for original staff safety reports.</p>
+<p class="hold">Handoff acceptance means an authorized supervisor acknowledged the work item. It is not an independent physical safety signoff, job dispatch or incident resolution.</p>
+<p class="muted">SLA policy: STOP WORK response target 15 minutes · Supervisor review response target 60 minutes. Clock begins at the original incident receipt; timers do not reset.</p></div>
+<section><h2>Original work-order scope</h2><label>Assigned work order<select id="job"><option>Loading authorized work orders…</option></select></label>
+<button id="refresh" type="button">Refresh source evidence</button> <button id="queueRefresh" type="button">Refresh supervisor queue</button>
+<p class="status" id="status" role="status" aria-live="polite">Checking signed Rosie staff session…</p><p id="source" class="muted"></p></section>
+<section><h2>Exception response dashboard</h2><div id="metrics" class="metrics"></div><p id="slaWarning" class="hold">Original exception source not loaded.</p>
+<p class="muted">On-screen timers show a local countdown only. Source timestamps and signed acknowledgements are authoritative. This screen does not send automated SMS, alerts or dispatches.</p></section>
+<div class="cols">
+<section class="full"><h2>Original supervisor exception queue</h2><ul id="queue" class="queue"><li>Supervisor source queue requires a signed privileged session.</li></ul></section>
+<section><h2>Choose original exception</h2><label>Existing Build 901 escalation<select id="exception"></select></label>
+<div id="exceptionSummary" class="status">Choose original work order to inspect the current deadline and handoff.</div>
+<p><a href="/admin-jobday-dispatch.html">Report a new original STOP WORK issue in Build 901</a></p></section>
+<section><h2>Crew → supervisor handoff offer</h2><form id="offer">
+<label>Active original supervisor recipient<select id="recipient"></select></label>
+<label>Original issue and handoff notes<textarea id="offer_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="offerSave" type="submit" disabled>Offer original crew handoff</button></form>
+<p class="muted">Only the actual reporting crew member may offer. A pending or accepted offer cannot be silently replaced.</p></section>
+<section><h2>Supervisor acknowledge / reject</h2><form id="acknowledge">
+<label>Decision<select id="ackDecision"><option value="accepted">Accept responsibility</option><option value="rejected">Reject / return to reporting crew</option></select></label>
+<label>Signed supervisor acknowledgement<textarea id="ackNote" minlength="12" maxlength="350" required></textarea></label>
+<button id="ackSave" type="submit" disabled>Sign original handoff response</button></form>
+<p class="muted">Only the exact nominated supervisor can respond. Another staff member's receipt is not accepted.</p></section>
+<section><h2>Supervisor priority & response</h2><form id="triage">
+<label>Source review priority<select id="priority"><option value="critical">Critical</option><option value="high">High</option><option value="normal">Normal</option></select></label>
+<label>Original supervisor review / action<textarea id="triageNote" minlength="12" maxlength="350" required></textarea></label>
+<button id="triageSave" type="submit" disabled>Record supervisor triage</button></form>
+<p class="muted">Priority classification does not change the original SLA deadline.</p></section>
+<section><h2>Independent supervisor escalation</h2><form id="escalate">
+<label>Reason for escalation<textarea id="escalateNote" minlength="12" maxlength="350" required></textarea></label>
+<button id="escalateSave" type="submit" disabled>Record signed escalation</button></form>
+<p class="muted">Records the escalation for the operator queue only; no fabricated external delivery or customer message.</p></section>
+<section><h2>Original immutable custody history</h2><ul id="history"><li>No source exception selected.</li></ul></section></div></main>
+<script type="module">
+const $=id=>document.getElementById(id),state={jobs:[],detail:null,retry:new Map(),queue:null};
+const notify=t=>$('status').textContent=String(t||''),txt=(id,t)=>$(id).textContent=String(t??'');
+const opts=(id,rows,label)=>{const el=$(id);el.replaceChildren();for(const r of rows){const o=document.createElement('option');o.value=r.id;o.textContent=label(r);el.append(o);}};
+const li=(text)=>{const item=document.createElement('li');item.textContent=String(text);return item;};
+async function get(url,opt={}){const r=await fetch(url,{credentials:'same-origin',cache:'no-store',...opt}),j=await r.json().catch(()=>({}));
+ if(!r.ok||!j.ok)throw Error(j.error||'Signed source unavailable');return j;}
+const chosen=()=>state.detail?.report.exceptions.find(e=>e.id===$('exception').value)||null;
+function render(){const d=state.detail;if(!d)return;
+ const r=d.report,x=chosen();
+ opts('recipient',d.supervisors.filter(s=>s.id!==d.role.actor_id),s=>s.name+' · '+s.role);
+ const counts=$('metrics');counts.replaceChildren();for(const [name,value] of [['Open exceptions',r.totals.open],['Overdue response',r.totals.overdue],
+ ['Pending handoff',r.totals.pending_handoffs],['Two-person accepted',r.totals.verified_handoffs]]){const box=document.createElement('article'),label=document.createElement('span'),num=document.createElement('strong');label.textContent=name;num.textContent=String(value);box.append(label,num);counts.append(box);}
+ txt('slaWarning',r.totals.overdue?'OVERDUE SUPERVISOR RESPONSE — inspect the original queue.':'No overdue responses in the loaded job source.');
+ const i=r.exceptions.filter(e=>e.id===$('exception').value)[0]||r.exceptions[0];
+ if(i&&$('exception').value!==i.id)$('exception').value=i.id;
+ const item=chosen();
+ txt('exceptionSummary',item?'Original '+item.subject+' / '+item.priority+' · '+item.sla_state+' · due '+item.due_at+
+  ' · handoff '+item.handoff.status+' · '+(item.open?'UNRESOLVED':'RESOLVED'):'No original Build 901 exception recorded.');
+ const isOpen=!!item?.open;
+ $('offerSave').disabled=!isOpen||!d.role.worker||item.reported_by!==d.role.actor_id||
+  ['PENDING','TWO_PERSON_ACCEPTED'].includes(item.handoff.status);
+ $('ackSave').disabled=!isOpen||!d.role.supervisor||item.handoff.status!=='PENDING'||
+  item.handoff.recipient_staff_user_id!==d.role.actor_id;
+ $('triageSave').disabled=!isOpen||!d.role.supervisor||item.reported_by===d.role.actor_id;
+ $('escalateSave').disabled=!isOpen||!d.role.supervisor||item.reported_by===d.role.actor_id;
+ const history=$('history');history.replaceChildren();
+ const receipts=d.receipts.filter(e=>e.exception_id===item?.id);
+ if(!receipts.length)history.append(li('No original handoff or supervisor receipts.'));
+ for(const e of receipts)history.append(li(e.recorded_at+' · '+e.event_kind+' · '+(e.decision||e.priority||'')+' · '+e.note));
+}
+async function loadJob(){if(!$('job').value)return;state.detail=null;notify('Loading signed original exception and handoff source…');
+ try{const d=await get('/api/admin/jobday_exceptions_v902?booking_id='+encodeURIComponent($('job').value));state.detail=d;
+  opts('exception',d.report.exceptions,e=>(e.open?'OPEN':'CLOSED')+' · '+e.subject+' · '+e.sla_state+' · '+e.id.slice(0,8));
+  txt('source','Original work order '+d.booking.id+' · source '+(d.source_revision||'unknown')+' · source-clock response targets unchanged.');
+  render();notify('Original source verified. '+d.report.totals.open+' open issues; '+d.report.totals.overdue+' overdue.');
+ }catch(e){notify(e.message+' Handoff remains unverified.');}}
+async function loadJobs(){notify('Loading signed work orders…');try{const d=await get('/api/admin/workforce_safety_v900');
+  state.jobs=d.jobs||[];opts('job',state.jobs,e=>e.service_date+' · '+(e.package_code||'Detail')+' · '+e.id.slice(0,8));
+  if(state.jobs.length)await loadJob();else notify('No original assigned work orders.');}catch(e){notify(e.message);}}
+async function loadQueue(){const root=$('queue');root.replaceChildren();
+ try{const d=await get('/api/admin/jobday_exceptions_v902');state.queue=d;
+  if(!d.queue.length){root.append(li('No original unresolved exceptions in bounded supervisor source.'));return;}
+  for(const e of d.queue){const item=li(e.sla_state+' · '+e.subject+' · '+e.priority+' · due '+e.due_at+
+     ' · handoff '+e.handoff.status+' · job '+e.booking_id.slice(0,8));
+   const b=document.createElement('button');b.type='button';b.textContent='Inspect';b.addEventListener('click',async()=>{
+     if(!state.jobs.some(j=>j.id===e.booking_id)){notify('This job is outside the current bounded work-order selector. Review original source manually.');return;}
+     $('job').value=e.booking_id;await loadJob();$('exception').value=e.id;render();});item.append(b);root.append(item);}
+ }catch(e){root.append(li(e.message+' No queue state inferred.'));}}
+async function post(action,fields,button){const issue=chosen();if(!issue||!state.detail)return;
+ const payload={action,booking_id:state.detail.booking.id,exception_id:issue.id,...fields};
+ const fingerprint=JSON.stringify(payload),id=state.retry.get(fingerprint)||crypto.randomUUID();state.retry.set(fingerprint,id);
+ $(button).disabled=true;notify('Recording original signed receipt; no automatic dispatch, notification or physical certification…');
+ try{const r=await get('/api/admin/jobday_exceptions_v902',{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({...payload,client_request_id:id})});
+  if(!r.source_recorded)throw Error('Original receipt readback absent');
+  state.retry.delete(fingerprint);await loadJob();await loadQueue();notify('Original '+action+' receipt '+(r.duplicate?'reconfirmed':'recorded')+'.');
+ }catch(e){notify(e.message+' Refresh source and review before retry.');$(button).disabled=false;}}
+const wire=(id,action,button,fields)=>$(id).addEventListener('submit',e=>{e.preventDefault();post(action,fields(),button);});
+wire('offer','offer','offerSave',()=>({recipient_staff_user_id:$('recipient').value,note:$('offer_note').value}));
+wire('acknowledge','acknowledge','ackSave',()=>({offer_id:chosen()?.handoff.offer_id,decision:$('ackDecision').value,note:$('ackNote').value}));
+wire('triage','triage','triageSave',()=>({priority:$('priority').value,note:$('triageNote').value}));
+wire('escalate','escalate','escalateSave',()=>({note:$('escalateNote').value}));
+$('exception').addEventListener('change',render);
+$('job').addEventListener('change',loadJob);
+$('refresh').addEventListener('click',()=>{loadJob();loadQueue();});
+$('queueRefresh').addEventListener('click',loadQueue);
+loadJobs();loadQueue();
+</script></body></html>
