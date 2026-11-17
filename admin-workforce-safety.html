@@ -1,0 +1,103 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>Workforce & Job Safety | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+:root{--edge:#ba944b;--line:#526077;--surface:#111a29;--ink:#e7eef9}
+body{background:linear-gradient(145deg,#07101e,#172537 70%,#0c1321);color:var(--ink)}
+.work900{max-width:1250px;margin:auto;padding:20px}.work900 h1{font-size:clamp(1.7rem,4vw,2.8rem);margin:8px 0}
+.work900 h2{font-size:1.2rem;margin:0 0 10px}.work900 .hero900{padding:24px;border-left:7px solid var(--edge);border-top:1px solid var(--edge);background:linear-gradient(120deg,#1d2b3d,#0e1724);clip-path:polygon(0 0,98% 0,100% 18px,100% 100%,0 100%)}
+.work900 .layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.work900 section{margin:14px 0;padding:18px;border:1px solid var(--line);background:var(--surface);border-radius:4px}
+.work900 .full{grid-column:1/-1}.work900 .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.work900 .metrics article{border-top:3px solid var(--edge);padding:12px;background:#1c2b3d}.work900 .metrics strong{display:block;font-size:1.4rem}
+.work900 label{display:grid;gap:5px;margin:9px 0}.work900 input,.work900 select,.work900 textarea{background:#17273b;color:var(--ink);border:1px solid #75839a;border-radius:3px;padding:10px;width:100%;box-sizing:border-box;min-height:42px}
+.work900 textarea{min-height:78px}.work900 button{min-height:43px;border:1px solid var(--edge);padding:9px 16px;border-radius:2px;background:#795d26;color:white;cursor:pointer}
+.work900 button:disabled{opacity:.44;cursor:not-allowed}.work900 button:focus-visible,.work900 a:focus-visible{outline:3px solid #f3d28c}
+.work900 .quiet{color:#b2c0d6}.work900 .hold{font-weight:750;color:#ffe3ab}.work900 .state{border:1px solid var(--line);padding:12px;min-height:44px}
+.work900 ul{padding-left:22px}.work900 li{margin:5px 0;overflow-wrap:anywhere}.work900 .chip{display:inline-block;padding:4px 9px;border:1px solid var(--edge);font-weight:800;letter-spacing:.08em}
+@media(max-width:780px){.work900 .layout{grid-template-columns:1fr}.work900 .metrics{grid-template-columns:1fr}.work900 .full{grid-column:auto}}
+</style></head><body data-page="admin-workforce-safety-v900" data-build900="private-signed-evidence">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html">Rosie Dazzlers Admin</a><nav class="nav-links">
+<a href="/admin.html">Dashboard</a><a href="/admin-staff.html">Staff</a><a href="/admin-supplies-equipment.html">Equipment</a>
+<a href="/detailer-jobs.html">Detailer jobs</a></nav></div></header>
+<main class="work900"><div class="hero900"><span class="chip">BUILD 900 / OPERATIONS</span>
+<h1>Workforce, equipment & job safety</h1><p>Assign actual catalog tools to assigned crew, record preparation observations, and request an independent supervisor safety decision.</p>
+<p class="hold">BUSINESS SAFETY HOLD until original staff observations and an authorized supervisor signoff exist. A signed record is not third-party safety certification.</p></div>
+<section><label for="job">Original assigned work order</label><select id="job"><option value="">Loading private work orders…</option></select>
+<button id="refresh" type="button">Refresh original work order</button>
+<p id="status" class="state" role="status" aria-live="polite">Checking signed staff session…</p>
+<p id="source" class="quiet"></p></section>
+<section><h2>Readiness overview</h2><div id="metrics" class="metrics"></div><p id="decision" class="hold">No original job selected.</p></section>
+<div class="layout">
+<section id="assignmentPanel"><h2>Equipment assignment / return</h2><p class="quiet">Supervisor only. Assignment records are append-only. Return an item with a new record.</p>
+<form id="assignment"><label for="tool">Original active tool</label><select id="tool" required></select>
+<label for="worker">Assigned crew member</label><select id="worker" required></select>
+<label for="assignment_action">Action</label><select id="assignment_action"><option value="assign">Assign to job</option><option value="return">Return / withdraw</option></select>
+<label for="assignment_note">Original reason or observation</label><textarea id="assignment_note" required minlength="12" maxlength="350"></textarea>
+<button type="submit" id="saveAssignment" disabled>Record tool assignment</button></form></section>
+<section><h2>Job preparation checklist</h2><p class="quiet">Assigned staff record each observed result. An issue blocks supervisor READY.</p>
+<form id="check"><label for="check_key">Preparation item</label><select id="check_key">
+<option value="ppe">PPE & personal protection</option><option value="chemicals">Chemical storage, labels and SDS</option>
+<option value="power_water">Power/water readiness</option><option value="worksite">Driveway/worksite access & hazards</option>
+<option value="weather">Weather and safe workability</option><option value="tool_condition">Assigned tool condition / guards</option></select>
+<label for="check_tool" id="checkToolLabel" hidden>Assigned equipment</label><select id="check_tool" hidden></select>
+<label for="outcome">Original observed result</label><select id="outcome"><option value="pass">Observed ready</option><option value="issue">Issue / stop-work</option></select>
+<label for="check_note">What was actually checked?</label><textarea id="check_note" required minlength="12" maxlength="350"></textarea>
+<button type="submit" id="saveCheck" disabled>Record staff observation</button></form></section>
+<section><h2>Supervisor safety signoff</h2><p class="quiet">Operations Manager or Admin only. READY requires all five preparation checks and every assigned tool condition PASS, without overdue planned service. Later changes invalidate the readiness snapshot.</p>
+<form id="signoff"><label for="decision_select">Decision</label><select id="decision_select"><option value="hold">Hold / stop work</option><option value="ready">Supervisor-recorded ready</option></select>
+<label for="signoff_note">Signed supervisor rationale</label><textarea id="signoff_note" required minlength="12" maxlength="350"></textarea>
+<button type="submit" id="saveSignoff" disabled>Record signed decision</button></form></section>
+<section><h2>Original job evidence</h2><h3>Required checks</h3><ul id="checksLog"><li>Choose a job.</li></ul><h3>Equipment status</h3><ul id="toolsLog"></ul><h3>Supervisor receipt</h3><p id="signoffLog" class="quiet">No supervisor evidence loaded.</p></section></div>
+<p class="quiet">No customer contact information, payment provider data, payroll rates or Master events are shown or modified. Read-only job state; no automatic dispatch, job start or completion.</p>
+</main>
+<script type="module">
+const $=id=>document.getElementById(id),data={list:null,detail:null,keys:new Map()};
+const status=m=>$('status').textContent=m;
+const putText=(id,m)=>$(id).textContent=String(m??'');
+const names={ppe:'PPE',chemicals:'Chemicals / SDS',power_water:'Power & water',worksite:'Worksite hazards',weather:'Weather',tool_condition:'Assigned tool'};
+async function api(url,options={}){const r=await fetch(url,{credentials:'same-origin',cache:'no-store',...options});const d=await r.json().catch(()=>({}));
+ if(!r.ok||!d.ok)throw Error(d.error||'Original source request failed.');return d;}
+function options(id,list,display){const e=$(id);e.replaceChildren();for(const x of list){const o=document.createElement('option');o.value=x.id;o.textContent=display(x);e.append(o);}}
+function showList(id,list,display){const e=$(id);e.replaceChildren();if(!list.length){const l=document.createElement('li');l.textContent='No original records yet.';e.append(l);}
+ for(const x of list){const l=document.createElement('li');l.textContent=display(x);e.append(l);}}
+function chooseCheck(){const yes=$('check_key').value==='tool_condition';$('checkToolLabel').hidden=!yes;$('check_tool').hidden=!yes;}
+$('check_key').addEventListener('change',chooseCheck);
+async function loadJobs(){status('Loading signed original workforce scope…');$('refresh').disabled=true;
+ try{const d=await api('/api/admin/workforce_safety_v900');data.list=d;
+  options('job',d.jobs,x=>x.service_date+' · '+(x.package_code||'Detail')+' · '+(x.job_status||x.status||'pending')+' · '+x.id.slice(0,8));
+  if(d.jobs.length)await loadJob();else status('No source-assigned work orders are available for this session.');
+ }catch(e){status(e.message)}finally{$('refresh').disabled=false;}}
+async function loadJob(){const id=$('job').value;if(!id){data.detail=null;status('Choose an original work order.');return;}
+ status('Checking job scope, equipment and preparation sources…');
+ for(const k of ['saveAssignment','saveCheck','saveSignoff'])$(k).disabled=true;
+ try{const d=await api('/api/admin/workforce_safety_v900?booking_id='+encodeURIComponent(id));data.detail=d;
+  const r=d.report;options('tool',d.tools,x=>x.name);options('worker',d.staff.filter(x=>['admin','operations_manager','senior_detailer','detailer'].includes(x.role_code)),x=>x.full_name+' · '+x.role_code);
+  options('check_tool',r.tools.map(x=>({id:x.inventory_item_id,name:d.tools.find(t=>t.id===x.inventory_item_id)?.name||x.inventory_item_id.slice(0,8)})),x=>x.name);
+  const cs=$('metrics');cs.replaceChildren();
+  for(const [k,v] of [['Checklist items needing work',r.pending_checks],['Assigned tools needing review',r.equipment_review_count],['Assigned tools',r.tools.length]]){
+   const a=document.createElement('article'),label=document.createElement('span'),value=document.createElement('strong');
+   label.textContent=k;value.textContent=String(v);a.append(label,value);cs.append(a);}
+  putText('decision',r.readiness==='SUPERVISOR_RECORDED_READY'?'SUPERVISOR-RECORDED READY — staff-reported evidence; not independent certification.':'SAFETY HOLD — incomplete, changed or unverified job evidence.');
+  showList('checksLog',r.required_checks,x=>names[x.key]+': '+x.outcome+(x.note?' — '+x.note:''));
+  showList('toolsLog',r.tools,x=>(d.tools.find(t=>t.id===x.inventory_item_id)?.name||x.inventory_item_id)+' · '+x.condition+(x.maintenance_review?' · overdue service review':'')+(x.ready?' · staff report ready':' · HOLD'));
+  putText('signoffLog',r.supervisor_signoff?r.supervisor_signoff.decision+' · '+r.supervisor_signoff.recorded_at+' · '+(r.supervisor_signoff.current?'current':'STALE')+' · '+r.supervisor_signoff.note:'No original supervisor signoff. HOLD.');
+  $('saveAssignment').disabled=!d.role.supervisor||!d.tools.length||!d.staff.length;
+  $('saveCheck').disabled=!d.role.worker;
+  $('saveSignoff').disabled=!d.role.supervisor;
+  $('decision_select').querySelector('option[value="ready"]').disabled=!r.eligible_for_supervisor_signoff;
+  if(!r.eligible_for_supervisor_signoff)$('decision_select').value='hold';
+  putText('source','Original job '+d.booking.id+' · '+d.booking.service_date+' · signed role '+(d.role.supervisor?'Supervisor':'Assigned staff')+' · source '+(d.source_revision||'unknown'));
+  status('Original staff evidence loaded. '+r.readiness+'.');
+ }catch(e){data.detail=null;status(e.message+' Safety remains HOLD.');}}
+$('job').addEventListener('change',loadJob);$('refresh').addEventListener('click',()=>data.list?loadJob():loadJobs());
+async function submit(action,values,button){if(!data.detail)return;const payload={action,booking_id:data.detail.booking.id,...values};
+ const fingerprint=JSON.stringify(payload);let id=data.keys.get(fingerprint);if(!id){id=crypto.randomUUID();data.keys.set(fingerprint,id);}
+ payload.client_request_id=id;$(button).disabled=true;status('Recording original evidence, not certifying physical safety…');
+ try{const r=await api('/api/admin/workforce_safety_v900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  if(!r.source_recorded)throw Error('Original source did not confirm a record.');data.keys.delete(fingerprint);
+  await loadJob();status('Original source '+(r.duplicate?'replayed':'recorded')+' signed observation. No external certification.');
+ }catch(e){status(e.message+' Safety remains HOLD.');$(button).disabled=false;}}
+$('assignment').addEventListener('submit',e=>{e.preventDefault();submit('assignment',{inventory_item_id:$('tool').value,assigned_to_staff_user_id:$('worker').value,assignment_action:$('assignment_action').value,note:$('assignment_note').value},'saveAssignment');});
+$('check').addEventListener('submit',e=>{e.preventDefault();const tool=$('check_key').value==='tool_condition';submit('check',{check_key:$('check_key').value,...(tool?{inventory_item_id:$('check_tool').value}:{}),outcome:$('outcome').value,note:$('check_note').value},'saveCheck');});
+$('signoff').addEventListener('submit',e=>{e.preventDefault();submit('signoff',{decision:$('decision_select').value,note:$('signoff_note').value},'saveSignoff');});
+chooseCheck();loadJobs();
+</script></body></html>
