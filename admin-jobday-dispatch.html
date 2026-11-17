@@ -1,0 +1,106 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><title>Job-Day Dispatch & Safety | Rosie Dazzlers</title><link rel="stylesheet" href="/assets/site.css">
+<style>
+body{background:radial-gradient(ellipse at top right,#193853,transparent 55%),#07121e;color:#ebf4ff}
+.work901{max-width:1270px;margin:auto;padding:18px}.work901 h1{font-size:clamp(1.8rem,4vw,3rem);margin:10px 0}
+.work901 .mast{background:linear-gradient(130deg,#183049,#0b1828);border-left:7px solid #d5b16a;border-top:1px solid #d5b16a;padding:24px;clip-path:polygon(0 0,98% 0,100% 18px,100% 100%,0 100%)}
+.work901 .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.work901 section{padding:17px;margin:15px 0;background:#101f31;border:1px solid #55718a;border-radius:3px;min-width:0}
+.work901 h2{font-size:1.22rem;margin:0 0 9px}.work901 .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.work901 .metrics article{border-top:3px solid #d5b16a;background:#20334c;padding:10px}.work901 .metrics strong{display:block;font-size:1.4rem}
+.work901 label{display:grid;gap:5px;margin:8px 0}.work901 :is(input,select,textarea){width:100%;min-height:42px;box-sizing:border-box;background:#142940;border:1px solid #8fa3b7;color:#edf6ff;padding:9px}
+.work901 textarea{min-height:75px}.work901 button{border:1px solid #d5b16a;background:#806332;color:white;padding:10px 15px;min-height:43px;cursor:pointer}
+.work901 button:disabled{opacity:.45;cursor:not-allowed}.work901 :is(button,a,input,textarea,select):focus-visible{outline:3px solid #fff1b2}
+.work901 .hold{color:#ffdfa2;font-weight:800}.work901 .muted{color:#b2c4d9}.work901 .status{border-left:4px solid #d5b16a;padding:12px;background:#20334c}
+.work901 li{margin:8px 0;overflow-wrap:anywhere}.work901 a{color:#a5dbfa}
+@media(max-width:780px){.work901 .cols{grid-template-columns:1fr}.work901 .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.work901 .metrics{grid-template-columns:1fr}}
+</style></head><body data-page="admin-jobday-dispatch-v901" data-build901="original-private">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html">Rosie Dazzlers</a><nav class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-workforce-safety.html">Workforce Safety</a><a href="/admin-supplies-equipment.html">Equipment</a><a href="/detailer-jobs.html">Detailer Jobs</a></nav></div></header>
+<main class="work901"><div class="mast"><strong>BUILD 901 / WORKFORCE COMMAND</strong><h1>Job-day dispatch and safety control</h1>
+<p>Raise original stop-work concerns, resolve them under supervisor authority, verify signed dispatch permission, and reconcile reported equipment returns.</p>
+<p class="hold">Physical field acceptance remains HOLD unless real staff actually inspect and approve it. No automated tool certification, customer notification or vehicle dispatch.</p>
+<p><a href="/admin-workforce-safety.html">Build 900 preparation & signoff</a> · <a href="/detailer-jobs.html">Original Detailer “On my way” workflow</a></p></div>
+<section><label for="job">Original assigned work order</label><select id="job"><option value="">Loading source jobs…</option></select><button id="refresh" type="button">Refresh original job</button>
+<p class="status" id="status" role="status" aria-live="polite">Checking signed staff session…</p><p class="muted" id="source"></p></section>
+<section><h2>Job-day readiness</h2><p id="decision" class="hold">Choose a source job.</p><div class="metrics" id="metrics"></div>
+<p class="muted">An unresolved safety escalation immediately blocks dispatch. Resolution requires a fresh Build 900 signoff and a fresh Build 901 dispatch decision.</p></section>
+<div class="cols">
+<section><h2>Report safety issue / STOP WORK</h2><form id="raise">
+<label>Concern<select id="subject"><option value="ppe">PPE</option><option value="chemicals">Chemical/SDS</option><option value="power_water">Power & water</option><option value="worksite">Worksite/access</option><option value="weather">Weather</option><option value="equipment">Equipment</option><option value="other">Other</option></select></label>
+<label>Severity<select id="severity"><option value="stop_work">STOP WORK</option><option value="review">Supervisor review</option></select></label>
+<label id="issueToolLabel" hidden>Original assigned tool<select id="issueTool"></select></label>
+<label>Original observation<textarea id="raise_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="saveRaise" type="submit" disabled>Record stop-work concern</button></form></section>
+<section><h2>Supervisor incident resolution</h2><form id="resolve">
+<label>Open concern<select id="escalation"></select></label>
+<label>Decision<select id="resolution"><option value="hold">Continue HOLD</option><option value="resolved">Resolved</option></select></label>
+<label>Original corrective work<textarea id="resolution_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="saveResolve" type="submit" disabled>Record supervisor resolution</button></form>
+<p class="muted">An incident reporter cannot self-resolve their escalation.</p></section>
+<section><h2>Supervisor dispatch authority</h2><p id="preflight" class="hold">Original preflight not loaded.</p><form id="dispatch">
+<label>Decision<select id="dispatch_decision"><option value="hold">HOLD dispatch</option><option value="authorize">Authorize job-day dispatch</option></select></label>
+<label>Original decision reason<textarea id="dispatch_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="saveDispatch" type="submit" disabled>Record signed dispatch decision</button></form>
+<p class="muted">Actual crew dispatch is still performed by the original Detailer workflow.</p></section>
+<section><h2>Staff equipment return</h2><form id="return">
+<label>Originally assigned tool<select id="return_tool"></select></label>
+<label>Observed condition<select id="return_condition"><option value="good">Returned — good (staff-reported)</option><option value="issue">Returned — issue / damage</option></select></label>
+<label>Original return observation<textarea id="return_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="saveReturn" type="submit" disabled>Record staff tool return</button></form>
+<p class="muted">Assigned crew only. Stock quantities are unchanged.</p></section>
+<section><h2>Supervisor return reconciliation</h2><p id="returnState" class="hold">No source data.</p><form id="reconcile">
+<label>Decision<select id="reconcile_decision"><option value="hold">HOLD equipment review</option><option value="reconciled">Reconcile staff return receipts</option></select></label>
+<label>Original supervisor review<textarea id="reconcile_note" minlength="12" maxlength="350" required></textarea></label>
+<button id="saveReconcile" type="submit" disabled>Record supervisor reconciliation</button></form>
+<p class="muted">An internal return reconciliation is not independent physical certification.</p></section>
+<section><h2>Signed append-only evidence</h2><ul id="events"><li>Choose original job.</li></ul>
+<p class="muted">No customer identity, payment, payroll, inventory adjustment or Master messages on this screen.</p></section></div></main>
+<script type="module">
+const $=id=>document.getElementById(id),state={jobs:[],detail:null,retry:new Map()};
+const message=x=>$('status').textContent=String(x||''),text=(id,x)=>$(id).textContent=String(x??'');
+function options(id,rows,label){const p=$(id);p.replaceChildren();for(const r of rows){const o=document.createElement('option');o.value=r.id;o.textContent=label(r);p.append(o);}}
+function listing(id,rows,label){const p=$(id);p.replaceChildren();if(!rows.length){const li=document.createElement('li');li.textContent='No original events.';p.append(li);}for(const r of rows){const li=document.createElement('li');li.textContent=label(r);p.append(li);}}
+async function api(url,opt={}){const res=await fetch(url,{credentials:'same-origin',cache:'no-store',...opt});const d=await res.json().catch(()=>({}));if(!res.ok||!d.ok)throw Error(d.error||'Original evidence unavailable');return d;}
+function showTool(){const e=$('subject').value==='equipment';$('issueToolLabel').hidden=!e;}
+$('subject').addEventListener('change',showTool);
+async function loadJobs(){message('Loading original staff work orders…');try{const d=await api('/api/admin/workforce_safety_v900');state.jobs=d.jobs||[];
+ options('job',state.jobs,x=>x.service_date+' · '+(x.package_code||'Detail')+' · '+x.id.slice(0,8));if(state.jobs.length)await load();else message('No original assigned jobs available.');}catch(e){message(e.message);}}
+async function load(){const id=$('job').value;if(!id)return;
+ for(const id of ['saveRaise','saveResolve','saveDispatch','saveReturn','saveReconcile'])$(id).disabled=true;
+ message('Verifying current signed job-day source…');
+ try{const d=await api('/api/admin/jobday_dispatch_v901?booking_id='+encodeURIComponent(id));state.detail=d;const r=d.report;
+ text('decision',r.dispatch_status+(r.equipment_reconciled?' · RETURN RECONCILED':''));
+ text('preflight',r.eligible_to_authorize?'Eligible for original supervisor dispatch decision.':'HOLD: original preparation, signed supervisor readiness or incident clearance incomplete.');
+ text('returnState',r.equipment_reconciled?'Return reconciliation recorded.':r.eligible_to_reconcile?'All assigned tools staff-reported GOOD; supervisor review needed.':'Missing or damaged original equipment returns, or unresolved safety issue.');
+ const metrics=$('metrics');metrics.replaceChildren();for(const [label,value] of [['Open safety issues',r.counts.open_escalations],['Assigned tools',r.counts.assigned_tools],['GOOD returns',r.counts.staff_reported_good_returns],['Dispatch authorized',r.dispatch_authorized?'YES':'NO']]){const a=document.createElement('article'),l=document.createElement('span'),v=document.createElement('strong');l.textContent=label;v.textContent=String(value);a.append(l,v);metrics.append(a);}
+ const assigned=r.equipment_returns.map(x=>({id:x.inventory_item_id,name:d.tools.find(t=>t.id===x.inventory_item_id)?.name||x.inventory_item_id.slice(0,8)}));
+ options('issueTool',assigned,x=>x.name);options('return_tool',assigned,x=>x.name);
+ options('escalation',r.open_escalations,x=>x.subject+' · '+x.severity+' · '+x.id.slice(0,8));
+ listing('events',d.events,x=>x.recorded_at+' · '+x.event_kind+' · '+(x.subject||x.decision||'')+' · '+x.note);
+ text('source','Original job '+d.booking.id+' · source '+(d.source_revision||'unknown')+' · '+r.counts.events+' signed events.');
+ $('saveRaise').disabled=!d.role.worker;$('saveResolve').disabled=!d.role.supervisor||!r.open_escalations.length;
+ $('saveDispatch').disabled=!d.role.supervisor;$('saveReturn').disabled=!d.role.worker||!assigned.length;
+ $('saveReconcile').disabled=!d.role.supervisor;
+ $('dispatch_decision').querySelector('[value="authorize"]').disabled=!r.eligible_to_authorize;
+ $('reconcile_decision').querySelector('[value="reconciled"]').disabled=!r.eligible_to_reconcile;
+ if(!r.eligible_to_authorize)$('dispatch_decision').value='hold';
+ if(!r.eligible_to_reconcile)$('reconcile_decision').value='hold';
+ showTool();message('Original job evidence loaded. '+r.dispatch_status+'.');
+ }catch(e){state.detail=null;message(e.message+' No dispatch or approval inferred.');}}
+async function save(action,fields,button){if(!state.detail)return;
+ const payload={action,booking_id:state.detail.booking.id,...fields};const finger=JSON.stringify(payload);
+ const id=state.retry.get(finger)||crypto.randomUUID();state.retry.set(finger,id);$(button).disabled=true;
+ message('Recording original source evidence. No stock or customer mutation…');
+ try{const r=await api('/api/admin/jobday_dispatch_v901',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,client_request_id:id})});
+  if(!r.source_recorded)throw Error('Original event missing');state.retry.delete(finger);await load();
+  message('Original signed event '+(r.duplicate?'reconfirmed':'recorded')+'.');
+ }catch(e){message(e.message+' HOLD until refreshed.');$(button).disabled=false;}}
+const wire=(id,action,button,values)=>$(id).addEventListener('submit',e=>{e.preventDefault();save(action,values(),button);});
+wire('raise','escalation','saveRaise',()=>({subject:$('subject').value,severity:$('severity').value,...($('subject').value==='equipment'?{inventory_item_id:$('issueTool').value}:{}),note:$('raise_note').value}));
+wire('resolve','resolution','saveResolve',()=>({escalation_id:$('escalation').value,decision:$('resolution').value,note:$('resolution_note').value}));
+wire('dispatch','dispatch','saveDispatch',()=>({decision:$('dispatch_decision').value,note:$('dispatch_note').value}));
+wire('return','return','saveReturn',()=>({inventory_item_id:$('return_tool').value,decision:$('return_condition').value,note:$('return_note').value}));
+wire('reconcile','reconcile','saveReconcile',()=>({decision:$('reconcile_decision').value,note:$('reconcile_note').value}));
+$('job').addEventListener('change',load);$('refresh').addEventListener('click',load);
+showTool();loadJobs();
+</script></body></html>

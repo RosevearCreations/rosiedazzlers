@@ -7,6 +7,8 @@ import { allowedMobileTransition745, mobileStage745 } from '../../../assets/deta
 import { canWorkMobileBooking745 } from '../_lib/detailer-mobile-scope-v745.js';
 import { loadOnsiteGate746 } from '../_lib/onsite-setup-v746.js';
 import { qualitySnapshot749 } from '../_lib/quality-store-v749.js';
+import { requireJobdayTransition901 } from '../_lib/jobday-safety-v901.js';
+import { sameOrigin811 } from '../client/worksite_issues_v811.js';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -21,6 +23,18 @@ export async function onRequestPost(context) {
     return json({ok:false,error:'Mobile changes must originate from the signed-in Rosie Dazzlers app.'},403);
   const action = cleanText(body.action);
   const reason = cleanText(body.reason);
+  // Build 901: opt-in stop-work and signed dispatch authorization on the REAL lifecycle.
+  // Jobs with no Build 901 ledger remain on their established workflow. Source errors fail closed.
+  if (['dispatch','start','resume'].includes(action)) {
+    let gate901;
+    try { gate901=await requireJobdayTransition901({env,bookingId,action}); }
+    catch { return json({ok:false,error:'Original job-day safety evidence unavailable. Action held.',code:'jobday_source_unavailable'},503); }
+    if (gate901.enrolled && (access.auth_mode!=='session'||!sameOrigin811(request)))
+      return json({ok:false,error:'Enrolled job-day dispatch requires a current same-origin signed staff session.',code:'jobday_signed_session_required'},403);
+    if (!gate901.allowed)
+      return json({ok:false,error:'Stop-work or supervisor dispatch clearance is unresolved. No lifecycle action taken.',
+        code:gate901.code||'jobday_dispatch_hold',dispatch_status:gate901.status||'DISPATCH_HOLD'},409);
+  }
   const arrived_latitude = toCoord(body.arrived_latitude);
   const arrived_longitude = toCoord(body.arrived_longitude);
   if (!bookingId || !action) return json({ error: "booking_id and action are required." }, 400);

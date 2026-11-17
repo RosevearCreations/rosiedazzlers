@@ -27,6 +27,8 @@ globalThis.fetch=async(input,options={})=>{
   const url=new URL(input);
   assert.equal(url.origin,env.SUPABASE_URL,'No external service may be contacted in acceptance');
   const table=url.pathname.split('/').pop(),method=options.method||'GET';
+  // Build 901 opt-in: this legacy test job has no job-day ledger records.
+  if(table==='rosie_jobday_events_v901' && method==='GET')return response([]);
   if(table==='staff_auth_sessions')return response([{id:'session',expires_at:'2030-01-01T00:00:00Z',revoked_at:null,
     created_at:'2026-11-02T09:00:00Z',staff_user:user}]);
   if(table==='staff_users')return response([user]);
