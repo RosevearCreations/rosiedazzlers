@@ -35,6 +35,8 @@ const startCtx=(extra={})=>({env,request:new Request(`${origin}/api/detailer/job
 
 globalThis.fetch=async(input,options={})=>{
   const url=new URL(input),table=url.pathname.split('/').pop(),method=options.method||'GET';
+  // Build 901 opt-in: this legacy test job has no job-day ledger records.
+  if(table==='rosie_jobday_events_v901' && method==='GET')return respond([]);
   assert.equal(url.origin,env.SUPABASE_URL,'Mock test cannot contact a real provider');
   if(table==='staff_auth_sessions')return respond([{id:'test-session',expires_at:'2030-01-01T00:00:00Z',revoked_at:null,staff_user:actor}]);
   if(table==='staff_users')return respond([actor]);
