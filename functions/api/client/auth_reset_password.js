@@ -6,6 +6,11 @@ export async function onRequestOptions(){ return new Response('', { status:204, 
 export async function onRequestPost(context){
   const { request, env } = context;
   try {
+    const origin=request.headers.get('origin');
+    if(origin&&origin!==new URL(request.url).origin)
+      return withCors(json({error:'Same-origin password reset required.'},403));
+    if(Number(request.headers.get('content-length')||0)>1200)
+      return withCors(json({error:'Password reset request too large.'},413));
     const body = await request.json().catch(() => ({}));
     const token = String(body.token || '').trim();
     const password = String(body.password || '');
@@ -25,7 +30,7 @@ export async function onRequestPost(context){
     headers = appendSetCookie(headers, session.cookie);
     headers = applyCors(headers);
     return new Response(JSON.stringify({ ok:true, message:'Password reset successful.', customer: formatCustomer(profile) }), { status:200, headers });
-  } catch (err) { return withCors(json({ error: err?.message || 'Unexpected server error.' }, 500)); }
+  } catch { return withCors(json({ error:'Password reset is temporarily unavailable. Please request a new link or contact Rosie.' },503)); }
 }
 async function makePasswordHash(password, requestedMode) { if (requestedMode === 'bcrypt') { const bcrypt = await loadBcrypt(); if (bcrypt) { const salt = await bcrypt.genSalt(12); return bcrypt.hash(password, salt); } } return `sha256:${await sha256Hex(password)}`; }
 async function loadBcrypt() { try { const mod = await import('bcryptjs'); return mod.default || mod; } catch { return null; } }
