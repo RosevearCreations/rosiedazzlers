@@ -6,6 +6,7 @@
 import { onRequestPost as canonicalCheckout, onRequestOptions as canonicalOptions } from "./checkout.js";
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
 import { getCurrentCustomerSession } from "./_lib/customer-session.js";
+import { approvedProviderUrl908 } from "./_lib/payment-provider-url-v908.js";
 import { evaluateBookingRecovery626 } from "./_lib/booking-recovery-contract-626.js";
 
 export async function onRequestOptions() {
@@ -264,12 +265,6 @@ async function recoverPayPal({ env, request, booking, holdMinutes }) {
   }, 409);
 }
 
-export function approvedProviderUrl908(value,provider){
- try{const u=new URL(value);if(u.protocol!=="https:"||u.username||u.password)return false;
- const host=u.hostname.toLowerCase();return provider==="stripe"?(host==="stripe.com"||host.endsWith(".stripe.com")):
- provider==="paypal"?(host==="paypal.com"||host.endsWith(".paypal.com")):false;
- }catch{return false;}
-}
 
 function paypalBase(env) {
   return String(env.PAYPAL_API_BASE || "").trim() || "https://api-m.paypal.com";

@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {webcrypto} from 'node:crypto';
 import {ownsBooking908,allowedReview908,summarizeMedia908,revision908} from '../functions/api/_lib/customer-account-review-v908.js';
 import {safeProviderReference908,deliveryEvidenceState908,verifyWitnessSignature908,normalizeWitness908} from '../functions/api/_lib/recovery-deliverability-v908.js';
-import {approvedProviderUrl908} from '../functions/api/checkout_recovery.js';
+import {approvedProviderUrl908} from '../functions/api/_lib/payment-provider-url-v908.js';
 if(!globalThis.crypto)globalThis.crypto=webcrypto;
 const profile='80e040ba-a17b-469f-8997-d62b69e95007';
 const booking='c1d834eb-e99c-4266-9f40-8b1f168bad1c';
