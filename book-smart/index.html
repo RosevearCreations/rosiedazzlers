@@ -31,6 +31,8 @@ body{background:radial-gradient(ellipse at 80% 5%,#203c59,transparent 50%),#0915
 <p class="muted">Save only your selected vehicle size, cleaning goal, condition and optional extras on this device for up to 24 hours. No name, email, photos, price, appointment date or payment details are stored.</p>
 <div class="actions">
 <button type="button" class="btn ghost" id="saveSmart907">Save my choices</button>
+<button type="button" class="btn ghost" id="saveSmartAccount909">Save to my Rosie account</button>
+<button type="button" class="btn ghost" id="restoreSmartAccount909">Restore from my Rosie account</button>
 <button type="button" class="btn ghost" id="restoreSmart907">Restore saved choices</button>
 <button type="button" class="btn ghost" id="clearSmart907">Clear saved choices</button>
 </div><p id="smartDraftStatus907" class="status" role="status" aria-live="polite">Nothing saved in this browser by this feature.</p></section>
@@ -132,6 +134,42 @@ $('restoreSmart907').addEventListener('click',()=>{
 $('clearSmart907').addEventListener('click',()=>{
  try{localStorage.removeItem(SMART_DRAFT_KEY907);}catch{}
  draftStatus907.textContent='Saved Smart choices cleared. Current form choices are unchanged.';
+});
+
+// Build 909: authenticated cross-device save & explicit restore. Still no prices, dates or private PII.
+$('saveSmartAccount909').addEventListener('click',async()=>{
+ if(!recommendation){draftStatus907.textContent='Generate a current Smart recommendation before saving to your account.';return;}
+ const d=sanitizeSmartDraft907({...draftInput907(),saved_at:Date.now()});
+ if(!d){draftStatus907.textContent='No valid choices to save.';return;}
+ try{
+  const r=await fetch('/api/client/booking_continuity_v909',{method:'POST',credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save_plan',plan:{
+     mode:'smart',size:d.size,goal:d.goal,condition:d.condition,concerns:d.concerns,accepted_addons:d.accepted_addons}})});
+  const x=await r.json().catch(()=>null);if(!r.ok||!x?.saved)throw Error(x?.error||'Sign in to save to your Rosie account.');
+  draftStatus907.textContent='Generic Smart choices saved to your signed-in Rosie account. No date or payment was saved.';
+ }catch(e){draftStatus907.textContent=e.message||'Account save unavailable.';}
+});
+$('restoreSmartAccount909').addEventListener('click',async()=>{
+ try{
+  if(!catalog)throw Error('Wait for the current catalogue.');
+  const r=await fetch('/api/client/booking_continuity_v909',{credentials:'same-origin',cache:'no-store'});
+  const x=await r.json().catch(()=>null);if(!r.ok||!x?.ok)throw Error(x?.error||'Sign in to restore choices.');
+  const p=x.plans?.smart;
+  if(!p)throw Error('No saved Smart choices in your Rosie account.');
+  const candidate={schema:'rosie.smart-choices.v907',version:907,saved_at:Date.now(),
+   size:p.size,goal:p.goal,condition:p.condition,concerns:p.concerns,accepted_addons:p.accepted_addons};
+  const restored=reconcileSmartDraft907(candidate,catalog);
+  if(!restored)throw Error('Saved preferences no longer qualify under the current catalogue.');
+  $('size').value=restored.size;$('condition').value=restored.condition;
+  const goal=document.querySelector('input[name=goal][value="'+restored.goal+'"]');if(goal)goal.checked=true;
+  document.querySelectorAll('#concerns input').forEach(n=>{n.checked=restored.concerns.includes(n.value)});
+  $('smartForm906').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+  accepted.clear();
+  document.querySelectorAll('#suggestedExtras input[type=checkbox]').forEach(n=>{
+   n.checked=restored.accepted_addons.includes(n.value);if(n.checked)accepted.add(n.value);
+  });
+  link();draftStatus907.textContent='Account choices restored and rechecked against live suggestions. Review before booking.';
+ }catch(e){draftStatus907.textContent=e.message||'Unable to restore saved Smart choices.';}
 });
 load();
 </script></body></html>
