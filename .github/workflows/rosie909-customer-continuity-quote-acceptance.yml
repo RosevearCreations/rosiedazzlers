@@ -1,0 +1,31 @@
+name: Rosie 909 Account Booking Continuity, Verified Quote Acceptance and Private Media Timeline
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  acceptance909:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax, source ownership, privacy and quote concurrency
+        run: |
+          node --check functions/api/_lib/customer-continuity-v909.js
+          node --check functions/api/client/booking_continuity_v909.js
+          node --check assets/customer-continuity-workbench-v909.mjs
+          node --check assets/ala-carte-booking-v889.js
+      - name: Build 909 original-code behavior and negative paths
+        run: node --test tests/build909_customer_continuity_acceptance.test.mjs
+      - name: Preserve Build 907/908 recovery and 889 manual checkout contracts
+        run: |
+          node --test tests/build908_account_review_witness.test.mjs
+          node --test tests/build907_saved_choices_photo_quote.test.mjs tests/build907_account_recovery_dryrun.test.mjs
+          node --test tests/build889_ala_carte_checkout.test.mjs tests/build893_customer_identity_ownership.test.mjs
