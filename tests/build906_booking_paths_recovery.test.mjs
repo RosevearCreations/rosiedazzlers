@@ -58,7 +58,7 @@ test('optional account creation is explicit and never starts payment or changes 
  assert.match(planner,/photo_estimate_files/);
  assert.match(planner,/booking-account-v906.mjs/);
  assert.match(js,/auth_signup/);assert.match(js,/auth_me/);
- assert.match(js,/notification_opt_in:false/);assert.match(js,/Create.*account/i);
+ assert.match(js,/notification_opt_in:false/);assert.match(js,/Account created and signed in/);
  assert.doesNotMatch(js,/\/api\/checkout|\/api\/bookings|localStorage|sessionStorage/);
 });
 test('forgot-password and forgotten-account endpoints are wired and no accounts exposed',()=>{
