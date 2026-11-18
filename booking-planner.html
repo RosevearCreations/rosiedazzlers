@@ -654,6 +654,25 @@
         <input id="customer_phone" type="tel" autocomplete="tel" placeholder="(555) 555-5555" />
       </div>
 
+      <section class="panel" id="bookingAccount906" style="margin:15px 0;border:1px solid #997c4a;background:#132c42;padding:18px">
+        <h3 style="margin:0 0 8px">Optional — create your Rosie account before checkout</h3>
+        <p class="muted">Save your details for future bookings. We use the name and email you entered above. Creating an account does <strong>not</strong> reserve the date or charge a deposit. Existing customers can continue without creating a duplicate account.</p>
+        <form id="bookingAccountForm906" autocomplete="on">
+          <div class="grid2">
+            <div><label for="bookingNewPassword906">Choose a password</label>
+              <input id="bookingNewPassword906" type="password" minlength="8" maxlength="200" autocomplete="new-password" required></div>
+            <div><label for="bookingNewConfirm906">Confirm password</label>
+              <input id="bookingNewConfirm906" type="password" minlength="8" maxlength="200" autocomplete="new-password" required></div>
+          </div>
+          <div class="row" style="margin-top:12px;flex-wrap:wrap">
+            <button class="btn ghost" type="submit" id="bookingCreateAccount906">Create my account (optional)</button>
+            <button class="btn ghost" type="button" id="bookingCheckAccount906">Check if I’m signed in</button>
+          </div>
+        </form>
+        <p id="bookingAccountStatus906" class="mini" role="status" aria-live="polite">No account action taken. Checkout is still available without creating an account.</p>
+        <p class="mini"><a href="/login" target="_blank" rel="noopener">Already registered? Sign in</a> ·
+          <a href="/login#password-help" target="_blank" rel="noopener">Forgot password or account?</a></p>
+      </section>
       <div class="hr"></div>
       <div class="booking-final-review-631" aria-labelledby="finalReviewHeading631">
         <h3 id="finalReviewHeading631">Check these details before paying <span aria-hidden="true">ⓘ</span></h3>
@@ -2579,6 +2598,7 @@
     }
   </script>
 
+  <script type="module" src="/assets/booking-account-v906.mjs"></script>
   <script type="module" src="/assets/booking-wizard-v627.js?v=20261101build737"></script>
   <script type="module" src="/assets/booking-wizard-ux-v801.mjs?v=build801"></script>
   <script type="module" src="/assets/booking-availability-v802.mjs?v=build802"></script>
