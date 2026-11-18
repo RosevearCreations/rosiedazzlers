@@ -1,0 +1,35 @@
+name: Rosie 906 Evidence Lifecycle, Two Booking Paths and Account Recovery Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  scope906:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate private 906 evidence module and route syntax
+        run: |
+          node --check assets/build906-evidence-lifecycle.mjs
+          node --check functions/api/admin/outbox_audit_v906.js
+          node --check assets/book-smart-v906.mjs
+          node --check assets/ala-carte-booking-v889.js
+          node --check assets/booking-account-v906.mjs
+          node --check functions/api/client/auth_forgot_password.js
+      - name: Independent evidence lifecycle, expiry and third-supervisor audit
+        run: node --test tests/build906_evidence_lifecycle.test.mjs
+      - name: Smart/manual booking and account recovery integration
+        run: node --test tests/build906_booking_paths_recovery.test.mjs
+      - name: Preserve original 888/889 and 899-905 source gates
+        run: |
+          node scripts/build888_booking_paths_test.mjs
+          node --test tests/build889_ala_carte_checkout.test.mjs
+          node --test tests/build899_supplies_equipment.test.mjs tests/build900_workforce_safety.test.mjs tests/build901_jobday_dispatch_safety.test.mjs tests/build902_jobday_exception_sla_handoff.test.mjs tests/build903_exception_routing.test.mjs tests/build904_manual_review_consent.test.mjs tests/build905_outbox_invalidation_evidence.test.mjs
