@@ -42,7 +42,7 @@ test('908: provider HTTP acceptance is not independent delivery',()=>{
  assert.equal(deliveryEvidenceState908({ok:true,status:200,provider_response:{}}),'no_provider_reference');
  assert.equal(deliveryEvidenceState908({ok:false,status:503}),'provider_unavailable');
  assert.equal(deliveryEvidenceState908({ok:true,status:202,provider_response:{message_id:'provider-event-12345'}}),'provider_accepted');
- assert.equal(safeProviderReference908({provider_response:{message_id:'test@example.com'}}),null); 
+ assert.equal(safeProviderReference908({provider_response:{message_id:'test@example.com'}}),null);
  assert.equal(safeProviderReference908({provider_response:{message_id:'token with spaces'}}),null);
  assert.equal(normalizeWitness908({provider_reference:'provider-event-12345',status:'delivered',observed_at:new Date().toISOString()})?.status,'delivered');
  assert.equal(normalizeWitness908({provider_reference:'provider-event-12345',status:'accepted',observed_at:new Date().toISOString()}),null);
