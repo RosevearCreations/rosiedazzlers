@@ -673,6 +673,12 @@
         <p class="mini"><a href="/login" target="_blank" rel="noopener">Already registered? Sign in</a> ·
           <a href="/login#password-help" target="_blank" rel="noopener">Forgot password or account?</a></p>
       </section>
+      <section class="panel" id="photoQuotePanel907" style="padding:16px;background:#18314a;border:1px solid #c4a16b;margin:16px 0">
+        <h3 style="margin:0 0 7px">Prefer a reviewed photo quote before booking?</h3>
+        <p class="mini muted">Upload estimate photos in Step 4 or paste private share links there, then enter your contact details above. We can send your request to the existing staff quote queue without creating an appointment, charging a deposit, sending any automatic customer-contact message, or claiming that a file passed privacy review.</p>
+        <button type="button" id="photoQuoteBtn907" class="btn ghost">Request a staff photo quote (no payment)</button>
+        <p id="photoQuoteStatus907" class="mini" role="status" aria-live="polite">Quote request not submitted. Uploaded media is not linked to staff until you submit this request.</p>
+      </section>
       <div class="hr"></div>
       <div class="booking-final-review-631" aria-labelledby="finalReviewHeading631">
         <h3 id="finalReviewHeading631">Check these details before paying <span aria-hidden="true">ⓘ</span></h3>
@@ -767,6 +773,8 @@
       conditionRecommendationSummary: "",
       photoEstimateRequested: false,
       uploadedPhotoEstimateLinks: [],
+      quoteUploadReceipts907: [],
+      photoQuoteRequestId907: null,
       mediaConsentPreference: "estimate_only",
       garageVehicles: [],
       availabilityCache: new Map(),
@@ -915,8 +923,18 @@
             headers: { "Content-Type": file.type || "application/octet-stream" },
             body: file
           });
-          if (!putRes.ok) throw new Error(`Upload failed for ${file.name}.`);
-          uploaded.push(sign.public_url || sign.media_url || sign.object_path);
+          if (!putRes.ok) throw new Error('Upload failed for '+file.name+'.');
+          if(!sign.intake_id||!sign.upload_proof)throw new Error('Signed upload has no private proof; it is not attached.');
+          const confirmRes=await fetch('/api/public_photo_estimate_complete_v907',{
+            method:'POST',credentials:'same-origin',cache:'no-store',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({intake_id:sign.intake_id,proof:sign.upload_proof})
+          });
+          const verified=await confirmRes.json().catch(()=>null);
+          if(!confirmRes.ok||!verified?.ok||verified.original_upload_verified!==true)
+            throw new Error(verified?.error||'Private upload confirmation failed; this file is not attached.');
+          state.quoteUploadReceipts907.push({intake_id:sign.intake_id,proof:sign.upload_proof});
+          uploaded.push(verified.media_ref);
           setPhotoEstimateUploadStatus(`Uploaded ${uploaded.length}/${selected.length} estimate file${selected.length === 1 ? "" : "s"}…`, "ok");
         } catch (err) {
           setPhotoEstimateUploadStatus(`${err?.message || err} Paste a shared photo link instead if needed.`, "error");
@@ -2562,6 +2580,42 @@
       await uploadPhotoEstimateFiles(event.target.files);
       event.target.value = "";
     });
+
+    // Separate from /api/checkout: a quote request creates a staff lead, not a reservation.
+    qs("#photoQuoteBtn907")?.addEventListener("click",async()=>{
+      const button=qs("#photoQuoteBtn907"),out=qs("#photoQuoteStatus907");
+      const full_name=qs("#customer_name").value.trim(),email=qs("#customer_email").value.trim();
+      const phone=qs("#customer_phone").value.trim();
+      if(full_name.length<2||(!qs("#customer_email").checkValidity()&&!phone)){
+        out.textContent='Enter your name and valid email (or phone number) in the contact fields above first.';return;
+      }
+      button.disabled=true;out.textContent='Saving your staff-review request and verifying photo receipts…';
+      if(!state.photoQuoteRequestId907)state.photoQuoteRequestId907=crypto.randomUUID();
+      const body={client_request_id:state.photoQuoteRequestId907,topic:'photo_estimate',
+        full_name,email,phone,service_area:qs("#service_area").value,
+        vehicle_size:selectedSize(),
+        message:(qs("#special_notes").value.trim()||'Please review the vehicle condition and uploaded or linked estimate photos before providing a final detailing quote.')+
+          ' Requested package: '+(state.selectedPackageCode||'to be recommended by staff')+'.',
+        requested_service_codes:[state.selectedPackageCode,...state.addons].filter(Boolean).slice(0,12),
+        photo_estimate_links:parsePhotoEstimateLinks().filter(x=>/^https:\/\//i.test(x)),
+        photo_receipts:state.quoteUploadReceipts907,website:''};
+      try{
+        const response=await fetch('/api/public_photo_quote_v907',{method:'POST',credentials:'same-origin',
+          headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+        const result=await response.json().catch(()=>null);
+        if(!response.ok||!result?.ok||!result.lead_recorded)
+          throw Error(result?.error||'Original quote request could not be verified.');
+        out.textContent=result.linkage_verified?
+          'Staff quote request recorded. '+result.linked_upload_count+' uploaded file(s) linked for private review. Reference: '+result.lead_id+'. No booking, charge or automatic message.':
+          'Quote request recorded but media linkage needs staff reconciliation. Reference: '+result.lead_id+'. Contact Rosie before retrying.';
+        // Leave button disabled to prevent a duplicate quote lead or payment attempt.
+      }catch(e){
+        out.textContent=String(e.message||'Quote request unavailable.')+
+          ' If the network was interrupted, ask Rosie to check the staff queue before retrying.';
+        button.disabled=false;
+      }
+    });
+
 
 
     renderServiceAreas(configuredServiceAreas());
