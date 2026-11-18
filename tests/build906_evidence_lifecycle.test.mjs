@@ -50,7 +50,7 @@ test('withdrawn consent, invalidation and third-person custody fail closed',()=>
  assert.throws(()=>view({reviews906:[{...audit,staff_user_id:owner}]}),/Untrusted independent/);
  assert.throws(()=>view({reviews906:[{...audit,staff_user_id:firstReview}]}),/Untrusted independent/);
  assert.throws(()=>view({reviews906:[{...audit,channel:'sms'}]}),/Untrusted independent/);
- assert.throws(()=>view({reviews906:new Array(150).fill(audit)}),/incomplete/);
+ assert.throws(()=>view({reviews906:new Array(150).fill(audit)}),/incomplete/i);
 });
 test('private append-only schema and signed route preserve NO AUTO-SEND invariant',()=>{
  const sql=readFileSync(new URL('../supabase/migrations/20261117200000_build906_evidence_lifecycle.sql',import.meta.url),'utf8');
