@@ -33,7 +33,7 @@ export function project906({report904,report905,receipts905=[],reviews906=[],cha
    !UUID(x.manual_authority_id)||!UUID(x.contact_receipt_id)||!CONTACT_CHANNELS906.includes(x.channel)||
    !['corroborated','hold'].includes(x.decision)||!Number.isFinite(Date.parse(x.recorded_at||''))||
    x.booking_id!==report904.booking_id||x.exception_id!==report904.exception_id||
-   x.manual_authority_id!==report904.authority_id||x.staff_user_id!==report904.review_actor_id||
+   x.manual_authority_id!==report904.authority_id||x.staff_user_id===report904.review_actor_id||
    x.staff_user_id===report904.owner_staff_user_id||!contact||
    x.contact_receipt_id!==contact.id||x.channel!==report904.channel||
    x.internal_only!==true||x.provider_delivery_verified!==false||x.automatic_send_enabled!==false)
