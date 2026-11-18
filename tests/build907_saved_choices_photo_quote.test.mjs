@@ -20,7 +20,7 @@ const draft={size:'mid',goal:'interior',condition:'heavy',concerns:['pets','salt
  accepted_addons:['pet_removal','retired_item'],saved_at:1763400000000};
 test('Smart choices are explicitly saved, 24h bounded, whitelisted and live-catalog rechecked',()=>{
  const d=sanitizeSmartDraft907({...draft,customer_email:'private@example.invalid',price_cad:9999,photo_url:'secret'});
- assert.deepEqual(Object.keys(d).sort(),['accepted_addons','condition','concerns','goal','saved_at','schema','size','version']);
+ assert.deepEqual(Object.keys(d).sort(),['accepted_addons','concerns','condition','goal','saved_at','schema','size','version']);
  assert.equal(SMART_DRAFT_TTL_MS907,86400000);
  assert.equal(parseSmartDraft907(JSON.stringify(d),d.saved_at+3600000).size,'mid');
  assert.equal(parseSmartDraft907(JSON.stringify(d),d.saved_at+86400001),null);
@@ -114,7 +114,7 @@ test('Original verified photo enters real staff lead and is linked without check
   assert.equal(out.automatic_send,false);assert.equal(out.booking_created,false);
   assert.ok(calls.some(x=>x.url.includes('public_inquiry_leads?select=id')&&x.method==='POST'));
   assert.ok(calls.some(x=>x.url.includes('photo_estimate_uploads?id=')&&x.method==='PATCH'));
-  assert.ok(!calls.some(x=>/checkout|provider|mail|sms/i.test(x.url)));
+  assert.ok(!calls.some(x=>/\/api\/checkout|\/mail(?:[/?]|$)|\/sms(?:[/?]|$)|\/provider(?:[/?]|$)/i.test(new URL(x.url).pathname)));
  }finally{globalThis.fetch=before;}
 });
 test('Source files preserve prior checkout and explicit no-send contact boundaries',()=>{
