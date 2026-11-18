@@ -230,3 +230,34 @@ form.addEventListener('submit',async e=>{
 });
 const d=field('service_date'),today=new Date();const localToday=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');d.min=localToday;
 loadCatalog();
+
+
+// Build 909 account save/restore: no name, address, date, slot, price, media or payment stored.
+byId('saveManualAccount909')?.addEventListener('click',async()=>{
+ if(!catalog){status('checkoutStatus889','Load the current catalogue before saving preferences.');return;}
+ const input={mode:'manual',size:readValue('vehicle_size'),
+  payable_codes:[...selected],quote_codes:[...quoteRequested907]};
+ try{
+  const r=await fetch('/api/client/booking_continuity_v909',{method:'POST',
+   credentials:'same-origin',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({action:'save_plan',plan:input})});
+  const data=await r.json().catch(()=>null);if(!r.ok||!data?.saved)throw Error(data?.error||'Sign in before saving.');
+  status('checkoutStatus889','Your service preferences were saved to your account. No appointment, payment or contact details were saved.');
+ }catch(e){status('checkoutStatus889',e.message||'Account save unavailable.');}
+});
+byId('restoreManualAccount909')?.addEventListener('click',async()=>{
+ try{
+  if(!catalog)throw Error('Load the current catalogue before restoring.');
+  const r=await fetch('/api/client/booking_continuity_v909',{credentials:'same-origin',cache:'no-store'});
+  const data=await r.json().catch(()=>null);if(!r.ok||!data?.ok)throw Error(data?.error||'Sign in to restore.');
+  const plan=data.plans?.manual;if(!plan)throw Error('No manual service choices found in your account.');
+  field('vehicle_size').value=plan.size;
+  selected.clear();quoteRequested907.clear();
+  const eligible=new Set(eligibleItems().map(x=>x.code));
+  const validCodes=new Set((catalog.addons||[]).map(x=>x.code));
+  for(const code of plan.payable_codes||[])if(eligible.has(code))selected.add(code);
+  for(const code of plan.quote_codes||[])if(validCodes.has(code)&&!selected.has(code))quoteRequested907.add(code);
+  drawServices();drawBasket();await refreshAvailability();
+  status('checkoutStatus889','Restored selections were rechecked against the current catalogue. Removed ineligible payable items. Confirm all booking details before checkout.');
+ }catch(e){status('checkoutStatus889',e.message||'Unable to restore choices.');}
+});
