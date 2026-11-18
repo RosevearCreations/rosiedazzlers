@@ -44,10 +44,10 @@ test('manual cards display all extras, but only approved standalone items can en
  const manual=read('book-custom/index.html'),js=read('assets/ala-carte-booking-v889.js');
  assert.match(manual,/Manual \/ Custom Detailing Booking/);
  assert.match(manual,/standaloneServices889/);assert.match(manual,/special_notes/);
- assert.match(js,/const all=Array\.isArray\(catalog\?\.addons\)/);
+ assert.match(js,/all=Array\.isArray\(catalog\?\.addons\)/);
  assert.match(js,/const selectable=approved&&permitted\.has\(item\.code\)/);
  assert.match(js,/item\.quote_required===true/);
- assert.match(js,/\/contact\?source=manual_custom/);
+ assert.match(js,/\/api\/public_photo_quote_v907/);
  assert.match(js,/booking_mode:'ala_carte'/);
  assert.match(js,/if\(dateIsCold\(date\)/);
  assert.match(js,/\/api\/checkout/);
