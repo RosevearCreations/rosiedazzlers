@@ -1,0 +1,39 @@
+name: Rosie 907 Smart Draft, Private Photo Quote, Manual Basket & Account Recovery Acceptance
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  scope907:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and private upload/quote route safety
+        run: |
+          node --check assets/smart-draft-v907.mjs
+          node --check functions/api/_lib/photo-quote-907.js
+          node --check functions/api/public_photo_estimate_upload_url.js
+          node --check functions/api/public_photo_estimate_complete_v907.js
+          node --check functions/api/public_photo_quote_v907.js
+          node --check assets/ala-carte-booking-v889.js
+          node --check functions/api/client/auth_forgot_password.js
+          node --check functions/api/client/auth_reset_password.js
+          node --check functions/api/client/auth_account_help.js
+      - name: Smart choices, original storage verification and staff quote dry-run
+        run: node --test tests/build907_saved_choices_photo_quote.test.mjs
+      - name: Account recovery full issuance reset replay and queue dry-run
+        run: node --test tests/build907_account_recovery_dryrun.test.mjs
+      - name: Preserve Build 906 and canonical 888/889/899-905 foundations
+        run: |
+          node scripts/build888_booking_paths_test.mjs
+          node --test tests/build889_ala_carte_checkout.test.mjs
+          node --test tests/build906_evidence_lifecycle.test.mjs tests/build906_booking_paths_recovery.test.mjs
+          node --test tests/build899_supplies_equipment.test.mjs tests/build900_workforce_safety.test.mjs tests/build901_jobday_dispatch_safety.test.mjs tests/build902_jobday_exception_sla_handoff.test.mjs tests/build903_exception_routing.test.mjs tests/build904_manual_review_consent.test.mjs tests/build905_outbox_invalidation_evidence.test.mjs

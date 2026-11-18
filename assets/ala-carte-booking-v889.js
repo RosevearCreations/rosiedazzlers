@@ -7,6 +7,8 @@ const byId=id=>document.getElementById(id);
 const money=cents=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(cents/100);
 const status=(id,message)=>{byId(id).textContent=message;};
 const selected=new Set();
+const quoteRequested907=new Set();
+let quoteRequestId907=null;
 let catalog=null,policy=null,approved=false,busy=false,uncertain=false;
 let availability=null;
 const readValue=name=>String(field(name)?.value||'').trim();
@@ -18,47 +20,48 @@ function eligibleItems() {
   return addons.filter(x=>x?.standalone_allowed===true && x?.quote_required!==true &&
      Number.isFinite(x?.prices_cad?.[size]) && x.prices_cad[size]>0);
 }
-function drawServices() {
-  const root=byId('standaloneServices889');
-  root.replaceChildren();
-  const size=readValue('vehicle_size');
-  const allowed=eligibleItems();
-  const permitted=new Set(allowed.map(x=>x.code));
-  for(const code of [...selected])if(!permitted.has(code))selected.delete(code);
-  const all=Array.isArray(catalog?.addons)?catalog.addons:[];
-  if(!all.length){root.append(text('p','No current add-on cards are available. Contact Rosie for a custom quote.'));return;}
-  const sorted=[...all].sort((a,b)=>Number(permitted.has(b.code))-Number(permitted.has(a.code)));
-  for(const item of sorted){
-    const selectable=approved&&permitted.has(item.code);
-    const wrap=document.createElement('div');wrap.className='choice';
-    const image=document.createElement('img');
-    const url=String(item.image_url||item.thumbnail_url||'');
-    if(/^https:\/\/assets\.rosiedazzlers\.ca\//.test(url)){image.src=url;image.loading='lazy';image.alt='';wrap.append(image);}
-    const body=document.createElement('div');body.className='choice-copy';
-    const name=text('strong',String(item.name||item.code||'Detailing extra'));
-    body.append(name);
-    const category=text('small',String(item.category||'Optional detailing service'));
-    body.append(category);
-    const price=Number(item.prices_cad?.[size]);
-    const availability=selectable
-      ?money(Math.round(price*100))+' CAD · current approved standalone price'
-      :item.quote_required===true?'Personal quote / photo assessment required'
-      :item.standalone_allowed!==true?'Package-only or staff-reviewed item'
-      :'Choose vehicle size or wait for owner-approved pricing';
-    body.append(text('small',availability));
-    if(selectable){
-      const input=document.createElement('input');input.type='checkbox';
-      input.id='service889_'+item.code;input.value=item.code;input.checked=selected.has(item.code);
-      const label=document.createElement('label');label.htmlFor=input.id;
-      label.append(text('span','Select this service'));body.append(label);
-      input.addEventListener('change',()=>{input.checked?selected.add(item.code):selected.delete(item.code);drawBasket();});
-      wrap.append(input);
-    }else{
-      const link=document.createElement('a');link.href='/contact?source=manual_custom';
-      link.textContent='Ask about this service';body.append(link);
-    }
-    wrap.append(body);root.append(wrap);
-  }
+function drawServices(){
+ const root=byId('standaloneServices889');root.replaceChildren();
+ const size=readValue('vehicle_size'),all=Array.isArray(catalog?.addons)?catalog.addons:[];
+ const permitted=new Set(eligibleItems().map(x=>x.code));
+ for(const code of [...selected])if(!permitted.has(code))selected.delete(code);
+ const categories=[...new Set(all.map(x=>String(x.category||x.type||'Other').trim()).filter(Boolean))].sort();
+ const chooser=byId('manualCategory907'),was=chooser.value;
+ chooser.replaceChildren(new Option('All service types','all'));
+ for(const category of categories)chooser.add(new Option(category,category));
+ chooser.value=categories.includes(was)?was:'all';
+ const search=String(byId('manualAddonSearch907').value||'').trim().toLowerCase();
+ const category=chooser.value;
+ const sorted=[...all].sort((a,b)=>Number(permitted.has(b.code))-Number(permitted.has(a.code)));
+ let visible=0;
+ for(const item of sorted){
+  const type=String(item.category||item.type||'Other').trim();
+  if((category!=='all'&&category!==type)||(search&&![item.name,item.code,type].join(' ').toLowerCase().includes(search)))continue;
+  visible++;
+  const selectable=approved&&permitted.has(item.code);
+  const wrap=document.createElement('div');wrap.className='choice';
+  const image=document.createElement('img'),url=String(item.image_url||item.thumbnail_url||'');
+  if(/^https:\/\/assets\.rosiedazzlers\.ca\//.test(url)){image.src=url;image.loading='lazy';image.alt='';wrap.append(image);}
+  const body=document.createElement('div');body.className='choice-copy';
+  body.append(text('strong',String(item.name||item.code||'Detailing extra')),text('small',type));
+  const price=Number(item.prices_cad?.[size]);
+  const availability=selectable?money(Math.round(price*100))+' CAD · owner-approved standalone price':
+    item.quote_required===true?'Staff price / photo assessment required — not charged here':
+    item.standalone_allowed!==true?'Package-only or staff-reviewed item':
+    'Choose vehicle size or wait for approved pricing';
+  body.append(text('small',availability));
+  const input=document.createElement('input');input.type='checkbox';
+  input.id=(selectable?'service889_':'quote907_')+item.code;
+  input.value=item.code;input.checked=(selectable?selected:quoteRequested907).has(item.code);
+  const label=document.createElement('label');label.htmlFor=input.id;
+  label.append(text('span',selectable?'Add to payable basket':'Request staff quote (NOT in payable basket)'));body.append(label);
+  input.addEventListener('change',()=>{
+   const target=selectable?selected:quoteRequested907;
+   input.checked?target.add(item.code):target.delete(item.code);drawBasket();
+  });
+  wrap.append(input,body);root.append(wrap);
+ }
+ byId('manualFilterStatus907').textContent='Showing '+visible+' of '+all.length+' catalogue cards. Filters do not change your basket.';
 }
 function drawBasket() {
   const root=byId('basketSummary889');root.replaceChildren();
@@ -74,6 +77,8 @@ function drawBasket() {
   root.append(text('span','Owner-approved deposit requested today'),text('strong',approved&&deposit>0?money(Math.round(deposit*100)):'Not approved'));
   if (approved&&Number.isFinite(deposit) && Math.round(deposit*100)>total)
     status('catalogStatus889','Please choose services totalling at least the approved deposit or contact Rosie for a quote.');
+  byId('basketCount907').textContent=items.length+' payable service(s), '+quoteRequested907.size+
+   ' quote-only item(s). Only approved standalone items are charged.';
   const allowed=approved&&items.length>0&&total>=Math.round(deposit*100)&&!!size&&!busy&&!uncertain;
   byId('checkout889').disabled=!allowed;
 }
@@ -137,6 +142,35 @@ function safeProviderUrl(url,provider){
     if(provider==='paypal'&&(h==='paypal.com'||h.endsWith('.paypal.com')))return u.toString();
   }catch{}return null;
 }
+byId('manualAddonSearch907').addEventListener('input',drawServices);
+byId('manualCategory907').addEventListener('change',drawServices);
+byId('clearManualBasket907').addEventListener('click',()=>{
+ selected.clear();quoteRequested907.clear();drawServices();drawBasket();
+ status('checkoutStatus889','All service selections cleared; no payment was made.');
+});
+byId('requestManualQuote907').addEventListener('click',async()=>{
+ const out=byId('manualQuoteStatus907'),button=byId('requestManualQuote907');
+ const full_name=readValue('customer_name'),email=readValue('customer_email'),phone=readValue('customer_phone');
+ if(full_name.length<2||(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)&&phone.replace(/\D/g,'').length<7)){
+  out.textContent='Enter a name plus a valid email or phone before requesting a quote.';return;
+ }
+ const codes=[...new Set([...selected,...quoteRequested907])];
+ if(!codes.length){out.textContent='Choose at least one payable or quote-only service card for review.';return;}
+ button.disabled=true;if(!quoteRequestId907)quoteRequestId907=crypto.randomUUID();
+ out.textContent='Saving your staff-review request, with no payment or appointment…';
+ try{
+  const response=await fetch('/api/public_photo_quote_v907',{method:'POST',credentials:'same-origin',
+   headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    client_request_id:quoteRequestId907,topic:'manual_custom',full_name,email,phone,
+    vehicle_size:readValue('vehicle_size'),service_area:readValue('service_area'),
+    message:readValue('special_notes')||'Please review my manual custom detailing service selections before quoting.',
+    requested_service_codes:codes,photo_receipts:[],photo_estimate_links:[],website:''
+   })});
+  const d=await response.json().catch(()=>null);
+  if(!response.ok||!d?.ok||!d.lead_recorded)throw Error(d?.error||'Staff quote not recorded.');
+  out.textContent='Staff quote request '+d.lead_id+' recorded. No automatic send, booking or payment.';
+ }catch(e){out.textContent=(e.message||'Quote unavailable.')+' If uncertain, ask Rosie to inspect the staff queue before retrying.';button.disabled=false;}
+});
 form.addEventListener('change',e=>{
   if(e.target?.name==='vehicle_size'){drawServices();drawBasket();}
   if(['service_date','start_slot','service_area'].includes(e.target?.name))refreshAvailability();

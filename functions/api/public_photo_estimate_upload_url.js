@@ -1,4 +1,5 @@
 import { serviceHeaders, json, cleanText, cleanEmail } from "./_lib/staff-auth.js";
+import {sha256Receipt907} from './_lib/photo-quote-907.js';
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -6,6 +7,11 @@ export async function onRequestOptions() {
 
 export async function onRequestPost({ request, env }) {
   try {
+    const origin=request.headers.get('origin');
+    if(origin && origin!==new URL(request.url).origin)
+      return withCors(json({ok:false,error:'Same-origin estimate upload required.'},403));
+    if(Number(request.headers.get('content-length')||0)>1600)
+      return withCors(json({ok:false,error:'Upload metadata exceeds request limit.'},413));
     if (String(env.PUBLIC_PHOTO_ESTIMATE_UPLOADS_ENABLED || "").toLowerCase() !== "true") {
       return withCors(json({
         ok: false,
@@ -42,6 +48,9 @@ export async function onRequestPost({ request, env }) {
     const safeName = sanitizeFilename(filename);
     const stamp = new Date().toISOString().replaceAll(":", "").replaceAll(".", "");
     const intakeId = crypto.randomUUID();
+    const bytes=new Uint8Array(32);crypto.getRandomValues(bytes);
+    const uploadProof=[...bytes].map(b=>b.toString(16).padStart(2,'0')).join('');
+    const uploadProofHash=await sha256Receipt907(uploadProof);
     const path = `photo-estimates/${stamp}_${intakeId}_${safeName}`;
 
     const signRes = await fetch(`${env.SUPABASE_URL}/storage/v1/object/upload/sign/${encodeURIComponent(bucket)}/${encodePath(path)}`, {
@@ -79,13 +88,16 @@ export async function onRequestPost({ request, env }) {
       file_size_bytes: Number.isFinite(file_size_bytes) ? file_size_bytes : null,
       customer_email: customer_email || null,
       customer_name: customer_name || null,
-      media_url
+      media_url,
+      upload_proof_hash:uploadProofHash
     });
 
     return withCors(json({
       ok: true,
       upload_enabled: true,
       upload_url,
+      intake_id:intakeId,
+      upload_proof:uploadProof,
       method: "PUT",
       bucket,
       object_path: path,
@@ -119,9 +131,8 @@ async function recordUploadIntent(env, payload) {
         created_at: new Date().toISOString()
       })
     });
-    // Missing table should not break uploads; the booking form still stores the returned media URL/link.
-    await res.text().catch(() => "");
-  } catch {}
+    if(!res.ok)throw new Error('Upload custody record unavailable.');
+  } catch { throw new Error('Upload custody record unavailable. File was not reported as attached.'); }
 }
 
 function isAllowedContentType(type) {

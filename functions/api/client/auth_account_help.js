@@ -6,6 +6,11 @@ export async function onRequestOptions(){ return new Response('', { status:204, 
 export async function onRequestPost(context) {
   const { request, env } = context;
   try {
+    const origin=request.headers.get('origin');
+    if(origin&&origin!==new URL(request.url).origin)
+      return withCors(json({error:'Same-origin account help request required.'},403));
+    if(Number(request.headers.get('content-length')||0)>1800)
+      return withCors(json({error:'Account recovery request too large.'},413));
     if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) return withCors(json({ error:'Account help is not configured yet.' },500));
     const body = await request.json().catch(() => ({}));
     if (String(body.website || '').trim()) return withCors(json(genericResponse()));
@@ -24,7 +29,7 @@ export async function onRequestPost(context) {
     });
     if (!insert.ok) throw new Error(`Could not record sign-in help request. ${await insert.text()}`);
     return withCors(json(genericResponse()));
-  } catch (error) { return withCors(json({ error:error?.message || 'Could not send account help request.' },500)); }
+  } catch { return withCors(json({ error:'Account help is temporarily unavailable. No account information was disclosed.' },503)); }
 }
 function genericResponse(){ return { ok:true, message:'Thanks. If the details match an account, our team will review the request. For privacy, this form does not confirm whether an account exists.' }; }
 function safeText(value,max){ const text=String(value ?? '').trim().replace(/[\u0000-\u001f]/g,' '); return text && text.length <= max ? text : null; }
