@@ -1,12 +1,11 @@
 // Build 908: dispatch acceptance is not delivery. Only independently signed provider
 // callbacks can witness delivery, and only with a separate owner-enrolled secret.
 import { serviceHeaders } from './customer-session.js';
-export const UUID908=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const UUID_OK=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export function safeProviderReference908(delivery){
  const raw=delivery?.provider_response;
  const reference=raw&&typeof raw==='object'?(raw.message_id||raw.messageId||raw.id||raw.provider_message_id):null;
- return typeof reference==='string'&&/^[a-zA-Z0-9._:@-]{8,160}$/.test(reference)?reference:null;
+ return typeof reference==='string'&&/^[a-zA-Z0-9._:-]{8,160}$/.test(reference)?reference:null;
 }
 export function deliveryEvidenceState908(delivery){
  return delivery?.ok===true?(safeProviderReference908(delivery)?'provider_accepted':'no_provider_reference'):'provider_unavailable';
@@ -40,7 +39,7 @@ export function normalizeWitness908(value){
  const keys=Object.keys(value).sort().join(',');
  if(keys!=='observed_at,provider_reference,status')return null;
  const reference=value.provider_reference,observed=value.observed_at,status=value.status;
- if(typeof reference!=='string'||!/^[a-zA-Z0-9._:@-]{8,160}$/.test(reference)||
+ if(typeof reference!=='string'||!/^[a-zA-Z0-9._:-]{8,160}$/.test(reference)||
   !['delivered','bounced','failed'].includes(status)||typeof observed!=='string')return null;
  const t=Date.parse(observed);
  if(!Number.isFinite(t)||Math.abs(Date.now()-t)>24*60*60*1000)return null;
