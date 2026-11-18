@@ -1,4 +1,8 @@
 -- Rosie Build 907: add proof-bound upload confirmation without sharing private media publicly.
+alter table public.public_inquiry_leads
+ add column if not exists client_request_id uuid;
+create unique index if not exists rosie907_quote_request_unique
+ on public.public_inquiry_leads(client_request_id) where client_request_id is not null;
 alter table public.photo_estimate_uploads
  add column if not exists upload_proof_hash text,
  add column if not exists verified_at timestamptz;
