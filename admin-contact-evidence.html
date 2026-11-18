@@ -65,6 +65,7 @@ function show(){const d=s.d;if(!d)return;const r=d.report905,a=d.report904,actor
  $('metrics').replaceChildren();for(const [k,v] of [['Source',a.state],['Live consent',a.consent_allowed?'EXPLICIT TRUE':'HOLD'],['Reconciliation',r.state]]){
   const x=document.createElement('article'),t=document.createElement('span'),b=document.createElement('strong');
   t.textContent=k;b.textContent=String(v);x.append(t,b);$('metrics').append(x);}
+ $('auditLink906').href='/admin-contact-audit.html?booking_id='+encodeURIComponent(d.booking_id)+'&exception_id='+encodeURIComponent(d.exception_id);
  $('summary').textContent='Original authority '+(a.authority_id||'NONE')+' · expiry '+(a.expires_at||'not established')+
   ' · manual evidence only · NO provider calls · NO contact asserted by this software.';
  $('history').replaceChildren();for(const x of d.history){

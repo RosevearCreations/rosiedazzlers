@@ -1,11 +1,14 @@
 
 import { serviceHeaders } from "../_lib/customer-session.js";
-import { issueCustomerAuthToken, sendCustomerAuthEmail } from "../_lib/customer-auth-tokens.js";
+import { issueCustomerAuthToken, sendCustomerAuthEmail, markCustomerAuthTokenUsed } from "../_lib/customer-auth-tokens.js";
 
 export async function onRequestOptions(){ return new Response('', { status:204, headers:corsHeaders() }); }
 export async function onRequestPost(context){
   const { request, env } = context;
   try {
+    const origin=request.headers.get('origin');
+    if(origin && origin!==new URL(request.url).origin) return withCors(json({error:'Same-origin recovery request required.'},403));
+    if(Number(request.headers.get('content-length')||0)>512) return withCors(json({error:'Recovery request too large.'},413));
     const body = await request.json().catch(() => ({}));
     const email = cleanEmail(body.email);
     if (!email) return withCors(json({ error:'Valid email is required.' }, 400));
@@ -13,11 +16,22 @@ export async function onRequestPost(context){
     if (!customer || customer.is_active !== true) return withCors(json({ ok:true, message:'If that email exists, a reset link has been sent.' }));
     if (!(await canIssuePasswordReset(env, customer.id))) return withCors(json({ ok:true, message:'If that email exists, a reset link has been sent.' }));
     const issued = await issueCustomerAuthToken({ env, customerProfileId: customer.id, purpose:'password_reset', expiresMinutes: 90, payload:{ email } });
-    await sendCustomerAuthEmail({ env, request, customer, purpose:'password_reset', rawToken: issued.rawToken }).catch(() => null);
+    // A transactional recovery email is explicitly requested by the customer;
+    // this is separate from Build 906's manual customer-contact outbox (NO AUTO-SEND).
+    // Provider failure must never leave a valid, undelivered password-reset token.
+    let sent=false;
+    try {
+      const delivery=await sendCustomerAuthEmail({ env, request, customer, purpose:'password_reset', rawToken: issued.rawToken });
+      sent=delivery?.ok===true;
+    } catch { sent=false; }
+    if(!sent) {
+      await markCustomerAuthTokenUsed({env,tokenId:issued.record?.id}).catch(()=>null);
+      console.error('CUSTOMER_PASSWORD_RESET_PROVIDER_UNAVAILABLE'); // No customer PII or raw token logged.
+    }
     // Match the unknown-email response exactly so browser/network observers cannot enumerate accounts.
     return withCors(json({ ok:true, message:'If that email exists, a reset link has been sent.' }));
-  } catch (err) {
-    return withCors(json({ error: err?.message || 'Unexpected server error.' }, 500));
+  } catch {
+    return withCors(json({ error: 'Password recovery is temporarily unavailable. Please contact Rosie account support.' }, 503));
   }
 }
 
