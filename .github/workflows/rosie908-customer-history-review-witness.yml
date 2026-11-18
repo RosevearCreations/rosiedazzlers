@@ -1,0 +1,35 @@
+name: Rosie 908 Customer History, Quote and Media Receipt, Checkout and Independent Recovery Witness
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  acceptance908:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build 908 syntax and private API shape
+        run: |
+          node --check functions/api/_lib/customer-account-review-v908.js
+          node --check functions/api/client/booking_reviews_v908.js
+          node --check functions/api/_lib/recovery-deliverability-v908.js
+          node --check functions/api/recovery_delivery_witness_v908.js
+          node --check functions/api/client/auth_forgot_password.js
+          node --check functions/api/checkout_recovery.js
+          node --check assets/customer-review-workbench-v908.mjs
+      - name: Customer ownership, receipts, checkout and HMAC negative-path proofs
+        run: node --test tests/build908_account_review_witness.test.mjs
+      - name: Retain 906-907 booking, media and recovery acceptance
+        run: |
+          node --test tests/build907_saved_choices_photo_quote.test.mjs
+          node --test tests/build907_account_recovery_dryrun.test.mjs
+          node --test tests/build906_booking_paths_recovery.test.mjs tests/build906_evidence_lifecycle.test.mjs
+          node --test tests/build889_ala_carte_checkout.test.mjs tests/build892_checkout_negative_paths.test.mjs tests/build893_customer_identity_ownership.test.mjs

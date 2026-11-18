@@ -174,6 +174,7 @@ function normalizeCustomerProfile(row) {
     created_at: row.created_at || null,
     updated_at: row.updated_at || null,
     email: row.email || null,
+    email_verified_at: row.email_verified_at || null,
     full_name: row.full_name || null,
     phone: row.phone || null,
     tier_code: row.tier_code || null,
