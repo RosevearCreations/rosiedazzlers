@@ -21,21 +21,43 @@ function eligibleItems() {
 function drawServices() {
   const root=byId('standaloneServices889');
   root.replaceChildren();
-  const options=eligibleItems();
-  const permitted=new Set(options.map(x=>x.code));
+  const size=readValue('vehicle_size');
+  const allowed=eligibleItems();
+  const permitted=new Set(allowed.map(x=>x.code));
   for(const code of [...selected])if(!permitted.has(code))selected.delete(code);
-  if(!options.length) {
-    root.append(text('p','No individually priced and owner-approved services are available for this vehicle size. You can use the guided package booking or contact Rosie.'));
-    return;
-  }
-  for(const item of options) {
+  const all=Array.isArray(catalog?.addons)?catalog.addons:[];
+  if(!all.length){root.append(text('p','No current add-on cards are available. Contact Rosie for a custom quote.'));return;}
+  const sorted=[...all].sort((a,b)=>Number(permitted.has(b.code))-Number(permitted.has(a.code)));
+  for(const item of sorted){
+    const selectable=approved&&permitted.has(item.code);
     const wrap=document.createElement('div');wrap.className='choice';
-    const input=document.createElement('input');input.type='checkbox';input.id='service889_'+item.code;
-    input.value=item.code;input.checked=selected.has(item.code);input.disabled=!approved;
-    const label=document.createElement('label');label.htmlFor=input.id;
-    label.append(text('strong',item.name),text('span',money(Math.round(item.prices_cad[readValue('vehicle_size')]*100))+' CAD · service price'));
-    input.addEventListener('change',()=>{input.checked?selected.add(item.code):selected.delete(item.code);drawBasket();});
-    wrap.append(input,label);root.append(wrap);
+    const image=document.createElement('img');
+    const url=String(item.image_url||item.thumbnail_url||'');
+    if(/^https:\/\/assets\.rosiedazzlers\.ca\//.test(url)){image.src=url;image.loading='lazy';image.alt='';wrap.append(image);}
+    const body=document.createElement('div');body.className='choice-copy';
+    const name=text('strong',String(item.name||item.code||'Detailing extra'));
+    body.append(name);
+    const category=text('small',String(item.category||'Optional detailing service'));
+    body.append(category);
+    const price=Number(item.prices_cad?.[size]);
+    const availability=selectable
+      ?money(Math.round(price*100))+' CAD · current approved standalone price'
+      :item.quote_required===true?'Personal quote / photo assessment required'
+      :item.standalone_allowed!==true?'Package-only or staff-reviewed item'
+      :'Choose vehicle size or wait for owner-approved pricing';
+    body.append(text('small',availability));
+    if(selectable){
+      const input=document.createElement('input');input.type='checkbox';
+      input.id='service889_'+item.code;input.value=item.code;input.checked=selected.has(item.code);
+      const label=document.createElement('label');label.htmlFor=input.id;
+      label.append(text('span','Select this service'));body.append(label);
+      input.addEventListener('change',()=>{input.checked?selected.add(item.code):selected.delete(item.code);drawBasket();});
+      wrap.append(input);
+    }else{
+      const link=document.createElement('a');link.href='/contact?source=manual_custom';
+      link.textContent='Ask about this service';body.append(link);
+    }
+    wrap.append(body);root.append(wrap);
   }
 }
 function drawBasket() {
@@ -146,6 +168,7 @@ form.addEventListener('submit',async e=>{
       customer_email:readValue('customer_email'),customer_phone:readValue('customer_phone')||null,
       address_line1:readValue('address_line1'),city:readValue('city'),postal_code:readValue('postal_code'),
       payment_provider:readValue('payment_provider'),
+      special_notes:readValue('special_notes')||null,
       vehicle:{year:Number(readValue('vehicle_year')),make:readValue('vehicle_make'),model:readValue('vehicle_model')},
       workability_739:site,ack_driveway:field('ack_driveway').checked,
       ack_power_water:true,ack_bylaw:field('ack_bylaw').checked,

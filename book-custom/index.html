@@ -15,7 +15,11 @@
     .build889 .choice{border:1px solid rgba(255,255,255,.28);border-radius:16px;padding:14px;display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.04)}
     .build889 .choice label{cursor:pointer;display:grid;gap:6px;line-height:1.45}
     .build889 .choice input{width:22px;height:22px;flex:none}
-    .build889 input,.build889 select{width:100%;max-width:100%;min-height:44px;margin-top:5px}
+    .build889 input,.build889 select,.build889 textarea{width:100%;max-width:100%;min-height:44px;margin-top:5px;background:#19324b;color:#eff7ff;border:1px solid #839fba;padding:10px}
+    .build889 .choice{display:grid;grid-template-columns:86px minmax(0,1fr);align-items:start}
+    .build889 .choice img{width:86px;height:86px;object-fit:cover;border-radius:8px;grid-row:span 2}
+    .build889 .choice .choice-copy{min-width:0}.build889 .choice a{color:#addfff}
+    .build889 .choice small{display:block;color:#d0e1f0;margin-top:5px}
     .build889 label{display:block;font-weight:600}
     .build889 .choice label{font-weight:500}
     .build889 fieldset{border:1px solid rgba(255,255,255,.2);padding:16px;border-radius:14px}
@@ -38,9 +42,9 @@
 <body>
   <main class="build889" id="main">
     <div><p><a href="/book">← Back to booking options</a></p>
-      <h1>Build your own detailing service</h1>
-      <p>Choose individually approved services instead of a full detailing package. All prices and availability are checked again by Rosie before any payment.</p>
-      <p><a href="/book#booking">Prefer step-by-step help? Use our guided booking wizard.</a></p></div>
+      <h1>Manual / Custom Detailing Booking</h1>
+      <p>See every available detailing add-on card. Choose any individually approved, fixed-price standalone service, then enter your vehicle, date, site and contact details manually. Assessment-only extras need a personal quote before we can charge them.</p>
+      <p><a href="/book-smart">Prefer recommendations? Use our Smart Wizard.</a></p></div>
     <div class="status" id="catalogStatus889" role="status" aria-live="polite">Checking the current Rosie service catalogue…</div>
     <form id="alaCarteForm889" novalidate>
       <section class="panel">
@@ -58,9 +62,10 @@
             <select name="service_area" required><option value="">Loading available service zones…</option></select>
           </label>
         </div>
-        <h3>Choose one or more services</h3>
+        <h3>Choose from all add-on cards</h3>
+        <p class="muted">Each card shows its current eligibility. Quote-only and package-only services remain visible but cannot be charged as standalone items.</p>
         <div id="standaloneServices889" class="choices" role="group" aria-label="Individual services"></div>
-        <p class="list-note">Quote-required and package-only work cannot be charged through this self-service path. Contact Rosie for a custom quote.</p>
+        <p class="list-note">Everything shown comes from the live catalogue. Quote-required and package-only services are visible for reference and need staff review. <a href="/contact?source=manual_custom">Request a personal quote</a> for those extras.</p>
       </section>
       <section class="panel">
         <h2>2. Your date, vehicle and worksite</h2>
@@ -94,14 +99,19 @@
         </fieldset>
       </section>
       <section class="panel">
-        <h2>3. Review your price and deposit</h2>
+        <h2>3. Contact, optional account and payment</h2>
+        <p class="muted">Create or recover a Rosie account separately if you wish. An account is not required to look at prices; all checkout data is entered by you.</p>
+        <p><a href="/login#create-account" target="_blank" rel="noopener">Create an account</a> · <a href="/login#password-help" target="_blank" rel="noopener">Forgot password or account?</a></p>
         <div id="basketSummary889" class="totals" aria-live="polite"></div>
         <p class="muted">Amounts shown are CAD service prices from the current catalogue. Tax, travel, availability, and final payable amount are revalidated by the secure server. The deposit is not a separate extra charge.</p>
         <div class="grid">
           <label>Your name <input name="customer_name" autocomplete="name" maxlength="140" required></label>
           <label>Email <input name="customer_email" type="email" autocomplete="email" maxlength="200" required></label>
           <label>Phone (optional) <input name="customer_phone" type="tel" autocomplete="tel" maxlength="40"></label>
-          <label>Payment provider
+          <label>Vehicle / job notes (optional)
+          <textarea name="special_notes" maxlength="800" rows="3" placeholder="Condition, access, or custom service request. Do not include payment data."></textarea>
+        </label>
+        <label>Payment provider
             <select name="payment_provider" required><option value="stripe">Stripe (card)</option><option value="paypal">PayPal</option></select>
           </label>
         </div>

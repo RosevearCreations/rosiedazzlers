@@ -1,0 +1,92 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Smart detailing booking wizard: choose your vehicle, goals and condition, review optional extras, add photos and complete secure booking.">
+<title>Smart Booking Wizard | Rosie Dazzlers</title><link rel="canonical" href="https://rosiedazzlers.ca/book-smart">
+<link rel="stylesheet" href="/assets/site.css?v=20261101build734"><style>
+body{background:radial-gradient(ellipse at 80% 5%,#203c59,transparent 50%),#091521;color:#f0f6ff}
+.smart906{max-width:1240px;margin:auto;padding:20px 16px 80px}.smart906 *{box-sizing:border-box}
+.smart906 .hero{background:linear-gradient(130deg,#2a4864,#102338 76%);border-left:10px solid #e6ba75;border-top:2px solid #e6ba75;padding:26px;clip-path:polygon(0 0,98% 0,100% 24px,100% 100%,0 100%)}
+.smart906 h1{font-size:clamp(1.9rem,4vw,3rem);line-height:1.15;margin:8px 0}
+.smart906 h2{font-size:1.25rem}.smart906 section{background:#14283d;border:1px solid #728da8;padding:19px;margin-top:16px;min-width:0}
+.smart906 .choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.smart906 .goal{display:grid;gap:8px;padding:15px;border:1px solid #6c88a2;background:#213b53;min-height:120px;cursor:pointer}
+.smart906 .goal:has(input:checked){outline:3px solid #f0bc69;background:#344963}
+.smart906 input[type=radio],.smart906 input[type=checkbox]{accent-color:#e6ba75;width:20px;height:20px}
+.smart906 .goal span{font-size:1.04rem;font-weight:800}.smart906 .goal small{color:#ccdeed}
+.smart906 select{width:100%;padding:13px;background:#19354d;color:#fff;border:1px solid #98afc5;min-height:48px}
+.smart906 .result{border-top:4px solid #e6ba75;background:#203e56;padding:18px;overflow-wrap:anywhere}
+.smart906 .extras{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:11px}
+.smart906 .extra{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid #708ca5;background:#1a354d;min-width:0}
+.smart906 .extra b{display:block}.smart906 .muted{color:#c5d9ea}.smart906 .status{padding:12px;border-left:5px solid #e6ba75;background:#27475f}
+.smart906 .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.smart906 .btn{min-height:46px}.smart906 :focus-visible{outline:3px solid #fff3b7;outline-offset:2px}
+@media(max-width:600px){.smart906 .hero{padding:17px}.smart906 section{padding:15px}.smart906 .actions>*{width:100%}}
+</style></head><body>
+<div class="smart906"><p><a href="/book">← Choose another booking method</a></p>
+<header class="hero"><p class="eyebrow">SMART BOOKING · BUILD 906</p><h1>Tell us what you want. We’ll suggest the detail.</h1>
+<p>Pick a vehicle, the result you want and any concerns. The wizard recommends a real catalogue package and useful optional treatments. Nothing is added or charged automatically.</p>
+<p class="muted">After reviewing the suggestions, we take you to the existing five-step booking planner for date, availability, secure payment, photo upload and optional account creation.</p></header>
+<form id="smartForm906">
+<section><h2>1 · Your vehicle and current condition</h2><div class="choices">
+<label>Vehicle size<select id="size" required><option value="">Choose vehicle size</option><option value="small">Car / compact</option>
+<option value="mid">SUV / crossover</option><option value="oversize">Large SUV / truck / van</option></select></label>
+<label>Current condition<select id="condition" required><option value="light">Maintained / light cleaning</option>
+<option value="moderate">Everyday buildup / some stains</option><option value="heavy">Heavy soil / unknown — photo review recommended</option></select></label>
+</div></section>
+<section><h2>2 · What would you like improved?</h2><div class="choices" role="radiogroup" aria-label="Primary detail goal">
+<label class="goal"><input type="radio" name="goal" value="exterior" required checked><span>Quick exterior refresh</span><small>Wash, wheels, glass and exterior tidy</small></label>
+<label class="goal"><input type="radio" name="goal" value="interior"><span>Deep or light interior</span><small>Seats, carpets, mats, spills and pet hair</small></label>
+<label class="goal"><input type="radio" name="goal" value="complete"><span>Inside and outside</span><small>All-around reset for a family or sale-ready vehicle</small></label>
+<label class="goal"><input type="radio" name="goal" value="protection"><span>Paint and protection</span><small>Exterior condition and treatment planning</small></label>
+</div></section>
+<section><h2>3 · Anything else we should consider?</h2><p class="muted">Optional. These concerns help us suggest extras; prices for assessment-only work are not guaranteed.</p>
+<div class="choices" id="concerns">
+<label class="extra"><input type="checkbox" value="pets">Pet hair</label>
+<label class="extra"><input type="checkbox" value="salt">Salt / winter staining</label>
+<label class="extra"><input type="checkbox" value="odour">Odours and smoke</label>
+<label class="extra"><input type="checkbox" value="paint">Swirls / paint defects</label>
+<label class="extra"><input type="checkbox" value="coating">Wax / ceramic / graphene</label>
+<label class="extra"><input type="checkbox" value="headlights">Cloudy headlights</label></div>
+<div class="actions"><button type="submit" class="btn primary" id="suggest">Show my recommended plan</button>
+<a class="btn ghost" href="/book-custom">I prefer manual/custom booking</a></div></section>
+<section id="recommendations" hidden><h2>4 · Recommended starting plan</h2><div class="result" id="result"></div>
+<p class="muted">Suggested extras below are all <strong>off by default</strong>. Select only what you want. We recheck eligibility and pricing before checkout.</p>
+<div class="extras" id="suggestedExtras"></div>
+<div class="status" id="photoAdvice">You can upload photos during booking.</div>
+<div class="actions"><a id="continue" class="btn primary" href="/booking-planner?mode=smart">Continue to photos, account and booking</a>
+<a href="/book-custom" class="btn ghost">Switch to manual/custom</a></div></section>
+</form><p class="status" id="catalogStatus" role="status" aria-live="polite">Loading the current Rosie catalogue…</p></div>
+<script type="module">
+import {recommendSmart906,smartHandoff906} from '/assets/book-smart-v906.mjs';
+const $=id=>document.getElementById(id);let catalog=null,recommendation=null;
+const accepted=new Set(),money=x=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(x);
+async function load(){
+ try{const r=await fetch('/api/pricing_catalog_public',{credentials:'same-origin',cache:'no-store'});
+ const d=await r.json();if(!r.ok||d.ok!==true)throw Error('Unavailable');
+ catalog=d;$('catalogStatus').textContent='Current catalogue loaded. Suggestions are optional; server checks final price.';}
+ catch{$('catalogStatus').textContent='Catalogue unavailable. Try manual booking or contact Rosie before paying.';$('suggest').disabled=true;}}
+function chosen(){return [...document.querySelectorAll('#concerns input:checked')].map(x=>x.value)}
+function link(){if(recommendation)$('continue').href=smartHandoff906(recommendation,[...accepted])}
+$('smartForm906').addEventListener('submit',e=>{e.preventDefault();accepted.clear();
+ const data=recommendSmart906({goal:document.querySelector('input[name=goal]:checked')?.value,
+ condition:$('condition').value,size:$('size').value,concerns:chosen(),catalog});
+ if(!data.ok){$('catalogStatus').textContent=data.error;return;}
+ recommendation=data;$('recommendations').hidden=false;
+ $('result').replaceChildren();
+ const name=document.createElement('h3');name.textContent=data.package_name;
+ const price=document.createElement('p');price.textContent='Starting at '+money(data.price_cad)+' CAD before HST · indicated deposit '+money(data.deposit_cad)+' (not charged yet)';
+ $('result').append(name,price);
+ const extras=$('suggestedExtras');extras.replaceChildren();
+ if(!data.suggested_extras.length){const p=document.createElement('p');p.textContent='No extra treatments needed for this starting recommendation.';extras.append(p);}
+ for(const item of data.suggested_extras){const label=document.createElement('label');label.className='extra';
+  const box=document.createElement('input');box.type='checkbox';box.value=item.code;
+  const text=document.createElement('span'),strong=document.createElement('b');strong.textContent=item.name;
+  const amount=document.createElement('small');amount.textContent=item.quote_required?'Photo/condition quote required':
+   item.price_cad!==null?'Starting at '+money(item.price_cad)+' CAD':'Price checked at booking';
+  text.append(strong,amount);box.addEventListener('change',()=>{box.checked?accepted.add(item.code):accepted.delete(item.code);link()});
+  label.append(box,text);extras.append(label);}
+ $('photoAdvice').textContent=data.photo_review_recommended?'Photo review recommended: upload 2–6 pictures in Step 4 of the booking planner; quote-only items are not charged until reviewed.':
+  'Photos are welcome in Step 4. Account creation is available before payment.';
+ link();$('recommendations').scrollIntoView({behavior:'smooth',block:'start'});
+});
+load();
+</script></body></html>
