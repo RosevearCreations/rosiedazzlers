@@ -1,10 +1,10 @@
 // Rosie 908: privacy-minimized customer history and explicit review receipts.
 export const UUID908=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export const KINDS908=['quote','media_booking','media_quote'];
-export function ownsBooking908(row,profileId,email){
+export function ownsBooking908(row,profileId,email,emailVerified=false){
  return !!row&&UUID908.test(String(row.id||''))&&(
   row.customer_profile_id===profileId ||
-  (!row.customer_profile_id&&String(row.customer_email||'').trim().toLowerCase()===email)
+  (!row.customer_profile_id&&emailVerified&&String(row.customer_email||'').trim().toLowerCase()===email)
  );
 }
 export function safeBooking908(row){

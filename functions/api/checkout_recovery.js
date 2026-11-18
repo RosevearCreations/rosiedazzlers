@@ -5,6 +5,7 @@
 
 import { onRequestPost as canonicalCheckout, onRequestOptions as canonicalOptions } from "./checkout.js";
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
+import { getCurrentCustomerSession } from "./_lib/customer-session.js";
 import { evaluateBookingRecovery626 } from "./_lib/booking-recovery-contract-626.js";
 
 export async function onRequestOptions() {
@@ -13,6 +14,8 @@ export async function onRequestOptions() {
 
 export async function onRequestPost(context) {
   const { request, env } = context;
+  const origin=request.headers.get("origin");
+  if(origin&&origin!==new URL(request.url).origin) return corsJson({error:"Same-origin checkout recovery required.",recovery_state:"origin_mismatch"},403);
   const cloned = request.clone();
   const body = await cloned.json().catch(() => null);
 
@@ -69,6 +72,17 @@ export async function onRequestPost(context) {
 
   if (!candidate) return canonicalCheckout(context);
 
+  // Build 908: original pending payment URLs cannot be recovered using email and slot alone.
+  // Never hand an existing provider checkout session to an unverified or different customer.
+  let current;
+  try { current=await getCurrentCustomerSession({env,request}); }
+  catch { return corsJson({error:"Account ownership could not be verified. No payment session reopened.",recovery_state:"identity_unavailable"},503); }
+  const owner=String(candidate.customer_profile_id||"");
+  if(!owner||!current?.customer_profile?.id||owner!==current.customer_profile.id||
+    String(current.customer_profile.email||"").trim().toLowerCase()!==email){
+    return corsJson({error:"This earlier hold requires verified account ownership before payment can resume. No new charge or booking was created.",recovery_state:"ownership_required",retryable:false},409);
+  }
+
   const otherBlocker = activeRows.find((row) => row?.id !== candidate.id && slotsOverlap(requestedSlots, bookingSlots(row)));
   if (otherBlocker) {
     return corsJson({
@@ -102,7 +116,7 @@ export async function onRequestPost(context) {
 async function fetchSameDateBookings(env, serviceDate) {
   const fields = [
     "id", "status", "created_at", "service_date", "start_slot", "duration_slots",
-    "customer_email", "package_code", "vehicle_size", "payment_provider",
+    "customer_email", "customer_profile_id", "package_code", "vehicle_size", "payment_provider",
     "service_area", "address_line1", "vehicle_year", "vehicle_make", "vehicle_model",
     "addons", "price_total_cents", "deposit_cents",
     "stripe_session_id", "paypal_order_id"
@@ -166,7 +180,7 @@ async function recoverStripe({ env, request, booking, holdMinutes }) {
     }, 502);
   }
 
-  if (session.status === "open" && session.url) {
+  if (session.status === "open" && approvedProviderUrl908(session.url,"stripe")) {
     return corsJson({
       ok: true,
       recovered: true,
@@ -238,7 +252,7 @@ async function recoverPayPal({ env, request, booking, holdMinutes }) {
   }
 
   const approveUrl = Array.isArray(order.links) ? (order.links.find((row) => row?.rel === "approve") || {}).href || null : null;
-  if (approveUrl) {
+  if (approvedProviderUrl908(approveUrl,"paypal")) {
     return corsJson({ ok: true, recovered: true, mode: "paypal_recovery", booking_id: booking.id, checkout_url: approveUrl, approve_url: approveUrl, hold_minutes: holdMinutes });
   }
 
@@ -248,6 +262,13 @@ async function recoverPayPal({ env, request, booking, holdMinutes }) {
     booking_id: booking.id,
     retryable: true
   }, 409);
+}
+
+export function approvedProviderUrl908(value,provider){
+ try{const u=new URL(value);if(u.protocol!=="https:"||u.username||u.password)return false;
+ const host=u.hostname.toLowerCase();return provider==="stripe"?(host==="stripe.com"||host.endsWith(".stripe.com")):
+ provider==="paypal"?(host==="paypal.com"||host.endsWith(".paypal.com")):false;
+ }catch{return false;}
 }
 
 function paypalBase(env) {

@@ -11,7 +11,7 @@ async function identity(request,env){
  if(!env?.SUPABASE_URL||!env?.SUPABASE_SERVICE_ROLE_KEY)throw Error('Configuration missing');
  const current=await getCurrentCustomerSession({request,env}),p=current?.customer_profile;
  if(!p?.is_active||!UUID908.test(String(p.id||''))||typeof p.email!=='string')return null;
- return {id:p.id,email:p.email.trim().toLowerCase()};
+ return {id:p.id,email:p.email.trim().toLowerCase(),verified_email:!!p.email_verified_at};
 }
 async function rows(env,query){
  const response=await fetch(env.SUPABASE_URL.replace(/\/+$/,'')+'/rest/v1/'+query,{
@@ -26,11 +26,11 @@ async function workspace(env,p){
  const bookingCols='id,customer_profile_id,customer_email,created_at,service_date,start_slot,status,job_status,package_code,vehicle_size,price_total_cents,deposit_cents,detailing_completed_at';
  const [direct,legacy,quotes,receipts]=await Promise.all([
   rows(env,'bookings?select='+bookingCols+'&customer_profile_id=eq.'+p.id+'&order=created_at.desc&limit=60'),
-  rows(env,'bookings?select='+bookingCols+'&customer_profile_id=is.null&customer_email=eq.'+encodeURIComponent(p.email)+'&order=created_at.desc&limit=60'),
-  rows(env,'quote_proposal_drafts?select=id,title,status,acceptance_status,sent_at,updated_at,accepted_at,declined_at,terms_expires_at,lead_id&customer_email=eq.'+encodeURIComponent(p.email)+'&sent_at=not.is.null&order=sent_at.desc&limit=40'),
+  p.verified_email?rows(env,'bookings?select='+bookingCols+'&customer_profile_id=is.null&customer_email=eq.'+encodeURIComponent(p.email)+'&order=created_at.desc&limit=60'):[],
+  p.verified_email?rows(env,'quote_proposal_drafts?select=id,title,status,acceptance_status,sent_at,updated_at,accepted_at,declined_at,terms_expires_at,lead_id&customer_email=eq.'+encodeURIComponent(p.email)+'&sent_at=not.is.null&order=sent_at.desc&limit=40'):[],
   rows(env,'customer_review_receipts_908?select=id,subject_kind,subject_id,source_revision,reviewed_at&customer_profile_id=eq.'+p.id+'&order=reviewed_at.desc&limit=150')
  ]);
- const bookings=[...new Map([...direct,...legacy].filter(b=>ownsBooking908(b,p.id,p.email)).map(b=>[b.id,b])).values()]
+ const bookings=[...new Map([...direct,...legacy].filter(b=>ownsBooking908(b,p.id,p.email,p.verified_email)).map(b=>[b.id,b])).values()]
   .sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))).slice(0,60);
  const sentQuotes=quotes.filter(q=>UUID908.test(q.id)&&q.sent_at);
  const bookingIds=bookings.map(b=>b.id);
@@ -68,7 +68,7 @@ export async function onRequestGet({request,env}){
   if(!p)return send({ok:false,error:'Sign in to view account history.'},401);
   const data=await workspace(env,p);
   return send({ok:true,authenticated:true,history:data.bookings,review_targets:data.targets,
-   policy:{saved_to_account:true,media_files_public:false,quote_approved:false,
+   policy:{saved_to_account:true,email_verification_required:!p.verified_email,media_files_public:false,quote_approved:false,
     checkout_auto_resumed:false,acknowledgement_not_consent:true}});
  }catch{return send({ok:false,error:'Customer history is temporarily unavailable. No receipt was recorded.'},503);}
 }
