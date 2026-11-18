@@ -111,14 +111,14 @@
       <h2 id="bookingPathsHeading888">How would you like to book?</h2>
       <p class="muted">Both choices use the same live service catalogue, availability and secure checkout. You can change your mind without losing a booking or making a payment.</p>
       <div class="booking-paths-888__grid" role="group" aria-label="Choose how to book">
-        <a class="booking-paths-888__choice" id="guidedPath888" href="#booking" aria-describedby="guidedDesc888">
-          <strong>Guide me step by step</strong>
-          <span id="guidedDesc888">Use our five-step wizard to choose a date, vehicle, package, optional extras and payment.</span>
-          <span class="booking-paths-888__action">Start guided booking →</span>
+        <a class="booking-paths-888__choice" id="guidedPath888" href="/book-smart" aria-describedby="guidedDesc888">
+          <strong>Smart Wizard — help me choose</strong>
+          <span id="guidedDesc888">Answer a few questions, get a real-catalogue package recommendation, opt into suggested extras, add photos and optionally create an account before checkout.</span>
+          <span class="booking-paths-888__action">Start the Smart Wizard →</span>
         </a>
         <a class="booking-paths-888__choice" id="manualPath888" href="/book-custom" aria-describedby="manualDesc888">
-          <strong>Let me choose services</strong>
-          <span id="manualDesc888">Build your own approved individual-service basket without choosing a package. We verify the service prices and availability before secure payment.</span>
+          <strong>Manual / Custom — choose every service</strong>
+          <span id="manualDesc888">See every add-on card, choose individually priced approved services, and enter vehicle, date, address, waiver and contact details yourself. Quote-only options are clearly marked.</span>
           <span class="booking-paths-888__action">Build my service →</span>
         </a>
       </div>
@@ -580,7 +580,7 @@
   <script id="booking-paths-script-888">
     (function(){
       const status=document.getElementById('bookingPathStatus888');
-      const choices=[['guidedPath888','Guided booking selected. Continue with the five-step planner.'],['manualPath888','Individual service booking selected. The next page verifies owner-approved standalone prices and shares the canonical checkout.']];
+      const choices=[['guidedPath888','Smart Wizard selected. You can choose a service from our live catalogue and opt into suggested extras; photos and account creation are in the secure booking planner.'],['manualPath888','Manual/Custom selected. All extras are visible; only owner-approved standalone services can be paid online without a separate quote.']];
       for(const [id,message] of choices){
         const link=document.getElementById(id);
         if(link)link.addEventListener('click',()=>{if(status)status.textContent=message;});

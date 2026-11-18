@@ -1,0 +1,79 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Independent Contact Evidence Audit | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+body{background:#071626;color:#edf5ff}.audit906{max-width:1050px;margin:auto;padding:20px}
+.audit906 .hero{border-left:9px solid #dfb873;border-top:2px solid #dfb873;background:linear-gradient(135deg,#2d4b69,#11263b);padding:24px;clip-path:polygon(0 0,97% 0,100% 25px,100% 100%,0 100%)}
+.audit906 section{border:1px solid #718ca6;background:#142c44;padding:18px;margin:16px 0}
+.audit906 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.audit906 .tile{border-top:3px solid #dfb873;background:#26455e;padding:14px;overflow-wrap:anywhere}
+.audit906 .tile strong{display:block;margin:8px 0}.audit906 label{display:block;font-weight:700;margin:10px 0}
+.audit906 input,.audit906 textarea,.audit906 select{width:100%;box-sizing:border-box;padding:11px;min-height:44px;background:#19344f;color:#fff;border:1px solid #849fb7}
+.audit906 textarea{min-height:90px}.audit906 button{min-height:45px;padding:10px 15px;background:#806436;color:#fff;border:1px solid #e8c58e;cursor:pointer}
+.audit906 button:disabled{opacity:.45;cursor:not-allowed}.audit906 .hold{font-weight:800;color:#ffdda0}
+.audit906 .status{border-left:5px solid #e8c58e;background:#27465f;padding:12px}
+.audit906 :focus-visible{outline:3px solid #fff1aa;outline-offset:2px}
+@media(max-width:800px){.audit906 .grid{grid-template-columns:1fr}}
+</style></head><body>
+<div class="audit906"><p><a href="/admin-contact-evidence.html">← Manual evidence workspace</a></p>
+<header class="hero"><p class="hold">BUILD 906 · THIRD SUPERVISOR AUDIT</p><h1>Contact evidence lifecycle and channel review</h1>
+<p>Read the live original consent status and source-linked manual staff evidence. A third supervisor may sign an independent review of another supervisor's contact attestation.</p>
+<p class="hold">No automatic calls, SMS, emails, provider confirmation, customer receipt or message delivery is performed.</p></header>
+<section><h2>Original source</h2>
+<label>Booking ID<input id="booking" placeholder="Original booking UUID" autocomplete="off"></label>
+<label>Exception ID<input id="issue" placeholder="Original exception UUID" autocomplete="off"></label>
+<button type="button" id="load">Recheck live source and all channels</button>
+<p class="status" id="status" role="status" aria-live="polite">Select the original booking and exception.</p></section>
+<section><h2>Lifecycle review</h2><div class="grid" id="metrics"></div><p id="summary" class="hold">No evidence read.</p></section>
+<section><h2>Cross-channel audit</h2><div class="grid" id="channels"></div>
+<p>This matrix never grants permission to contact a customer. Only the original channel and explicit current consent can be considered for an internal review.</p></section>
+<section><h2>Third independent supervisor decision</h2>
+<form id="review"><label>Finding<select id="decision"><option value="hold">HOLD — stale, unverified or insufficient evidence</option>
+<option value="corroborated">Corroborated original staff evidence (NOT delivery proof)</option></select></label>
+<label>Signed, non-personal source finding<textarea id="note" minlength="12" maxlength="350" required placeholder="Do not enter customer names, contact information or message text."></textarea></label>
+<button id="save" type="submit" disabled>Save independent audit (no send)</button></form>
+<p id="history">No independent review receipt.</p></section></div>
+<script type="module">
+const $=id=>document.getElementById(id),q=new URL(location.href).searchParams;
+$('booking').value=q.get('booking_id')||'';$('issue').value=q.get('exception_id')||'';
+let detail=null,clientId=null;
+const status=x=>$('status').textContent=String(x);
+async function api(url,opts={}){const r=await fetch(url,{credentials:'same-origin',cache:'no-store',...opts});
+ const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw Error(d.error||'Original source unavailable');return d;}
+function tile(label,value){const x=document.createElement('article'),l=document.createElement('span'),v=document.createElement('strong');
+ x.className='tile';l.textContent=label;v.textContent=String(value);x.append(l,v);return x;}
+async function load(){detail=null;$('save').disabled=true;status('Rechecking original source, expiry and consent…');
+ const booking=$('booking').value.trim(),issue=$('issue').value.trim();
+ if(!booking||!issue){status('Original booking and exception IDs are required.');return;}
+ try{
+ const d=await api('/api/admin/outbox_audit_v906?booking_id='+encodeURIComponent(booking)+'&exception_id='+encodeURIComponent(issue));
+ detail=d;const r=d.report906;
+ $('metrics').replaceChildren(tile('Lifecycle',r.state),tile('Review expires',r.review_expires_at||'N/A'),
+  tile('Retention review',r.retention_review_due?'DUE — HOLD':'Within review window'));
+ $('channels').replaceChildren(...r.cross_channel_audit.map(c=>tile(c.channel.toUpperCase(),
+  (c.explicit_current_consent?'CONSENT TRUE':'CONSENT HOLD')+' · '+
+  (c.selected_by_original_authority?'ORIGINAL CHANNEL':'OTHER CHANNEL')+' · NO SEND')));
+ $('summary').textContent='Original staff attestation '+(r.contact_receipt_id||'NONE')+
+  ' · no provider delivery/receipt verified · age '+(r.age_days??'N/A')+' days.';
+ $('history').textContent=d.history.length?
+  d.history.map(x=>x.recorded_at+' · '+x.decision+' · independent staff '+x.staff_user_id.slice(0,8)).join(' | '):
+  'No independent audit receipt exists.';
+ const independent=![d.original_owner_id,d.previous_reviewer_id].includes(d.actor_id);
+ $('save').disabled=!(independent&&r.can_review);
+ $('decision').querySelector('[value=corroborated]').disabled=!r.can_corroborate;
+ if(!r.can_corroborate)$('decision').value='hold';
+ status(independent?'Live source checked; third supervisor may record only a supported finding.':
+  'Your original owner/reviewer identity cannot conduct a THIRD independent audit.');
+ }catch(e){status(e.message+' HOLD, no delivery.');}}
+$('load').addEventListener('click',load);
+$('review').addEventListener('submit',async e=>{e.preventDefault();if(!detail?.report906?.contact_receipt_id)return;
+ const r=detail.report906,p={action:'review',client_request_id:clientId||crypto.randomUUID(),
+  booking_id:r.booking_id,exception_id:r.exception_id,authority_id:r.authority_id,
+  contact_receipt_id:r.contact_receipt_id,decision:$('decision').value,note:$('note').value};
+ clientId=p.client_request_id;$('save').disabled=true;
+ try{const x=await api('/api/admin/outbox_audit_v906',{method:'POST',
+  headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+ if(!x.source_recorded||x.provider_calls!==0)throw Error('Signed no-send receipt unavailable');
+ clientId=null;await load();status('Independent audit saved; zero customer messages sent.');}
+ catch(err){status(err.message+' Inspect original source; no message sent.');$('save').disabled=false;}});
+if($('booking').value&&$('issue').value)load();
+</script></body></html>
