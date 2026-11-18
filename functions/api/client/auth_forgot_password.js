@@ -1,6 +1,7 @@
 
 import { serviceHeaders } from "../_lib/customer-session.js";
 import { issueCustomerAuthToken, sendCustomerAuthEmail, markCustomerAuthTokenUsed } from "../_lib/customer-auth-tokens.js";
+import {recordRecoveryDispatch908} from "../_lib/recovery-deliverability-v908.js";
 
 export async function onRequestOptions(){ return new Response('', { status:204, headers:corsHeaders() }); }
 export async function onRequestPost(context){
@@ -19,11 +20,15 @@ export async function onRequestPost(context){
     // A transactional recovery email is explicitly requested by the customer;
     // this is separate from Build 906's manual customer-contact outbox (NO AUTO-SEND).
     // Provider failure must never leave a valid, undelivered password-reset token.
-    let sent=false;
+    let sent=false,delivery={ok:false,provider:'unknown'};
     try {
-      const delivery=await sendCustomerAuthEmail({ env, request, customer, purpose:'password_reset', rawToken: issued.rawToken });
+      delivery=await sendCustomerAuthEmail({ env, request, customer, purpose:'password_reset', rawToken: issued.rawToken });
       sent=delivery?.ok===true;
     } catch { sent=false; }
+    // Immutable dispatch fact, no address, message body, reset token or raw URL saved.
+    // HTTP acceptance is deliberately NOT independently witnessed delivery.
+    await recordRecoveryDispatch908({env,customerProfileId:customer.id,
+      tokenRecordId:issued.record?.id,delivery}).catch(()=>console.error('RECOVERY_DELIVERY_EVIDENCE_UNAVAILABLE'));
     if(!sent) {
       await markCustomerAuthTokenUsed({env,tokenId:issued.record?.id}).catch(()=>null);
       console.error('CUSTOMER_PASSWORD_RESET_PROVIDER_UNAVAILABLE'); // No customer PII or raw token logged.
