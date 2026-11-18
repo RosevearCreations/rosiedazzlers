@@ -64,6 +64,12 @@
         </div>
         <h3>Choose from all add-on cards</h3>
         <p class="muted">Each card shows its current eligibility. Quote-only and package-only services remain visible but cannot be charged as standalone items.</p>
+        <div class="grid" style="margin:12px 0">
+          <label>Search detailing add-ons<input id="manualAddonSearch907" type="search" placeholder="Ceramic, odour, pet hair…" autocomplete="off"></label>
+          <label>Filter by service type<select id="manualCategory907"><option value="all">All service types</option></select></label>
+        </div>
+        <p id="manualFilterStatus907" class="muted" role="status" aria-live="polite">Showing current add-on cards.</p>
+        <div class="actions" style="margin-bottom:12px"><button class="btn ghost" type="button" id="clearManualBasket907">Clear payable and quote selections</button></div>
         <div id="standaloneServices889" class="choices" role="group" aria-label="Individual services"></div>
         <p class="list-note">Everything shown comes from the live catalogue. Quote-required and package-only services are visible for reference and need staff review. <a href="/contact?source=manual_custom">Request a personal quote</a> for those extras.</p>
       </section>
@@ -102,6 +108,7 @@
         <h2>3. Contact, optional account and payment</h2>
         <p class="muted">Create or recover a Rosie account separately if you wish. An account is not required to look at prices; all checkout data is entered by you.</p>
         <p><a href="/login#create-account" target="_blank" rel="noopener">Create an account</a> · <a href="/login#password-help" target="_blank" rel="noopener">Forgot password or account?</a></p>
+        <p id="basketCount907" class="muted" role="status" aria-live="polite">Select services for checkout or staff quote.</p>
         <div id="basketSummary889" class="totals" aria-live="polite"></div>
         <p class="muted">Amounts shown are CAD service prices from the current catalogue. Tax, travel, availability, and final payable amount are revalidated by the secure server. The deposit is not a separate extra charge.</p>
         <div class="grid">
@@ -122,6 +129,12 @@
           <label class="check"><input name="ack_cancellation" type="checkbox" required><span>I have reviewed the cancellation and weather rescheduling policy.</span></label>
           <p><a href="/policies">Review Rosie Dazzlers policies</a></p>
         </fieldset>
+        <section class="panel" style="padding:16px;background:#15314a;border-left:5px solid #d8af74">
+          <h3>Need a custom price or quote-only extras?</h3>
+          <p class="muted">Select the separate Request staff quote boxes on relevant service cards. This creates a staff-review lead with your service choices, not a booking or payment.</p>
+          <button type="button" class="btn ghost" id="requestManualQuote907">Request a custom staff quote (no payment)</button>
+          <p id="manualQuoteStatus907" class="muted" role="status" aria-live="polite">No custom quote submitted.</p>
+        </section>
         <p id="checkoutStatus889" class="status" role="status" aria-live="polite">No reservation or payment has been made.</p>
         <div class="actions"><button class="btn primary" id="checkout889" type="submit" disabled>Check availability and pay deposit</button><a class="btn ghost" href="/contact">Need a quote or help?</a></div>
       </section>

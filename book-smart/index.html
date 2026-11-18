@@ -26,6 +26,14 @@ body{background:radial-gradient(ellipse at 80% 5%,#203c59,transparent 50%),#0915
 <p>Pick a vehicle, the result you want and any concerns. The wizard recommends a real catalogue package and useful optional treatments. Nothing is added or charged automatically.</p>
 <p class="muted">After reviewing the suggestions, we take you to the existing five-step booking planner for date, availability, secure payment, photo upload and optional account creation.</p></header>
 <form id="smartForm906">
+<section id="savedChoices907" aria-label="Save or restore Smart Wizard choices">
+<h2>Save your choices and come back</h2>
+<p class="muted">Save only your selected vehicle size, cleaning goal, condition and optional extras on this device for up to 24 hours. No name, email, photos, price, appointment date or payment details are stored.</p>
+<div class="actions">
+<button type="button" class="btn ghost" id="saveSmart907">Save my choices</button>
+<button type="button" class="btn ghost" id="restoreSmart907">Restore saved choices</button>
+<button type="button" class="btn ghost" id="clearSmart907">Clear saved choices</button>
+</div><p id="smartDraftStatus907" class="status" role="status" aria-live="polite">Nothing saved in this browser by this feature.</p></section>
 <section><h2>1 · Your vehicle and current condition</h2><div class="choices">
 <label>Vehicle size<select id="size" required><option value="">Choose vehicle size</option><option value="small">Car / compact</option>
 <option value="mid">SUV / crossover</option><option value="oversize">Large SUV / truck / van</option></select></label>
@@ -57,6 +65,7 @@ body{background:radial-gradient(ellipse at 80% 5%,#203c59,transparent 50%),#0915
 </form><p class="status" id="catalogStatus" role="status" aria-live="polite">Loading the current Rosie catalogue…</p></div>
 <script type="module">
 import {recommendSmart906,smartHandoff906} from '/assets/book-smart-v906.mjs';
+import {SMART_DRAFT_KEY907,parseSmartDraft907,sanitizeSmartDraft907,reconcileSmartDraft907} from '/assets/smart-draft-v907.mjs';
 const $=id=>document.getElementById(id);let catalog=null,recommendation=null;
 const accepted=new Set(),money=x=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(x);
 async function load(){
@@ -87,6 +96,42 @@ $('smartForm906').addEventListener('submit',e=>{e.preventDefault();accepted.clea
  $('photoAdvice').textContent=data.photo_review_recommended?'Photo review recommended: upload 2–6 pictures in Step 4 of the booking planner; quote-only items are not charged until reviewed.':
   'Photos are welcome in Step 4. Account creation is available before payment.';
  link();$('recommendations').scrollIntoView({behavior:'smooth',block:'start'});
+});
+// Explicit, privacy-minimized draft. No automatic writes or storage of personal details.
+const draftStatus907=$('smartDraftStatus907');
+function draftInput907(){
+ return {size:$('size').value,condition:$('condition').value,
+  goal:document.querySelector('input[name=goal]:checked')?.value||'',
+  concerns:chosen(),accepted_addons:[...accepted]};
+}
+$('saveSmart907').addEventListener('click',()=>{
+ const draft=recommendation?sanitizeSmartDraft907({...draftInput907(),saved_at:Date.now()}):null;
+ if(!draft){draftStatus907.textContent='Choose a vehicle and generate a current recommendation before saving.';return;}
+ try{localStorage.setItem(SMART_DRAFT_KEY907,JSON.stringify(draft));
+ draftStatus907.textContent='Choices saved on this browser for 24 hours. Current prices and eligibility will be checked again.';}
+ catch{draftStatus907.textContent='Browser storage unavailable. Nothing was saved.';}
+});
+$('restoreSmart907').addEventListener('click',()=>{
+ let saved=null;try{saved=parseSmartDraft907(localStorage.getItem(SMART_DRAFT_KEY907),Date.now());}catch{}
+ if(!saved||!catalog){draftStatus907.textContent='No valid saved choices, or the current catalogue is not yet available.';return;}
+ const restored=reconcileSmartDraft907(saved,catalog);
+ if(!restored){draftStatus907.textContent='The saved choices no longer match the live catalogue. Start a fresh plan.';return;}
+ $('size').value=restored.size;$('condition').value=restored.condition;
+ const goal=document.querySelector('input[name=goal][value="'+restored.goal+'"]');if(goal)goal.checked=true;
+ document.querySelectorAll('#concerns input').forEach(x=>{x.checked=restored.concerns.includes(x.value)});
+ // Re-run the current-catalogue suggestion. No checkout, upload or reservation is triggered.
+ $('smartForm906').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+ const eligible=new Set(restored.accepted_addons);
+ document.querySelectorAll('#suggestedExtras input[type=checkbox]').forEach(x=>{
+  x.checked=eligible.has(x.value);
+  if(x.checked)accepted.add(x.value);
+ });
+ link();
+ draftStatus907.textContent='Saved choices restored and rechecked against the live catalogue. Review extras before continuing.';
+});
+$('clearSmart907').addEventListener('click',()=>{
+ try{localStorage.removeItem(SMART_DRAFT_KEY907);}catch{}
+ draftStatus907.textContent='Saved Smart choices cleared. Current form choices are unchanged.';
 });
 load();
 </script></body></html>
