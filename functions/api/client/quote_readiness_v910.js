@@ -2,7 +2,6 @@
 // Never makes a booking, a hold, a charge, a deletion, a message or a public media URL.
 import {getCurrentCustomerSession,serviceHeaders} from '../_lib/customer-session.js';
 import {UUID908,ownsBooking908} from '../_lib/customer-account-review-v908.js';
-import {resolveCurrentQuotePrice} from '../_lib/quote-booking-authority.js';
 import {evaluateQuoteReadiness910,mediaRetentionReceipt910} from '../_lib/quote-retention-readiness-v910.js';
 const response=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{
  'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store',
@@ -40,6 +39,7 @@ export async function onRequestGet({request,env}){
   let currentPrice=null;
   if(!existing&&q.acceptance_status==='accepted'&&q.accepted_terms){
    const t=q.accepted_terms;
+   const {resolveCurrentQuotePrice}=await import('../_lib/quote-booking-authority.js');
    currentPrice=await resolveCurrentQuotePrice(env,{
     package_code:t.package_code,vehicle_size:t.vehicle_size,addon_codes:t.addon_codes});
   }
