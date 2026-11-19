@@ -58,7 +58,7 @@ function renderReview(item){
   wrapper.append(elt('p','Click to load '+item.video_platform+' content. External tracking may occur.'));
   wrapper.append(load);
   const social=elt('a','Open original video on '+item.video_platform);social.href=item.video_url;
-  social.target='_blank';social.rel='noopener noreferrer';wrapper.append(elt('p')).lastChild.append(social);
+  social.target='_blank';social.rel='noopener noreferrer';const line=elt('p');line.append(social);wrapper.append(line);
  }
  return wrapper;
 }
