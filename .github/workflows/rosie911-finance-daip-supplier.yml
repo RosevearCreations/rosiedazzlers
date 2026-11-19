@@ -1,0 +1,32 @@
+name: Rosie 911 — Finance Evidence, DAIP & VEVOR Supplier Reviews
+on:
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - 'assets/build911-finance-acceptance.mjs'
+      - 'assets/build911-supplier-review.mjs'
+      - 'assets/build911-operator-workbench.mjs'
+      - 'functions/api/admin/finance_acceptance_v911.js'
+      - 'functions/api/admin/supplier_reviews_v911.js'
+      - 'admin-finance-supplier-911.html'
+      - 'supabase/migrations/20261119113000_build911_supplier_review_drafts.sql'
+      - 'tests/build911_finance_supplier_daip.test.mjs'
+      - '.github/workflows/rosie911-finance-daip-supplier.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --check assets/build911-finance-acceptance.mjs
+      - run: node --check assets/build911-supplier-review.mjs
+      - run: node --check assets/build911-operator-workbench.mjs
+      - run: node --check functions/api/admin/finance_acceptance_v911.js
+      - run: node --check functions/api/admin/supplier_reviews_v911.js
+      - run: node --test tests/build911_finance_supplier_daip.test.mjs tests/build910_quote_readiness_media_retention.test.mjs
