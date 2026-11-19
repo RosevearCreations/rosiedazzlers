@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Build 911 · Finance, DAIP and supplier reviews | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+:root{color-scheme:dark}body{background:#101923;color:#f3f5fa;font:16px/1.5 system-ui,sans-serif}
+main{max-width:1220px;margin:auto;padding:20px 16px 70px}
+nav{display:flex;flex-wrap:wrap;gap:13px;margin:12px 0 24px}a{color:#a8d5ff}
+h1{font-size:clamp(1.8rem,3vw,2.5rem);line-height:1.15}h2{font-size:1.18rem}
+header p,.muted{color:#bcc9d7}
+.panel{background:#1b2735;border:1px solid #435267;border-radius:17px;padding:clamp(15px,2vw,23px);margin-bottom:18px;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:17px}
+.panel p{overflow-wrap:anywhere}label{display:grid;gap:5px;margin:11px 0;font-weight:650}
+input,select,textarea{width:100%;font:inherit;color:#f8fafc;border:1px solid #8295ac;background:#14202c;padding:11px;border-radius:9px;box-sizing:border-box}
+textarea{min-height:96px}button{border:0;border-radius:8px;background:#e6bb6b;color:#1a2030;padding:11px 18px;font:700 1rem system-ui;cursor:pointer}button:disabled{opacity:.55}
+.badge{display:inline-block;background:#33455a;border-radius:12px;padding:3px 9px;color:#f6f8fa;font-size:.85rem}
+.list{display:grid;gap:10px}.review{background:#122030;border:1px solid #435267;padding:15px;border-radius:12px}
+iframe{display:block;aspect-ratio:16/9;width:100%;min-height:220px;border:0;background:#03080b}
+mark{background:#ffe5ab;color:#162336}.status{padding:10px;border-left:4px solid #d0a75b;background:#111b27}
+ul{padding-left:21px}small{color:#c0cfdf}.inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@media(max-width:520px){button{width:100%}.panel{padding:14px}}
+</style>
+</head><body><main>
+<header><p class="badge">Rosie Dazzlers · Build 911 · private owner/operator workspace</p>
+<h1>Financial acceptance, DAIP & supplier reviews</h1>
+<p>Original-source evidence first. No automatic refunds, accounting close, product-publication, social posting, or media release.</p>
+<nav><a href="/admin.html">Admin home</a><a href="/admin-finance-reconciliation.html">Full finance reconciliation</a>
+<a href="/admin-daip-media.html">Private DAIP media</a><a href="/admin-creative-projects.html">Creative projects</a>
+<a href="/admin-tax-review.html">HST review</a></nav></header>
+<div class="grid">
+<section class="panel" aria-labelledby="finance-title"><h2 id="finance-title">Sales, refunds and HST acceptance</h2>
+<p class="muted">Real booking-linked sources; no simulated bank or payment-provider approval.</p>
+<p id="financeStatus" class="status" role="status" aria-live="polite">Checking signed finance permission…</p>
+<div id="financeResults" class="list"></div><button id="refreshFinance" type="button">Refresh original financial evidence</button></section>
+<section class="panel" aria-labelledby="daip-title"><h2 id="daip-title">DAIP actual workflow status</h2>
+<p>Source-linked project and private media workflows, consent checks and reviewed public derivatives.</p>
+<p id="daipStatus" class="status" role="status" aria-live="polite">Checking original DAIP projects…</p>
+<div id="daipResults"></div><button id="refreshDaip" type="button">Check DAIP</button>
+<p class="muted">This read-only check does not upload, run AI, grant consent or publish any asset.</p></section>
+</div>
+<section class="panel" aria-labelledby="review-title"><h2 id="review-title">Special Tools & Supplies received for review</h2>
+<p>Start with <a href="https://www.vevor.ca/" rel="noopener noreferrer" target="_blank">VEVOR Canada</a>. Each record is an internal draft, not a product endorsement, payment, inventory receipt or public video.</p>
+<div class="grid"><form id="reviewForm">
+<label>Supplier<select id="supplier"><option value="VEVOR">VEVOR · Vevor.ca</option></select></label>
+<label>Actual tool / supply name<input id="productName" required minlength="4" maxlength="140" placeholder="Enter an actual VEVOR product title"></label>
+<label>Specific VEVOR product URL<input id="productUrl" type="url" required placeholder="https://www.vevor.ca/…"></label>
+<label>How obtained (owner-reported)<select id="acquisition">
+<option value="not_received">Not received yet / planned review</option>
+<option value="purchased">Purchased</option><option value="gifted">Gifted</option>
+<option value="loaned">On loan</option><option value="review_sample">Sample provided for review</option></select></label>
+<label>Video-card platform<select id="platform"><option value="none">No video yet</option>
+<option value="youtube">YouTube video / Shorts</option><option value="instagram">Instagram reel / post</option>
+<option value="facebook">Facebook video</option></select></label>
+<label>Specific video URL (optional)<input id="videoUrl" type="url" placeholder="https://www.youtube.com/watch?v=…"></label>
+<label>Existing DAIP project UUID (optional)<input id="daipId" placeholder="Link only after actual project creation"></label>
+<label>Internal notes / disclosure<textarea id="notes" maxlength="750" placeholder="Testing observations; any gifted, loaned or affiliate relationship must be clearly disclosed."></textarea></label>
+<p class="muted">Media does not become public automatically. Real product receipt, source price, safety testing and affiliate claims require independent review.</p>
+<button type="submit" id="saveReview">Save private review draft</button>
+<p id="saveStatus" role="status" aria-live="polite"></p></form>
+<div><h3>Private social video cards</h3><p class="muted">Cards are loaded only after a click. External platforms may set cookies and gather usage data.</p>
+<button type="button" id="refreshReviews">Refresh saved reviews</button><div id="reviewItems" class="list" style="margin-top:16px"></div>
+<p id="reviewStatus" role="status" aria-live="polite"></p></div></div>
+</section>
+<section class="panel"><h2>Full-business capabilities still outstanding</h2>
+<p>These are tracked development requirements, <strong>not</strong> claims of completed Build 911 functionality.</p>
+<ul><li>Client storefront, complete online sales/pickup-and-stand order lifecycle, taxes, shipping and refunds.</li>
+<li>Remote-location travel specials, discount guardrails, service-area coverage and customer quote clarity.</li>
+<li>Rental inventory, booking, deposits, damage/return and event schedules.</li>
+<li>Support and complaint case management, privacy/security audit, incident SLA and customer self-service.</li>
+<li>Local company IT dashboard: errors, performance, traffic, uptime, host reboot/ACK, log trails, roles and change approvals.</li>
+<li>First-party consent-based audience/product-interest analytics and cross-app signed telemetry enrollment.</li></ul>
+</section>
+</main>
+<script type="module" src="/assets/build911-operator-workbench.mjs"></script></body></html>
