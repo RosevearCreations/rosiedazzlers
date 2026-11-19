@@ -1,0 +1,28 @@
+name: Rosie 910 — Quote Readiness and Private Retention Evidence
+on:
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - 'functions/api/_lib/quote-retention-readiness-v910.js'
+      - 'functions/api/client/quote_readiness_v910.js'
+      - 'assets/customer-quote-readiness-v910.mjs'
+      - 'my-account.html'
+      - 'my-account/index.html'
+      - 'tests/build910_quote_readiness_media_retention.test.mjs'
+      - '.github/workflows/rosie910-quote-readiness-retention.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --check functions/api/_lib/quote-retention-readiness-v910.js
+      - run: node --check functions/api/client/quote_readiness_v910.js
+      - run: node --check assets/customer-quote-readiness-v910.mjs
+      - run: node --test tests/build910_quote_readiness_media_retention.test.mjs tests/build909_customer_continuity_acceptance.test.mjs
