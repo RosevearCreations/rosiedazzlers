@@ -38,12 +38,12 @@ export async function readOriginalProvider915(env,channel,externalId,fetcher=fet
   const c=graphConfig(env||{},channel);if(!c.valid)return stop('META_ORIGINAL_ACCOUNT_NOT_ENROLLED');
   const account=await readJson('https://graph.facebook.com/'+c.version+'/'+encodeURIComponent(c.owner)+'?fields=id',c.token,fetcher);
   if(String(account?.id||'')!==c.owner)return stop('META_ORIGINAL_ACCOUNT_MISMATCH');
-  const fields=channel==='instagram'?'id,owner,media_type,permalink':'id,from,published,permalink_url';
+  const fields=channel==='instagram'?'id,owner,media_type,permalink':'id,from,published,permalink_url,length';
   const p=await readJson('https://graph.facebook.com/'+c.version+'/'+encodeURIComponent(externalId)+'?fields='+encodeURIComponent(fields),c.token,fetcher);
   if(String(p?.id||'')!==externalId)return stop('META_ORIGINAL_VIDEO_NOT_FOUND');
   const owner=channel==='instagram'?String(p?.owner?.id||''):String(p?.from?.id||'');
   const url=channel==='instagram'?p?.permalink:p?.permalink_url;
-  const video=channel==='instagram'?['VIDEO','REELS'].includes(p?.media_type):p?.published===true;
+  const video=channel==='instagram'?['VIDEO','REELS'].includes(p?.media_type):p?.published===true&&Number.isFinite(Number(p?.length))&&Number(p?.length)>0;
   if(owner!==c.owner||!video||!hostAllowed(url,channel))return stop('META_OWNER_VIDEO_OR_PUBLICATION_NOT_CONFIRMED');
   return {ok:true,identity:{channel,owner_id:c.owner},provider:{channel,owner_id:owner,id:externalId,public:true,published:true,media_type:'video',canonical_url:url,observed_at:new Date().toISOString()},verified_read_only:true};
  }catch{return stop('PROVIDER_UNAVAILABLE_OR_DENIED');}
