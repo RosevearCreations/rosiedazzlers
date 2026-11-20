@@ -1,0 +1,23 @@
+name: Rosie 915 — Provider Proof and Private Attribution
+on:
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - 'assets/build915-provider-proof-contract.mjs'
+      - 'tests/build915_provider_proof.test.mjs'
+      - 'docs/build915_provider_receipt_acceptance.md'
+      - '.github/workflows/rosie915-provider-proof.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --check assets/build915-provider-proof-contract.mjs
+      - run: node --test tests/build915_provider_proof.test.mjs tests/build914_supplier_consent_attribution.test.mjs
