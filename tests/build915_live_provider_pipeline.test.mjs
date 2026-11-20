@@ -27,9 +27,9 @@ test('915 Instagram authenticates configured owner and rejects wrong owner or ho
 test('915 Facebook requires original owner, a published video and canonical host',async()=>{
  const env={FACEBOOK_PAGE_ID:'1234567890123456',FACEBOOK_PAGE_ACCESS_TOKEN:'a'.repeat(30),META_GRAPH_VERSION:'v27.0'};
  const object='1234567890123456_7890123456789012';
- const fetcher=async url=>json(url.includes('?fields=id')?{id:env.FACEBOOK_PAGE_ID}:{id:object,from:{id:env.FACEBOOK_PAGE_ID},published:true,length:31,permalink_url:'https://www.facebook.com/watch/?v=7890123456789012'});
+ const fetcher=async url=>json(url.includes('/'+env.FACEBOOK_PAGE_ID+'?fields=id')?{id:env.FACEBOOK_PAGE_ID}:{id:object,from:{id:env.FACEBOOK_PAGE_ID},published:true,length:31,permalink_url:'https://www.facebook.com/watch/?v=7890123456789012'});
  assert.equal((await readOriginalProvider915(env,'facebook',object,fetcher)).ok,true);
- const unpublished=async url=>json(url.includes('?fields=id')?{id:env.FACEBOOK_PAGE_ID}:{id:object,from:{id:env.FACEBOOK_PAGE_ID},published:false,length:31,permalink_url:'https://www.facebook.com/watch/?v=7890123456789012'});
+ const unpublished=async url=>json(url.includes('/'+env.FACEBOOK_PAGE_ID+'?fields=id')?{id:env.FACEBOOK_PAGE_ID}:{id:object,from:{id:env.FACEBOOK_PAGE_ID},published:false,length:31,permalink_url:'https://www.facebook.com/watch/?v=7890123456789012'});
  assert.equal((await readOriginalProvider915(env,'facebook',object,unpublished)).ok,false);
 });
 test('915 original DB: private receipt, atomic state change, unique event nonce, private rollup',()=>{
