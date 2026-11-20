@@ -1,0 +1,39 @@
+name: Rosie 913 — Original Retail Settlement Refund Invoice Handoff
+on:
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - 'assets/build913-retail-provider-contract.mjs'
+      - 'assets/build913-customer-retail.mjs'
+      - 'assets/build913-retail-finance-admin.mjs'
+      - 'functions/api/_lib/retail-finance-v913.js'
+      - 'functions/api/client/retail_checkout_v913.js'
+      - 'functions/api/client/retail_receipt_v913.js'
+      - 'functions/api/admin/retail_finance_v913.js'
+      - 'functions/api/stripe/retail_webhook_v913.js'
+      - 'retail-receipt-913.html'
+      - 'admin-retail-913.html'
+      - 'supabase/migrations/20261119223000_build913_original_retail_finance_pos.sql'
+      - 'tests/build913_retail_payment_refund_handoff.test.mjs'
+      - '.github/workflows/rosie913-retail-finance-handoff.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  original-retail-finance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --check assets/build913-retail-provider-contract.mjs
+      - run: node --check assets/build913-customer-retail.mjs
+      - run: node --check assets/build913-retail-finance-admin.mjs
+      - run: node --check functions/api/_lib/retail-finance-v913.js
+      - run: node --check functions/api/client/retail_checkout_v913.js
+      - run: node --check functions/api/client/retail_receipt_v913.js
+      - run: node --check functions/api/admin/retail_finance_v913.js
+      - run: node --check functions/api/stripe/retail_webhook_v913.js
+      - run: node --test tests/build913_retail_payment_refund_handoff.test.mjs tests/build912_retail_stand_specials.test.mjs tests/build911_finance_supplier_daip.test.mjs tests/build910_quote_readiness_media_retention.test.mjs

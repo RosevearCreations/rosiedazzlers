@@ -1,0 +1,26 @@
+<!doctype html><html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Rosie Dazzlers — Original Retail Invoices & Pickup</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+:root{color-scheme:dark}body{background:#111a27;color:#f5f7fa;font:16px/1.5 system-ui,sans-serif}
+main{max-width:1050px;margin:auto;padding:22px 16px 90px}nav{display:flex;gap:15px;flex-wrap:wrap}a{color:#bddfff}
+.panel{border:1px solid #607184;background:#1b2937;border-radius:12px;padding:18px;margin:18px 0}
+button{background:#edc37c;border:0;border-radius:8px;color:#1b2732;font:700 1rem system-ui;padding:10px 14px;cursor:pointer}
+button:disabled{opacity:.5}.muted{color:#d2dce8}.record{border-top:1px solid #667b91;padding:12px 0;overflow-wrap:anywhere}
+.warning{padding:12px;border-left:4px solid #edc37c;background:#283543}
+code{overflow-wrap:anywhere;background:#132337;padding:6px 9px;display:inline-block;max-width:100%}
+@media(max-width:550px){button{width:100%;margin:5px 0}}
+</style></head><body><main>
+<header><p>Rosie Dazzlers · Customer-owned receipts</p><h1>Retail payments, invoices & handoff</h1>
+<nav><a href="/retail.html">Retail catalogue</a><a href="/my-account.html">My Account</a><a href="/book.html">Detailing booking</a></nav></header>
+<p class="warning">A retail request is not a paid sale. Use payment only on a staff-reviewed original quote; the authenticated Stripe provider confirms payment asynchronously. An invoice is displayed only after that confirmation. Pickup or stand delivery needs staff and customer handoff acceptance.</p>
+<p id="message" role="status" aria-live="polite">Loading verified account requests…</p>
+<section class="panel"><h2>Your original pickup/stand requests</h2><div id="requests"></div></section>
+<section class="panel"><h2>Invoice and refund evidence</h2><p>Choose one of your orders to see its payment status and any provider-confirmed refund.</p><div id="receipt"></div>
+<div id="pinSection" hidden><h3>In-person customer handoff code</h3>
+<p>Only generate this code when physically present with signed Rosie staff. It expires in 15 minutes. We do not retain or email its plaintext.</p>
+<button id="makeCode" type="button">Generate single-use pickup code</button>
+<p id="oneTimeCode" role="status"></p></div>
+</section>
+<script type="module" src="/assets/build913-customer-retail.mjs"></script>
+</main></body></html>
