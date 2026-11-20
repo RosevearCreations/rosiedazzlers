@@ -1,0 +1,58 @@
+<!doctype html><html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Build 915 · Supplier video verification | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+:root{color-scheme:dark}body{margin:0;background:#101923;color:#f3f7fc;font:16px/1.5 system-ui,sans-serif}
+main{max-width:920px;margin:auto;padding:20px 16px 72px}a{color:#b8dcff}header nav{display:flex;flex-wrap:wrap;gap:14px}
+section{border:1px solid #60768b;background:#1b2937;border-radius:12px;padding:18px;margin:18px 0}
+label{display:block;margin:12px 0;font-weight:600}input,select{display:block;width:100%;box-sizing:border-box;min-height:44px;background:#122332;color:white;border:1px solid #9fb0c5;border-radius:8px;padding:9px;font:inherit}
+button{border:0;border-radius:8px;background:#f2cc84;color:#0f2237;padding:12px 16px;font:700 1rem system-ui;cursor:pointer;min-height:44px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #b8dcff;outline-offset:3px}
+.actions{display:flex;flex-wrap:wrap;gap:10px}.muted{color:#d0dbe6}.warning{border-left:5px solid #f2cc84;padding:12px;background:#304155}
+output{display:block;overflow-wrap:anywhere;white-space:pre-wrap;padding:12px;background:#0c1825;color:#eaf3ff;border-radius:8px;min-height:40px}
+@media(max-width:520px){button{width:100%}.actions{display:block}.actions button+button{margin-top:10px}}
+</style></head><body><main>
+<header><p>Rosie Dazzlers · Private staff acceptance</p><h1>Build 915 — Supplier video verification</h1><nav><a href="/admin.html">Admin</a><a href="/admin-finance-supplier-911.html">Supplier review</a><a href="/admin-daip-media.html">Private DAIP</a><a href="/admin-retail-912.html">Retail</a></nav></header>
+<p class="warning"><strong>Approved does not mean posted.</strong> Original custody, current consent, approved video assets, and an owner-authenticated provider readback are required. This page does not publish or delete content. Attribution only measures anonymous first-party events, not proven sales or unique customers.</p>
+<section><h2>1. Load original supplier review</h2>
+<form id="reviewForm"><label for="reviewId">Original supplier review UUID</label><input required id="reviewId" placeholder="xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx" autocomplete="off" spellcheck="false" pattern="[0-9a-fA-F-]{36}"><div class="actions"><button type="submit">Load approval history</button></div></form>
+<p class="muted">Actual Supplies and Tools records are read-only here. This screen never creates test inventory.</p>
+<output id="reviewStatus" role="status" aria-live="polite">Sign in to Rosie Admin to start.</output>
+</section>
+<section><h2>2. Verify an original public provider video</h2>
+<form id="verifyForm"><label for="pubId">Existing approved publication</label><select id="pubId" required><option value="">Load a supplier review first</option></select>
+<label for="providerId">Actual YouTube / Instagram / Facebook video ID (not a URL)</label><input id="providerId" minlength="6" maxlength="100" autocomplete="off" required pattern="[A-Za-z0-9_-]{6,100}" placeholder="Provider-issued ID">
+<div class="actions"><button type="button" id="refresh">Read original approval and metrics</button><button type="submit">Verify LIVE provider record</button></div></form>
+<p class="muted">Provider credentials stay in Cloudflare secrets. Missing credentials, private uploads, identity mismatches, or withdrawn consent produce HOLD.</p>
+<output id="verifyStatus" role="status" aria-live="polite">No provider proof has been inspected.</output>
+</section>
+<section><h2>3. Cross-device operator checklist</h2><p>Repeat on a real desktop browser and a real phone, using authorized Admin and Detailer accounts. Verify keyboard/touch labels, DAIP consent history, provider readback and public link. Complete customer booking and accessibility tests separately with an actual customer login. This checklist is guidance, not a signed device acceptance receipt.</p>
+<p class="warning">Software GREEN is separate from owner/provider/device business acceptance. No live platform post is claimed without the provider-issued receipt.</p></section>
+</main><script type="module">
+const el=id=>document.getElementById(id),json=(data)=>JSON.stringify(data,null,2);
+const call=async(url,options)=>{
+ const r=await fetch(url,{credentials:'same-origin',cache:'no-store',...options});
+ const d=await r.json().catch(()=>({ok:false,error:'Unparseable server response'}));
+ return {status:r.status,...d};
+};
+el('reviewForm').addEventListener('submit',async e=>{
+ e.preventDefault();el('reviewStatus').textContent='Checking private original approval history…';
+ const id=el('reviewId').value.trim();
+ const d=await call('/api/admin/supplier_custody_publication_v914?supplier_review_id='+encodeURIComponent(id));
+ el('pubId').replaceChildren(new Option('Select original approved publication',''));
+ if(d.ok&&Array.isArray(d.publication)){
+  for(const p of d.publication)el('pubId').add(new Option(p.channel+' · '+p.publication_state+' · '+p.id,p.id));
+  el('reviewStatus').textContent='Original supplier review loaded: '+d.publication.length+' publication approval(s), '+(d.custody||[]).length+' custody attestation(s). No provider publication inferred.';
+ }else el('reviewStatus').textContent='HOLD: '+(d.error||'Login or original source unavailable')+' ('+d.status+')';
+});
+el('refresh').addEventListener('click',async()=>{
+ const id=el('pubId').value;if(!id){el('verifyStatus').textContent='Select an original approval first.';return}
+ const d=await call('/api/admin/supplier_provider_v915?publication_id='+encodeURIComponent(id));
+ el('verifyStatus').textContent=d.ok?json({state:d.state,verified:d.verified,current_approval_valid:d.current_approval_valid,receipt:d.receipt,aggregates:d.aggregates,warning:'No customer identity, sales or financial conversion inferred.'}):'HOLD: '+(d.error||'Unverified')+' ('+d.status+')';
+});
+el('verifyForm').addEventListener('submit',async e=>{
+ e.preventDefault();if(!confirm('Verify provider readback against this current original approved supplier video? This action can store a verified receipt, but does NOT post video.'))return;
+ el('verifyStatus').textContent='Checking original consent and independent platform status…';
+ const d=await call('/api/admin/supplier_provider_v915',{method:'POST',headers:{'Content-Type':'application/json'},body:json({action:'verify',publication_id:el('pubId').value,provider_object_id:el('providerId').value.trim()})});
+ el('verifyStatus').textContent=d.ok?json({state:d.state,receipt_id:d.receipt_id,channel:d.channel,auto_posted:false}):'HOLD: '+json({error:d.error,blockers:d.blockers,http_status:d.status});
+});
+</script></body></html>
