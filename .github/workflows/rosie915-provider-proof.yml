@@ -1,0 +1,34 @@
+name: Rosie 915 — Original Provider Readback and Privacy-Safe Attribution
+on:
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - 'assets/build915-*'
+      - 'functions/api/_lib/supplier-provider915.js'
+      - 'functions/api/admin/supplier_provider_v915.js'
+      - 'functions/api/public/supplier_attribution_v915.js'
+      - 'supabase/migrations/*build915*'
+      - 'tests/build915*'
+      - 'admin-supplier-915.html'
+      - 'admin-retail-912.html'
+      - 'retail.html'
+      - 'docs/build915_provider_receipt_acceptance.md'
+      - '.github/workflows/rosie915-provider-proof.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --check assets/build915-provider-proof-contract.mjs
+      - run: node --check assets/build915-anonymous-attribution-client.mjs
+      - run: node --check functions/api/_lib/supplier-provider915.js
+      - run: node --check functions/api/admin/supplier_provider_v915.js
+      - run: node --check functions/api/public/supplier_attribution_v915.js
+      - run: node --test tests/build915_provider_proof.test.mjs tests/build915_live_provider_pipeline.test.mjs tests/build914_supplier_consent_attribution.test.mjs tests/build913_retail_payment_refund_handoff.test.mjs tests/build912_retail_stand_specials.test.mjs tests/build911_finance_supplier_daip.test.mjs
