@@ -1,0 +1,49 @@
+<!doctype html><html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Rosie Build 913 — Finance, POS & Handoff</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+:root{color-scheme:dark}body{background:#101923;color:#f5f7fa;font:16px/1.55 system-ui,sans-serif}
+main{max-width:1260px;margin:auto;padding:22px 16px 90px}nav{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0 24px}
+a{color:#bedcff}.panel{background:#1b2a39;border:1px solid #607386;padding:17px;border-radius:14px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:15px}
+label{display:block;margin:9px 0 5px}input,textarea,select{font:inherit;color:white;background:#0f2131;border:1px solid #96a9bc;border-radius:8px;padding:10px;width:100%;box-sizing:border-box}
+button{font:700 1rem system-ui;color:#162432;background:#edc37c;border:0;border-radius:9px;padding:10px 14px;cursor:pointer}
+button:disabled{opacity:.5}.warning{background:#283744;border-left:4px solid #edc37c;padding:13px}
+.record{padding:11px 0;border-bottom:1px solid #51677e;overflow-wrap:anywhere}
+small{color:#cdd9e5}
+</style></head><body><main>
+<header><p>Rosie Dazzlers · Build 913 · private signed-staff console</p>
+<h1>Retail payments, refunds, invoices and physical handoff</h1>
+<nav><a href="/admin.html">Admin home</a><a href="/admin-retail-912.html">Retail inventory, locations & specials</a>
+<a href="/admin-finance-reconciliation.html">Canonical detailing finance</a>
+<a href="/admin-finance-supplier-911.html">Supplier/DAIP</a>
+<a href="/retail-receipt-913.html">Customer invoice/handoff</a></nav></header>
+<p class="warning"><strong>Finance protection:</strong> Original Stripe events and a real merchant/owner-approved HST mapping are required before live financial actions. Staff review cannot manufacture paid status. Refunds must return from the provider; physical handoff needs an in-person customer code. Stand terminal POS and independent physical-device acceptance are not yet certified.</p>
+<p id="status" role="status">Checking original signed staff authority…</p>
+<div class="grid">
+<section class="panel"><h2>Provider and finance activation</h2><div id="activation"></div>
+<h3>Original event evidence</h3><div id="events"></div>
+<h3>Issued invoices (not tax filing)</h3><div id="invoices"></div>
+</section>
+<section class="panel"><h2>Retail orders & original payment status</h2><div id="orders"></div><h3>Provider finance balances</h3><div id="finance"></div></section>
+<section class="panel"><h2>Staff-controlled refund</h2>
+<p>A refund request is not money returned. A separately signed action contacts Stripe; only a verified refund outcome updates the balance.</p>
+<form id="refundRequest"><label>Original order UUID<input name="order_id" required></label>
+<label>Refund amount, CAD cents<input name="amount_cents" type="number" min="1" required></label>
+<label>Refund reason (8–400 characters)<textarea name="reason" minlength="8" maxlength="400" required></textarea></label>
+<button type="submit">Record reviewed refund request</button></form>
+<form id="refundSend"><label>Original order UUID<input name="order_id" required></label>
+<label>Original refund request UUID<input name="refund_id" required></label>
+<button type="submit">Initiate actual Stripe refund</button></form>
+<h3>Refund source receipts</h3><div id="refunds"></div></section>
+<section class="panel"><h2>Physical pickup / stand handoff</h2>
+<form id="handoffForm"><label>Paid original order UUID<input name="order_id" required></label>
+<label>24-character code shown by customer in person<input name="pin" required minlength="24" maxlength="24" autocomplete="off"></label>
+<label>Observed physical transfer and condition note (12–400 characters)<textarea name="note" required minlength="12" maxlength="400"></textarea></label>
+<label><input type="checkbox" name="customer_present_attested" required> I am physically present, saw the customer’s current code, and witnessed handing over the items</label>
+<button type="submit">Confirm handoff and decrement original stock</button></form>
+<h3>Recorded staff attestations</h3><div id="handoffs"></div></section>
+</div>
+<button id="refresh" type="button">Refresh original receipts</button>
+<script type="module" src="/assets/build913-retail-finance-admin.mjs"></script>
+</main></body></html>
