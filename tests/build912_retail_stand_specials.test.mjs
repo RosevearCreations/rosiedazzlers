@@ -48,7 +48,7 @@ test('912: stand/pickup pricing comes only from server rows and cannot trust bro
  assert.equal(x.estimated_hst_cents,650);
  assert.equal(x.stock_reserved,false);assert.equal(x.payment_status,'NOT_ATTEMPTED');
  assert.throws(()=>priceRetailIntent912({...input,total_cents:1},[product],[location]),/Unexpected/);
- assert.throws(()=>priceRetailIntent912({...input,items:[{product_id:productId,quantity:5}]},[product],[location]),/Stock/);
+ assert.throws(()=>priceRetailIntent912({...input,items:[{product_id:productId,quantity:5}]},[product],[location]),/stock/i);
  assert.throws(()=>priceRetailIntent912({...input,items:[{product_id:productId,quantity:2,price_cents:1}]},[product],[location]),/Unexpected/);
  assert.throws(()=>priceRetailIntent912({...input,mode:'stand'},[product],[location]),/not currently/);
  assert.equal(priceRetailIntent912({...input,mode:'stand'},[product],[stand]).subtotal_cents,5000);
@@ -57,8 +57,10 @@ test('912: dates, remote specials, location and quantities fail closed',()=>{
  const l=normalizeLocation912({name:'Remote test zone',mode:'remote_service',service_area:'Norfolk',active:true});
  assert.equal(l.mode,'remote_service');
  assert.throws(()=>normalizeLocation912({name:'bad',mode:'remote_service',service_area:'Norfolk'}),/Location/);
- assert.throws(()=>normalizeSpecial912({...special,starts_at:'2030-01-01',ends_at:'2029-01-01'}),/date range/);
- assert.throws(()=>normalizeSpecial912({...special,percent_off:100}),/discount/);
+ const {quote_required, ...draftSpecial}=special;
+ assert.equal(quote_required,true);
+ assert.throws(()=>normalizeSpecial912({...draftSpecial,starts_at:'2030-01-01',ends_at:'2029-01-01'}),/date range/);
+ assert.throws(()=>normalizeSpecial912({...draftSpecial,percent_off:100}),/discount/);
 });
 test('912: cross-origin staff, customer and interest mutations fail before database calls',async()=>{
  const request=url=>new Request(url,{method:'POST',headers:{origin:'https://attacker.invalid',
