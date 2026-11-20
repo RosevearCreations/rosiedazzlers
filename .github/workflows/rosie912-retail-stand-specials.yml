@@ -1,0 +1,39 @@
+name: Rosie 912 — Retail Pickup Stand and Remote Specials
+on:
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - 'assets/build912-retail-contract.mjs'
+      - 'assets/build912-retail-client.mjs'
+      - 'assets/build912-retail-admin.mjs'
+      - 'functions/api/_lib/retail-store-v912.js'
+      - 'functions/api/retail_catalog_v912.js'
+      - 'functions/api/client/retail_order_v912.js'
+      - 'functions/api/client/retail_interest_v912.js'
+      - 'functions/api/admin/retail_ops_v912.js'
+      - 'retail.html'
+      - 'admin-retail-912.html'
+      - 'supabase/migrations/20261119210000_build912_retail_pickup_stand_specials.sql'
+      - 'tests/build912_retail_stand_specials.test.mjs'
+      - '.github/workflows/rosie912-retail-stand-specials.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  retail-commerce-negative-paths:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --check assets/build912-retail-contract.mjs
+      - run: node --check assets/build912-retail-client.mjs
+      - run: node --check assets/build912-retail-admin.mjs
+      - run: node --check functions/api/_lib/retail-store-v912.js
+      - run: node --check functions/api/admin/retail_ops_v912.js
+      - run: node --check functions/api/retail_catalog_v912.js
+      - run: node --check functions/api/client/retail_order_v912.js
+      - run: node --check functions/api/client/retail_interest_v912.js
+      - run: node --test tests/build912_retail_stand_specials.test.mjs tests/build911_finance_supplier_daip.test.mjs tests/build910_quote_readiness_media_retention.test.mjs

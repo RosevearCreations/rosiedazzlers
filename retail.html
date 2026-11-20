@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Browse approved Rosie Dazzlers retail items and request pickup or event-stand handoff.">
+<title>Rosie Dazzlers · Retail, pickup, stand & travel specials</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+:root{color-scheme:dark}body{background:#101923;color:#f7f8fb;font:16px/1.5 system-ui,sans-serif}
+main{max-width:1140px;margin:auto;padding:24px 16px 80px}
+a{color:#bddcff}header{border-bottom:1px solid #3e5165;margin-bottom:25px}
+nav{display:flex;flex-wrap:wrap;gap:16px;margin:18px 0}
+h1{font-size:clamp(1.8rem,4vw,2.6rem)}h2{font-size:1.35rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:15px}
+.panel{background:#1a2735;border:1px solid #52657b;border-radius:14px;padding:18px;margin-bottom:18px;min-width:0}
+.muted,small{color:#c7d2df}.warning{border-left:4px solid #edc175;padding:13px;background:#25303b}
+label{display:block;margin:12px 0 6px;font-weight:600}input,select{width:100%;padding:11px;font:inherit;color:white;background:#102030;border:1px solid #96a9c0;border-radius:7px;box-sizing:border-box}
+button{border:0;border-radius:9px;background:#edc175;color:#192534;font:700 1rem system-ui;padding:12px 19px;cursor:pointer}button:disabled{opacity:.5}
+fieldset{border:1px solid #65778a;border-radius:9px}fieldset label{display:flex;align-items:center;gap:9px}
+fieldset input[type=checkbox]{width:auto}li{margin:8px 0}
+</style></head><body><main><header>
+<p><strong>Rosie Dazzlers</strong> · Retail and local services</p>
+<h1>Shop, pickup & stand requests</h1>
+<p>Browse original approved items. Submit a request for staff review; payment, availability and pickup are confirmed separately.</p>
+<nav><a href="/">Home</a><a href="/book.html">Detailing bookings</a><a href="/specials.html">Service specials</a><a href="/my-account.html">My Account</a></nav>
+</header>
+<p class="warning"><strong>Important:</strong> This is an order-request checkout, not a paid sale. Online card/PayPal payment, shipping, stand POS, final tax and confirmed stock allocation remain unavailable here until independently verified.</p>
+<section aria-labelledby="productsTitle"><h2 id="productsTitle">Approved retail products</h2><p id="loadStatus" role="status">Loading original catalog…</p><div class="grid" id="products"></div></section>
+<section class="panel"><h2>Pickup or pop-up stand request</h2>
+<form id="retailForm"><label for="mode">Handoff type</label><select id="mode" required><option value="pickup">Local pickup</option><option value="stand">Event / pop-up stand</option></select>
+<label for="location">Available handoff location</label><select id="location" required></select>
+<fieldset><legend>Optional first-party interest measurement</legend><label><input id="interestOptIn" type="checkbox">Allow Rosie to count my saved/cart interest (deduplicated daily, never sent to advertising networks)</label></fieldset>
+<p id="cartSummary" aria-live="polite">Cart empty.</p>
+<button type="submit" id="submitRetail">Send request for staff review</button><p id="requestStatus" role="status"></p>
+</form></section>
+<section class="panel"><h2>Remote-location specials</h2><p>Offers shown below are location- and date-scoped, <strong>quote required</strong>, and not automatic checkout discounts. Travel, site and service conditions need approval.</p>
+<div id="remoteSpecials"></div><p><a href="/roadside-quote.html">Request a remote or roadside quote</a></p></section>
+</main><script type="module" src="/assets/build912-retail-client.mjs"></script></body></html>
