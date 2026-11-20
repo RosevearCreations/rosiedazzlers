@@ -22,11 +22,13 @@ export async function onRequestPost({request,env}){
  try{
   const pub=await read(env,'rosie_supplier_publication_v914',data.publication_id);
   if(pub.publication_state!=='provider_verified')return blocked();
-  const [receipt,project]=await Promise.all([
+  const [receipt,project,review,custody]=await Promise.all([
    read(env,'rosie_supplier_provider_receipts_v915',pub.provider_receipt_reference),
-   read(env,'creative_projects',pub.project_id)
+   read(env,'creative_projects',pub.project_id),
+   read(env,'rosie_supplier_reviews_v911',pub.supplier_review_id),
+   read(env,'rosie_supplier_custody_v914',pub.custody_id)
   ]);
-  if(receipt.publication_id!==pub.id||receipt.channel!==pub.channel||project.consent_status!=='approved_public'||project.consent_reviewed!==true||project.public_publish_allowed!==true||project.archived_at||project.consent_expires_at&&Date.parse(project.consent_expires_at)<=Date.now())return blocked();
+  if(receipt.publication_id!==pub.id||receipt.channel!==pub.channel||review.received_verified!==true||review.daip_project_id!==project.id||custody.supplier_review_id!==review.id||project.consent_status!=='approved_public'||project.consent_reviewed!==true||project.public_publish_allowed!==true||project.archived_at||project.consent_expires_at&&Date.parse(project.consent_expires_at)<=Date.now())return blocked();
   const assets=pub.approved_asset_ids||[];
   if(!assets.length||new Set(assets).size!==assets.length)return blocked();
   // An asset can be withdrawn after publication; invalidate the original source immediately.
