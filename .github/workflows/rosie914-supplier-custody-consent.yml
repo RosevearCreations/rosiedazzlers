@@ -1,0 +1,25 @@
+name: Rosie 914 — Original Supplier Consent and Attribution
+on:
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - 'assets/build914-supplier-publication-contract.mjs'
+      - 'functions/api/admin/supplier_custody_publication_v914.js'
+      - 'supabase/migrations/20261120100000_build914_supplier_custody_publication_attribution.sql'
+      - 'tests/build914_supplier_consent_attribution.test.mjs'
+      - '.github/workflows/rosie914-supplier-custody-consent.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --check assets/build914-supplier-publication-contract.mjs
+      - run: node --check functions/api/admin/supplier_custody_publication_v914.js
+      - run: node --test tests/build914_supplier_consent_attribution.test.mjs tests/build913_retail_payment_refund_handoff.test.mjs tests/build912_retail_stand_specials.test.mjs tests/build911_finance_supplier_daip.test.mjs
