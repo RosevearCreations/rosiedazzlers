@@ -1,0 +1,59 @@
+<!doctype html><html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Build 912 · Retail & local commerce | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+:root{color-scheme:dark}body{background:#101923;color:#f5f7fb;font:16px/1.55 system-ui,sans-serif}
+main{max-width:1240px;margin:auto;padding:24px 16px 90px}
+a{color:#b8dbff}nav{display:flex;flex-wrap:wrap;gap:15px;margin:20px 0}
+h1{font-size:clamp(1.75rem,3vw,2.5rem)}h2{font-size:1.2rem}
+.panel{background:#1b2937;border:1px solid #52647c;border-radius:14px;padding:19px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:16px}
+label{display:block;margin:9px 0;font-weight:600}input,select,textarea{display:block;width:100%;padding:10px;font:inherit;background:#122232;color:white;border:1px solid #94a7ba;border-radius:8px;box-sizing:border-box}
+input[type=checkbox]{display:inline;width:auto}button{padding:11px 16px;background:#ecc174;color:#172536;border:0;border-radius:8px;font:700 1rem system-ui;cursor:pointer}
+button:disabled{opacity:.5}small,.muted{color:#c9d5e3}.warning{border-left:4px solid #ecc174;padding:12px;background:#243341}
+.record{padding:9px 0;border-bottom:1px solid #48576b;overflow-wrap:anywhere}
+@media(max-width:550px){button{width:100%}}
+</style></head><body><main>
+<p>Rosie Dazzlers · <strong>Build 912</strong> · private staff operations</p>
+<h1>Retail, pickup, stand & remote-location specials</h1>
+<nav><a href="/admin.html">Admin home</a><a href="/retail.html">Customer retail requests</a>
+<a href="/admin-finance-supplier-911.html">Supplier review and DAIP</a><a href="/admin-finance-reconciliation.html">Finance acceptance</a>
+<a href="/admin-analytics.html">Site analytics</a></nav>
+<p class="warning"><strong>Operational boundary:</strong> These are original-source product approvals, local handoff requests and quote-only promotions. No automatic payment, refund, receipt issuance, inventory reservation, real stand-terminal charge or DAIP publication is enabled. Verify taxes, original stock and customer permissions before confirming externally.</p>
+<p id="status" role="status">Checking signed staff access…</p>
+<div class="grid">
+<section class="panel"><h2>Retail products</h2><form id="productForm">
+<label>SKU<input name="sku" required minlength="3" maxlength="32" placeholder="ROSIE-EXAMPLE"></label>
+<label>Product name<input name="title" required minlength="4" maxlength="140"></label>
+<label>Description<textarea name="description" maxlength="1000"></textarea></label>
+<label>Category<input name="category" value="general" maxlength="50"></label>
+<label>Unit price in cents (CAD)<input name="price_cents" type="number" min="1" max="10000000" required></label>
+<label>Original stock on hand<input name="stock_on_hand" type="number" min="0" max="1000000" value="0" required></label>
+<label>Private VEVOR/supplier-review UUID (optional)<input name="supplier_review_id" placeholder="Original Build 911 review ID"></label>
+<label><input name="active" type="checkbox"> Active product</label>
+<label><input name="publish_confirmed" type="checkbox"> I authorize public listing after confirming actual stock, price, permissions and compliance</label>
+<button type="submit">Save approved product</button></form><div id="products"></div></section>
+<section class="panel"><h2>Pickup, event stand or remote service location</h2><form id="locationForm">
+<label>Customer-facing location name<input name="name" minlength="4" required></label>
+<label>Type<select name="mode"><option value="pickup">Pickup</option><option value="stand">Pop-up / event stand</option><option value="remote_service">Remote detailing area</option></select></label>
+<label>Service area<input name="service_area" required minlength="3" placeholder="Oxford / Norfolk"></label>
+<label>Public directions<textarea name="customer_directions" maxlength="400"></textarea></label>
+<label>Start (optional)<input name="starts_at" type="datetime-local"></label>
+<label>End (optional)<input name="ends_at" type="datetime-local"></label>
+<label><input name="active" type="checkbox"> Open for requests (subject to staff review)</label>
+<button type="submit">Create location</button></form><div id="locations"></div></section>
+<section class="panel"><h2>Remote location special — quote only</h2><form id="specialForm">
+<label>Code<input name="code" minlength="4" maxlength="30" required></label>
+<label>Special title<input name="title" required minlength="4"></label>
+<label>Remote-service location<select name="location_id" id="remoteLocation" required></select></label>
+<label>Proposed discount (%)<input name="percent_off" type="number" min="1" max="50" required></label>
+<label>Starts<input name="starts_at" type="datetime-local" required></label>
+<label>Ends<input name="ends_at" type="datetime-local" required></label>
+<label><input name="active" type="checkbox"> Show approved offer publicly</label>
+<button type="submit">Save quote-only special</button></form><div id="specials"></div></section>
+<section class="panel"><h2>Original customer requests & safe interest analytics</h2>
+<p>Only staff see order/customer identifiers. Interest reports are aggregate daily counters and do not reveal individuals.</p>
+<button id="reload" type="button">Refresh original data</button>
+<h3>Outstanding staff handoff requests</h3><div id="orders"></div><h3>First-party interest counts</h3><div id="interest"></div>
+</section>
+</div></main><script type="module" src="/assets/build912-retail-admin.mjs"></script></body></html>
