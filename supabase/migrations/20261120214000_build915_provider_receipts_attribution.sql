@@ -38,3 +38,54 @@ as $$
 $$;
 revoke all on function public.rosie_supplier_attribution_rollup_v915(uuid) from public, anon, authenticated;
 grant execute on function public.rosie_supplier_attribution_rollup_v915(uuid) to service_role;
+
+-- Atomic transaction: one original live provider corroboration, no replay / cross-tenant promotion.
+create or replace function public.rosie_supplier_confirm_provider_v915(
+ p_publication_id uuid,p_provider_object_id text,p_provider_owner_id text,
+ p_provider_permalink text,p_response_hash text,p_staff_id uuid
+) returns uuid
+language plpgsql security invoker set search_path = ''
+as $$
+declare v_pub public.rosie_supplier_publication_v914%rowtype; v_receipt uuid; v_matched int;
+begin
+ select * into v_pub from public.rosie_supplier_publication_v914
+ where id=p_publication_id for update;
+ if not found or v_pub.publication_state<>'approved_pending_provider' then
+  raise exception 'ORIGINAL_PUBLICATION_NOT_PENDING';
+ end if;
+ if not exists (
+ select 1 from public.creative_projects pr
+ where pr.id=v_pub.project_id and pr.consent_status='approved_public'
+ and pr.public_publish_allowed is true and pr.consent_reviewed is true
+ and pr.content_package_status='approved' and pr.archived_at is null
+ and (pr.consent_expires_at is null or pr.consent_expires_at>now())
+ ) then raise exception 'CURRENT_ORIGINAL_PROJECT_CONSENT_HOLD'; end if;
+ select count(*) into v_matched from public.daip_project_media_assets a
+ where a.project_id=v_pub.project_id and a.id=any(v_pub.approved_asset_ids)
+ and a.story_review_status='selected' and a.consent_status='approved_public'
+ and a.upload_status='uploaded';
+ if v_matched<>cardinality(v_pub.approved_asset_ids) then
+  raise exception 'CURRENT_ASSET_CONSENT_HOLD';
+ end if;
+ if not exists (
+ select 1 from public.rosie_supplier_reviews_v911 sr
+ join public.rosie_supplier_custody_v914 custody
+  on custody.supplier_review_id=sr.id
+ where sr.id=v_pub.supplier_review_id and sr.daip_project_id=v_pub.project_id
+ and custody.id=v_pub.custody_id and sr.received_verified is true
+ ) then raise exception 'PHYSICAL_SUPPLIER_RECEIPT_HOLD'; end if;
+ insert into public.rosie_supplier_provider_receipts_v915 (
+  publication_id,channel,provider_object_id,provider_owner_id,
+  provider_permalink,provider_response_sha256,verified_by_staff_id
+ ) values (v_pub.id,v_pub.channel,p_provider_object_id,p_provider_owner_id,
+  p_provider_permalink,p_response_hash,p_staff_id) returning id into v_receipt;
+ update public.rosie_supplier_publication_v914 set
+ publication_state='provider_verified',provider_video_url=p_provider_permalink,
+ provider_receipt_reference=v_receipt::text
+ where id=v_pub.id and publication_state='approved_pending_provider';
+ if not found then raise exception 'PROVIDER_PUBLICATION_RACE_HOLD'; end if;
+ return v_receipt;
+end
+$$;
+revoke all on function public.rosie_supplier_confirm_provider_v915(uuid,text,text,text,text,uuid) from public, anon, authenticated;
+grant execute on function public.rosie_supplier_confirm_provider_v915(uuid,text,text,text,text,uuid) to service_role;
