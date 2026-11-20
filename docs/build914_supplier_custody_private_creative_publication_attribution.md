@@ -1,5 +1,15 @@
 # Rosie Dazzlers Build 914 — Supplier Custody, Consent-Gated Creative and Attribution
 
+## Release reconciliation — November 20, 2026
+
+**Build 914 feature release is software Production GREEN** at immutable source SHA [`0ad8ba56c26b8df7b54069c98fe319127b66496a`](https://github.com/RosevearCreations/rosiedazzlers/commit/0ad8ba56c26b8df7b54069c98fe319127b66496a). Protected [feature PR #1153](https://github.com/RosevearCreations/rosiedazzlers/pull/1153) merged to `dev`, protected [promotion PR #1154](https://github.com/RosevearCreations/rosiedazzlers/pull/1154) merged to `main`. Original Build914 Node24 tests and prior Build911–913 regressions passed; Cloudflare Pages deployment check and Production Business Acceptance were successful. [Release Health #44745698342](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/44745698342) independently reconciled exact main to Cloudflare Production with RELEASE HEALTH GREEN and CI budget WITHIN_BUDGET, pending=0 **at the time of that run**. This subsequent documentation-only receipt requires separate protected PR and exact-main checks; it is not a new Build 915 or a claim that the deployed runtime changed.
+
+**Original database recheck:** the three new Rosie v914 tables exist, each has RLS enabled, and neither `anon` nor `authenticated` has SELECT/INSERT/UPDATE/DELETE table privileges. Custody, publication and attribution each currently contain **zero original records**. The source API and schema are deployed, but no received supplier item, actual published social-video receipt, measured attribution sample or cross-device operator witnessed pilot is certified.
+
+**Independent non-914 operational dependency:** [scheduled Rosie Build 882 workflow #44746291644](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/44746291644) reports `ORIGINAL_SCHEDULER_SIGNER_NOT_ENROLLED_HOLD` because private job-signing credentials were not enrolled. Its failure is fail-closed; do not falsely claim all operational monitors are GREEN. Do not add signing keys to the repo, bypass the check, or treat the independent workflow as proof that Build 914 deployment failed.
+
+**Next proposed:** Build 915 — Live Supplier Channel Provider Handshake, Verified Published-Video Receipts, Privacy-Safe Attribution Pipeline and Cross-Device Creative Acceptance. Four roadmap builds remain (915–918) under the current queue.
+
 ## Source behavior
 
 Original authenticated Rosie DAIP-authorized staff can attest received VEVOR supplier equipment with private evidence reference and receipt date, linked to the existing Build911 private supplier draft. A mismatched acquisition status is rejected. A custody attestation is not an independently witnessed invoice or physical inventory movement.
