@@ -17,7 +17,7 @@ export function providerEvent913(event){
   return {kind:'checkout_paid',event_id:event.id,order_id,session_id:ob.id,
    payment_intent:ob.payment_intent,amount_cents:ob.amount_total};
  }
- if(type==='refund.updated' && ob.object==='refund' && ob.status==='succeeded'){
+ if((type==='refund.updated'||type==='refund.created') && ob.object==='refund' && ob.status==='succeeded'){
   if(!/^re_[A-Za-z0-9_]+$/.test(String(ob.id||''))||!validCents(ob.amount)||
     ob.currency?.toLowerCase()!=='cad')
    throw Error('Invalid original Stripe refund event');
