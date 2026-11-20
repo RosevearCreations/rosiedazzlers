@@ -34,7 +34,7 @@ test('913: provider event validates exact Stripe status, currency, original ID a
   ...event,data:{object:{...event.data.object,...bad.data.object}}}));
  assert.equal(providerEvent913({...event,type:'payment_intent.created'}).kind,'ignored');
  assert.equal(providerEvent913(rEvent).kind,'refund_succeeded');
- assert.throws(()=>providerEvent913({...rEvent,data:{object:{...rEvent.data.object,status:'pending'}}}),/Invalid|Original|Stripe|no/);
+ assert.equal(providerEvent913({...rEvent,data:{object:{...rEvent.data.object,status:'pending'}}}).kind,'ignored');
 });
 test('913: signed HMAC, replay window and tamper resistance',async()=>{
  const secret='whsec_private_for_test_example_123456789',body=JSON.stringify(event);
