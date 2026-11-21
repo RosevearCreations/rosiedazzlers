@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Staff decorative artwork">
+<title>Staff — Rosie Dazzlers original admin artwork</title>
+<defs>
+ <linearGradient id="back" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0d1d2a"/><stop offset=".55" stop-color="#304e5c"/><stop offset="1" stop-color="#070e18"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1=".15" x2="1" y2="1"><stop stop-color="#fff0bc"/><stop offset=".44" stop-color="#d3a454"/><stop offset="1" stop-color="#88632c"/></linearGradient>
+ <radialGradient id="halo"><stop stop-color="#d3a454" stop-opacity=".28"/><stop offset="1" stop-color="#d3a454" stop-opacity="0"/></radialGradient>
+ <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".09"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+</defs>
+<rect width="640" height="360" fill="url(#back)"/>
+<circle cx="539" cy="145" r="245" fill="url(#halo)"/>
+<path d="M0 304Q170 284 320 298T640 282V360H0Z" fill="#040b16" opacity=".43"/>
+<g stroke="#d3a454" stroke-opacity=".21" fill="none"><path d="M0 282H640M0 319H640M155 240 40 360M256 240 225 360M360 240 425 360M463 240 620 360"/><circle cx="539" cy="146" r="137"/><circle cx="539" cy="146" r="164"/></g>
+<rect x="160" y="29" width="322" height="302" rx="37" fill="#07111e" stroke="#d3a454" stroke-opacity=".72" stroke-width="2"/>
+<rect x="172" y="41" width="298" height="277" rx="31" fill="url(#glass)"/>
+<rect x="182" y="50" width="277" height="6" rx="3" fill="url(#gold)" opacity=".65"/>
+<g transform="translate(224 88) rotate(-3 84 84) scale(1.12)" fill="none" stroke="url(#gold)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><circle cx="66" cy="51" r="22"/><path d="M28 133v-16c0-23 17-38 38-38s38 15 38 38v16z"/><circle cx="118" cy="54" r="16"/><path d="M112 87c19 0 34 13 34 31v15h-26"/></g>
+<g transform="translate(18 225) scale(.56)" fill="none" stroke="#fff0bc" stroke-opacity=".67" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="27" width="128" height="113" rx="14"/><circle cx="111" cy="58" r="13"/><path d="m30 122 37-39 27 23 19-18 25 28"/></g>
+<path d="M83 46l7 18 18 7-18 7-7 18-7-18-18-7 18-7z" fill="#fff0bc" opacity=".7"/>
+<path d="M570 28l5 13 13 5-13 5-5 13-5-13-13-5 13-5z" fill="#fff0bc" opacity=".48"/>
+<g fill="#fff0bc" opacity=".78"><circle cx="37" cy="300" r="4"/><circle cx="56" cy="300" r="2.5"/><circle cx="71" cy="300" r="1.5"/></g>
+<path d="M0 0H640V360H0Z" fill="none" stroke="#d3a454" stroke-opacity=".27" stroke-width="4"/>
+</svg>

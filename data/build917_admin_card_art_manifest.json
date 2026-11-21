@@ -1,0 +1,369 @@
+{
+  "schema": "rosie.admin-static-workspace-art.v917",
+  "build": 917,
+  "created": "2026-11-21",
+  "asset_root": "assets/themes/standard/admin/workspaces-917",
+  "purpose": "Decorative admin-workspace illustrations only; not original customer/proof/device/provider evidence",
+  "images": [
+    {
+      "title": "Bookings",
+      "path": "assets/themes/standard/admin/workspaces-917/bookings.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 1
+    },
+    {
+      "title": "Leads & Photo Estimates",
+      "path": "assets/themes/standard/admin/workspaces-917/leads-photo-estimates.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 2
+    },
+    {
+      "title": "Conversion Draft Review",
+      "path": "assets/themes/standard/admin/workspaces-917/conversion-draft-review.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 3
+    },
+    {
+      "title": "Payments & Webhooks",
+      "path": "assets/themes/standard/admin/workspaces-917/payments-webhooks.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 4
+    },
+    {
+      "title": "Media Health",
+      "path": "assets/themes/standard/admin/workspaces-917/media-health.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 5
+    },
+    {
+      "title": "Photo Management Studio",
+      "path": "assets/themes/standard/admin/workspaces-917/photo-management-studio.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 6
+    },
+    {
+      "title": "DAIP Test Lab",
+      "path": "assets/themes/standard/admin/workspaces-917/daip-test-lab.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 7
+    },
+    {
+      "title": "DAIP Blueprint Review",
+      "path": "assets/themes/standard/admin/workspaces-917/daip-blueprint-review.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 8
+    },
+    {
+      "title": "Water Restriction Rules",
+      "path": "assets/themes/standard/admin/workspaces-917/water-restriction-rules.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 9
+    },
+    {
+      "title": "Security Posture",
+      "path": "assets/themes/standard/admin/workspaces-917/security-posture.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 10
+    },
+    {
+      "title": "Gallery Approvals",
+      "path": "assets/themes/standard/admin/workspaces-917/gallery-approvals.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 11
+    },
+    {
+      "title": "Quote Pipeline",
+      "path": "assets/themes/standard/admin/workspaces-917/quote-pipeline.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 12
+    },
+    {
+      "title": "Value-Added Operations",
+      "path": "assets/themes/standard/admin/workspaces-917/value-added-operations.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 13
+    },
+    {
+      "title": "Workflow Command Center",
+      "path": "assets/themes/standard/admin/workspaces-917/workflow-command-center.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 14
+    },
+    {
+      "title": "UI & SEO Health",
+      "path": "assets/themes/standard/admin/workspaces-917/ui-seo-health.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 15
+    },
+    {
+      "title": "Production Readiness",
+      "path": "assets/themes/standard/admin/workspaces-917/production-readiness.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 16
+    },
+    {
+      "title": "Today Needs Attention",
+      "path": "assets/themes/standard/admin/workspaces-917/today-needs-attention.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 17
+    },
+    {
+      "title": "Live Detail Interaction",
+      "path": "assets/themes/standard/admin/workspaces-917/live-detail-interaction.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 18
+    },
+    {
+      "title": "Docs & Sanity Center",
+      "path": "assets/themes/standard/admin/workspaces-917/docs-sanity-center.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 19
+    },
+    {
+      "title": "Sanity Check & Value Roadmap",
+      "path": "assets/themes/standard/admin/workspaces-917/sanity-check-value-roadmap.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 20
+    },
+    {
+      "title": "HST/GST Review",
+      "path": "assets/themes/standard/admin/workspaces-917/hst-gst-review.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 21
+    },
+    {
+      "title": "Month-End Close",
+      "path": "assets/themes/standard/admin/workspaces-917/month-end-close.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 22
+    },
+    {
+      "title": "Incident Reports",
+      "path": "assets/themes/standard/admin/workspaces-917/incident-reports.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 23
+    },
+    {
+      "title": "Marketing Tracker",
+      "path": "assets/themes/standard/admin/workspaces-917/marketing-tracker.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 24
+    },
+    {
+      "title": "Local SEO Tasks",
+      "path": "assets/themes/standard/admin/workspaces-917/local-seo-tasks.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 25
+    },
+    {
+      "title": "Content Center",
+      "path": "assets/themes/standard/admin/workspaces-917/content-center.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 26
+    },
+    {
+      "title": "Blocks",
+      "path": "assets/themes/standard/admin/workspaces-917/blocks.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 27
+    },
+    {
+      "title": "Progress",
+      "path": "assets/themes/standard/admin/workspaces-917/progress.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 28
+    },
+    {
+      "title": "Social Queue",
+      "path": "assets/themes/standard/admin/workspaces-917/social-queue.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 29
+    },
+    {
+      "title": "Job Site",
+      "path": "assets/themes/standard/admin/workspaces-917/job-site.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 30
+    },
+    {
+      "title": "Live Monitor",
+      "path": "assets/themes/standard/admin/workspaces-917/live-monitor.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 31
+    },
+    {
+      "title": "Staff",
+      "path": "assets/themes/standard/admin/workspaces-917/staff.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 32
+    },
+    {
+      "title": "Follow-Up Workload Command",
+      "path": "assets/themes/standard/admin/workspaces-917/follow-up-workload-command.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 33
+    },
+    {
+      "title": "Crew Time & Payroll",
+      "path": "assets/themes/standard/admin/workspaces-917/crew-time-payroll.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 34
+    },
+    {
+      "title": "Analytics",
+      "path": "assets/themes/standard/admin/workspaces-917/analytics.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 35
+    },
+    {
+      "title": "Inventory",
+      "path": "assets/themes/standard/admin/workspaces-917/inventory.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 36
+    },
+    {
+      "title": "Launch Readiness",
+      "path": "assets/themes/standard/admin/workspaces-917/launch-readiness.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 37
+    },
+    {
+      "title": "Accounting",
+      "path": "assets/themes/standard/admin/workspaces-917/accounting.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 38
+    },
+    {
+      "title": "Promos",
+      "path": "assets/themes/standard/admin/workspaces-917/promos.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 39
+    },
+    {
+      "title": "App Management",
+      "path": "assets/themes/standard/admin/workspaces-917/app-management.svg",
+      "width": 640,
+      "height": 360,
+      "kind": "decorative-svg",
+      "style": "dark-navy-metallic-gold",
+      "index": 40
+    }
+  ]
+}

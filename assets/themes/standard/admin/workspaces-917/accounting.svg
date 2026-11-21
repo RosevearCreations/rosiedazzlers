@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Accounting decorative artwork">
+<title>Accounting — Rosie Dazzlers original admin artwork</title>
+<defs>
+ <linearGradient id="back" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0d1d2a"/><stop offset=".55" stop-color="#304e5c"/><stop offset="1" stop-color="#070e18"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1=".15" x2="1" y2="1"><stop stop-color="#fff0bc"/><stop offset=".44" stop-color="#d3a454"/><stop offset="1" stop-color="#88632c"/></linearGradient>
+ <radialGradient id="halo"><stop stop-color="#d3a454" stop-opacity=".28"/><stop offset="1" stop-color="#d3a454" stop-opacity="0"/></radialGradient>
+ <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".09"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+</defs>
+<rect width="640" height="360" fill="url(#back)"/>
+<circle cx="550" cy="145" r="245" fill="url(#halo)"/>
+<path d="M0 304Q170 279 320 298T640 282V360H0Z" fill="#040b16" opacity=".43"/>
+<g stroke="#d3a454" stroke-opacity=".21" fill="none"><path d="M0 282H640M0 319H640M155 240 40 360M256 240 225 360M360 240 425 360M463 240 620 360"/><circle cx="550" cy="146" r="137"/><circle cx="550" cy="146" r="164"/></g>
+<rect x="160" y="29" width="322" height="302" rx="37" fill="#07111e" stroke="#d3a454" stroke-opacity=".72" stroke-width="2"/>
+<rect x="172" y="41" width="298" height="277" rx="31" fill="url(#glass)"/>
+<rect x="182" y="50" width="277" height="6" rx="3" fill="url(#gold)" opacity=".65"/>
+<g transform="translate(224 88) rotate(0 84 84) scale(1.12)" fill="none" stroke="url(#gold)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="84" cy="47" rx="47" ry="18"/><path d="M37 47v55c0 25 94 25 94 0V47M37 75c0 25 94 25 94 0"/><path d="M84 34v28m-12-23c8-6 25-4 25 4s-22 4-25 13 20 15 25 4"/></g>
+<g transform="translate(18 225) scale(.56)" fill="none" stroke="#fff0bc" stroke-opacity=".67" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M48 27a32 32 0 0 0 35 42l49 49a14 14 0 0 1-20 20L63 89a32 32 0 0 1-42-35l20 20 26-26z"/><path d="m100 34 32-18 18 18-18 32-15-15-22 22"/></g>
+<path d="M74 46l7 18 18 7-18 7-7 18-7-18-18-7 18-7z" fill="#fff0bc" opacity=".7"/>
+<path d="M570 28l5 13 13 5-13 5-5 13-5-13-13-5 13-5z" fill="#fff0bc" opacity=".48"/>
+<g fill="#fff0bc" opacity=".78"><circle cx="78" cy="300" r="4"/><circle cx="97" cy="300" r="2.5"/><circle cx="112" cy="300" r="1.5"/></g>
+<path d="M0 0H640V360H0Z" fill="none" stroke="#d3a454" stroke-opacity=".27" stroke-width="4"/>
+</svg>
