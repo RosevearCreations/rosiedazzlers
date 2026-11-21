@@ -20,3 +20,10 @@ assert.match(js,/img\.alt=''/);
 assert.match(js,/img\.loading='lazy'/);
 assert.match(css,/admin-workspace-art-917/);
 console.log('Rosie Build 917 Admin artwork: 40 distinct approved decorative assets and injection PASS');
+
+for(const entry of ['admin.html','admin/index.html']){
+ const html=readFileSync(entry,'utf8');
+ assert.match(html,/assets\\/build648-admin-operator\\.css\\?v=build917/);
+ assert.match(html,/assets\\/build648-admin-operator\\.js\\?v=build917/);
+ assert.doesNotMatch(html,/build648-admin-operator\\.(?:css|js)\\?v=build648/);
+}
