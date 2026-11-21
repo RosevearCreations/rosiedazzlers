@@ -20,3 +20,11 @@ assert.match(js,/img\.alt=''/);
 assert.match(js,/img\.loading='lazy'/);
 assert.match(css,/admin-workspace-art-917/);
 console.log('Rosie Build 917 Admin artwork: 40 distinct approved decorative assets and injection PASS');
+
+for(const entry of ['admin.html','admin/index.html']){
+ const html=readFileSync(entry,'utf8');
+ assert.ok(html.includes('/assets/build648-admin-operator.css?v=build917'),'CSS cache-key not promoted: '+entry);
+ assert.ok(html.includes('/assets/build648-admin-operator.js?v=build917'),'JS cache-key not promoted: '+entry);
+ assert.ok(!html.includes('/assets/build648-admin-operator.css?v=build648'),'Stale CSS reference: '+entry);
+ assert.ok(!html.includes('/assets/build648-admin-operator.js?v=build648'),'Stale JS reference: '+entry);
+}
