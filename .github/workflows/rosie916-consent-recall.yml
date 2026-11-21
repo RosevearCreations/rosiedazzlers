@@ -5,6 +5,7 @@ on:
     paths:
       - 'assets/build916-*'
       - 'functions/api/admin/supplier_recall_v916.js'
+      - 'functions/api/public/supplier_attribution_v915.js'
       - 'supabase/migrations/*build916*'
       - 'tests/build916*'
       - 'admin-supplier-916.html'
