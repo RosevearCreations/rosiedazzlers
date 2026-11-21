@@ -118,3 +118,50 @@ create trigger rosie_supplier_revoked_guard_v916
  before update on public.rosie_supplier_publication_v914
  for each row execute function public.rosie_supplier_revoked_guard_v916();
 revoke all on function public.rosie_supplier_revoked_guard_v916() from public, anon, authenticated;
+
+-- Atomic event admission: publication row FOR SHARE coordinates with revocation FOR UPDATE.
+-- A revocation cannot race a previously checked publication and permit post-revoke inserts.
+create or replace function public.rosie_supplier_record_attribution_v916(
+ p_publication_id uuid,p_event_uuid uuid,p_event_kind text
+) returns boolean
+language plpgsql security invoker set search_path=''
+as $$
+declare v_pub public.rosie_supplier_publication_v914%rowtype;
+        v_matched integer; v_inserted integer;
+begin
+ if p_event_uuid is null or p_event_kind not in ('landing','product_interest','quote_started') then
+  raise exception 'INVALID_NONIDENTIFYING_ATTRIBUTION'; end if;
+ select * into v_pub from public.rosie_supplier_publication_v914
+ where id=p_publication_id for share;
+ if not found or v_pub.publication_state<>'provider_verified' then
+  raise exception 'CURRENT_PUBLICATION_REVOKED_OR_UNVERIFIED'; end if;
+ if exists(select 1 from public.rosie_supplier_revocations_v916 r where r.publication_id=v_pub.id) then
+  raise exception 'REVOKED_PUBLICATION_HAS_NO_NEW_ATTRIBUTION'; end if;
+ if not exists(select 1 from public.rosie_supplier_provider_receipts_v915 r
+ where r.publication_id=v_pub.id and r.id::text=v_pub.provider_receipt_reference
+ and r.channel=v_pub.channel) then raise exception 'ORIGINAL_PROVIDER_RECEIPT_REQUIRED'; end if;
+ if not exists(select 1 from public.creative_projects p
+ where p.id=v_pub.project_id and p.consent_status='approved_public'
+ and p.consent_reviewed is true and p.public_publish_allowed is true
+ and p.archived_at is null and (p.consent_expires_at is null or p.consent_expires_at>now())
+ ) then raise exception 'ORIGINAL_CUSTOMER_CONSENT_INVALID'; end if;
+ if not exists(select 1 from public.rosie_supplier_reviews_v911 sr
+ join public.rosie_supplier_custody_v914 c on c.supplier_review_id=sr.id
+ where sr.id=v_pub.supplier_review_id and sr.received_verified is true
+ and sr.daip_project_id=v_pub.project_id and c.id=v_pub.custody_id)
+ then raise exception 'ORIGINAL_SUPPLIER_CUSTODY_INVALID'; end if;
+ select count(*) into v_matched from public.daip_project_media_assets a
+ where a.project_id=v_pub.project_id and a.id=any(v_pub.approved_asset_ids)
+ and a.consent_status='approved_public' and a.story_review_status='selected'
+ and a.upload_status='uploaded';
+ if v_matched<>cardinality(v_pub.approved_asset_ids) or v_matched=0 then
+  raise exception 'ORIGINAL_ASSET_CONSENT_INVALID'; end if;
+ insert into public.rosie_supplier_attribution_v914(publication_id,source,event_kind,event_uuid)
+ values(v_pub.id,v_pub.channel,p_event_kind,p_event_uuid)
+ on conflict (event_uuid) where event_uuid is not null do nothing;
+ get diagnostics v_inserted = row_count;
+ return v_inserted=1;
+end
+$$;
+revoke all on function public.rosie_supplier_record_attribution_v916(uuid,uuid,text) from public, anon, authenticated;
+grant execute on function public.rosie_supplier_record_attribution_v916(uuid,uuid,text) to service_role;
