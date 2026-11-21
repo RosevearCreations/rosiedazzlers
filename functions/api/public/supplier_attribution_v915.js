@@ -38,10 +38,17 @@ export async function onRequestPost({request,env}){
   if(!ar.ok)return blocked();
   const approved=await ar.json();
   if(!Array.isArray(approved)||approved.length!==assets.length||approved.some(a=>a.consent_status!=='approved_public'||a.story_review_status!=='selected'||a.upload_status!=='uploaded'))return blocked();
-  const row={publication_id:pub.id,source:pub.channel,event_kind:data.event_kind,event_uuid:data.event_uuid};
-  const rr=await fetch(env.SUPABASE_URL.replace(/\/+$/,'')+'/rest/v1/rosie_supplier_attribution_v914',{method:'POST',headers:{...serviceHeaders(env),Prefer:'return=minimal'},body:JSON.stringify(row),redirect:'error',cache:'no-store'});
-  if(rr.status===409)return reply({ok:true,accepted:false,duplicate:true},200);
+  // Build 916: exclusive revocation and shared-locked attribution cannot race.
+  // The original DB, not the earlier browser-side check, is authoritative.
+  const rr=await fetch(new URL('/rest/v1/rpc/rosie_supplier_record_attribution_v916',env.SUPABASE_URL).toString(),{
+   method:'POST',headers:serviceHeaders(env),body:JSON.stringify({
+    p_publication_id:pub.id,p_event_uuid:data.event_uuid,p_event_kind:data.event_kind
+   }),redirect:'error',cache:'no-store'
+  });
   if(!rr.ok)return blocked();
+  const admitted=await rr.json();
+  if(admitted===false)return reply({ok:true,accepted:false,duplicate:true},200);
+  if(admitted!==true)return blocked();
   return reply({ok:true,accepted:true,kind:'non_identifying_first_party_event',not_a_customer_or_sale:true},202);
  }catch{return blocked();}
 }
