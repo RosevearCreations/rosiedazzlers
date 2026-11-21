@@ -35,3 +35,12 @@ body.admin-staff-login .admin-return-link{color:#f0d9a8;text-decoration:underlin
 @media(max-width:800px){.admin-tool-controls{grid-template-columns:1fr 1fr}.admin-tool-controls>button{grid-column:1/-1;justify-self:start}body[data-page="admin"] .admin-topbar{flex-direction:column}}
 @media(max-width:540px){.admin-tool-controls{grid-template-columns:1fr}.admin-tool-controls>button{grid-column:auto;width:100%}.admin-quick-actions{display:grid;grid-template-columns:1fr 1fr}.admin-quick-actions .btn{width:100%;min-width:0}.admin-command-panel{padding:16px!important}body.admin-staff-login{padding:12px}body.admin-staff-login .login-card{padding:20px}#adminWorkspaceCards{grid-template-columns:minmax(0,1fr)}}
 @media(prefers-reduced-motion:reduce){body.admin-staff-login .btn{transition:none}}
+
+/* Build 917 — 40 unique in-repository Admin artwork assets. No actual job proof. */
+#adminWorkspaceCards>.admin-workspace-card>.admin-workspace-art-917{
+  display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;
+  border-radius:12px;border:1px solid rgba(223,181,109,.4);
+  background:linear-gradient(135deg,#101d2e,#2c2630 50%,#070f1a);
+  margin:0 0 8px;box-shadow:0 9px 23px rgba(0,0,0,.17);
+}
+@media(max-width:540px){#adminWorkspaceCards>.admin-workspace-card>.admin-workspace-art-917{max-height:205px}}
