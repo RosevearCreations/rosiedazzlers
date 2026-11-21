@@ -1,0 +1,29 @@
+name: Rosie 916 — Original Consent Revocation, Provider Recall, Finance and Device Evidence
+on:
+  pull_request:
+    branches: [dev, main]
+    paths:
+      - 'assets/build916-*'
+      - 'functions/api/admin/supplier_recall_v916.js'
+      - 'supabase/migrations/*build916*'
+      - 'tests/build916*'
+      - 'admin-supplier-916.html'
+      - 'admin-supplier-915.html'
+      - 'docs/build916_supplier_recall_financial_device_acceptance.md'
+      - '.github/workflows/rosie916-consent-recall.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --check assets/build916-revocation-recall-device-contract.mjs
+      - run: node --check assets/build916-supplier-recall-ui.mjs
+      - run: node --check functions/api/admin/supplier_recall_v916.js
+      - run: node --test tests/build916_supplier_recall_integrity.test.mjs tests/build915_provider_proof.test.mjs tests/build915_live_provider_pipeline.test.mjs tests/build914_supplier_consent_attribution.test.mjs tests/build913_retail_payment_refund_handoff.test.mjs tests/build912_retail_stand_specials.test.mjs tests/build911_finance_supplier_daip.test.mjs
