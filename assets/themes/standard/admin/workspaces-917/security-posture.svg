@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Security Posture decorative artwork">
+<title>Security Posture — Rosie Dazzlers original admin artwork</title>
+<defs>
+ <linearGradient id="back" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0a1824"/><stop offset=".55" stop-color="#234a55"/><stop offset="1" stop-color="#070e18"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1=".15" x2="1" y2="1"><stop stop-color="#f8d39b"/><stop offset=".44" stop-color="#d0ab70"/><stop offset="1" stop-color="#88632c"/></linearGradient>
+ <radialGradient id="halo"><stop stop-color="#d0ab70" stop-opacity=".28"/><stop offset="1" stop-color="#d0ab70" stop-opacity="0"/></radialGradient>
+ <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".09"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+</defs>
+<rect width="640" height="360" fill="url(#back)"/>
+<circle cx="521" cy="145" r="245" fill="url(#halo)"/>
+<path d="M0 304Q170 274 320 298T640 282V360H0Z" fill="#040b16" opacity=".43"/>
+<g stroke="#d0ab70" stroke-opacity=".21" fill="none"><path d="M0 282H640M0 319H640M155 240 40 360M256 240 225 360M360 240 425 360M463 240 620 360"/><circle cx="521" cy="146" r="137"/><circle cx="521" cy="146" r="164"/></g>
+<rect x="160" y="29" width="322" height="302" rx="37" fill="#07111e" stroke="#d0ab70" stroke-opacity=".72" stroke-width="2"/>
+<rect x="172" y="41" width="298" height="277" rx="31" fill="url(#glass)"/>
+<rect x="182" y="50" width="277" height="6" rx="3" fill="url(#gold)" opacity=".65"/>
+<g transform="translate(224 88) rotate(6 84 84) scale(1.12)" fill="none" stroke="url(#gold)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="m84 18 55 18v40c0 34-21 53-55 73-34-20-55-39-55-73V36z"/><path d="m59 83 18 18 36-42"/></g>
+<g transform="translate(18 225) scale(.56)" fill="none" stroke="#f8d39b" stroke-opacity=".67" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><rect x="28" y="31" width="112" height="104" rx="15"/><path d="M28 59h112M56 23v20m55-20v20M50 81h15m23 0h15m-53 25h15m23 0h15"/></g>
+<path d="M80 46l7 18 18 7-18 7-7 18-7-18-18-7 18-7z" fill="#f8d39b" opacity=".7"/>
+<path d="M570 28l5 13 13 5-13 5-5 13-5-13-13-5 13-5z" fill="#f8d39b" opacity=".48"/>
+<g fill="#f8d39b" opacity=".78"><circle cx="89" cy="300" r="4"/><circle cx="108" cy="300" r="2.5"/><circle cx="123" cy="300" r="1.5"/></g>
+<path d="M0 0H640V360H0Z" fill="none" stroke="#d0ab70" stroke-opacity=".27" stroke-width="4"/>
+</svg>
