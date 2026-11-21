@@ -23,7 +23,8 @@ console.log('Rosie Build 917 Admin artwork: 40 distinct approved decorative asse
 
 for(const entry of ['admin.html','admin/index.html']){
  const html=readFileSync(entry,'utf8');
- assert.match(html,/assets\\/build648-admin-operator\\.css\\?v=build917/);
- assert.match(html,/assets\\/build648-admin-operator\\.js\\?v=build917/);
- assert.doesNotMatch(html,/build648-admin-operator\\.(?:css|js)\\?v=build648/);
+ assert.ok(html.includes('/assets/build648-admin-operator.css?v=build917'),'CSS cache-key not promoted: '+entry);
+ assert.ok(html.includes('/assets/build648-admin-operator.js?v=build917'),'JS cache-key not promoted: '+entry);
+ assert.ok(!html.includes('/assets/build648-admin-operator.css?v=build648'),'Stale CSS reference: '+entry);
+ assert.ok(!html.includes('/assets/build648-admin-operator.js?v=build648'),'Stale JS reference: '+entry);
 }
