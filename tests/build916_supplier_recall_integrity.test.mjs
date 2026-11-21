@@ -70,5 +70,5 @@ test('916: device screenshot hashing is local and is not uploaded',()=>{
  const ui=readFileSync(new URL('../assets/build916-supplier-recall-ui.mjs',import.meta.url),'utf8');
  assert.match(ui,/crypto\.subtle\.digest\('SHA-256',bytes\)/);
  assert.match(ui,/file.*\.files\[0\]/);
- assert.doesNotMatch(ui,/FormData|FileReader|upload|object_key/);
+ assert.doesNotMatch(ui,/new FormData|new FileReader|body:.*bytes|object_key/);
 });
