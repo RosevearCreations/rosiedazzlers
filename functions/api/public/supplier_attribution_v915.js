@@ -40,7 +40,7 @@ export async function onRequestPost({request,env}){
   if(!Array.isArray(approved)||approved.length!==assets.length||approved.some(a=>a.consent_status!=='approved_public'||a.story_review_status!=='selected'||a.upload_status!=='uploaded'))return blocked();
   // Build 916: exclusive revocation and shared-locked attribution cannot race.
   // The original DB, not the earlier browser-side check, is authoritative.
-  const rr=await fetch(env.SUPABASE_URL.replace(/\\/+$/,'')+'/rest/v1/rpc/rosie_supplier_record_attribution_v916',{
+  const rr=await fetch(new URL('/rest/v1/rpc/rosie_supplier_record_attribution_v916',env.SUPABASE_URL).toString(),{
    method:'POST',headers:serviceHeaders(env),body:JSON.stringify({
     p_publication_id:pub.id,p_event_uuid:data.event_uuid,p_event_kind:data.event_kind
    }),redirect:'error',cache:'no-store'
