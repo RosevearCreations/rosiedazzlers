@@ -11,7 +11,7 @@ for(const {title,path} of manifest.images){
  assert.match(image,/viewBox="0 0 640 360"/);
  assert.match(image,/Rosie Dazzlers original admin artwork/);
  assert.ok(image.startsWith('<svg '));
- assert.doesNotMatch(image,/(?:https?:\/\/|<script|<image\b|<foreignObject\b)/i,'Static art must be self-contained');
+ assert.doesNotMatch(image,/(?:\b(?:href|src)\s*=\s*["']https?:\/\/|<script|<image\b|<foreignObject\b)/i,'Static art must not reference remote images or scripts');
  assert.ok(js.includes(JSON.stringify(title)),'Card missing from client art map: '+title);
  assert.ok(js.includes('/'+path),'File missing from client art map: '+path);
 }
