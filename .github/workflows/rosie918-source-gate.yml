@@ -20,3 +20,8 @@ jobs:
         run: |
           node --check assets/build918-signed-mesh-contract.mjs
           node tests/build918_mesh_contract.test.mjs
+          node --check functions/api/admin/sysop_918.js
+          node --check assets/build918-telemetry-admin.mjs
+          node --check scripts/build918_continuous_production_watch.mjs
+          node tests/build918_private_api_gate.test.mjs
+          node tests/build918_production_watch.test.mjs

@@ -24,10 +24,13 @@ async function status(path){
 async function main(){
  if(repo!=='RosevearCreations/rosiedazzlers'||base!=='https://rosiedazzlers.ca')throw Error('PRODUCTION_SCOPE_NOT_APPROVED');
  const sha=(await github('/commits/main')).sha;
- const page1=await github('/commits/'+sha+'/check-runs?per_page=100&page=1');
- const page2=(page1.total_count||0)>100?await github('/commits/'+sha+'/check-runs?per_page=100&page=2'):{check_runs:[]};
- const checks=[...(page1.check_runs||[]),...(page2.check_runs||[])];
- if((page1.total_count||0)>200)throw Error('EXACT_CHECK_HISTORY_INCOMPLETE');
+ const checks=[];
+ for(let page=1;page<=8;page++){
+  const result=await github('/commits/'+sha+'/check-runs?per_page=100&page='+page);
+  checks.push(...(result.check_runs||[]));
+  if(page*100>=(result.total_count||0))break;
+  if(page===8)throw Error('EXACT_CHECK_HISTORY_INCOMPLETE');
+ }
  const http={admin:await status('/admin-sysop-918.html'),privateEndpoint:await status('/api/admin/sysop_918'),sourceScope:await status('/internal/rosevear/sysop/telemetry/v1')};
  const result=assessProduction918({checks,http,sha});
  process.stdout.write(JSON.stringify(result)+'\n');
