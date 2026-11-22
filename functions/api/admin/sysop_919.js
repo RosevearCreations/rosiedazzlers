@@ -78,7 +78,7 @@ export async function onRequestPost({request,env}){
    let v;try{v=await verifyHostWitness919({envelope:body.envelope,pin,source,staffWitness:w,sourcePin,actorId:a.staff.id})}
    catch{return respond({ok:false,state:'HOLD',error:'HOST_SIGNED_WITNESS_CORRELATION_OR_FRESHNESS_REJECTED'},409)}
    const saved=one(await db(env,'rosie_sysop_host_recovery_v919?select=id',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({
-    source_receipt_id:v.sourceReceiptId,original_staff_witness_id:v.originalStaffWitnessId,host_id:v.hostId,boot_id:v.bootId,
+    source_receipt_id:v.sourceReceiptId,original_staff_witness_id:v.originalStaffWitnessId,host_id:v.hostId,host_witness_commit:v.hostWitnessCommit,boot_id:v.bootId,
     boot_time_ms:v.bootTimeMs,windows_event_sha256:v.windowsEventDigestSha256,service_readback_sha256:v.serviceReadbackDigestSha256,
     signature_sha256:v.signatureSha256,reviewed_by_staff_id:a.staff.id})}));
    if(!UUID914.test(saved?.id))throw Error('DURABLE_HOST_WITNESS_UNAVAILABLE');
