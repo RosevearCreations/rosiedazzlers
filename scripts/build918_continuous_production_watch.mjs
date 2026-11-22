@@ -25,11 +25,14 @@ async function main(){
  if(repo!=='RosevearCreations/rosiedazzlers'||base!=='https://rosiedazzlers.ca')throw Error('PRODUCTION_SCOPE_NOT_APPROVED');
  const sha=(await github('/commits/main')).sha;
  const checks=[];
- for(let page=1;page<=8;page++){
-  const result=await github('/commits/'+sha+'/check-runs?per_page=100&page='+page);
-  checks.push(...(result.check_runs||[]));
-  if(page*100>=(result.total_count||0))break;
-  if(page===8)throw Error('EXACT_CHECK_HISTORY_INCOMPLETE');
+ // The active commit may accumulate thousands of scheduled checks without a code change.
+ // Filter exact named gates instead of truncating an expanding chronological list.
+ const names=['Cloudflare Pages','source checks','Production release health and operator alert','Verify exact Production deployment'];
+ for(const name of names){
+  const result=await github('/commits/'+sha+'/check-runs?check_name='+encodeURIComponent(name)+'&per_page=100');
+  if(!Array.isArray(result.check_runs))throw Error('EXACT_NAMED_CHECK_READ_UNAVAILABLE');
+  checks.push(...result.check_runs);
+  if(name==='Verify exact Production deployment'&&result.total_count>100)throw Error('EXACT_PRODUCTION_CHECK_SET_UNBOUNDED');
  }
  const http={admin:await status('/admin-sysop-918.html'),privateEndpoint:await status('/api/admin/sysop_918'),sourceScope:await status('/internal/rosevear/sysop/telemetry/v1')};
  const result=assessProduction918({checks,http,sha});
