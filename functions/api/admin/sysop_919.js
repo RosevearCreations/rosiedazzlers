@@ -8,8 +8,8 @@ import {verifyReceiver919,verifyHostWitness919,project919} from '../../../assets
 const respond=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'private, no-store','Vary':'Cookie','X-Robots-Tag':'noindex,nofollow','X-Content-Type-Options':'nosniff'}});
 const H40=/^[a-f0-9]{40}$/, encode=encodeURIComponent;
 async function db(env,path,opt={}){
- const base=String(env?.SUPABASE_URL||'').replace(/\\/+$/,'');
- if(!/^https:\\/\\/[A-Za-z0-9.-]+$/.test(base)||!env?.SUPABASE_SERVICE_ROLE_KEY)throw Error('ORIGINAL_DATABASE_UNAVAILABLE');
+ const base=String(env?.SUPABASE_URL||'').replace(/\/+$/,'');
+ if(!/^https:\/\/[A-Za-z0-9.-]+$/.test(base)||!env?.SUPABASE_SERVICE_ROLE_KEY)throw Error('ORIGINAL_DATABASE_UNAVAILABLE');
  const response=await fetch(base+'/rest/v1/'+path,{...opt,headers:{...serviceHeaders(env),'Content-Type':'application/json',...opt.headers},redirect:'error',cache:'no-store'});
  if(!response.ok)throw Error('ORIGINAL_DATABASE_DENIED_OR_CONFLICT');
  if(response.status===204)return null;
