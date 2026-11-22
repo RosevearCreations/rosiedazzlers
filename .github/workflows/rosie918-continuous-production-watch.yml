@@ -1,0 +1,27 @@
+name: Rosie 918 Continuous Production Health (Read-Only)
+on:
+  schedule:
+    - cron: '17,47 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  checks: read
+jobs:
+  read-only-original-production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check source monitor logic with fail-closed pure tests
+        run: |
+          node tests/build918_production_watch.test.mjs
+      - name: Observe exact main, Cloudflare acceptance and public denied boundaries
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/build918_continuous_production_watch.mjs
