@@ -14,8 +14,8 @@ assert.equal(assessProduction918({sha,checks:checks.slice(0,-1),http}).softwareP
 assert.equal(assessProduction918({sha,checks,http:{...http,privateEndpoint:200}}).softwareProduction,'OBSERVATION_HOLD');
 assert.equal(assessProduction918({sha,checks,http:{...http,sourceScope:404}}).softwareProduction,'OBSERVATION_HOLD');
 const script=readFileSync('scripts/build918_continuous_production_watch.mjs','utf8');
-assert.match(script,/per_page=100&page=/);
-assert.match(script,/EXACT_CHECK_HISTORY_INCOMPLETE/);
+assert.match(script,/check_name=/);
+assert.match(script,/EXACT_PRODUCTION_CHECK_SET_UNBOUNDED/);
 assert.doesNotMatch(script,/method:\s*['"](?:POST|PATCH|PUT|DELETE)['"]/);
 const workflow=readFileSync('.github/workflows/rosie918-continuous-production-watch.yml','utf8');
 assert.match(workflow,/cron: '17,47 \* \* \* \*'/);
