@@ -21,11 +21,12 @@ for(const bad of [{...p,sourceReceiptId:receiverReceiptId},{...p,receiverCommit:
  await assert.rejects(verifyReceiver919({envelope:signIt(bad,receiver),pin:receiver.pin,source,nowMs:now}));}
 await assert.rejects(verifyReceiver919({envelope:signIt(p,host),pin:receiver.pin,source,nowMs:now}));
 const w={id:witnessId,receipt_id:sourceReceiptId,witnessed_by_staff_id:staff,evidence_sha256:'e'.repeat(64)};
-const hp={schema:HOST_SCHEMA919,sourceReceiptId,sourceSignatureSha256:source.signature_sha256,hostId:host.pin.hostId,bootId:'1'.repeat(32),bootTimeMs:now-100000,
+const hp={schema:HOST_SCHEMA919,sourceReceiptId,sourceSignatureSha256:source.signature_sha256,hostId:host.pin.hostId,hostWitnessCommit:'a'.repeat(40),bootId:'1'.repeat(32),bootTimeMs:now-100000,
  windowsEventDigestSha256:'2'.repeat(64),serviceReadbackDigestSha256:'3'.repeat(64),originalWitnessEvidenceSha256:w.evidence_sha256,witnessStaffId:staff,
  issuedAtMs:now-8000,expiresAtMs:now+30000,dataClass:'NON_SENSITIVE_AGGREGATE',authorizesRestart:false};
 const hostOk=await verifyHostWitness919({envelope:signIt(hp,host),pin:host.pin,source,staffWitness:w,sourcePin,actorId:staff,nowMs:now});
 assert.equal(hostOk.state,'SIGNED_HOST_SECOND_WITNESS_REVIEW_ONLY');assert.equal(hostOk.physicalRecoveryVerified,false);
+await assert.rejects(verifyHostWitness919({envelope:signIt({...hp,hostWitnessCommit:'f'.repeat(40)},host),pin:host.pin,source,staffWitness:w,sourcePin,actorId:staff,nowMs:now}));
 await assert.rejects(verifyHostWitness919({envelope:signIt({...hp,witnessStaffId:original},host),pin:host.pin,source,staffWitness:w,sourcePin,actorId:staff,nowMs:now}));
 await assert.rejects(verifyHostWitness919({envelope:signIt(hp,host),pin:{...host.pin,fingerprintSha256:sourcePin.fingerprintSha256},source,staffWitness:w,sourcePin,actorId:staff,nowMs:now}));
 assert.equal(project919([source],[{source_app_id:'rosevear-ai-hub'}],[{host_id:'REES-ORIGINAL-HOST'}]).sevenSourceConnected,false);
