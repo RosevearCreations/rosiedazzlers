@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const route=readFileSync('functions/api/admin/supplier_acceptance_v917.js','utf8');
+const ui=readFileSync('assets/build917-source-evidence-ui.mjs','utf8');
+const page=readFileSync('admin-supplier-917.html','utf8');
+for(const x of ['requireStaffAccess','allowLegacyAdminFallback:false',"a.auth_mode!=='session'","origin!==new URL(request.url).origin","validate917(JSON.parse","evaluate917(await snapshot","rosie_supplier_device_second_witness_v917","ORIGINAL_SOURCE_REVOCATION_REQUIRED","POSTED_ORIGINAL_JOURNAL_REQUIRED","business_state:'HOLD'"])assert.ok(route.includes(x),'Missing guard '+x);
+for(const x of ['financial_ledgers_unchanged:true','provider_deleted:false','worldwide_recalled:false','onRequestDelete=deny'])assert.ok(route.includes(x));
+assert.doesNotMatch(route,/method:\s*['"]DELETE['"]|api\.youtube\.com\/delete|provider\.delete/i);
+assert.match(page,/Operational acceptance remains HOLD/);
+assert.match(page,/build917-source-evidence-ui\.mjs\?v=917/);
+assert.match(ui,/credentials:'same-origin'/);
+assert.match(ui,/source|ORIGINAL_SOURCE_UNAVAILABLE/);
+for(const action of ['native_receipt','surface','second_witness','finance_chain'])assert.ok(ui.includes(action));
+console.log('Rosie 917 original staff auth, fail-closed routes, no provider or accounting mutation PASS');
