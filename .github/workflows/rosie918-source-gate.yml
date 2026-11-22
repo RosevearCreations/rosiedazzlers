@@ -1,0 +1,22 @@
+name: Rosie 918 Seven-App Signed Source & Host Recovery Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-recovery-918:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify seven-app signatures, bound challenge and original-host HOLD
+        run: |
+          node --check assets/build918-signed-mesh-contract.mjs
+          node tests/build918_mesh_contract.test.mjs
