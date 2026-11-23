@@ -1,0 +1,26 @@
+name: Rosie 922 Original Receiver Compatibility and Windows App Authority Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-922:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Fail-closed original receiver compatibility and signed host application evidence
+        run: |
+          node --check assets/build922-original-application-authority-contract.mjs
+          node tests/build922_original_application_authority.test.mjs
+          node tests/build921_live_native_receiver_windows.test.mjs
+          node tests/build920_ledger_two_owner.test.mjs
+          node tests/build919_original_receiver_host.test.mjs
+          node tests/build918_mesh_contract.test.mjs
