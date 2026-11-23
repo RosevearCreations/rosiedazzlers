@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {finalFieldGate922} from '../assets/build922-original-application-authority-contract.mjs';
+const api=readFileSync('functions/api/admin/sysop_923.js','utf8');
+const agent=readFileSync('scripts/build923-original-windows-app-challenge.mjs','utf8');
+const sql=readFileSync('sql/2026-11-23_build923_original_app_challenge_evidence.sql','utf8');
+const html=readFileSync('admin-sysop-923.html','utf8'),ui=readFileSync('assets/build923-original-admin.mjs','utf8');
+for(const s of ['requireStaffAccess','allowLegacyAdminFallback:false','SAME_ORIGIN_REQUIRED','issue_app_challenge','admit_app_attestation','verifyAppHealth922','finalFieldGate922','onRequestDelete=DENY'])assert.ok(api.includes(s),'missing API security '+s);
+for(const s of ['process.platform!==\'win32\'','LOCALAPPDATA','createPrivateKey','challengeNonce','127\\.0\\.0\\.1','AbortSignal.timeout','serviceResults','APP_HEALTH_SCHEMA922'])assert.ok(agent.includes(s),'missing local host gate '+s);
+assert.doesNotMatch(agent,/execSync|spawnSync|powershell|Stop-Service|Restart-Service|child_process|net\.connect/i);
+assert.doesNotMatch(api,/ROSEVEAR_ROSIE923_APP_PRIVATE_KEY|service_role.*reply\(/);
+for(const s of ['enable row level security','grant select,insert','grant execute','pg_advisory_xact_lock','unique references','challenge_nonce text not null unique'])assert.ok(sql.includes(s),'missing DB safety '+s);
+assert.doesNotMatch(sql,/grant (update|delete|all) on public\.rosie_sysop_app_/i);
+assert.ok(html.includes('admin-sysop-923')===false);
+assert.ok(html.includes('Build 923')&&ui.includes('textContent'));
+assert.equal(finalFieldGate922().fieldCertified,false);
+console.log('Rosie 923 private immutable evidence and Windows agent source-gate PASS; actual Windows not simulated');
