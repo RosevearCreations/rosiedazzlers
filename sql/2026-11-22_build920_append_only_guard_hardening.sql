@@ -1,5 +1,5 @@
 -- Build920 append-only guard hardening: original evidence tables are SELECT/INSERT only.
--- Avoid FOR UPDATE / FOR SHARE permission requirements; serialize same-ceremony reports
+-- Avoid row-locking privilege requirements; serialize same-ceremony reports
 -- by transaction-scoped advisory lock, with no table UPDATE or DELETE grants.
 create or replace function public.rosie_sysop_readback_guard_v920()
 returns trigger language plpgsql security invoker set search_path=public as $$
