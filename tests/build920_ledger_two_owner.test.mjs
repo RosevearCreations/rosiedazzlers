@@ -40,7 +40,11 @@ const projection=project920({ackReviews:[ack],ledgerReviews:[{receiver_id:'ai-da
  ownerReviews:[{ceremony_id:ceremonyId,owner_role:'PRIMARY_OWNER',owner_staff_id:primaryOwner},{ceremony_id:ceremonyId,owner_role:'SECOND_OWNER',owner_staff_id:secondOwner}]});
 assert.equal(projection.signedTwoOwnerReportPresent,true);assert.equal(projection.originalHostPhysicallyCertified,false);assert.equal(projection.sevenSourceConnected,false);
 const sql=readFileSync('sql/2026-11-22_build920_receiver_readback_preflight_two_owner.sql','utf8');
-for(const x of ['enable row level security','grant select,insert','for update','unique(ceremony_id,owner_role)','unique(ceremony_id,owner_staff_id)','unique(ceremony_id,owner_pin_fingerprint_sha256)','ORIGINAL_PREFLIGHT_MUST_PRECEDE_SIGNED_WINDOWS_BOOT','SIGNED_INDEPENDENT_LEDGER_READBACK_REVIEW'])assert.ok(sql.includes(x),x);
+for(const x of ['enable row level security','grant select,insert','unique(ceremony_id,owner_role)','unique(ceremony_id,owner_staff_id)','unique(ceremony_id,owner_pin_fingerprint_sha256)','ORIGINAL_PREFLIGHT_MUST_PRECEDE_SIGNED_WINDOWS_BOOT','SIGNED_INDEPENDENT_LEDGER_READBACK_REVIEW'])assert.ok(sql.includes(x),x);
+const hardened=readFileSync('sql/2026-11-22_build920_append_only_guard_hardening.sql','utf8');
+assert.match(hardened,/pg_advisory_xact_lock/);
+assert.doesNotMatch(hardened,/for update|for share|grant update|grant delete/i);
+assert.match(hardened,/TWO_OWNER_REPORTS_MUST_BIND_SAME_ORIGINAL_BOOT/);
 const api=readFileSync('functions/api/admin/sysop_920.js','utf8'),ui=readFileSync('assets/build920-field-admin.mjs','utf8'),html=readFileSync('admin-sysop-920.html','utf8');
 for(const x of ['requireStaffAccess','allowLegacyAdminFallback:false','SAME_ORIGIN_REQUIRED','verifyLedgerReadback920','verifyOwnerWitness920','ownerRoster(env)','ROSEVEAR_ROSIE920_OWNER_PINS_JSON','onRequestDelete=deny','open_preflight'])assert.ok(api.includes(x),x);
 assert.doesNotMatch(api,/method:\s*['"]DELETE['"]|\.delete\(|\breboot\s*\(|exec\s*\(/i);
