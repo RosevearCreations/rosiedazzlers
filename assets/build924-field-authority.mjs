@@ -37,13 +37,13 @@ export async function verifyWindowsServiceIdentity924({envelope,pin,sourceAttest
  !['RUNNING','MISSING','UNKNOWN'].includes(s.state)||!Number.isSafeInteger(s.processId)||s.processId<0||
  !(s.binarySha256===null||H64.test(s.binarySha256))||!['VALID','INVALID','UNKNOWN'].includes(s.authenticode)||
  typeof s.account!=='string'||s.account.length>128||
- (s.state==='RUNNING'&&(!s.processId||!H64.test(s.binarySha256||'')||s.authenticode!=='VALID'))))
+ (s.state==='RUNNING'&&(!s.processId||!H64.test(s.binarySha256||'')))))
  throw Error('ORIGINAL_924_WINDOWS_SCM_EVIDENCE_INVALID');
  const signatureSha256=await signed(envelope,pin);
  return {inspectionId:p.inspectionId,sourceAttestationId:p.sourceAttestationId,hostId:p.hostId,bootId:p.bootId,
   observedAtMs:p.observedAtMs,inspectorCommit:p.inspectorCommit,signatureSha256,
   services:p.services.map(s=>({service:s.service,state:s.state,serviceName:s.serviceName,processId:s.processId,binarySha256:s.binarySha256,authenticode:s.authenticode,account:s.account})),
-  allServiceIdentitiesObserved:p.services.every(x=>x.state==='RUNNING'),independentFieldCertified:false};
+  allServiceIdentitiesObserved:p.services.every(x=>x.state==='RUNNING'&&x.authenticode==='VALID'),independentFieldCertified:false};
 }
 export function checkLiveReceiverEvidence924({observations=[],manifests={},pins={},nowMs=Date.now()}={}){
  const required=['ai-data-platform','rosevear-comms-hub'],accepted=[];
@@ -63,9 +63,9 @@ export function checkLiveReceiverEvidence924({observations=[],manifests={},pins=
  return {twoOriginalLiveReceiversObserved:true,accepted,certifiesCustomerOrTransport:false};
 }
 export async function verifyOwnerFinalReview924({envelope,pin,actorId,caseDigestSha256,nowMs=Date.now()}={}){
- const p=envelope?.payload,ks=['schema','ownerStaffId','ownerRole','reviewId','identityWitnessId','caseDigestSha256','decision','observedAtMs','expiresAtMs','dataClass','authorizesAction'];
+ const p=envelope?.payload,ks=['schema','ownerStaffId','ownerRole','ownerSignerCommit','reviewId','identityWitnessId','caseDigestSha256','decision','observedAtMs','expiresAtMs','dataClass','authorizesAction'];
  if(!exact(p,ks)||p.schema!==OWNER_REVIEW_SCHEMA924||!UUID.test(p.reviewId||'')||!UUID.test(p.identityWitnessId||'')||
- !UUID.test(p.ownerStaffId||'')||p.ownerStaffId!==actorId||pin?.staffId!==actorId||p.ownerRole!==pin?.ownerRole||
+ !UUID.test(p.ownerStaffId||'')||p.ownerStaffId!==actorId||pin?.staffId!==actorId||p.ownerRole!==pin?.ownerRole||p.ownerSignerCommit!==pin?.expectedCommit||
  !H64.test(caseDigestSha256||'')||p.caseDigestSha256!==caseDigestSha256||
  !['APPROVE_REVIEW','HOLD'].includes(p.decision)||!Number.isSafeInteger(p.observedAtMs)||
  !Number.isSafeInteger(p.expiresAtMs)||p.observedAtMs>nowMs+2000||nowMs-p.observedAtMs>300000||
