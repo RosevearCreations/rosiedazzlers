@@ -13,7 +13,7 @@ const original921Sample={host_id:'original-windows-owner',boot_id:'d'.repeat(32)
 const payload={schema:APP_HEALTH_SCHEMA922,hostId:original921Sample.host_id,bootId:original921Sample.boot_id,healthSampleId:sampleId,attestationId:randomUUID(),sampledAtMs:now,issuedAtMs:now,expiresAtMs:now+40000,challengeNonce:nonce,samplerCommit:commit,serviceResults:['hub','caddy','mqtt','ollama'].map(service=>({service,state:'UNKNOWN',proof:'NONE'})),dataClass:'NON_SENSITIVE_AGGREGATE',authorizesAction:false};
 const envelope=p=>({payload:p,signature:sign(null,Buffer.from(canonical918(p)),pair.privateKey).toString('hex')});
 const args={pin,original921Sample,challengeNonce:nonce,nowMs:now};
-assert.equal((await verifyAppHealth922({envelope:envelope(payload),...args})).fieldCertified,false);
+assert.equal((await verifyAppHealth922({envelope:envelope(payload),...args})).originalApplicationHealthCertified,false);
 await assert.rejects(verifyAppHealth922({envelope:envelope({...payload,challengeNonce:'f'.repeat(64)}),...args}),/STALE/);
 await assert.rejects(verifyAppHealth922({envelope:envelope({...payload,serviceResults:[...payload.serviceResults.slice(0,3),{service:'ollama',state:'AUTHENTICATED',proof:'NONE'}]}),...args}),/UNPROVEN/);
 await assert.rejects(verifyAppHealth922({envelope:{...envelope(payload),signature:'0'.repeat(128)},...args}),/SIGNATURE_REJECTED/);
