@@ -15,17 +15,26 @@ const signEnvelope=(payload,key)=>({payload,signature:sign(null,Buffer.from(cano
 const source={id:randomUUID(),host_id:'original-windows-owner',boot_id:'f'.repeat(32)};
 const ch={app_attestation_id:source.id,challenge_nonce:'b'.repeat(64),expires_at:new Date(now+60000).toISOString()};
 const services=['hub','caddy','mqtt','ollama'].map(service=>({service,serviceName:'rosevear-'+service,state:'RUNNING',processId:5432,binarySha256:'c'.repeat(64),authenticode:'VALID',account:'LocalSystem'}));
+const expectedServices=Object.fromEntries(services.map(s=>[s.service,{serviceName:s.serviceName,binarySha256:s.binarySha256,account:s.account}]));
 const identity={schema:IDENTITY_SCHEMA924,hostId:source.host_id,bootId:source.boot_id,sourceAttestationId:source.id,inspectionId:randomUUID(),
  challengeNonce:ch.challenge_nonce,inspectorCommit:h40,observedAtMs:now-1000,expiresAtMs:now+30000,services,dataClass:'NON_SENSITIVE_AGGREGATE',authorizesAction:false};
 const verify=(p,pin=inspector.pin,sourceAttestation=source,challenge=ch,fp=app.pin.fingerprintSha256)=>
- verifyWindowsServiceIdentity924({envelope:signEnvelope(p,inspector.key),pin,sourceAttestation,challenge,appSignerFingerprint:fp,nowMs:now});
+ verifyWindowsServiceIdentity924({envelope:signEnvelope(p,inspector.key),pin,sourceAttestation,challenge,appSignerFingerprint:fp,expectedServices,nowMs:now});
 const ok=await verify(identity);assert.equal(ok.allServiceIdentitiesObserved,true);assert.equal(ok.independentFieldCertified,false);
 for(const altered of [{challengeNonce:'d'.repeat(64)},{bootId:'e'.repeat(32)},{expiresAtMs:now-1},{inspectorCommit:'e'.repeat(40)},
  {services:services.map((x,i)=>i===0?{...x,service:'browser'}:x)}])
  await assert.rejects(verify({...identity,...altered}),/ORIGINAL_924/);
 await assert.rejects(verify(identity,inspector.pin,source,ch,inspector.pin.fingerprintSha256),/INDEPENDENT_INSPECTOR/);
 await assert.rejects(verifyWindowsServiceIdentity924({envelope:{...signEnvelope(identity,inspector.key),signature:'0'.repeat(128)},
- pin:inspector.pin,sourceAttestation:source,challenge:ch,appSignerFingerprint:app.pin.fingerprintSha256,nowMs:now}),/SIGNATURE_REJECTED/);
+ pin:inspector.pin,sourceAttestation:source,challenge:ch,appSignerFingerprint:app.pin.fingerprintSha256,expectedServices,nowMs:now}),/SIGNATURE_REJECTED/);
+const wrongPins={...expectedServices,hub:{...expectedServices.hub,binarySha256:'e'.repeat(64)}};
+const wrongIdentity=await verifyWindowsServiceIdentity924({envelope:signEnvelope(identity,inspector.key),
+ pin:inspector.pin,sourceAttestation:source,challenge:ch,appSignerFingerprint:app.pin.fingerprintSha256,
+ expectedServices:wrongPins,nowMs:now});
+assert.equal(wrongIdentity.allServiceIdentitiesObserved,false);
+await assert.rejects(verifyWindowsServiceIdentity924({envelope:signEnvelope(identity,inspector.key),
+ pin:inspector.pin,sourceAttestation:source,challenge:ch,appSignerFingerprint:app.pin.fingerprintSha256,
+ nowMs:now}),/WINDOWS_SERVICE_PINS_REQUIRED/);
 const unsigned=await verify({...identity,services:services.map((s,i)=>i? s:{...s,authenticode:'UNKNOWN'})});
 assert.equal(unsigned.allServiceIdentitiesObserved,false);
 const receiver=makePin(),rpin=receiver.pin;
@@ -57,7 +66,7 @@ assert.equal(finalFieldReview924().reviewReady,false);
 const api=readFileSync('functions/api/admin/sysop_924.js','utf8'),sql=readFileSync('sql/2026-11-23_build924_independent_field_review.sql','utf8');
 const ps=readFileSync('scripts/build924-original-windows-service-inspection.ps1','utf8'),agent=readFileSync('scripts/build924-original-windows-service-identity.mjs','utf8');
 const signer=readFileSync('scripts/build924-original-owner-final-review.mjs','utf8'),html=readFileSync('admin-sysop-924.html','utf8');
-for(const s of ['requireStaffAccess','allowLegacyAdminFallback:false','SAME_ORIGIN_REQUIRED','issue_identity_challenge','admit_service_identity','record_owner_final_review','onRequestDelete=DENY','ROSEVEAR_ROSIE924_INSPECTOR_PIN_JSON','ROSEVEAR_ROSIE920_OWNER_PINS_JSON'])assert.ok(api.includes(s),'missing private gate '+s);
+for(const s of ['requireStaffAccess','allowLegacyAdminFallback:false','SAME_ORIGIN_REQUIRED','issue_identity_challenge','admit_service_identity','record_owner_final_review','onRequestDelete=DENY','ROSEVEAR_ROSIE924_INSPECTOR_PIN_JSON','ROSEVEAR_ROSIE924_EXPECTED_WINDOWS_SERVICES_JSON','ROSEVEAR_ROSIE920_OWNER_PINS_JSON'])assert.ok(api.includes(s),'missing private gate '+s);
 for(const s of ['enable row level security','grant select,insert','pg_advisory_xact_lock','unique','challenge_nonce text not null unique'])assert.ok(sql.includes(s),'missing immutable DB '+s);
 assert.doesNotMatch(sql,/grant (update|delete|all) on public\.rosie_sysop_/i);
 for(const s of ['Get-CimInstance','Win32_Service','Get-FileHash','Get-AuthenticodeSignature','Win32_Process'])assert.ok(ps.includes(s));
