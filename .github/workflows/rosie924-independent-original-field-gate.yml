@@ -1,0 +1,32 @@
+name: Rosie 924 Independent Windows Identity and Owner Field Authority Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-924:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check 924 private API, inspector, owner signer and protocol
+        run: |
+          node --check assets/build924-field-authority.mjs
+          node --check functions/api/admin/sysop_924.js
+          node --check scripts/build924-original-windows-service-identity.mjs
+          node --check scripts/build924-original-owner-final-review.mjs
+          node --check assets/build924-original-admin.mjs
+          node tests/build924_original_field_authority.test.mjs
+          node tests/build923_original_agent_evidence.test.mjs
+          node tests/build922_original_application_authority.test.mjs
+          node tests/build921_live_native_receiver_windows.test.mjs
+          node tests/build920_ledger_two_owner.test.mjs
+          node tests/build919_original_receiver_host.test.mjs
+          node tests/build918_mesh_contract.test.mjs
