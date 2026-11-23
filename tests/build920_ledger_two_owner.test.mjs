@@ -32,7 +32,7 @@ const op={schema:OWNER_SCHEMA920,ceremonyId,preflightNonce:ceremony.preflight_no
  expiresAtMs:now+50000,physicalObservationReported:true,automaticRestartApproved:false,dataClass:'NON_SENSITIVE_AGGREGATE'};
 const v=await verifyOwnerWitness920({envelope:signed(op,owner1),pin:owner1.pin,ceremony,host,hostSignerPin:hostSigner.pin,otherOwnerPin:owner2.pin,actorId:primaryOwner,nowMs:now});
 assert.equal(v.ownerRole,'PRIMARY_OWNER');assert.equal(v.physicalRecoveryCertified,false);
-for(const bad of [{...op,automaticRestartApproved:true},{...op,hostReviewId:ceremonyId},{...op,ownerStaffId:secondOwner},{...op,physicalObservationReported:false},{...op,preflightNonce:'f'.repeat(64)},{...op,windowsEventDigestSha256:'c'.repeat(64)}]){
+for(const bad of [{...op,automaticRestartApproved:true},{...op,hostReviewId:ceremonyId},{...op,ownerStaffId:secondOwner},{...op,physicalObservationReported:false},{...op,preflightNonce:'f'.repeat(64)},{...op,windowsEventDigestSha256:'c'.repeat(64)},{...op,bootTimeMs:op.bootTimeMs+0.5},{...op,observedAtMs:now+10000}]){
  await assert.rejects(verifyOwnerWitness920({envelope:signed(bad,owner1),pin:owner1.pin,ceremony,host,hostSignerPin:hostSigner.pin,otherOwnerPin:owner2.pin,actorId:primaryOwner,nowMs:now}));}
 await assert.rejects(verifyOwnerWitness920({envelope:signed(op,owner1),pin:owner1.pin,ceremony:{...ceremony,created_at:new Date(now-20000).toISOString()},host,hostSignerPin:hostSigner.pin,otherOwnerPin:owner2.pin,actorId:primaryOwner,nowMs:now}));
 await assert.rejects(verifyOwnerWitness920({envelope:signed(op,owner1),pin:owner1.pin,ceremony,host,hostSignerPin:hostSigner.pin,otherOwnerPin:owner1.pin,actorId:primaryOwner,nowMs:now}));
