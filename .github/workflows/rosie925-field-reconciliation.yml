@@ -1,0 +1,23 @@
+name: Rosie 925 SCM Task and Independent Closure Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  field-925:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check assets/build925-field-reconciliation.mjs
+          node tests/build925_field_reconciliation.test.mjs
+          node tests/build924_original_field_authority.test.mjs
+          node tests/build923_original_agent_evidence.test.mjs
