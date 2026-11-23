@@ -18,7 +18,7 @@ async function signed(envelope,pin){
  if(!await crypto.subtle.verify('Ed25519',key,bytes(envelope.signature),new TextEncoder().encode(canonical918(envelope.payload))))throw Error('ORIGINAL_924_SIGNATURE_REJECTED');
  return await sha(bytes(envelope.signature));
 }
-export async function verifyWindowsServiceIdentity924({envelope,pin,sourceAttestation,challenge,appSignerFingerprint,nowMs=Date.now()}={}){
+export async function verifyWindowsServiceIdentity924({envelope,pin,sourceAttestation,challenge,appSignerFingerprint,expectedServices,nowMs=Date.now()}={}){
  const p=envelope?.payload,fields=['schema','hostId','bootId','sourceAttestationId','inspectionId','challengeNonce','inspectorCommit','observedAtMs','expiresAtMs','services','dataClass','authorizesAction'];
  if(!exact(p,fields)||p.schema!==IDENTITY_SCHEMA924||!UUID.test(p.inspectionId||'')||
  !UUID.test(p.sourceAttestationId||'')||!H64.test(p.challengeNonce||'')||!H40.test(p.inspectorCommit||'')||
@@ -39,11 +39,16 @@ export async function verifyWindowsServiceIdentity924({envelope,pin,sourceAttest
  typeof s.account!=='string'||s.account.length>128||
  (s.state==='RUNNING'&&(!s.processId||!H64.test(s.binarySha256||'')))))
  throw Error('ORIGINAL_924_WINDOWS_SCM_EVIDENCE_INVALID');
+ if(!exact(expectedServices,REQUIRED_SERVICES922)||p.services.some(s=>!exact(expectedServices[s.service],['serviceName','binarySha256','account'])||
+ typeof expectedServices[s.service].serviceName!=='string'||!H64.test(expectedServices[s.service].binarySha256||'')||
+ typeof expectedServices[s.service].account!=='string'||!expectedServices[s.service].account))throw Error('ORIGINAL_924_INDEPENDENT_WINDOWS_SERVICE_PINS_REQUIRED');
+ const servicePinsMatch=p.services.every(s=>s.serviceName===expectedServices[s.service].serviceName&&
+  s.binarySha256===expectedServices[s.service].binarySha256&&s.account===expectedServices[s.service].account);
  const signatureSha256=await signed(envelope,pin);
  return {inspectionId:p.inspectionId,sourceAttestationId:p.sourceAttestationId,hostId:p.hostId,bootId:p.bootId,
   observedAtMs:p.observedAtMs,inspectorCommit:p.inspectorCommit,signatureSha256,
   services:p.services.map(s=>({service:s.service,state:s.state,serviceName:s.serviceName,processId:s.processId,binarySha256:s.binarySha256,authenticode:s.authenticode,account:s.account})),
-  allServiceIdentitiesObserved:p.services.every(x=>x.state==='RUNNING'&&x.authenticode==='VALID'),independentFieldCertified:false};
+  allServiceIdentitiesObserved:servicePinsMatch&&p.services.every(x=>x.state==='RUNNING'&&x.authenticode==='VALID'),servicePinsMatch,independentFieldCertified:false};
 }
 export function checkLiveReceiverEvidence924({observations=[],manifests={},pins={},nowMs=Date.now()}={}){
  const required=['ai-data-platform','rosevear-comms-hub'],accepted=[];
