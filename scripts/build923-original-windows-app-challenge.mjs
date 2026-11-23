@@ -36,7 +36,7 @@ for(const service of REQUIRED_SERVICES922){
       result={service,state:'AUTHENTICATED',proof:'HTTP_LOCAL_CHALLENGE'};
     }
    }
-  }catch{} 
+  }catch{}
  }
  results.push(result);
 }
