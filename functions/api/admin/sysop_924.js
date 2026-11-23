@@ -48,11 +48,11 @@ async function evidence(env){
  rows(env,tables.native,'order=created_at.desc')]);
  return {apps,challenges,identities,owners,natives};
 }
-function publicState(x,live){
+function publicState(x,live,expectedServices){
  const identity=x.identities[0]||null;
  const ownerReviews=x.owners.filter(r=>r.identity_witness_id===identity?.id).map(r=>({ownerStaffId:r.owner_staff_id,identityWitnessId:identity?.inspection_id,decision:r.decision,ownerRole:r.owner_role}));
  const identityWitness=identity?{inspectionId:identity.inspection_id,allServiceIdentitiesObserved:
- Array.isArray(identity.service_states)&&identity.service_states.length===4&&identity.service_states.every(s=>s.state==='RUNNING'&&s.authenticode==='VALID')}:null;
+ Array.isArray(identity.service_states)&&identity.service_states.length===4&&identity.service_states.every(s=>s.state==='RUNNING'&&s.authenticode==='VALID'&&s.serviceName===expectedServices?.[s.service]?.serviceName&&s.binarySha256===expectedServices?.[s.service]?.binarySha256&&s.account===expectedServices?.[s.service]?.account)}:null;
  const gate=finalFieldReview924({identityWitness,liveReceivers:live,ownerReviews});
  return {fieldGate:gate,originalApps:x.apps.map(v=>({id:v.id,hostId:v.host_id,bootId:v.boot_id,createdAt:v.created_at})),
   identityWitnesses:x.identities.map(v=>({id:v.id,inspectionId:v.inspection_id,appAttestationId:v.app_attestation_id,createdAt:v.created_at,serviceStates:v.service_states,reviewState:v.review_state})),
@@ -68,7 +68,7 @@ async function caseDigest(x,identityId){
 }
 export async function onRequestGet({request,env}){
  const a=await admin(request,env);if(a.response)return a.response;
- try{const x=await evidence(env),live=liveReceiver(env,x.natives),v=publicState(x,live),
+ try{const x=await evidence(env),live=liveReceiver(env,x.natives),v=publicState(x,live,envJSON(env,'ROSEVEAR_ROSIE924_EXPECTED_WINDOWS_SERVICES_JSON')),
  identity=x.identities[0];return reply({ok:true,build:924,...v,
  currentCaseDigestSha256:live&&identity?await caseDigest(x,identity.id):null,
  migrationApplied:true,exactShaProductionVerified:false,physicalObservationVerified:false})}
@@ -86,8 +86,9 @@ export async function onRequestPost({request,env}){
    const app=single(await rows(env,tables.apps,'id=eq.'+E(body.appAttestationId)));
    if(!app)return reply({ok:false,state:'HOLD',error:'ORIGINAL_SIGNED_APP_ATTESTATION_NOT_FOUND'},409);
    const inspector=envJSON(env,'ROSEVEAR_ROSIE924_INSPECTOR_PIN_JSON');
+   const servicePins=envJSON(env,'ROSEVEAR_ROSIE924_EXPECTED_WINDOWS_SERVICES_JSON');
    const appPin=envJSON(env,'ROSEVEAR_ROSIE923_APP_SIGNER_PIN_JSON');
-   if(!validPin(inspector)||inspector.hostId!==app.host_id||!validPin(appPin)||inspector.fingerprintSha256===appPin.fingerprintSha256)
+   if(!validPin(inspector)||!servicePins||inspector.hostId!==app.host_id||!validPin(appPin)||inspector.fingerprintSha256===appPin.fingerprintSha256)
     return reply({ok:false,state:'HOLD',error:'INDEPENDENT_ORIGINAL_INSPECTOR_NOT_ENROLLED'},409);
    const nonce=[...crypto.getRandomValues(new Uint8Array(32))].map(x=>x.toString(16).padStart(2,'0')).join('');
    const ch=single(await db(env,tables.challenge+'?select=*',{method:'POST',headers:{Prefer:'return=representation'},
@@ -101,9 +102,9 @@ export async function onRequestPost({request,env}){
    const ch=single(await rows(env,tables.challenge,'id=eq.'+E(body.challengeId))),
     app=ch?single(await rows(env,tables.apps,'id=eq.'+E(ch.app_attestation_id))):null;
    if(!ch||!app||Date.parse(ch.expires_at)<=Date.now())return reply({ok:false,state:'HOLD',error:'ORIGINAL_924_CHALLENGE_EXPIRED_OR_SOURCE_MISSING'},409);
-   const inspector=envJSON(env,'ROSEVEAR_ROSIE924_INSPECTOR_PIN_JSON'),appPin=envJSON(env,'ROSEVEAR_ROSIE923_APP_SIGNER_PIN_JSON');
-   if(!validPin(inspector)||inspector.hostId!==app.host_id||!validPin(appPin))return reply({ok:false,state:'HOLD',error:'ORIGINAL_INDEPENDENT_SIGNER_PINS_MISSING'},409);
-   let v;try{v=await verifyWindowsServiceIdentity924({envelope:body.envelope,pin:inspector,sourceAttestation:app,challenge:ch,appSignerFingerprint:appPin.fingerprintSha256})}
+   const inspector=envJSON(env,'ROSEVEAR_ROSIE924_INSPECTOR_PIN_JSON'),appPin=envJSON(env,'ROSEVEAR_ROSIE923_APP_SIGNER_PIN_JSON'),servicePins=envJSON(env,'ROSEVEAR_ROSIE924_EXPECTED_WINDOWS_SERVICES_JSON');
+   if(!validPin(inspector)||!servicePins||inspector.hostId!==app.host_id||!validPin(appPin))return reply({ok:false,state:'HOLD',error:'ORIGINAL_INDEPENDENT_SIGNER_PINS_MISSING'},409);
+   let v;try{v=await verifyWindowsServiceIdentity924({envelope:body.envelope,pin:inspector,sourceAttestation:app,challenge:ch,appSignerFingerprint:appPin.fingerprintSha256,expectedServices:servicePins})}
    catch{return reply({ok:false,state:'HOLD',error:'ORIGINAL_SERVICE_IDENTITY_SIGNATURE_OR_SCM_REJECTED'},409)}
    const stored=single(await db(env,tables.identity+'?select=id',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({
     challenge_id:ch.id,app_attestation_id:app.id,inspection_id:v.inspectionId,host_id:v.hostId,boot_id:v.bootId,
