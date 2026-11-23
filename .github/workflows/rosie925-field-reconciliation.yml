@@ -18,6 +18,9 @@ jobs:
           node-version: '24'
       - run: |
           node --check assets/build925-field-reconciliation.mjs
+          node --check functions/api/admin/sysop_925.js
+          node --check assets/build925-admin.mjs
+          node --check scripts/build925-sign-original-evidence.mjs
           node tests/build925_field_reconciliation.test.mjs
           node tests/build924_original_field_authority.test.mjs
           node tests/build923_original_agent_evidence.test.mjs
