@@ -1,0 +1,29 @@
+name: Rosie 923 Original Windows Challenge and Private Evidence Authority
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-agent-evidence-923:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify private challenge API, original Windows signed agent and regression gates
+        run: |
+          node --check functions/api/admin/sysop_923.js
+          node --check scripts/build923-original-windows-app-challenge.mjs
+          node --check assets/build923-original-admin.mjs
+          node tests/build923_original_agent_evidence.test.mjs
+          node tests/build922_original_application_authority.test.mjs
+          node tests/build921_live_native_receiver_windows.test.mjs
+          node tests/build920_ledger_two_owner.test.mjs
+          node tests/build919_original_receiver_host.test.mjs
+          node tests/build918_mesh_contract.test.mjs
