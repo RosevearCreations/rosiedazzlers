@@ -1,0 +1,30 @@
+name: Rosie 921 Live Native Receiver and Original Windows Authority Source Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-windows-921:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Source-verify live receiver origin security and original Windows signed post-boot evidence
+        run: |
+          node --check assets/build921-live-authority-contract.mjs
+          node --check functions/api/admin/sysop_921.js
+          node --check scripts/build921-original-windows-readonly-sampler.mjs
+          node --check assets/build921-live-admin.mjs
+          node tests/build921_live_native_receiver_windows.test.mjs
+          node tests/build920_ledger_two_owner.test.mjs
+          node tests/build919_original_receiver_host.test.mjs
+          node tests/build918_mesh_contract.test.mjs
+          node tests/build918_private_api_gate.test.mjs
+          node tests/build918_production_watch.test.mjs
