@@ -1,0 +1,26 @@
+name: Rosie 926 Runtime Attestation and Original Certification Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  runtime-926:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check assets/build926-runtime-certification.mjs
+          node --check functions/api/admin/sysop_926.js
+          node --check assets/build926-admin.mjs
+          node --check scripts/build926-sign.mjs
+          node tests/build926_runtime_certification.test.mjs
+          node tests/build925_field_reconciliation.test.mjs
+          node tests/build924_original_field_authority.test.mjs
