@@ -1,0 +1,31 @@
+name: Rosie 928 Original History MQTT and Receiver Closure Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-928:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check assets/build928-original-correlation.mjs
+          node --check assets/build928-admin.mjs
+          node --check functions/api/admin/sysop_928.js
+          node tests/build928_original_correlation.test.mjs
+          node tests/build927_guided_readiness.test.mjs
+          node tests/build926_runtime_certification.test.mjs
+      - name: Parse original Windows collector
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'scripts/build928-original-correlation.ps1'),[ref]$tokens,[ref]$errors)
+          if ($errors.Count -gt 0) { $errors | Format-List | Out-String | Write-Error; exit 1 }

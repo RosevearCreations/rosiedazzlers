@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {correlate928,receiverClosure928,verifyRuntimeDraft928} from '../assets/build928-original-correlation.mjs';
+const now=Date.now(),boot=now-3600000;
+const task={path:'\\Rosevear AI Hub Recovery',enabled:true,lastRun:new Date(now-10000).toISOString(),lastResult:0,launcher:'hub-recovery.ps1',definitionSha256:'a'.repeat(64)};
+const base={mode:'ORIGINAL_READ_ONLY_CORRELATION_NOT_CERTIFICATION',observedAtMs:now,bootTimeMs:boot,registeredTasks:[task,{...task,path:'\\Rosevear AI Hub Unattended Boot',lastResult:2},{...task,path:'\\Rosevear AI Server Startup',enabled:false}],listeners:[{port:8765,pid:100,candidates:[],processChain:[{pid:100,createdAtMs:now-20000}]}],taskHistoryState:'DISABLED_NOT_CHANGED',taskHistory:[],broker:{vmName:'Home Assistant',vmState:'RUNNING',target:'homeassistant.local',privateResolution:true,mqttTcp:'REACHABLE'}};
+const result=correlate928(base);
+assert.deepEqual(result.tasks.map(x=>x.state),['LAST_RUN_REPORTED_SUCCESS','LAST_RUN_NONZERO_REVIEW_REQUIRED','DISABLED_PRESERVED']);assert.equal(result.broker.location,'HOME_ASSISTANT_GUEST_AND_PRIVATE_TCP_OBSERVED');assert.equal(result.broker.authenticated,false);assert.equal(result.fieldCertified,false);assert.equal(result.configurationApproved,false);assert.deepEqual(result.draft,{});
+const evt={eventId:129,recordId:1,processId:100,time:new Date(now-20000).toISOString(),task:task.path};
+assert.equal(correlate928({...base,taskHistory:[evt]}).correlations[0].historyHints.length,0);
+assert.equal(correlate928({...base,taskHistoryState:'ENABLED',taskHistory:[evt]}).correlations[0].state,'HISTORICAL_PID_TIME_CORRELATION_ONLY');
+assert.equal(correlate928({...base,taskHistoryState:'ENABLED',taskHistory:[{...evt,time:new Date(boot-10).toISOString()}]}).correlations[0].historyHints.length,0);
+assert.equal(correlate928({...base,broker:{...base.broker,privateResolution:false}}).broker.privateTcpReachable,false);
+assert.equal(verifyRuntimeDraft928({draft:{},expected:{}}).matched,false);
+assert.equal(receiverClosure928({receiverId:'ai-data-platform',blockers:['ORIGINAL_SIGNED_920_LEDGER_REQUIRED'],ready:false}).steps.length,2);
+assert.equal(receiverClosure928({ready:true,recentNativeWitness:true,blockers:[]}).sevenSourceConnected,false);
+console.log('928 diagnostic correlation and guided receiver closure PASS (fixtures only)');
