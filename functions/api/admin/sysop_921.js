@@ -38,7 +38,7 @@ function ownerPins(env){
  return arr.map(([,p])=>p);
 }
 const rand=()=>{const b=new Uint8Array(32);crypto.getRandomValues(b);return [...b].map(x=>x.toString(16).padStart(2,'0')).join('')};
-function receiverSettings(env,id){
+export function receiverSettings(env,id){
  const raw=pins(env,'ROSEVEAR_ROSIE921_RECEIVER_READONLY_ORIGINS_JSON')[id];
  const pin=validPin(pins(env,'ROSEVEAR_ROSIE921_RECEIVER_API_PINS_JSON')[id]);
  const ledgerPin=validPin(pins(env,'ROSEVEAR_ROSIE920_RECEIVER_LEDGER_PINS_JSON')[id]);

@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {inventoryPlan927,receiverPlan927,PORTS927} from '../assets/build927-guided-readiness.mjs';
+const observed={mode:'READ_ONLY_INVENTORY_NOT_CERTIFICATION',listeners:[{port:8765,pid:101,candidates:[]},{port:8443,pid:102,candidates:[]},{port:11434,pid:103,candidates:[]},{port:5173,pid:104,candidates:[]}]};
+const p=inventoryPlan927(observed);assert.deepEqual(p.components.map(x=>x.state),['UNPROVEN_PROCESS_OWNERSHIP','UNPROVEN_PROCESS_OWNERSHIP','NO_LISTENER_ON_EXPECTED_PORT','UNPROVEN_PROCESS_OWNERSHIP']);assert.deepEqual(p.unapprovedDraft,{});assert.equal(p.configurationApproved,false);
+const good={mode:'SCHEDULED_TASK',identity:'task',principalSid:'S-1-5-18',definitionSha256:'a'.repeat(64),runtimeSha256:'b'.repeat(64),commandSha256:'c'.repeat(64),runtimePid:12,port:8765,lineage:'VERIFIED',listener:'OWNED',stable:true,state:'RUNNING'};
+const single=inventoryPlan927({...observed,listeners:[{port:8765,pid:12,candidates:[good]}]});assert.equal(single.components[0].state,'CANDIDATE_REQUIRES_INDEPENDENT_REVIEW');assert.equal(single.fieldCertified,false);assert.equal(single.allCandidatesPresent,false);
+assert.equal(inventoryPlan927({...observed,listeners:[{port:8765,pid:12,candidates:[good]},{port:8765,pid:13,candidates:[]}]}).components[0].state,'AMBIGUOUS_RUNTIME');
+assert.equal(inventoryPlan927({...observed,listeners:[{port:8765,pid:13,candidates:[good]}]}).components[0].state,'UNPROVEN_PROCESS_OWNERSHIP');
+const id='ai-data-platform',now=Date.now(),commit='a'.repeat(40),ledger={id:randomUUID(),receiver_id:id,ack_review_id:randomUUID(),ledger_entry_id:randomUUID(),ledger_entry_sha256:'b'.repeat(64),ledger_head_sha256:'c'.repeat(64)},ack={id:ledger.ack_review_id,receiver_id:id,receiver_commit:commit};
+const args={id,configurationReady:true,manifestReady:true,ledger,ack,expectedCommit:commit,now};
+assert.equal(receiverPlan927(args).ready,true);assert.equal(receiverPlan927({...args,ledger:null}).ready,false);assert.equal(receiverPlan927({...args,ack:{...ack,receiver_commit:'d'.repeat(40)}}).ready,false);
+assert.equal(receiverPlan927({...args,manifestReady:false}).ready,false);
+assert.equal(receiverPlan927({...args,native:{receiver_id:id,ledger_review_id:ledger.id,api_signer_commit:commit,api_observed_at_ms:now-300001}}).recentNativeWitness,false);
+assert.equal(receiverPlan927({...args,native:{receiver_id:id,ledger_review_id:ledger.id,api_signer_commit:commit,api_observed_at_ms:now}}).recentNativeWitness,true);
+console.log('927 inventory and receiver planning PASS (fixtures only, not live evidence)');
