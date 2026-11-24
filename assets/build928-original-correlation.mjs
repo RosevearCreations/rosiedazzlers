@@ -1,6 +1,6 @@
 // 928 — Diagnostic history and guest broker correlation. Never treats it as authenticated runtime or SCM proof.
 import {inventoryPlan927,PORTS927} from './build927-guided-readiness.mjs';
-import {H40,H64,UUID,validateRuntime926} from './build926-runtime-certification.mjs';
+import {H64} from './build926-runtime-certification.mjs';
 const knownTasks=['Rosevear AI Hub LAN Gateway','Rosevear AI Hub Recovery','Rosevear AI Hub Startup','Rosevear AI Hub Unattended Boot','Rosevear AI Hub Unattended Recovery','Rosevear AI Server Startup'];
 const time=v=>typeof v==='string'?Date.parse(v):NaN;
 const validHash=v=>typeof v==='string'&&H64.test(v);
@@ -34,8 +34,9 @@ export function verifyRuntimeDraft928({draft,expected}){
  try{
  const entries=Object.entries(PORTS927);
  if(Object.keys(draft).length!==4||Object.keys(expected).length!==4)throw Error('INCOMPLETE');
- const observations=entries.map(([component,port])=>({...draft[component],component,runtimePid:1,lineage:'VERIFIED',listener:'OWNED',stable:true,state:'RUNNING'}));
- const matched=validateRuntime926(observations,expected).every(x=>x.verified)&&entries.every(([id,port])=>draft[id].port===port);
+ const keys=['mode','identity','principalSid','definitionSha256','runtimeSha256','commandSha256','port'];
+ const valid=(x,port)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).length===keys.length&&keys.every(k=>Object.hasOwn(x,k))&&['SCM','SCHEDULED_TASK'].includes(x.mode)&&typeof x.identity==='string'&&x.identity.length>0&&x.identity.length<=260&&/^S-1-[0-9-]+$/.test(x.principalSid||'')&&[x.definitionSha256,x.runtimeSha256,x.commandSha256].every(validHash)&&x.port===port;
+ const matched=entries.every(([id,port])=>valid(draft[id],port)&&valid(expected[id],port)&&keys.every(k=>draft[id][k]===expected[id][k]));
  return {state:matched?'DRAFT_MATCHES_APPROVED_PINS_NOT_LIVE_ATTESTATION':'DRAFT_PIN_MISMATCH',matched};
  }catch{return {state:'DRAFT_INCOMPLETE_OR_INVALID',matched:false}}
 }
