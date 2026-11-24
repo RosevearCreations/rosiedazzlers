@@ -1,0 +1,26 @@
+name: Rosie 927 Inventory Guided Original Receiver and Enrollment Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  guided-927:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check assets/build927-guided-readiness.mjs
+          node --check functions/api/admin/sysop_927.js
+          node --check assets/build927-admin.mjs
+          node --check scripts/build927-local-signer.mjs
+          node tests/build927_guided_readiness.test.mjs
+          node tests/build926_runtime_certification.test.mjs
+          node tests/build925_field_reconciliation.test.mjs
