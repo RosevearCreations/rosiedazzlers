@@ -24,3 +24,11 @@ jobs:
           node tests/build927_guided_readiness.test.mjs
           node tests/build926_runtime_certification.test.mjs
           node tests/build925_field_reconciliation.test.mjs
+      - name: Parse Windows scripts without running them
+        shell: pwsh
+        run: |
+          foreach ($file in @('scripts/build927-windows-guided-inventory.ps1','scripts/build927-provision-local-signer.ps1')) {
+            $tokens=$null; $errors=$null
+            [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) $file),[ref]$tokens,[ref]$errors)
+            if ($errors.Count -gt 0) { $errors | Format-List | Out-String | Write-Error; exit 1 }
+          }

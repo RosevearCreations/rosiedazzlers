@@ -34,9 +34,10 @@ export async function onRequestGet({request,env}){
  const a=await requireStaffAccess({request,env,capability:null,allowLegacyAdminFallback:false});if(!a.ok)return a.response;
  if(a.auth_mode!=='session'||!a.actor?.is_active||!UUID.test(a.actor.id)||!hasActionAccess(a.actor,'admin.settings.manage'))return reply({ok:false,error:'ORIGINAL_ADMIN_SESSION_REQUIRED'},403);
  try{
- const [receivers,...evidence]=await Promise.all([Promise.all(RECEIVERS927.map(id=>receiver(env,id))),...[
+ const receivers=await Promise.all(RECEIVERS927.map(id=>receiver(env,id)));
+ const evidence=[];for(const [name,table] of [
  ['source','rosie_sysop_receipts_v918'],['ack','rosie_sysop_receiver_acks_v919'],['host','rosie_sysop_host_recovery_v919'],['preflight','rosie_sysop_preflight_v920'],['health','rosie_sysop_windows_health_v921'],['application','rosie_sysop_app_attestations_v923'],['ownerReview','rosie_sysop_field_reviews_v925'],['witnessEnrollment','rosie_sysop_witness_enrollment_v926'],['certification','rosie_sysop_operational_certifications_v926']
- ].map(async ([name,table])=>({name,recordPresent:!!await latest(env,table,'id')}))]);
+ ])evidence.push({name,recordPresent:!!await latest(env,table,'id')});
  return reply({ok:true,build:927,actorStaffId:a.actor.id,pins:pinStatus(env),receivers,evidence,fieldCertified:false,sevenSourceConnected:false,authorizesAction:false})
  }catch{return reply({ok:false,state:'HOLD',error:'PRIVATE_ORIGINAL_READINESS_UNAVAILABLE'},503)}
 }
