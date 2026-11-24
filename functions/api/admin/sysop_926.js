@@ -39,7 +39,7 @@ export async function onRequestGet({request,env}){
  const a=await auth(request,env);if(!a.ok)return a.response;
  const admin=hasActionAccess(a.actor,'admin.settings.manage');let cfg=null;
  try{cfg=await settings(env)}catch{}
- const role=cfg?Object.entries({...cfg.roles,RUNTIME_INSPECTOR:cfg.runtime,CERTIFICATION_AUTHORITY:cfg.authority}).find(([,p])=>p.staffId===a.actor.id)?.[0]||null:null;
+ const role=cfg?Object.entries({RUNTIME_INSPECTOR:cfg.runtime,CERTIFICATION_AUTHORITY:cfg.authority,...cfg.roles}).find(([,p])=>p.staffId===a.actor.id)?.[0]||null:null;
  if(!admin&&!role)return reply({ok:false,error:'ORIGINAL_ROLE_REQUIRED'},403);
  try{
  const enrollments=admin?await db(env,EN+'?select=id,staff_id,created_at&order=created_at.desc&limit=20'):[];

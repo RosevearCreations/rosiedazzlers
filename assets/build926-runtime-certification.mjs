@@ -19,8 +19,10 @@ export async function verify926({envelope,pin,role,bindingDigest,now=Date.now()}
 }
 export function validateRoster926(roles,appFingerprint,runtime,authority){
  validatePins925(roles,appFingerprint);
- const all=[...Object.values(roles),runtime,authority];need(all.every(p=>p&&UUID.test(p.staffId||'')&&H40.test(p.expectedCommit||'')&&H64.test(p.fingerprintSha256||'')&&typeof p.publicKeySpkiBase64==='string'),'ROLE_PIN_REQUIRED');
- need(new Set(all.map(p=>p.fingerprintSha256).concat(appFingerprint)).size===8&&new Set(all.map(p=>p.staffId)).size===7,'INDEPENDENT_ROLES_REQUIRED');
+ const extra=[runtime,authority];need(extra.every(p=>p&&UUID.test(p.staffId||'')&&H40.test(p.expectedCommit||'')&&H64.test(p.fingerprintSha256||'')&&typeof p.publicKeySpkiBase64==='string'),'ROLE_PIN_REQUIRED');
+ // Reuse the existing independent inspector and production witness, never their authority interchangeably.
+ need(runtime.staffId===roles.INSPECTOR.staffId&&runtime.fingerprintSha256===roles.INSPECTOR.fingerprintSha256&&runtime.publicKeySpkiBase64===roles.INSPECTOR.publicKeySpkiBase64,'RUNTIME_INSPECTOR_PIN_MISMATCH');
+ need(authority.staffId===roles.PRODUCTION_WITNESS.staffId&&authority.fingerprintSha256===roles.PRODUCTION_WITNESS.fingerprintSha256&&authority.publicKeySpkiBase64===roles.PRODUCTION_WITNESS.publicKeySpkiBase64,'CERTIFICATION_AUTHORITY_PIN_MISMATCH');
 }
 export function validateRuntime926(observations,expected){
  need(Array.isArray(observations)&&observations.length===4&&exact(expected,SERVICES925),'FOUR_COMPONENTS_REQUIRED');
