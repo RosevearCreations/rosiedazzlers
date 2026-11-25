@@ -1,0 +1,25 @@
+name: Rosie 930 Independent Signed Guest and Launcher Custody Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-930:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check functions/api/admin/sysop_930.js
+          node --check assets/build930-admin.mjs
+          node --check scripts/build930-sign.mjs
+          node tests/build930_signed_guest_custody.test.mjs
+          node tests/build929_guest_custody.test.mjs
+          node tests/build926_runtime_certification.test.mjs
