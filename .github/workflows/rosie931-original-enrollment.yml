@@ -1,0 +1,31 @@
+name: Rosie 931 Original Capture and Independent Enrollment Gate
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-931:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check functions/api/admin/sysop_931.js
+          node --check assets/build931-admin.mjs
+          node --check scripts/build930-sign.mjs
+          node tests/build931_original_enrollment.test.mjs
+          node tests/build930_signed_guest_custody.test.mjs
+          node tests/build929_guest_custody.test.mjs
+      - name: Parse original collector
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][System.Management.Automation.Language.Parser]::ParseFile((Join-Path (Get-Location) 'scripts/build931-original-evidence.ps1'),[ref]$tokens,[ref]$errors)
+          if ($errors.Count -gt 0) { $errors | Format-List | Out-String | Write-Error; exit 1 }
