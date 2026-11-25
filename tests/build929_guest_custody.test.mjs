@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {analyse929,mqttObservation929,receiverEnrollment929} from '../assets/build929-guest-custody.mjs';
+const now=1800000000000, names=['Rosevear AI Hub Unattended Boot','Rosevear AI Hub Unattended Recovery','Rosevear AI Hub Recovery','Rosevear AI Hub Startup','Rosevear AI Hub LAN Gateway'];
+const i={mode:'ORIGINAL_GUEST_LAUNCHER_DIAGNOSTIC_NOT_CERTIFICATION',observedAtMs:now,bootTimeMs:now-100000,launchers:names.map((task,j)=>({task,lastResult:j===0?2:0,launcher:'boot-hub-unattended356.ps1',actionMatchesHubRoot:true,scriptSha256:'a'.repeat(64),definitionSha256:'b'.repeat(64),passwordLogon:true})),listeners:[],bootLog:{state:'TIME_ALIGNED_LOG_ONLY',matchedPassCount:1,reasonCodes:['GATEWAY_HOLD']},guest:{vmRunning:true,addressSource:'OWNER_AND_VM_PROPERTY_AGREE',mqttTcp:'REACHABLE',guestPropertyState:'PRIVATE_IPV4_REPORTED'}};
+const a=analyse929(i,now);assert.deepEqual(a.boot.reasonCodes,['GATEWAY_HOLD']);assert.equal(a.guest.guestTcp,true);assert.equal(a.guest.mqttAuthenticationVerified,false);assert.equal(a.detachedCustodyVerified,false);assert.equal(a.fieldCertified,false);
+assert.equal(analyse929({...i,bootLog:{...i.bootLog,matchedPassCount:2}},now).boot.reasonCodes.length,0);
+assert.equal(analyse929({...i,bootLog:{...i.bootLog,reasonCodes:['UNKNOWN']}},now).boot.reasonCodes.length,0);
+assert.equal(analyse929({...i,guest:{...i.guest,addressSource:'VM_PROPERTY_ONLY'}},now).guest.guestTcp,false);
+assert.equal(analyse929(i,now+300001).fresh,false);
+assert.throws(()=>analyse929({...i,launchers:[...i.launchers.slice(1),i.launchers[1]]},now));
+const report={online:true,usernameConfigured:true,passwordConfigured:true,guestEndpointConfirmed:true,observedAtMs:now};
+assert.equal(mqttObservation929(report,now).state,'OPERATOR_REPORTED_CONFIGURED_GUEST_CONNECTION');assert.equal(mqttObservation929(report,now).independentAuthenticationVerified,false);
+assert.equal(mqttObservation929({...report,online:'true'},now).state,'HOLD_ORIGINAL_GUEST_MQTT');assert.equal(mqttObservation929(report,now+300001).fresh,false);
+const rows=['ai-data-platform','rosevear-comms-hub'].map(receiverId=>({receiverId,ready:true,blockers:[],recentNativeWitness:true}));
+assert.equal(receiverEnrollment929(rows).bothRecentNativeWitnesses,true);assert.equal(receiverEnrollment929(rows).independentFinalAcceptance,false);assert.equal(receiverEnrollment929([...rows,rows[0]]).bothRecentNativeWitnesses,false);assert.equal(receiverEnrollment929([]).bothRecentNativeWitnesses,false);
+console.log('Build 929 diagnostic and receiver evidence boundaries passed');
