@@ -21,7 +21,7 @@ try{
  const input=JSON.parse(read(process.env.ROSEVEAR_ROSIE930_INPUT,45000)),binding=input.binding;
  if(!binding||! /^[a-f0-9]{64}$/.test(binding.nonce)||!input.evidence)throw Error();
  let bindingDigest=await digest925(binding);
- if(cfg.role==='CUSTODY_AUTHORITY'){if(!input.guest||!input.launcher)throw Error();bindingDigest=await digest925({bindingDigest,guestDigest:await digest925(input.guest),launcherDigest:await digest925(input.launcher)})}
+ if(process.argv.includes('--enroll-key-possession')){if(binding.role!==cfg.role||binding.staffId!==cfg.staffId||binding.fingerprint!==createHash('sha256').update(der).digest('hex')||input.evidence.decision!=='ENROLL'||input.evidence.scope!=='KEY_POSSESSION_ONLY'||Object.keys(input.evidence).length!==2)throw Error();}else if(cfg.role==='CUSTODY_AUTHORITY'){if(!input.guest||!input.launcher)throw Error();bindingDigest=await digest925({bindingDigest,guestDigest:await digest925(input.guest),launcherDigest:await digest925(input.launcher)})}
  const issuedAtMs=Date.now(),payload={schema:'rosevear.rosie.original.v926',role:cfg.role,staffId:cfg.staffId,sourceCommit:commit,bindingDigest,issuedAtMs,expiresAtMs:issuedAtMs+120000,evidence:input.evidence,authorizesAction:false};
  console.log(JSON.stringify({payload,signature:sign(null,Buffer.from(canonical918(payload)),key).toString('hex')}));
 }catch{process.stderr.write('ROSIE930_HOLD: independently reviewed source evidence and private local signer required. No signature issued.\n');process.exit(2)}
