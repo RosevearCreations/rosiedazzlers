@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {generateKeyPairSync,createHash,sign,randomUUID} from 'node:crypto';
+import {capture931,verifyEnrollment931,enrollmentReady931} from '../assets/build931-original-enrollment.mjs';
+import {canonical918} from '../assets/build918-signed-mesh-contract.mjs';
+import {digest925} from '../assets/build925-field-reconciliation.mjs';
+const now=1800000000000,h='a'.repeat(64),roles=['GUEST_WITNESS','LAUNCHER_INSPECTOR','CUSTODY_AUTHORITY'],pins={},keys={};
+for(const role of roles){const k=generateKeyPairSync('ed25519'),der=k.publicKey.export({type:'spki',format:'der'});keys[role]=k.privateKey;pins[role]={staffId:randomUUID(),expectedCommit:'b'.repeat(40),fingerprintSha256:createHash('sha256').update(der).digest('hex'),publicKeySpkiBase64:der.toString('base64')}}
+const role=roles[0],pin=pins[role],binding={challengeId:randomUUID(),nonce:h,role,staffId:pin.staffId,fingerprint:pin.fingerprintSha256,configDigest:h},payload={schema:'rosevear.rosie.original.v926',role,staffId:pin.staffId,sourceCommit:pin.expectedCommit,bindingDigest:await digest925(binding),issuedAtMs:now,expiresAtMs:now+120000,evidence:{decision:'ENROLL',scope:'KEY_POSSESSION_ONLY'},authorizesAction:false};
+const envelope={payload,signature:sign(null,Buffer.from(canonical918(payload)),keys[role]).toString('hex')},args={binding,envelope,pin,actorId:pin.staffId,configDigest:h,now};
+const v=await verifyEnrollment931(args);assert.equal(v.keyPossessionVerified,true);assert.equal(v.physicalIdentityVerified,false);
+await assert.rejects(()=>verifyEnrollment931({...args,actorId:randomUUID()}));await assert.rejects(()=>verifyEnrollment931({...args,configDigest:'c'.repeat(64)}));await assert.rejects(()=>verifyEnrollment931({...args,now:now+120001}));
+const rows=roles.map(role=>({role,staff_id:pins[role].staffId,fingerprint:pins[role].fingerprintSha256,config_digest:h,enrollment_digest:h}));assert.equal(enrollmentReady931(rows,{pins},h).every(x=>x.enrolled),true);assert.equal(enrollmentReady931(rows.slice(1),{pins},h).every(x=>x.enrolled),false);
+const cap={mode:'ORIGINAL_931_UNSIGNED_CAPTURE',observedAtMs:now,bootTimeMs:now-10000,guest:{vmRunning:true,guestIdentitySha256:h},launchers:['hub','caddy','ollama'].map((component,i)=>({component,port:[8765,8443,11434][i],stableListener:true,pid:i+1,startedAtMs:now-5000,binarySha256:h}))};const c=capture931(cap,now);assert.equal(c.guestIdentityCandidate,true);assert.equal(c.launchers.every(x=>x.candidate),true);assert.equal(c.detachedCustodyVerified,false);assert.equal(c.mqttAuthenticationVerified,false);assert.equal(capture931(cap,now+300001).launchers.every(x=>!x.candidate),true);assert.throws(()=>capture931({...cap,launchers:[cap.launchers[0],cap.launchers[0],cap.launchers[2]]},now));
+console.log('931 enrollment and original capture boundaries passed');
