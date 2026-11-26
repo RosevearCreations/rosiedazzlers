@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {observeAdmin933,observeBoundary933} from '../assets/build933-canonical-telemetry-probe.mjs';
+import {readFileSync} from 'node:fs';
+const wait=async()=>{};
+const good=()=>new Response('<h1>Build 918 — Seven-App Signed Telemetry</h1><script src="/assets/build918-telemetry-admin.mjs"></script>',{headers:{'content-type':'text/html; charset=utf-8'}});
+assert.deepEqual(await observeAdmin933(async path=>{assert.equal(path,'/admin-sysop-918');return good()},wait),{status:200,reason:'EXACT_ADMIN_DOCUMENT',attempts:1});
+let n=0;
+assert.equal((await observeAdmin933(async()=>{if(++n===1)throw Error('transport');return good()},wait)).attempts,2);
+assert.equal((await observeAdmin933(async()=>{throw Error('transport')},wait)).status,null);
+assert.equal((await observeAdmin933(async()=>new Response('wrong page',{headers:{'content-type':'text/html'}}),wait)).reason,'ADMIN_DOCUMENT_MISMATCH');
+assert.equal((await observeAdmin933(async()=>new Response('{}',{headers:{'content-type':'application/json'}}),wait)).reason,'ADMIN_CONTENT_TYPE_MISMATCH');
+assert.equal((await observeAdmin933(async()=>new Response('x'.repeat(65537),{headers:{'content-type':'text/html'}}),wait)).reason,'ADMIN_BODY_UNBOUNDED');
+assert.equal((await observeAdmin933(async()=>new Response(null,{status:302,headers:{location:'https://other.invalid/'}}),wait)).status,302);
+for(const [path,code] of [['/api/admin/sysop_918',401],['/api/admin/sysop_918',200],['/internal/rosevear/sysop/telemetry/v1',400]])assert.equal((await observeBoundary933(async p=>{assert.equal(p,path);return new Response(null,{status:code})},path,wait)).status,code);
+assert.throws(()=>observeBoundary933(async()=>good(),'/other',wait));
+const smoke=readFileSync('scripts/development_http_smoke.sh','utf8');
+assert.match(smoke,/admin-sysop-918\|Build 918/);assert.match(smoke,/admin-sysop-931\|Build 931/);assert.match(smoke,/private evidence endpoint/);
+console.log('Build 933 canonical admin content and unchanged anonymous boundary checks PASS');

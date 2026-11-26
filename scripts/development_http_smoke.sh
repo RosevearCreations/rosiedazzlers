@@ -94,7 +94,24 @@ grep -q "Confirm public-use approval" /tmp/rosie-admin-gallery.html || { report_
 grep -q 'data-action="publish"' /tmp/rosie-admin-gallery.html || { report_failure "${LABEL}: Gallery publication page missing explicit publish control."; exit 40; }
 grep -q 'data-action="unpublish"' /tmp/rosie-admin-gallery.html || { report_failure "${LABEL}: Gallery publication page missing explicit unpublish control."; exit 41; }
 
+# Build 933: verify the actual telemetry and independent custody pages, not
+# just a successful HTTP response from a generic fallback. Canonical URLs
+# avoid Cloudflare Pages' .html redirects.
+for entry in "admin-sysop-918|Build 918 — Seven-App Signed Telemetry" "admin-sysop-931|Build 931 — Original evidence and independent enrollment"; do
+  route="${entry%%|*}"
+  marker="${entry#*|}"
+  code=$(curl_code "/tmp/rosie-${route}.html" "${BASE_URL}/${route}")
+  [[ "$code" == "200" ]] && grep -Fq "$marker" "/tmp/rosie-${route}.html" || { report_failure "${LABEL}: telemetry/custody page ${route} failed exact content check (HTTP ${code})."; exit 54; }
+done
 if [[ "$SMOKE_SCOPE" == "full" ]]; then
+  # Explicit anonymous denial; don't follow an unexpected redirect to a login
+  # page and mistake that for the required API boundary response.
+  for endpoint in /api/admin/sysop_918 /api/admin/sysop_931; do
+    code=$(curl --silent --show-error --max-time 12 --output /dev/null --write-out '%{http_code}' "${BASE_URL}${endpoint}")
+    [[ "$code" == "401" || "$code" == "403" ]] || { report_failure "${LABEL}: private evidence endpoint ${endpoint} did not deny anonymous access (HTTP ${code})."; exit 55; }
+  done
+  code=$(curl --silent --show-error --max-time 12 --output /dev/null --write-out '%{http_code}' "${BASE_URL}/internal/rosevear/sysop/telemetry/v1")
+  [[ "$code" == "400" ]] || { report_failure "${LABEL}: telemetry source missing-challenge boundary returned HTTP ${code}."; exit 56; }
   landing_api_code=$(curl_code /tmp/rosie-landing-pages.json "${BASE_URL}/api/landing_pages_public")
   [[ "$landing_api_code" == "200" ]] || { report_failure "${LABEL}: public landing-page API returned HTTP ${landing_api_code}."; exit 17; }
   jq -e '.ok == true and .pages["tillsonburg-auto-detailing"] and .pages["port-dover-auto-detailing"]' /tmp/rosie-landing-pages.json >/dev/null || { report_failure "${LABEL}: landing-page API is missing guarded local pages."; exit 18; }

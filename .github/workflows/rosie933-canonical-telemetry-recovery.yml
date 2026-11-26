@@ -1,0 +1,24 @@
+name: Rosie 933 Canonical Telemetry and Custody Release Verification
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  canonical-933:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          bash -n scripts/development_http_smoke.sh
+          node --check scripts/build918_continuous_production_watch.mjs
+          node tests/build918_production_watch.test.mjs
+          node tests/build933_canonical_telemetry_probe.test.mjs
+          node tests/build932_custody_admission.test.mjs
