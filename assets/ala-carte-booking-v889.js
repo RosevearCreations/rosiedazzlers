@@ -1,6 +1,7 @@
 // Build 889: customer-facing standalone service basket.
 // The live server catalogue, checkout capacity and payment callbacks remain authoritative.
 // No customer data is saved in URLs, browser storage or analytics.
+import {writeSwitch934,consumeSwitch934,describeSwitch934} from './booking-path-switch-v934.mjs';
 const form=document.getElementById('alaCarteForm889');
 const field=name=>form.elements.namedItem(name);
 const byId=id=>document.getElementById(id);
@@ -10,7 +11,11 @@ const selected=new Set();
 const quoteRequested907=new Set();
 let quoteRequestId907=null;
 let catalog=null,policy=null,approved=false,busy=false,uncertain=false;
-let availability=null;
+let availability=null,incoming934=null;
+try{incoming934=consumeSwitch934(sessionStorage,'manual')}catch{}
+if(incoming934)field('vehicle_size').value=incoming934.size;
+function showSwitch934(){if(!incoming934)return;byId('switchReview934').hidden=false;status('switchStatus934','Vehicle size carried over. Review your earlier selections against the current catalogue.');const list=byId('switchItems934');list.replaceChildren(...describeSwitch934(incoming934,catalog).map(x=>text('li',x)));}
+document.querySelectorAll('[data-switch934="smart"]').forEach(a=>a.addEventListener('click',e=>{if(e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey||!readValue('vehicle_size'))return;e.preventDefault();try{writeSwitch934(sessionStorage,'manual',{size:readValue('vehicle_size'),payable_codes:[...selected],quote_codes:[...quoteRequested907]},incoming934);location.assign('/book-smart')}catch{status('checkoutStatus889','Unable to carry choices. Use the normal booking-method link to start fresh, or try again.')}}));
 const readValue=name=>String(field(name)?.value||'').trim();
 const dateIsCold=date=>/^\d{4}-(11|12|01|02|03)-\d{2}$/.test(date);
 const text=(tag,string)=>{const el=document.createElement(tag);el.textContent=string;return el;};
@@ -102,10 +107,10 @@ async function loadCatalog() {
     status('catalogStatus889',approved
       ?'Individual services are available under the current owner-approved catalogue. Select a vehicle size and your services.'
       :'Individual service checkout is awaiting owner approval of standalone-eligible items, prices and deposit terms. No payment can be started here. Guided package booking remains available.');
-    drawServices();drawBasket();
+    drawServices();drawBasket();showSwitch934();
   } catch {
     approved=false;status('catalogStatus889','We could not verify the current service catalogue. No standalone checkout is available. Please choose guided booking or contact Rosie.');
-    drawServices();drawBasket();
+    drawServices();drawBasket();showSwitch934();
   }
 }
 function availabilityMessage(date,slot,data) {

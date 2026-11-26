@@ -1,0 +1,22 @@
+name: Rosie 934 Customer Booking Path Continuity
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  booking-switch-934:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check assets/ala-carte-booking-v889.js
+          node tests/build934_booking_path_switch.test.mjs
+          node --test tests/build906_booking_paths_recovery.test.mjs tests/build909_customer_continuity_acceptance.test.mjs
