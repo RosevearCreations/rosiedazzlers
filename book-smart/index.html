@@ -36,6 +36,7 @@ body{background:radial-gradient(ellipse at 80% 5%,#203c59,transparent 50%),#0915
 <button type="button" class="btn ghost" id="restoreSmart907">Restore saved choices</button>
 <button type="button" class="btn ghost" id="clearSmart907">Clear saved choices</button>
 </div><p id="smartDraftStatus907" class="status" role="status" aria-live="polite">Nothing saved in this browser by this feature.</p></section>
+<section id="switchReview934" hidden aria-label="Previous booking path"><h2>Your previous service choices</h2><p id="switchStatus934" role="status" aria-live="polite"></p><ul id="switchItems934"></ul><p>These are for review only. Choose your current goal and condition; nothing from the previous basket is added to a charge automatically.</p></section>
 <section><h2>1 · Your vehicle and current condition</h2><div class="choices">
 <label>Vehicle size<select id="size" required><option value="">Choose vehicle size</option><option value="small">Car / compact</option>
 <option value="mid">SUV / crossover</option><option value="oversize">Large SUV / truck / van</option></select></label>
@@ -57,26 +58,48 @@ body{background:radial-gradient(ellipse at 80% 5%,#203c59,transparent 50%),#0915
 <label class="extra"><input type="checkbox" value="coating">Wax / ceramic / graphene</label>
 <label class="extra"><input type="checkbox" value="headlights">Cloudy headlights</label></div>
 <div class="actions"><button type="submit" class="btn primary" id="suggest">Show my recommended plan</button>
-<a class="btn ghost" href="/book-custom">I prefer manual/custom booking</a></div></section>
+<a class="btn ghost" href="/book-custom" data-switch934="manual">I prefer manual/custom booking</a></div></section>
 <section id="recommendations" hidden><h2>4 · Recommended starting plan</h2><div class="result" id="result"></div>
 <p class="muted">Suggested extras below are all <strong>off by default</strong>. Select only what you want. We recheck eligibility and pricing before checkout.</p>
 <div class="extras" id="suggestedExtras"></div>
 <div class="status" id="photoAdvice">You can upload photos during booking.</div>
 <div class="actions"><a id="continue" class="btn primary" href="/booking-planner?mode=smart">Continue to photos, account and booking</a>
-<a href="/book-custom" class="btn ghost">Switch to manual/custom</a></div></section>
+<a href="/book-custom" data-switch934="manual" class="btn ghost">Switch to manual/custom</a></div></section>
 </form><p class="status" id="catalogStatus" role="status" aria-live="polite">Loading the current Rosie catalogue…</p></div>
 <script type="module">
 import {recommendSmart906,smartHandoff906} from '/assets/book-smart-v906.mjs';
+import {writeSwitch934,consumeSwitch934,describeSwitch934,restoreSmart934} from '/assets/booking-path-switch-v934.mjs';
 import {SMART_DRAFT_KEY907,parseSmartDraft907,sanitizeSmartDraft907,reconcileSmartDraft907} from '/assets/smart-draft-v907.mjs';
-const $=id=>document.getElementById(id);let catalog=null,recommendation=null;
+const $=id=>document.getElementById(id);let catalog=null,recommendation=null, incoming934=null;
 const accepted=new Set(),money=x=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(x);
 async function load(){
  try{const r=await fetch('/api/pricing_catalog_public',{credentials:'same-origin',cache:'no-store'});
  const d=await r.json();if(!r.ok||d.ok!==true)throw Error('Unavailable');
- catalog=d;$('catalogStatus').textContent='Current catalogue loaded. Suggestions are optional; server checks final price.';}
+ catalog=d;$('catalogStatus').textContent='Current catalogue loaded. Suggestions are optional; server checks final price.';renderSwitch934();}
  catch{$('catalogStatus').textContent='Catalogue unavailable. Try manual booking or contact Rosie before paying.';$('suggest').disabled=true;}}
 function chosen(){return [...document.querySelectorAll('#concerns input:checked')].map(x=>x.value)}
 function link(){if(recommendation)$('continue').href=smartHandoff906(recommendation,[...accepted])}
+function invalidate934(){recommendation=null;accepted.clear();$('recommendations').hidden=true;$('continue').removeAttribute('href');$('catalogStatus').textContent='Choices changed. Show a new recommended plan before continuing.';}
+$('smartForm906').addEventListener('change',e=>{if(e.target.matches('#size,#condition,input[name=goal],#concerns input'))invalidate934()});
+$('continue').addEventListener('click',e=>{if(!recommendation||!$('continue').hasAttribute('href'))e.preventDefault()});
+function renderSwitch934(){
+ if(!incoming934)return;
+ $('switchReview934').hidden=false;
+ $('switchStatus934').textContent='Vehicle size carried over. Review these earlier choices before booking.';
+ const rows=describeSwitch934(incoming934,catalog);$('switchItems934').replaceChildren();
+ for(const label of rows){const li=document.createElement('li');li.textContent=label;$('switchItems934').append(li)}
+}
+try{incoming934=consumeSwitch934(sessionStorage,'smart');}catch{}
+if(incoming934){
+ const restored=restoreSmart934(incoming934);$('size').value=restored.size;
+ if(restored.goal){const g=document.querySelector('input[name=goal][value="'+restored.goal+'"]');if(g)g.checked=true;$('condition').value=restored.condition;document.querySelectorAll('#concerns input').forEach(n=>{n.checked=restored.concerns.includes(n.value)})}
+ renderSwitch934();
+}
+document.querySelectorAll('[data-switch934="manual"]').forEach(a=>a.addEventListener('click',e=>{
+ if(e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;
+ if(!$('size').value)return;
+ e.preventDefault();try{writeSwitch934(sessionStorage,'smart',{...draftInput907(),package_code:recommendation?.package_code||null},incoming934);location.assign('/book-custom')}catch{$('catalogStatus').textContent='Your browser could not carry your choices. Use the normal booking-method link to start fresh, or try again.'}
+}));
 $('smartForm906').addEventListener('submit',e=>{e.preventDefault();accepted.clear();
  const data=recommendSmart906({goal:document.querySelector('input[name=goal]:checked')?.value,
  condition:$('condition').value,size:$('size').value,concerns:chosen(),catalog});

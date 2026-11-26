@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {writeSwitch934,consumeSwitch934,describeSwitch934,restoreSmart934} from '../assets/booking-path-switch-v934.mjs';
+const map=new Map(),storage={setItem:(k,v)=>map.set(k,v),getItem:k=>map.get(k),removeItem:k=>map.delete(k)};
+const now=1000000,smart={size:'mid',goal:'interior',condition:'heavy',concerns:['pets'],accepted_addons:['pet_hair'],package_code:'interior_detail',email:'do-not-store@example.invalid',price:123};
+writeSwitch934(storage,'smart',smart,null,now);
+assert.ok(!JSON.stringify([...map]).includes('do-not-store'));assert.ok(!JSON.stringify([...map]).includes('price'));
+const manual=consumeSwitch934(storage,'manual',now);assert.equal(manual.size,'mid');assert.deepEqual(manual.smart.accepted_addons,['pet_hair']);assert.equal(consumeSwitch934(storage,'manual',now),null);
+assert.ok(describeSwitch934(manual,{addons:[{code:'pet_hair',name:'Pet Hair Removal'}]}).some(x=>x.includes('Pet Hair Removal')));
+writeSwitch934(storage,'manual',{size:'small',payable_codes:['wax'],quote_codes:['ceramic']},manual,now);
+const back=consumeSwitch934(storage,'smart',now);assert.deepEqual(restoreSmart934(back),{size:'small',goal:'interior',condition:'heavy',concerns:['pets']});assert.ok(describeSwitch934(back,{}).some(x=>x.includes('ceramic')));
+writeSwitch934(storage,'smart',smart,null,now);assert.equal(consumeSwitch934(storage,'manual',now+1800001),null);
+assert.throws(()=>writeSwitch934(storage,'manual',{size:'mid',payable_codes:['wax'],quote_codes:['wax']},null,now));
+writeSwitch934(storage,'smart',smart,null,now);assert.equal(consumeSwitch934(storage,'smart',now),null);
+const s=readFileSync('book-smart/index.html','utf8'),m=readFileSync('assets/ala-carte-booking-v889.js','utf8');
+assert.match(s,/data-switch934="manual"/);assert.match(s,/removeAttribute\('href'\)/);assert.match(s,/invalidate934\(\)/);assert.match(m,/consumeSwitch934\(sessionStorage,'manual'\)/);assert.match(m,/showSwitch934\(\)/);
+console.log('934 privacy-minimized two-path switch, one-use expiry, round-trip review and stale recommendation gate PASS');
