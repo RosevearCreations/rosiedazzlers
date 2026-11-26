@@ -21,3 +21,7 @@ const workflow=readFileSync('.github/workflows/rosie918-continuous-production-wa
 assert.match(workflow,/cron: '17,47 \* \* \* \*'/);
 assert.match(workflow,/scripts\/build918_continuous_production_watch\.mjs/);
 console.log('Rosie 918 read-only scheduled Production watch, source boundary and no recovery claims PASS');
+
+assert.match(script,/observeAdmin933\(probe\)/);
+assert.match(script,/observeBoundary933\(probe,'\/api\/admin\/sysop_918'\)/);
+assert.match(script,/redirect:'error'/);
