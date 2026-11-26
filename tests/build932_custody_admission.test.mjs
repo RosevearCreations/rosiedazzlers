@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {digest925} from '../assets/build925-field-reconciliation.mjs';
+import {requireEnrollments932,verifyReadback932,receiverAcceptance932} from '../assets/build932-custody-admission.mjs';
+const h=c=>c.repeat(64),roles=['GUEST_WITNESS','LAUNCHER_INSPECTOR','CUSTODY_AUTHORITY'],config={pins:Object.fromEntries(roles.map((r,i)=>[r,{staffId:randomUUID(),fingerprintSha256:h(String(i+1))}]))},d=h('a');
+const rows=roles.map((role,i)=>({role,staff_id:config.pins[role].staffId,fingerprint:config.pins[role].fingerprintSha256,config_digest:d,enrollment_digest:h(String(i+4))}));
+assert.equal(requireEnrollments932(rows,config,d),true);assert.throws(()=>requireEnrollments932(rows.slice(1),config,d));assert.throws(()=>requireEnrollments932([...rows,rows[0]],config,d));assert.throws(()=>requireEnrollments932(rows,config,h('b')));
+const id=randomUUID(),caseId=randomUUID(),evidence={guest:{sample:'fixture-guest'},launcher:{sample:'fixture-launcher'},authority:{sample:'fixture-authority'}};
+const result={configDigest:d,bindingDigest:h('b'),guestDigest:await digest925(evidence.guest),launcherDigest:await digest925(evidence.launcher),authorityDigest:await digest925(evidence.authority),approved:true,guestSignedObservationAccepted:true,detachedLauncherSignedObservationAccepted:true,receiverContinuity:'FRESH_PAIR_BASELINE_ONLY',bootHoldClosed:false};
+const row={id,case_id:caseId,prior_receipt_id:null,binding_digest:result.bindingDigest,guest_digest:result.guestDigest,launcher_digest:result.launcherDigest,authority_digest:result.authorityDigest,result,evidence};
+const args={id,caseId,priorReceiptId:null,result};
+assert.equal(await verifyReadback932(row,args),true);await assert.rejects(()=>verifyReadback932({...row,case_id:randomUUID()},args));await assert.rejects(()=>verifyReadback932({...row,evidence:{...evidence,guest:{changed:true}}},args));await assert.rejects(()=>verifyReadback932({...row,result:{...result,approved:false}},args));
+assert.equal(receiverAcceptance932(result,null).receiverContinuity,'FIRST_ACCEPTED_PAIR_BASELINE');
+const next={...result,receiverContinuity:'NEW_WITNESSES_SAME_PINNED_LEDGER'};assert.equal(receiverAcceptance932(next,{result}).receiverContinuity,'INDEPENDENT_SAME_LEDGER_CONTINUITY_AT_OBSERVATION');assert.equal(receiverAcceptance932(next,{result:{...result,approved:false}}).receiverContinuity,'CONTINUITY_HOLD');assert.equal(receiverAcceptance932(next,{result:{...result,configDigest:h('c')}}).receiverContinuity,'CONTINUITY_HOLD');assert.equal(receiverAcceptance932({...next,approved:false},{result}).state,'ORIGINAL_OPERATIONAL_HOLD');assert.equal(receiverAcceptance932(next,{result}).fieldCertified,false);
+const api=readFileSync(new URL('../functions/api/admin/sysop_930.js',import.meta.url),'utf8');assert.ok(api.indexOf('await enrolled(env,c,d);const prior=')<api.indexOf("if(x.action==='issue_case'"));assert.ok(api.includes('await verifyReadback932(stored,'));
+console.log('932 common enrollment, durable readback and continuity boundaries passed');
