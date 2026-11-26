@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Rosie 918 every-30-minute read-only main/Cloudflare acceptance and HTTP boundary observer.
 import {assessProduction918} from '../assets/build918-production-watch-contract.mjs';
+import {observeAdmin933,observeBoundary933} from '../assets/build933-canonical-telemetry-probe.mjs';
 const repo=process.env.GITHUB_REPOSITORY||'RosevearCreations/rosiedazzlers';
 const token=process.env.GITHUB_TOKEN||'';
 const base=process.env.ROSIE_PRODUCTION_ORIGIN||'https://rosiedazzlers.ca';
@@ -17,10 +18,9 @@ async function github(path){
  if(!r.ok)throw Error('GITHUB_SOURCE_UNAVAILABLE');
  return r.json();
 }
-async function status(path){
- try{const r=await fetchBound(base+path);return r.status;}
- catch{return null;}
-}
+// Never follow redirects for private API boundary checks. The static admin page
+// uses Cloudflare Pages' canonical extensionless route.
+async function probe(path){return fetchBound(base+path);}
 async function main(){
  if(repo!=='RosevearCreations/rosiedazzlers'||base!=='https://rosiedazzlers.ca')throw Error('PRODUCTION_SCOPE_NOT_APPROVED');
  const sha=(await github('/commits/main')).sha;
@@ -34,8 +34,9 @@ async function main(){
   checks.push(...result.check_runs);
   if(name==='Verify exact Production deployment'&&result.total_count>100)throw Error('EXACT_PRODUCTION_CHECK_SET_UNBOUNDED');
  }
- const http={admin:await status('/admin-sysop-918.html'),privateEndpoint:await status('/api/admin/sysop_918'),sourceScope:await status('/internal/rosevear/sysop/telemetry/v1')};
- const result=assessProduction918({checks,http,sha});
+ const [admin,privateEndpoint,sourceScope]=await Promise.all([observeAdmin933(probe),observeBoundary933(probe,'/api/admin/sysop_918'),observeBoundary933(probe,'/internal/rosevear/sysop/telemetry/v1')]);
+ const http={admin:admin.status,privateEndpoint:privateEndpoint.status,sourceScope:sourceScope.status};
+ const result={...assessProduction918({checks,http,sha}),httpDiagnostics:{admin,privateEndpoint,sourceScope}};
  process.stdout.write(JSON.stringify(result)+'\n');
  if(summary){
   const fs=await import('node:fs/promises');
