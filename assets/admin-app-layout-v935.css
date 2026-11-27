@@ -1,0 +1,24 @@
+/* Build 935: fix implicit grid tracks caused by span-12 children in a
+   single-column content grid; scoped to App Management only. */
+body[data-rosie-app-management="935"] .shell{width:100%;max-width:1500px;box-sizing:border-box;padding:clamp(12px,2vw,24px)}
+body[data-rosie-app-management="935"] .app-layout{display:grid;grid-template-columns:minmax(215px,255px) minmax(0,1fr);align-items:start}
+body[data-rosie-app-management="935"] .content-col{display:grid;grid-template-columns:minmax(0,1fr);min-width:0;width:100%}
+body[data-rosie-app-management="935"] .content-col>*{grid-column:1/-1;min-width:0}
+body[data-rosie-app-management="935"] .content-col>.grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+body[data-rosie-app-management="935"] .content-col>.grid>.card{grid-column:1/-1;min-width:0;box-sizing:border-box}
+body[data-rosie-app-management="935"] .content-col>.grid>.card.span-6{grid-column:span 1}
+body[data-rosie-app-management="935"] .intro-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));align-items:start}
+body[data-rosie-app-management="935"] .intro-card .btn{display:block;margin-top:10px;white-space:normal}
+body[data-rosie-app-management="935"] .checkrow{display:flex;flex-wrap:nowrap;align-items:flex-start;gap:10px;min-width:0}
+body[data-rosie-app-management="935"] .checkrow>input[type=checkbox]{flex:0 0 20px;width:20px;height:20px;margin:3px 0 0;order:0}
+body[data-rosie-app-management="935"] .checkrow>:is(label,span):not([role=button]){flex:1 1 0;min-width:0;white-space:normal;word-break:normal;overflow-wrap:break-word;order:1}
+body[data-rosie-app-management="935"] .checkrow>:not(input):not(label):not(span){flex:0 0 auto;order:2}
+body[data-rosie-app-management="935"] .catalog-row.package,body[data-rosie-app-management="935"] .catalog-row.addon,body[data-rosie-app-management="935"] .catalog-row.service-area,body[data-rosie-app-management="935"] :is(.pricing-grid-4,.pricing-grid-5,.addon-editor-grid,.catalog-option-grid){grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));align-items:start}
+body[data-rosie-app-management="935"] .catalog-row.package>.catalog-row__head,body[data-rosie-app-management="935"] .catalog-row.package>div:empty{display:none}
+body[data-rosie-app-management="935"] :is(.field,.panel-lite,.catalog-section,.subgrid,.grid2,.addon-editor,.catalog-row){min-width:0}
+body[data-rosie-app-management="935"] :is(.field input,.field textarea,.field select,#addonEditorSelect,#packageEditorSelect){min-width:0;max-width:100%;min-height:44px}
+body[data-rosie-app-management="935"] .addon-image-preview{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+body[data-rosie-app-management="935"] #standaloneFields935{min-width:0;margin:0;padding:12px;border:1px solid var(--border);border-radius:12px}
+body[data-rosie-app-management="935"] #pricingCatalogCard,body[data-rosie-app-management="935"] #standalonePolicy935{scroll-margin-top:18px}
+@media(max-width:1100px){body[data-rosie-app-management="935"] .content-col>.grid{grid-template-columns:minmax(0,1fr)}body[data-rosie-app-management="935"] .content-col>.grid>.card.span-6{grid-column:1/-1}}
+@media(max-width:800px){body[data-rosie-app-management="935"] .app-layout{grid-template-columns:minmax(0,1fr)}body[data-rosie-app-management="935"] .menu-col{position:static}body[data-rosie-app-management="935"] :is(.subgrid,.grid2,.addon-dependency-grid,.friendly-json-grid){grid-template-columns:minmax(0,1fr)}body[data-rosie-app-management="935"] .actorcard{min-width:0;max-width:100%;box-sizing:border-box}body[data-rosie-app-management="935"] .card{padding:14px}}
