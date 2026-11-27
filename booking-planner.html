@@ -723,6 +723,7 @@
   </div>
 
   <script type="module">
+    import {guidedDepositCents936, guidedEstimate936, slotFits936} from "/assets/booking-terms-v936.mjs";
     import { validateFinalReviewContact631, finalReviewDisclosure631 } from "/assets/booking-final-review-v631.js?v=1";
     import { createCheckoutAttemptGuard737, validateBookingAddress737, validateBookingChoices737, CHECKOUT_UNCERTAIN_KEY_737 } from "/assets/booking-journey-v737.js?v=20261101build737";
     import { classifyCheckoutResult808 } from "/assets/checkout-mobile-v808.mjs?v=build808";
@@ -2050,9 +2051,9 @@
       const businessHours = out.business_hours || {};
       const hoursClosed = out.business_hours_conflict === true || businessHours.is_closed === true;
       const map = {
-        AM: !hoursClosed && !out.blocked && !!out.AM,
-        PM: !hoursClosed && !out.blocked && !!out.PM,
-        FULL: !hoursClosed && !out.blocked && !!out.AM && !!out.PM
+        AM: slotFits936(out,date,'AM'),
+        PM: slotFits936(out,date,'PM'),
+        FULL: slotFits936(out,date,'FULL')
       };
       const noLongerOpen = Boolean(state.selectedSlotChoice && !map[state.selectedSlotChoice]);
       if (noLongerOpen) state.selectedSlotChoice = "";
@@ -2126,7 +2127,7 @@
           <span class="muted package-note">${escapeHtml(pkg.best_for || pkg.subtitle || "")}</span>
           ${pkg.customer_goal ? `<span class="tag warn">${escapeHtml(pkg.customer_goal)}</span>` : ""}
           <span class="tag ok">${price != null && Number(price) > 0 ? `Starting at: ${money(price)}` : (size ? "Confirm price" : "Choose size first")}</span>
-          <span class="muted mini">Deposit ${money(pkg.deposit_cad || 0)}</span>
+          <span class="muted mini">Deposit ${money(guidedDepositCents936(pkg)/100)}</span>
         </button>`;
       }).join("");
 
@@ -2235,20 +2236,8 @@
     function computeTotals() {
       const pkg = selectedPackage();
       const size = selectedSize();
-      let subtotal = Number(pkg?.prices_cad?.[size] || 0);
-      let quoteOnly = false;
-
-      selectedAddons().forEach((addon) => {
-        if (addon.quote_required) quoteOnly = true;
-        else if (addon.prices_cad && addon.prices_cad[size] != null) subtotal += Number(addon.prices_cad[size] || 0);
-        else if (addon.price_cad != null) subtotal += Number(addon.price_cad || 0);
-      });
-
-      return {
-        subtotal,
-        deposit: Number(pkg?.deposit_cad || 0),
-        quoteOnly
-      };
+      const estimate=guidedEstimate936(pkg,size,selectedAddons());
+      return {subtotal:estimate.subtotal_cents/100,deposit:estimate.deposit_cents/100,quoteOnly:estimate.quote_only};
     }
 
     function renderVehicleServiceHint() {

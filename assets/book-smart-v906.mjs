@@ -1,5 +1,6 @@
 // Build 906: advisory customer wizard only. Server catalog, availability and
 // checkout remain authoritative. Never silently add an extra or charge a deposit.
+import {guidedDepositCents936} from './booking-terms-v936.mjs';
 const packageCodes={
  exterior:{light:'premium_wash',moderate:'exterior_detail',heavy:'exterior_detail'},
  interior:{light:'basic_detail',moderate:'interior_detail',heavy:'interior_detail'},
@@ -36,7 +37,7 @@ export function recommendSmart906({goal,condition,size,concerns=[],catalog}={}){
  .map(a=>({code:a.code,name:String(a.name||a.code),quote_required:a.quote_required===true,
   price_cad:Number.isFinite(Number(a.prices_cad?.[size]))?Number(a.prices_cad[size]):null}));
  return {ok:true,package_code:pack.code,package_name:String(pack.name||pack.code),
-  price_cad:Number(pack.prices_cad[size]),deposit_cad:Number(pack.deposit_cad||0),
+  price_cad:Number(pack.prices_cad[size]),deposit_cad:guidedDepositCents936(pack)/100,
   size,condition,goal,suggested_extras:addons,extra_auto_selected:false,
   photo_review_recommended:condition==='heavy'||unique.length>0||pack.photo_estimate_recommended===true,
   checkout_authoritative:false};
