@@ -1,0 +1,24 @@
+name: Rosie 935 App Management and Standalone Approval
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  admin-pricing-935:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check assets/admin-app-v313.js
+          node --check functions/api/admin/app_settings_save.js
+          node tests/build935_admin_pricing_editor.test.mjs
+          node --test tests/build889_ala_carte_checkout.test.mjs
+          node tests/build934_booking_path_switch.test.mjs

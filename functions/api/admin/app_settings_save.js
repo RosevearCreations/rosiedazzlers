@@ -1,4 +1,5 @@
 
+import { validateStandalonePolicy935 } from "../../../assets/standalone-policy-v935.mjs";
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed, cleanText } from "../_lib/staff-auth.js";
 
 export async function onRequestOptions() {
@@ -22,6 +23,10 @@ export async function onRequestPost(context) {
     const value = body.value && typeof body.value === "object" ? body.value : {};
 
     if (!key) return withCors(json({ error: "Missing key." }, 400));
+    if (key === "pricing_catalog") {
+      const verdict = validateStandalonePolicy935(value);
+      if (!verdict.ok) return withCors(json({error:verdict.error},400));
+    }
 
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/app_management_settings`, {
       method: "POST",
