@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {validateStandalonePolicy935 as check} from '../assets/standalone-policy-v935.mjs';
+const read=p=>readFileSync(p,'utf8');
+const h=read('admin-app.html'),j=read('assets/admin-app-v313.js'),css=read('assets/admin-app-layout-v935.css'),api=read('functions/api/admin/app_settings_save.js');
+assert.equal(h,read('admin-app/index.html'));for(const id of ['pricingCatalogCard','standalonePolicy935','standaloneFields935','standaloneDeposit935','standaloneConfirm935','saveStandalonePolicy935'])assert.match(h,new RegExp('id="'+id+'"'));
+assert.match(css,/\.content-col\{display:grid;grid-template-columns:minmax\(0,1fr\)/);assert.match(css,/\.content-col>\*\{grid-column:1\/-1/);assert.match(css,/\.checkrow\{display:flex/);
+assert.match(j,/Preserve the active input and caret/);assert.match(j,/Re-render on explicit selection\/save/);assert.match(j,/authoritativePricing935=false/);assert.match(api,/validateStandalonePolicy935\(value\)/);
+const p={enabled:true,owner_approved:true,version:'fixture only',deposit_cad:50,minimum_duration_slots:1},a={code:'wax',standalone_allowed:true,quote_required:false,prices_cad:{small:60,mid:70,oversize:80}};
+const c=(policy=p,addons=[a])=>({booking_rules:{ala_carte_policy:policy},addons});
+assert.equal(check({}).ok,true);assert.equal(check(c({...p,enabled:false},[])).ok,true);assert.equal(check(c()).ok,true);
+for(const bad of [c({...p,owner_approved:false}),c({...p,deposit_cad:50.001}),c({...p,minimum_duration_slots:3}),c({...p,version:''}),c(p,[]),c(p,[{...a,quote_required:true}]),c(p,[{...a,prices_cad:{small:50}}]),c(p,[a,a])])assert.equal(check(bad).ok,false);
+console.log('935 mirrored app layout, stable editor inputs and explicit standalone approval guards PASS');

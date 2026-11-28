@@ -746,7 +746,7 @@
     if (!catalog.public_requirements.length) catalog.public_requirements = (Array.isArray(catalog.booking_rules.public_requirements) ? catalog.booking_rules.public_requirements.slice() : defaults.public_requirements.slice());
     catalog.booking_rules.public_requirements = catalog.public_requirements.slice();
     catalog.packages = catalog.packages.map(function (pkg, index) {
-      return {
+      return { ...(pkg || {}),
         code: pkg && pkg.code || ('package_' + (index + 1)),
         name: pkg && pkg.name || ('Package ' + (index + 1)),
         subtitle: pkg && pkg.subtitle || '',
@@ -762,7 +762,7 @@
       };
     });
     catalog.addons = catalog.addons.map(function (addon, index) {
-      return {
+      return { ...(addon || {}),
         code: addon && addon.code || ('addon_' + (index + 1)),
         name: addon && addon.name || ('Add-on ' + (index + 1)),
         category: addon && addon.category || '',
@@ -994,6 +994,8 @@
     setLandingPagesState(fallback);
   }
   var pricingCatalogState = pricingCatalogDefaults();
+  var authoritativePricing935 = false;
+  var policyBusy935 = false;
   function setPricingCatalogEditor(value){
     var shaped = ensurePricingCatalogShape(value);
     byId('pricing_catalog_json').value = JSON.stringify(shaped, null, 2);
@@ -1024,6 +1026,7 @@
   }
   function renderPricingDashboard(){
     var catalog = pricingCatalogState;
+    renderStandalone935();
     byId('pricingCatalogSummary').innerHTML = [
       ['Package families', catalog.packages.length],
       ['Package price points', packagePricePointCount(catalog.packages)],
@@ -1058,6 +1061,17 @@
     bindPricingCatalogRowInputs();
     build201EnhanceFriendlyEditors(byId('pricingCatalogCard') || document);
   }
+  function renderStandalone935(){
+    const p=pricingCatalogState.booking_rules.ala_carte_policy || {};
+    byId('standaloneFields935').disabled=!authoritativePricing935||policyBusy935;
+    const count=pricingCatalogState.addons.filter(a=>a.standalone_allowed===true&&a.quote_required!==true).length;
+    byId('standaloneStatus935').textContent=(authoritativePricing935?'Authoritative catalogue loaded. ':'Read-only policy: saved catalogue not verified. ') + count + ' standalone service(s) in the editor. ' + (p.enabled===true&&p.owner_approved===true?'Policy enabled in editor.':'Standalone checkout not approved in editor.');
+    byId('standaloneEnabled935').checked=p.enabled===true;
+    byId('standaloneDeposit935').value=p.deposit_cad??'';
+    byId('standaloneDuration935').value=p.minimum_duration_slots??'';
+    byId('standaloneVersion935').value=p.version??'';
+    byId('standaloneConfirm935').checked=false;
+  }
   function packagePricePointCount(rows){
     return (Array.isArray(rows) ? rows : []).reduce(function (sum, pkg) {
       var prices = pkg && pkg.prices_cad && typeof pkg.prices_cad === 'object' ? pkg.prices_cad : {};
@@ -1069,13 +1083,13 @@
     return rows.map(function (pkg, index) {
       return '<div class="catalog-row package">' +
         '<div class="catalog-row__head">Code</div><div class="catalog-row__head">Name</div><div class="catalog-row__head">Subtitle</div><div class="catalog-row__head">Small</div><div class="catalog-row__head">Mid</div><div class="catalog-row__head">Oversize / exotic</div><div class="catalog-row__head">Deposit</div><div></div>' +
-        '<label class="field"><input data-pkg-field="code" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.code || '') + '"></label>' +
-        '<label class="field"><input data-pkg-field="name" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.name || '') + '"></label>' +
-        '<label class="field"><input data-pkg-field="subtitle" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.subtitle || '') + '"></label>' +
-        '<label class="field"><input type="number" step="0.01" data-pkg-field="prices_cad.small" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.prices_cad.small ?? 0)) + '"></label>' +
-        '<label class="field"><input type="number" step="0.01" data-pkg-field="prices_cad.mid" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.prices_cad.mid ?? 0)) + '"></label>' +
-        '<label class="field"><input type="number" step="0.01" data-pkg-field="prices_cad.oversize" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.prices_cad.oversize ?? 0)) + '"></label>' +
-        '<label class="field"><input type="number" step="0.01" data-pkg-field="deposit_cad" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.deposit_cad ?? 0)) + '"></label>' +
+        '<label class="field"><span>Code</span><input data-pkg-field="code" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.code || '') + '"></label>' +
+        '<label class="field"><span>Name</span><input data-pkg-field="name" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.name || '') + '"></label>' +
+        '<label class="field"><span>Subtitle</span><input data-pkg-field="subtitle" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.subtitle || '') + '"></label>' +
+        '<label class="field"><span>Small (CAD)</span><input type="number" step="0.01" data-pkg-field="prices_cad.small" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.prices_cad.small ?? 0)) + '"></label>' +
+        '<label class="field"><span>Mid (CAD)</span><input type="number" step="0.01" data-pkg-field="prices_cad.mid" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.prices_cad.mid ?? 0)) + '"></label>' +
+        '<label class="field"><span>Oversize / exotic (CAD)</span><input type="number" step="0.01" data-pkg-field="prices_cad.oversize" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.prices_cad.oversize ?? 0)) + '"></label>' +
+        '<label class="field"><span>Deposit (CAD)</span><input type="number" step="0.01" data-pkg-field="deposit_cad" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.deposit_cad ?? 0)) + '"></label>' +
         '<button class="btn" type="button" data-delete-package="' + index + '">Delete</button>' +
       '</div>';
     }).join('');
@@ -1318,9 +1332,11 @@
         var index = Number(input.getAttribute('data-pkg-index'));
         var field = input.getAttribute('data-pkg-field');
         var value = input.type === 'number' ? moneyNum(input.value, 0) : input.value;
+        var previousCode = pricingCatalogState.packages[index].code;
         setNestedValue(pricingCatalogState.packages[index], field, value);
+        if(field==='code'&&selectedPackageCode===previousCode) selectedPackageCode=value;
         syncPricingEditorToJson();
-        renderPricingDashboard();
+        // Preserve the active input and caret; rebuilding the entire table on input loses edits.
       });
     });
     var addonSelect = byId('addonEditorSelect');
@@ -1338,13 +1354,14 @@
         var field = input.getAttribute('data-addon-editor-field');
         var value = input.type === 'checkbox' ? input.checked : (input.type === 'number' ? moneyNum(input.value, 0) : input.value);
         setNestedValue(pricingCatalogState.addons[index], field, value);
+        if(field==='code') selectedAddonCode=value;
         syncPricingEditorToJson();
         if (field === 'image_url' || field === 'image_fallback_url') {
           var preview = byId('addonCurrentImagePreview');
           var nextUrl = firstAddonMediaUrl(pricingCatalogState.addons[index]);
           if (preview && nextUrl) preview.src = nextUrl;
         }
-        renderPricingDashboard();
+        // Re-render on explicit selection/save, never during typing.
       });
     });
     qsa('[data-addon-editor-notes]').forEach(function (input) {
@@ -1467,12 +1484,15 @@
     });
   }
   async function loadPricingCatalogEditor(savedSetting){
+    authoritativePricing935=false;
+    byId('standaloneFields935').disabled=true;
     const bundledFallback = await fetchBundledPricingCatalog();
     const editableServiceAreas = await fetchEditableServiceAreaRules();
     let source = null;
 
     if (savedSetting && typeof savedSetting === 'object') {
       source = hydratePricingCatalogFromDefaultMedia(savedSetting, bundledFallback);
+      authoritativePricing935=Array.isArray(savedSetting.addons)&&savedSetting.addons.length>0;
     } else {
       const res = await fetch('/api/pricing_catalog_public', { credentials:'include', cache:'no-store' }).catch(function(){ return null; });
       const out = res ? await res.json().catch(() => null) : null;
@@ -1487,6 +1507,7 @@
 
     if ((!Array.isArray(source.addons) || !source.addons.length) && bundledFallback && Array.isArray(bundledFallback.addons) && bundledFallback.addons.length) {
       source = hydratePricingCatalogFromDefaultMedia(bundledFallback, bundledFallback);
+      authoritativePricing935=false;
       setShellStatus('Pricing catalog add-ons were missing from the editable/API row, so the bundled fallback add-ons were loaded for the landing-page builder.', 'warning');
     }
     if (editableServiceAreas.length) {
@@ -1680,13 +1701,30 @@
   bindById('saveBeforeAfterGalleryBtn', 'click', async ()=>{ try{ const galleryValue = readBeforeAfterGalleryEditor(); if (!build201RequireSaveReview('Before / after gallery', galleryValue)) return; await saveSetting('before_after_gallery', galleryValue, 'Before / after gallery saved from the friendly editor.'); await loadMediaPrivacySummary().catch(function(){}); } catch(err){ setShellStatus(err?.message || 'Could not save before / after gallery.', 'error'); } });
   bindById('reloadMediaPrivacySummaryBtn', 'click', async ()=>{ try{ await loadMediaPrivacySummary(); } catch(err){ setShellStatus(err?.message || 'Could not load media privacy readiness summary.', 'error'); } });
   bindById('saveCatalogDropdownOptionsBtn', 'click', async ()=>{ try{ const value = readCatalogDropdownOptionsEditor(); setCatalogDropdownOptionsEditor(value); await saveSetting('catalog_dropdown_options', value, 'Dropdown option library saved. Admin App and Admin Catalog can now use these suggestions.'); renderPricingDashboard(); } catch(err){ setShellStatus(err?.message || 'Could not save dropdown option library.', 'error'); } });
-  bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
+  bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ const res=await fetch('/api/admin/app_settings_get',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'}); const out=await res.json(); if(!res.ok)throw Error(out?.error||'Saved catalogue unavailable.'); await loadPricingCatalogEditor(applySetting(out?.settings?.pricing_catalog,null)); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
   bindById('landing_addon_select', 'change', function(){ var nextAddon = this.value || ''; var currentLocation = byId('landing_location_select') ? byId('landing_location_select').value : ''; saveCurrentLandingEditorsToState(); renderLandingBuilder(nextAddon, currentLocation); });
   bindById('landing_location_select', 'change', function(){ var nextLocation = this.value || ''; var currentAddon = byId('landing_addon_select') ? byId('landing_addon_select').value : ''; saveCurrentLandingEditorsToState(); renderLandingBuilder(currentAddon, nextLocation); });
   bindById('landing_addon_create_btn', 'click', function(){ var code = byId('landing_addon_select').value || ''; var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === code; }) || { code: code, name: code }; var slug = slugify(addon.name || addon.code); var addonImage = firstAddonMediaUrl(addon); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'addon', related_code: code, enabled: true, slug: slug, nav_group: 'special-service', name: addon.name || addon.code, badge: 'Special service landing page', hero_title: addon.name || addon.code, hero_image_url: addonImage, gallery_image_urls: addonImage ? [addonImage] : [], meta_title: (addon.name || addon.code) + ' | Rosie Dazzlers', meta_description: Array.isArray(addon.notes) ? addon.notes.join(' ') : '' }, {}); renderLandingBuilder(code, byId('landing_location_select') ? byId('landing_location_select').value : ''); setShellStatus('Add-on landing draft created for ' + (addon.name || addon.code) + '.', 'success'); });
   bindById('landing_location_create_btn', 'click', function(){ saveCurrentLandingEditorsToState(); var label = prompt('New location page name (example: Norwich auto detailing)'); if (!label) return; var slug = slugify(label); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'location', enabled: true, slug: slug, nav_group: 'town', name: label, badge: 'Town-focused detailing page', hero_title: label, meta_title: label + ' | Rosie Dazzlers' }, {}); renderLandingBuilder(); byId('landing_location_select').value = slug; renderLandingBuilder(); setShellStatus('Location landing draft created for ' + label + '.', 'success'); });
   bindById('reloadLandingPagesBtn', 'click', async ()=>{ try{ await loadLandingPagesEditor(null); setShellStatus('Landing pages reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload landing pages.', 'error'); } });
   bindById('saveLandingPagesBtn', 'click', async ()=>{ try{ saveCurrentLandingEditorsToState(); if (!build201RequireSaveReview('Landing pages', landingPagesState)) return; await saveSetting('landing_pages', landingPagesState, 'Landing pages saved. Known pages and generic /landing/ routes now use this content.'); } catch(err){ setShellStatus(err?.message || 'Could not save landing pages.', 'error'); } });
+  bindById('saveStandalonePolicy935','click',async()=>{
+    if(!authoritativePricing935||policyBusy935)return;
+    const enabled=byId('standaloneEnabled935').checked;
+    const old=pricingCatalogState.booking_rules.ala_carte_policy;
+    const candidate={enabled,owner_approved:enabled&&byId('standaloneConfirm935').checked,version:byId('standaloneVersion935').value.trim(),deposit_cad:Number(byId('standaloneDeposit935').value),minimum_duration_slots:Number(byId('standaloneDuration935').value)};
+    try{
+      const {validateStandalonePolicy935}=await import('/assets/standalone-policy-v935.mjs');
+      const next=JSON.parse(JSON.stringify(pricingCatalogState));next.booking_rules.ala_carte_policy=candidate;
+      const verdict=validateStandalonePolicy935(next);if(!verdict.ok)throw Error(verdict.error);
+      if(!window.confirm('Save the current pricing catalogue and '+(enabled?'ENABLE':'DISABLE')+' individual-service checkout? This applies the current editor changes.'))return;
+      policyBusy935=true;byId('standaloneFields935').disabled=true;
+      const result=await saveSetting('pricing_catalog',next,'Standalone booking policy saved.');
+      if(!result?.ok||!result.setting?.value)throw Error('Save acknowledgement missing. Reload before retrying.');
+      setPricingCatalogState(result.setting.value);
+    }catch(err){setShellStatus(err?.message||'Could not save standalone policy.','error');byId('standaloneStatus935').textContent=err?.message||'Save failed.';}
+    finally{policyBusy935=false;byId('standaloneFields935').disabled=!authoritativePricing935;}
+  });
   bindById('savePricingCatalogBtn', 'click', async ()=>{ try{ syncPricingEditorToJson(); if (!build201RequireSaveReview('Pricing catalog', pricingCatalogState)) return; await saveSetting('pricing_catalog', pricingCatalogState, 'Pricing catalog saved. Booking, pricing, services, checkout, and pricing controls now share this source.'); } catch(err){ setShellStatus(err?.message || 'Could not save pricing catalog.', 'error'); } });
   bindById('previewRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(false); setShellStatus('Recovery preview generated.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not build recovery preview.', 'error'); } });
   bindById('sendTestRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(true); } catch(err){ setShellStatus(err?.message || 'Could not send recovery test.', 'error'); } });
