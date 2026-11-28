@@ -92,7 +92,14 @@ assert.match(book,/if \(addon\.quote_required\) \{ quoteOnly = true; return; \}/
 assert.match(book,/const raw = state\.size \? \(prices\[state\.size\] \?\? addon\?\.price_cad\) : addon\?\.price_cad/);
 assert.match(book,/addonGuidance736\(addon,state\.size\)/);
 assert.match(planner,/addonGuidance736\(addon, selectedSize\(\)\)/);
-assert.match(planner,/quoteOnly = true/);
+assert.match(planner,/guidedEstimate936\(pkg,size,selectedAddons\(\)\)/);
+assert.match(planner,/quoteOnly:estimate\.quote_only/);
+const {guidedEstimate936} = await import("../assets/booking-terms-v936.mjs");
+const fixturePackage = {code:"basic_detail",prices_cad:{small:100}};
+const fixtureQuote = {code:"quote",quote_required:true,prices_cad:{small:99}};
+const fixtureFixed = {code:"fixed",prices_cad:{small:20}};
+assert.deepEqual(guidedEstimate936(fixturePackage,"small",[fixtureQuote,fixtureFixed]),{subtotal_cents:12000,deposit_cents:5000,quote_only:true});
+assert.equal(guidedEstimate936(fixturePackage,"small",[fixtureFixed]).quote_only,false);
 assert.match(planner,/No fixed amount published/);
 assert.match(rich,/addonGuidance736/);
 assert.match(rich,/Add for quote review/);
