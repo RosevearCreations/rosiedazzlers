@@ -71,7 +71,9 @@ for(const asset of ['assets/site.js','assets/pricing-catalog-client-legacy.js','
 assert.match(read('assets/pricing-catalog-client-legacy.js'),/Small · Starting at:/);
 assert.match(book,/Deposit \$\{money\(pkg\.deposit_cad\|\|0\)\}/);
 assert.match(book,/qs\("#summaryDeposit"\)\.textContent = pkg \? money\(t\.deposit\)/);
-assert.match(planner,/Deposit \$\{money\(pkg\.deposit_cad \|\| 0\)\}/);
+assert.match(planner,/Deposit \$\{money\(guidedDepositCents936\(pkg\)\/100\)\}/);
+assert.match(planner,/deposit:estimate\.deposit_cents\/100/);
+assert.match(read('functions/api/checkout.js'),/depositCents = guidedDepositCents936\(pkg\)/);
 
 let advertisedNumericValues=0;
 let liveLandingEntrypoints=0;
