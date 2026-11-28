@@ -1,0 +1,13 @@
+name: Rosie 938 private handover
+on: [pull_request, push]
+permissions:
+  contents: read
+jobs:
+  private-handover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node --check assets/handover938.mjs && node --test tests/build938_handover.test.mjs
