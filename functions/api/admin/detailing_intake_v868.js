@@ -232,8 +232,8 @@ export async function onRequest({request,env}){
    const actual=Number(info?.metadata?.size??info?.size);
    const type=String(info?.metadata?.mimetype??info?.metadata?.contentType??
      info?.content_type??'').toLowerCase();
-   if(!Number.isFinite(actual)||actual<1||actual>a.expected_bytes||
-    (type&&type!==a.content_type))
+   if(!Number.isSafeInteger(actual)||actual!==a.expected_bytes||
+    type!==a.content_type)
     return err('Uploaded object does not match expected private media',409);
    const saved=await db(env,'rosie_detailing_intake_media_v868',{method:'PATCH',
     query:'?id=eq.'+encodeURIComponent(assetId)+'&draft_id=eq.'+
