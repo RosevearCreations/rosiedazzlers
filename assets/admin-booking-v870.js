@@ -1,6 +1,6 @@
 // Rosie 870: no messaging side effects. Staff explicitly copies/shares a short-lived link.
 const rd=id=>document.getElementById(id);
-let draftId='',shareId='',busy=false;
+let draftId='',shareId='',busy=false,epoch937=0,ready937=false;
 const cash=v=>'$'+Number(v||0).toFixed(2)+' CAD';
 function message(v,bad=false){
  const el=rd('rdShareStatus');if(!el)return;
@@ -31,7 +31,10 @@ function showDeposit(value){
 }
 async function refresh(){
  if(!draftId)return;
+ const id=draftId,epoch=epoch937;
  const value=await request('GET');
+ if(id!==draftId||epoch!==epoch937)return;
+ ready937=true;
  const link=(value.links||[]).find(x=>!x.revoked_at)||null;
  shareId=link?.id||'';
  rd('rdCreateShare870').disabled=Boolean(shareId)||value.quote_consent_withdrawn===true;
@@ -44,14 +47,17 @@ async function refresh(){
 }
 async function choose(id){
  if(!id)return;
- draftId=id;shareId='';rd('rdShareUrl870').value='';
+ draftId=id;shareId='';epoch937++;ready937=false;busy=false;rd('rdShareUrl870').value='';
+ for(const k of ['rdCreateShare870','rdRevokeShare870','rdReconcileDeposit870'])rd(k).disabled=true;
+ rd('rdShareExpiry870').textContent='Checking selected draft…';rd('rdDepositStatus870').textContent='Deposit not yet checked for this draft.';
  rd('rdShareConsent870').checked=false;
  rd('rdShareDelivery870').checked=false;
  message('Confirm explicit customer permission before generating a private quote link.');
- try{await refresh();}catch(e){message(e.message,true);}
+ const epoch=epoch937;try{await refresh();}catch(e){if(epoch===epoch937)message(e.message,true);}
 }
 async function issue(){
- if(busy||!draftId)return;
+ if(busy||!draftId||!ready937)return;
+ const epoch=epoch937;
  busy=true;rd('rdCreateShare870').disabled=true;
  try{
   const out=await request('POST',{action:'issue',
@@ -59,12 +65,13 @@ async function issue(){
    confirm_customer_receive_link:rd('rdShareDelivery870').checked,
    package_code:rd('rdSharePackage870').value,
    vehicle_size:rd('rdShareSize870').value});
+  if(epoch!==epoch937)return;
   rd('rdShareUrl870').value=out.share_url;
   message('Link created; no message was sent automatically. Copy it and share only through the agreed channel. Estimate '+cash(out.quote_cad)+'.');
   await refresh();
-  window.dispatchEvent(new CustomEvent('rosie:roadside-share-changed',{detail:{draft_id:draftId}}));
- }catch(e){message(e.message,true);rd('rdCreateShare870').disabled=false;}
- finally{busy=false;}
+  if(epoch===epoch937)window.dispatchEvent(new CustomEvent('rosie:roadside-share-changed',{detail:{draft_id:draftId}}));
+ }catch(e){if(epoch===epoch937){message(e.message,true);rd('rdCreateShare870').disabled=false;}}
+ finally{if(epoch===epoch937)busy=false;}
 }
 async function copy(){
  const value=rd('rdShareUrl870').value;
@@ -73,27 +80,31 @@ async function copy(){
  catch{rd('rdShareUrl870').focus();rd('rdShareUrl870').select();message('Clipboard unavailable. Copy the selected link manually.',true);}
 }
 async function revoke(){
- if(busy||!shareId||!draftId)return;
+ if(busy||!shareId||!draftId||!ready937)return;
+ const epoch=epoch937;
  if(!confirm('Revoke this quote link immediately? Any customer holding it will need a new link.'))return;
  busy=true;rd('rdRevokeShare870').disabled=true;
  try{await request('POST',{action:'revoke',share_id:shareId});
+  if(epoch!==epoch937)return;
   rd('rdShareUrl870').value='';shareId='';
   message('Link revoked. Its token no longer grants quote access.');
   await refresh();
-  window.dispatchEvent(new CustomEvent('rosie:roadside-share-changed',{detail:{draft_id:draftId}}));
- }catch(e){message(e.message,true);}
- finally{busy=false;}
+  if(epoch===epoch937)window.dispatchEvent(new CustomEvent('rosie:roadside-share-changed',{detail:{draft_id:draftId}}));
+ }catch(e){if(epoch===epoch937)message(e.message,true);}
+ finally{if(epoch===epoch937)busy=false;}
 }
 async function reconcile(){
- if(busy||!draftId)return;
+ if(busy||!draftId||!ready937)return;
+ const epoch=epoch937;
  busy=true;rd('rdReconcileDeposit870').disabled=true;
  try{const r=await request('POST',{action:'reconcile'});
+  if(epoch!==epoch937)return;
   showDeposit(r.deposit);
   message(r.deposit?.verified?
    'Provider reconciliation passed for the original deposit. Check refunds before issuing a net-paid statement.':
    'Deposit is still unverified or pending; no paid status was written.',!r.deposit?.verified);
- }catch(e){message(e.message,true);}
- finally{busy=false;}
+ }catch(e){if(epoch===epoch937)message(e.message,true);}
+ finally{if(epoch===epoch937)busy=false;}
 }
 function boot(){
  if(!rd('rdCreateShare870'))return;
