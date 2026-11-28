@@ -197,6 +197,7 @@
         </div>
       </section>
     </div>
+    <section id="handover938" class="section" aria-live="polite"></section>
   </main>
 
   <footer class="footer container" data-footer></footer>
@@ -207,6 +208,7 @@
   <script src="/assets/admin-runtime.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script type="module">
+    import {staffHandover} from "/assets/handover938.mjs";
     import { setBrandImages, setFooter } from "/assets/site.js";
 
     const runtime = window.AdminRuntime;
@@ -296,6 +298,7 @@
     function renderHeader(data) {
       const booking = data.booking || {};
       currentBookingId = booking.id || '';
+      staffHandover(currentBookingId,requestJson);
       progressEnabled = booking.progress_enabled === true;
       qs('#bookingTitle').textContent = booking.package_name || booking.package_code || 'Booking loaded';
       const bits = [];
@@ -560,6 +563,7 @@
         const token = qs('#progressToken').value.trim();
         if (!token) return setNotice('Progress token is required.', 'bad');
         try {
+          staffHandover('',requestJson);
           currentToken = token;
           setNotice('Loading progress information…');
           await reloadCurrent();
