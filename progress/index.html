@@ -199,6 +199,7 @@
         </div>
       </div>
     </section>
+    <section id="handover938" class="section" aria-live="polite"></section>
   </main>
 
   <footer class="footer container" data-footer></footer>
@@ -206,6 +207,7 @@
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script defer src="/assets/jobday-recovery-841.js"></script>
   <script type="module">
+    import {customerHandover} from "/assets/handover938.mjs";
     import { setBrandImages, setFooter } from "/assets/site.js";
 
     let currentToken = "";
@@ -565,6 +567,7 @@
         renderUpdates(data);
         renderPaymentLinks(data);
         renderCompletedSummary(data);
+        customerHandover(token);
         const unread=document.querySelector('#unreadBadge');if(unread){unread.style.display=Number(data.unread_count||0)>0?'inline-flex':'none';unread.textContent=`${Number(data.unread_count||0)} new`; }
         renderIncidentReports(data);
         renderMedia(data);
@@ -574,6 +577,7 @@
         scheduleProgressRefresh();
         setNotice("Progress information loaded.", "ok");
       } catch (err) {
+        document.querySelector('#handover938').replaceChildren();
         if (!quiet) setNotice(err.message || "Could not load progress information.", "bad");
       } finally {
         refreshBusy = false;
