@@ -86,7 +86,9 @@ function labelMedia(items){
    view.type='button';view.className='btn ghost small';
    view.textContent='View private media';
    view.addEventListener('click',async ()=>{
+    if(state.busy||state.draft?.id!==a.draft_id)return;
     const tab=window.open('about:blank','_blank');
+    if(tab)tab.opener=null;
     try{
      const data=await call('preview_private',{
       draft_id:state.draft?.id,asset_id:a.id});
@@ -117,7 +119,10 @@ function labelMedia(items){
 async function reloadDraft894(draftId){
  const refreshed=await read(draftId);
  if(!refreshed.drafts?.[0])throw Error('Saved draft could not be reopened');
- showDraft(refreshed.drafts[0],refreshed.media||[]);
+ if(state.draft?.id!==draftId)return;
+ // Refresh media without replacing unsaved title/notes or reloading contact forms.
+ state.draft=refreshed.drafts[0];
+ labelMedia(refreshed.media||[]);
  await listSaved();
  window.dispatchEvent(new CustomEvent('rosie:intake-media-updated',
   {detail:{id:draftId}}));
@@ -154,7 +159,6 @@ async function retryPending894(assetId){
    if(signed.retry_existing!==true||signed.asset_id!==assetId||
       signed.content_type!==retained.type)
     throw Error('Private upload retry contract mismatch');
-   state.retryFiles.set(signed.asset_id,{file,type,draftId:state.draft.id});
    const response=await fetch(signed.upload_url,{method:'PUT',
     headers:{'Content-Type':retained.type},body:retained.file});
    if(!response.ok)throw Error('Private transfer retry failed');
@@ -170,10 +174,11 @@ async function retryPending894(assetId){
  finally{toggleBusy(false);}
 }
 function showDraft(row,assets=[]){
- if(state.draft?.id!==row.id)state.retryFiles.clear();
+ const changed=state.draft?.id!==row.id;
+ if(changed){state.retryFiles.clear();$('rdPrivatePhotoConsent').checked=row.private_photo_permission===true;}
  state.draft=row;
  try{sessionStorage.setItem('rd-intake-active-v869',row.id);}catch{}
- window.dispatchEvent(new CustomEvent('rosie:intake-selected',{detail:{id:row.id}}));
+ if(changed)window.dispatchEvent(new CustomEvent('rosie:intake-selected',{detail:{id:row.id}}));
  $('rdIntakeId').value=row.id;
  $('rdIntakeLabel').value=row.display_title||row.temporary_label;
  $('rdIntakeLabel').disabled=false;
@@ -190,6 +195,8 @@ async function create(){
  return saved.draft;
 }
 async function open(id){
+ if(state.busy)return;
+ if(state.draft?.id!==id&&state.draft&&($('rdIntakeLabel').value!==(state.draft.display_title||state.draft.temporary_label)||$('rdIntakeNotes').value!==(state.draft.notes||'')||state.retryFiles.size)&&!window.confirm('Switch requests? Unsaved title/notes and same-tab retry files will be discarded. Saved private records remain.'))return;
  toggleBusy(true);
  try{
   const response=await read(id);
@@ -229,7 +236,7 @@ async function uploadFiles(files,kind){
  }
  toggleBusy(true);
  try{
-  if(!state.draft)await create();
+  if(!state.draft){await create();$('rdPrivatePhotoConsent').checked=true;}
   await authorizePrivateCapture();
   const before=await read(state.draft.id);
   if((before.media||[]).length+files.length>8)
@@ -249,6 +256,9 @@ async function uploadFiles(files,kind){
    const signed=await call('sign_upload',{
     draft_id:state.draft.id,filename:file.name,content_type:type,
     file_size_bytes:file.size});
+   if(signed.status!=='pending_upload'||signed.content_type!==type||!signed.asset_id)throw Error('Private upload reservation mismatch');
+   // Retain the exact compressed bytes only in this tab, before any transfer.
+   state.retryFiles.set(signed.asset_id,{file,type,draftId:state.draft.id});
    const response=await fetch(signed.upload_url,{
     method:'PUT',headers:{'Content-Type':type},body:file});
    if(!response.ok)throw Error('Private media transfer failed for '+file.name+
@@ -302,7 +312,9 @@ function boot(){
   });
  }
  $('rdCreateIntake').addEventListener('click',async ()=>{
-  if(state.busy)return;toggleBusy(true);
+  if(state.busy)return;
+  if(state.draft&&($('rdIntakeLabel').value!==(state.draft.display_title||state.draft.temporary_label)||$('rdIntakeNotes').value!==(state.draft.notes||'')||state.retryFiles.size)&&!window.confirm('Start a new request? Unsaved title/notes and same-tab retry files will be discarded. Saved private records remain.'))return;
+  toggleBusy(true);
   try{await create();}catch(e){status(e.message,true);}
   finally{toggleBusy(false);}
  });

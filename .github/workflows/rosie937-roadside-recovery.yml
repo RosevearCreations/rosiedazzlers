@@ -1,0 +1,27 @@
+name: Rosie 937 Roadside Draft Recovery
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  roadside-recovery-937:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check assets/admin-booking-v868.js
+          node --check assets/admin-booking-v869.js
+          node --check assets/admin-booking-v870.js
+          node --check functions/api/admin/detailing_intake_v868.js
+          node --test tests/build937_roadside_recovery.test.mjs tests/build894_private_retry.test.mjs
+          node scripts/build868_camera_first_intake_test.mjs
+          node scripts/build869_roadside_quick_quote_test.mjs
+          node scripts/build870_consent_roadside_quote_test.mjs
