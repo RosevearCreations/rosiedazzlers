@@ -107,7 +107,7 @@ async function linkBooking(){
    confirm_canonical_checkout_completed:true,
    acknowledge_deposit_not_verified_here:true});
   if(epoch!==selectionEpoch937||selected!==id)return;
-  notice('Linked to canonical booking. Booking total    Number(j.canonical_booking_total_cad||0).toFixed(2)+
+  notice('Linked to canonical booking. Booking total CAD '+Number(j.canonical_booking_total_cad||0).toFixed(2)+
    ' CAD; planned deposit $'+
    Number(j.canonical_planned_deposit_cad||0).toFixed(2)+
    ' CAD. Verify actual deposit with Stripe/PayPal payment records.');
