@@ -6,6 +6,7 @@
 
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
 import { resolveAlaCarte889 } from "./_lib/ala-carte-v889.js";
+import {guidedDepositCents936} from "../../assets/booking-terms-v936.mjs";
 import { selectedProvider892, providerReady892 } from "./_lib/checkout-provider-v892.js";
 import { resolveTrustedBookingLocation, buildTrustedLocationPatch } from "./_lib/booking-location.js";
 import { resolveCheckoutCustomerIdentity } from "./_lib/checkout-customer-identity.js";
@@ -98,6 +99,7 @@ export async function onRequestPost({ request, env }) {
 
     const addonCodes = isAlaCarte889 ? alaCarte889.items.map(item=>item.code) :
       (Array.isArray(body.addon_codes) ? body.addon_codes.map((v) => String(v || "").trim()).filter(Boolean) : []);
+    if (new Set(addonCodes).size !== addonCodes.length) return corsJson({error:"Choose each service only once.",booking_created:false,payment_attempted:false},400);
     const addonsChosen = [];
     const quoteAddonsChosen = [];
     let addonsTotalCents = 0;
@@ -152,7 +154,7 @@ export async function onRequestPost({ request, env }) {
     let depositCents = Math.round((Number(pkg.deposit_cad || 0) || 0) * 100);
     if (isAlaCarte889 && depositCents !== alaCarte889.deposit_cents)
       return corsJson({ error:"Standalone deposit policy mismatch", booking_created:false, payment_attempted:false },409);
-    if (!isAlaCarte889 && depositCents <= 0) depositCents = ["premium_wash", "basic_detail"].includes(pkg.code) ? 5000 : 10000;
+    if (!isAlaCarte889) depositCents = guidedDepositCents936(pkg);
 
     const supa = async (method, path, payload, extraHeaders = {}) => {
       const res = await fetch(`${env.SUPABASE_URL}${path}`, {

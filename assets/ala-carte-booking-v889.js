@@ -2,6 +2,7 @@
 // The live server catalogue, checkout capacity and payment callbacks remain authoritative.
 // No customer data is saved in URLs, browser storage or analytics.
 import {writeSwitch934,consumeSwitch934,describeSwitch934} from './booking-path-switch-v934.mjs';
+import {exactPositiveCad936,minimumSlots936,slotFits936,appointmentKey936,createAvailabilityGate936} from './booking-terms-v936.mjs';
 const form=document.getElementById('alaCarteForm889');
 const field=name=>form.elements.namedItem(name);
 const byId=id=>document.getElementById(id);
@@ -12,6 +13,10 @@ const quoteRequested907=new Set();
 let quoteRequestId907=null;
 let catalog=null,policy=null,approved=false,busy=false,uncertain=false;
 let availability=null,incoming934=null;
+const availabilityGate936=createAvailabilityGate936();
+const appointment936=()=>({date:readValue('service_date'),slot:readValue('start_slot'),area:readValue('service_area')});
+const basketKey936=()=>JSON.stringify([appointmentKey936(appointment936()),readValue('vehicle_size'),[...selected].sort(),readValue('site_access'),readValue('site_surface'),readValue('site_weather'),readValue('site_runoff')]);
+function durationAllowed936(slot){return ['AM','PM','FULL'].includes(slot)&&minimumSlots936(policy)!==null&&(slot==='FULL'||minimumSlots936(policy)===1);}
 try{incoming934=consumeSwitch934(sessionStorage,'manual')}catch{}
 if(incoming934)field('vehicle_size').value=incoming934.size;
 function showSwitch934(){if(!incoming934)return;byId('switchReview934').hidden=false;status('switchStatus934','Vehicle size carried over. Review your earlier selections against the current catalogue.');const list=byId('switchItems934');list.replaceChildren(...describeSwitch934(incoming934,catalog).map(x=>text('li',x)));}
@@ -23,7 +28,7 @@ function eligibleItems() {
   const size=readValue('vehicle_size');
   const addons=Array.isArray(catalog?.addons)?catalog.addons:[];
   return addons.filter(x=>x?.standalone_allowed===true && x?.quote_required!==true &&
-     Number.isFinite(x?.prices_cad?.[size]) && x.prices_cad[size]>0);
+     exactPositiveCad936(x?.prices_cad?.[size]));
 }
 function drawServices(){
  const root=byId('standaloneServices889');root.replaceChildren();
@@ -84,7 +89,11 @@ function drawBasket() {
     status('catalogStatus889','Please choose services totalling at least the approved deposit or contact Rosie for a quote.');
   byId('basketCount907').textContent=items.length+' payable service(s), '+quoteRequested907.size+
    ' quote-only item(s). Only approved standalone items are charged.';
-  const allowed=approved&&items.length>0&&total>=Math.round(deposit*100)&&!!size&&!busy&&!uncertain;
+  const slot=readValue('start_slot');
+  const min=minimumSlots936(policy);
+  for(const opt of field('start_slot').options)if(['AM','PM','FULL'].includes(opt.value))opt.disabled=min===null||(min===2&&opt.value!=='FULL');
+  if(slot&&!durationAllowed936(slot))status('availabilityStatus889','The approved standalone policy requires a full-day appointment. Choose Full day.');
+  const allowed=approved&&items.length>0&&items.length<=12&&total>=Math.round(deposit*100)&&!!size&&durationAllowed936(slot)&&!busy&&!uncertain;
   byId('checkout889').disabled=!allowed;
 }
 async function loadCatalog() {
@@ -96,7 +105,7 @@ async function loadCatalog() {
     policy=data?.booking_rules?.ala_carte_policy||null;
     approved=policy?.enabled===true&&policy?.owner_approved===true&&
       typeof policy?.version==='string'&&!!policy.version.trim()&&
-      Number.isFinite(policy?.deposit_cad)&&policy.deposit_cad>0;
+      exactPositiveCad936(policy?.deposit_cad)&&minimumSlots936(policy)!==null;
     const area=field('service_area');area.replaceChildren(new Option('Choose an approved service zone',''));
     const seen=new Set();
     for(const row of Array.isArray(data.service_areas)?data.service_areas:[]){
@@ -118,27 +127,28 @@ function availabilityMessage(date,slot,data) {
   if(dateIsCold(date))return 'November–March requires staff winter/site approval. Contact Rosie before making a reservation or payment.';
   if(!data?.ok)return 'Availability cannot currently be verified. Do not submit payment.';
   if(data.blocked)return 'That date is blocked for booking.';
-  const open=slot==='FULL'?data.AM===true&&data.PM===true:data[slot]===true;
+  const open=slotFits936(data,date,slot,true);
   return open?'The requested slot currently appears available. Rosie rechecks availability when you submit.':'That slot is not currently available. Choose another.';
 }
 async function refreshAvailability() {
-  const date=readValue('service_date'),slot=readValue('start_slot');
+  const request=appointment936(),{date,slot,area}=request,ticket=availabilityGate936.begin(request);
   availability=null;
-  if(!date||!slot){status('availabilityStatus889',availabilityMessage(date,slot,null));return;}
-  if(dateIsCold(date)){status('availabilityStatus889',availabilityMessage(date,slot,null));return;}
+  if(!date||!slot||!area){status('availabilityStatus889','Choose a service area, date and appointment length.');return false;}
+  if(!durationAllowed936(slot)){status('availabilityStatus889','Choose the owner-approved appointment length.');return false;}
+  if(dateIsCold(date)){status('availabilityStatus889',availabilityMessage(date,slot,null));return false;}
   try{
     status('availabilityStatus889','Checking current availability…');
     const u=new URL('/api/availability',location.origin);
-    u.searchParams.set('date',date);u.searchParams.set('service_area',readValue('service_area'));
+    u.searchParams.set('date',date);u.searchParams.set('service_area',area);
     u.searchParams.set('start_slot',slot==='FULL'?'AM':slot);
     u.searchParams.set('duration_slots',slot==='FULL'?'2':'1');
     const res=await fetch(u,{cache:'no-store',credentials:'same-origin'});
     const result=await res.json();
     if(!res.ok||result?.ok!==true)throw Error('not available');
-    if(date===readValue('service_date')&&slot===readValue('start_slot')) {
-      availability=result;status('availabilityStatus889',availabilityMessage(date,slot,result));
-    }
-  }catch{status('availabilityStatus889','Availability could not be verified. Please try again later or contact Rosie.');}
+    if(!availabilityGate936.accept(ticket,appointment936()))return false;
+    availability=result;status('availabilityStatus889',availabilityMessage(date,slot,result));
+    return slotFits936(result,date,slot,true);
+  }catch{if(availabilityGate936.accept(ticket,appointment936()))status('availabilityStatus889','Availability could not be verified. Please try again later or contact Rosie.');return false;}
 }
 function safeProviderUrl(url,provider){
   try{const u=new URL(url);const h=u.hostname.toLowerCase();
@@ -178,7 +188,7 @@ byId('requestManualQuote907').addEventListener('click',async()=>{
 });
 form.addEventListener('change',e=>{
   if(e.target?.name==='vehicle_size'){drawServices();drawBasket();}
-  if(['service_date','start_slot','service_area'].includes(e.target?.name))refreshAvailability();
+  if(['service_date','start_slot','service_area'].includes(e.target?.name)){drawBasket();refreshAvailability();}
 });
 form.addEventListener('submit',async e=>{
   e.preventDefault();
@@ -192,12 +202,14 @@ form.addEventListener('submit',async e=>{
     status('checkoutStatus889','This date or worksite needs staff review. No booking has been submitted; contact Rosie to arrange it.');
     return;
   }
+  if(!durationAllowed936(slot)){status('checkoutStatus889','Choose the approved appointment length. No booking submitted.');return;}
+  const before936=basketKey936();
   busy=true;drawBasket();
   try{
     status('checkoutStatus889','Checking the slot before preparing payment…');
-    await refreshAvailability();
-    if(!availability?.ok||availability.blocked||
-      !(slot==='FULL'?availability.AM===true&&availability.PM===true:availability[slot]===true)){
+    const fresh936=await refreshAvailability();
+    if(before936!==basketKey936()){status('checkoutStatus889','Your choices changed during the availability check. Review them and submit again. No booking submitted.');return;}
+    if(!fresh936||!slotFits936(availability,date,slot,true)){
       status('checkoutStatus889','That date/slot is not currently available. Select another appointment.');return;
     }
     const payload={
