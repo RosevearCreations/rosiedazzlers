@@ -107,7 +107,62 @@ async function linkBooking(){
    confirm_canonical_checkout_completed:true,
    acknowledge_deposit_not_verified_here:true});
   if(epoch!==selectionEpoch937||selected!==id)return;
-  notice('Linked to canonical booking. Booking total 
+  notice('Linked to canonical booking. Booking total    Number(j.canonical_booking_total_cad||0).toFixed(2)+
+   ' CAD; planned deposit $'+
+   Number(j.canonical_planned_deposit_cad||0).toFixed(2)+
+   ' CAD. Verify actual deposit with Stripe/PayPal payment records.');
+  await selectDraft(id);
+ }catch(e){if(selected===id)notice(e.message,true);}
+ finally{working=false;if(readyDraft937===selected&&!$('rdQuoteReviewState').textContent.includes('Linked'))
+  $('rdLinkCanonicalBooking').disabled=false;}
+}
+function boot(){
+ if(!$('rdQuotePanel'))return;
+ $('rdSaveQuickQuote').addEventListener('click',saveQuote);
+ $('rdLinkCanonicalBooking').addEventListener('click',linkBooking);
+ $('rdOpenCanonicalBooking').addEventListener('click',()=>{
+  notice('Continue through normal availability, pricing, customer waiver and secure deposit checkout. Return here to link the booking UUID.');
+ });
+ window.addEventListener('rosie:intake-selected',e=>selectDraft(e.detail?.id));
+ window.addEventListener('rosie:intake-media-updated',refreshStorage);
+ $('rdContactPermission').addEventListener('change',()=>{
+  if(!$('rdContactPermission').checked)notice(
+   'To retain a name, phone or email, first confirm permission to contact the customer.');
+ });
+ if($('rdIntakeId')?.value)selectDraft($('rdIntakeId').value);
+ refreshStorage();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);
+else boot();
++
+   Number(j.canonical_booking_total_cad||0).toFixed(2)+
+   ' CAD; planned deposit $'+
+   Number(j.canonical_planned_deposit_cad||0).toFixed(2)+
+   ' CAD. Verify actual deposit with Stripe/PayPal payment records.');
+  await selectDraft(selected);
+ }catch(e){notice(e.message,true);}
+ finally{working=false;if(!$('rdQuoteReviewState').textContent.includes('Linked'))
+  $('rdLinkCanonicalBooking').disabled=false;}
+}
+function boot(){
+ if(!$('rdQuotePanel'))return;
+ $('rdSaveQuickQuote').addEventListener('click',saveQuote);
+ $('rdLinkCanonicalBooking').addEventListener('click',linkBooking);
+ $('rdOpenCanonicalBooking').addEventListener('click',()=>{
+  notice('Continue through normal availability, pricing, customer waiver and secure deposit checkout. Return here to link the booking UUID.');
+ });
+ window.addEventListener('rosie:intake-selected',e=>selectDraft(e.detail?.id));
+ window.addEventListener('rosie:intake-media-updated',refreshStorage);
+ $('rdContactPermission').addEventListener('change',()=>{
+  if(!$('rdContactPermission').checked)notice(
+   'To retain a name, phone or email, first confirm permission to contact the customer.');
+ });
+ if($('rdIntakeId')?.value)selectDraft($('rdIntakeId').value);
+ refreshStorage();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);
+else boot();
++
    Number(j.canonical_booking_total_cad||0).toFixed(2)+
    ' CAD; planned deposit $'+
    Number(j.canonical_planned_deposit_cad||0).toFixed(2)+
