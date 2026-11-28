@@ -1,0 +1,23 @@
+name: Rosie 936 Shared Booking Terms and Capacity Reconciliation
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  booking-terms-936:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check assets/ala-carte-booking-v889.js
+          node --check functions/api/checkout.js
+          node --test tests/build936_booking_terms_reconciliation.test.mjs tests/build889_ala_carte_checkout.test.mjs tests/build906_booking_paths_recovery.test.mjs
+          node tests/build934_booking_path_switch.test.mjs

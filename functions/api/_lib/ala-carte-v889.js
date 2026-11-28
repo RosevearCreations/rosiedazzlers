@@ -1,13 +1,12 @@
 // Rosie 889: canonical package-free basket priced by the *server* catalogue.
 // Does not create bookings, override checkout capacity, authorize products,
 // approve owner pricing or settle a payment. All unapproved cases fail closed.
+import {exactPositiveCad936, minimumSlots936} from "../../../assets/booking-terms-v936.mjs";
 export const ALA_CARTE_PACKAGE_CODE_889 = 'ala_carte';
 const sizes = new Set(['small','mid','oversize']);
 // Catalogue currency must be exact to the cent; do not silently round an
 // owner-entered fractional-cent price or deposit into a different charge.
-const exactCadCents = value => typeof value === 'number' && Number.isFinite(value) &&
-  value > 0 && /^\d+(?:\.\d{1,2})?$/.test(String(value)) &&
-  Number.isSafeInteger(Math.round(value * 100));
+const exactCadCents = exactPositiveCad936;
 const refusal = (code, message) => ({ok:false,reason:code,error:message,
   booking_created:false,payment_attempted:false});
 
@@ -55,7 +54,7 @@ export function resolveAlaCarte889(catalog, body) {
   if (String(body.gift_code||'').trim() || String(body.promo_code||'').trim())
     return refusal('STANDALONE_GIFT_PROMO_REVIEW_HOLD','Gift certificates or promotions for individual services need staff review. No payment was taken.');
   const duration=Number(body.duration_slots);
-  const minSlots=Number(policy.minimum_duration_slots || 1);
+  const minSlots=minimumSlots936(policy);
   if (![1,2].includes(minSlots) || ![1,2].includes(duration) || duration<minSlots)
     return refusal('STANDALONE_DURATION_REVIEW_HOLD','Select the approved appointment length for these services.');
   return {ok:true,package_code:ALA_CARTE_PACKAGE_CODE_889,
